@@ -2607,13 +2607,43 @@
         "Traveling Merchant Sunday Item 2": {
             "code": 717902,
             "region": "Traveling Cart Sunday",
-            "tags": ["MANDATORY", "TRAVELING_MERCHANT"],
+            "tags": ["TRAVELING_MERCHANT"],
             "content_packs": []
         },
         "Traveling Merchant Sunday Item 3": {
             "code": 717903,
             "region": "Traveling Cart Sunday",
-            "tags": ["MANDATORY", "TRAVELING_MERCHANT"],
+            "tags": ["TRAVELING_MERCHANT"],
+            "content_packs": []
+        },
+        "Traveling Merchant Sunday Item 4": {
+            "code": 717904,
+            "region": "Traveling Cart Sunday",
+            "tags": ["TRAVELING_MERCHANT"],
+            "content_packs": []
+        },
+        "Traveling Merchant Sunday Item 5": {
+            "code": 717905,
+            "region": "Traveling Cart Sunday",
+            "tags": ["TRAVELING_MERCHANT"],
+            "content_packs": []
+        },
+        "Traveling Merchant Sunday Item 6": {
+            "code": 717906,
+            "region": "Traveling Cart Sunday",
+            "tags": ["TRAVELING_MERCHANT"],
+            "content_packs": []
+        },
+        "Traveling Merchant Sunday Item 7": {
+            "code": 717907,
+            "region": "Traveling Cart Sunday",
+            "tags": ["TRAVELING_MERCHANT"],
+            "content_packs": []
+        },
+        "Traveling Merchant Sunday Item 8": {
+            "code": 717908,
+            "region": "Traveling Cart Sunday",
+            "tags": ["TRAVELING_MERCHANT"],
             "content_packs": []
         },
         "Traveling Merchant Monday Item 1": {
@@ -2625,13 +2655,43 @@
         "Traveling Merchant Monday Item 2": {
             "code": 717912,
             "region": "Traveling Cart Monday",
-            "tags": ["MANDATORY", "TRAVELING_MERCHANT"],
+            "tags": ["TRAVELING_MERCHANT"],
             "content_packs": []
         },
         "Traveling Merchant Monday Item 3": {
             "code": 717913,
             "region": "Traveling Cart Monday",
-            "tags": ["MANDATORY", "TRAVELING_MERCHANT"],
+            "tags": ["TRAVELING_MERCHANT"],
+            "content_packs": []
+        },
+        "Traveling Merchant Monday Item 4": {
+            "code": 717914,
+            "region": "Traveling Cart Monday",
+            "tags": ["TRAVELING_MERCHANT"],
+            "content_packs": []
+        },
+        "Traveling Merchant Monday Item 5": {
+            "code": 717915,
+            "region": "Traveling Cart Monday",
+            "tags": ["TRAVELING_MERCHANT"],
+            "content_packs": []
+        },
+        "Traveling Merchant Monday Item 6": {
+            "code": 717916,
+            "region": "Traveling Cart Monday",
+            "tags": ["TRAVELING_MERCHANT"],
+            "content_packs": []
+        },
+        "Traveling Merchant Monday Item 7": {
+            "code": 717917,
+            "region": "Traveling Cart Monday",
+            "tags": ["TRAVELING_MERCHANT"],
+            "content_packs": []
+        },
+        "Traveling Merchant Monday Item 8": {
+            "code": 717918,
+            "region": "Traveling Cart Monday",
+            "tags": ["TRAVELING_MERCHANT"],
             "content_packs": []
         },
         "Traveling Merchant Tuesday Item 1": {
@@ -2643,13 +2703,43 @@
         "Traveling Merchant Tuesday Item 2": {
             "code": 717922,
             "region": "Traveling Cart Tuesday",
-            "tags": ["MANDATORY", "TRAVELING_MERCHANT"],
+            "tags": ["TRAVELING_MERCHANT"],
             "content_packs": []
         },
         "Traveling Merchant Tuesday Item 3": {
             "code": 717923,
             "region": "Traveling Cart Tuesday",
-            "tags": ["MANDATORY", "TRAVELING_MERCHANT"],
+            "tags": ["TRAVELING_MERCHANT"],
+            "content_packs": []
+        },
+        "Traveling Merchant Tuesday Item 4": {
+            "code": 717924,
+            "region": "Traveling Cart Tuesday",
+            "tags": ["TRAVELING_MERCHANT"],
+            "content_packs": []
+        },
+        "Traveling Merchant Tuesday Item 5": {
+            "code": 717925,
+            "region": "Traveling Cart Tuesday",
+            "tags": ["TRAVELING_MERCHANT"],
+            "content_packs": []
+        },
+        "Traveling Merchant Tuesday Item 6": {
+            "code": 717926,
+            "region": "Traveling Cart Tuesday",
+            "tags": ["TRAVELING_MERCHANT"],
+            "content_packs": []
+        },
+        "Traveling Merchant Tuesday Item 7": {
+            "code": 717927,
+            "region": "Traveling Cart Tuesday",
+            "tags": ["TRAVELING_MERCHANT"],
+            "content_packs": []
+        },
+        "Traveling Merchant Tuesday Item 8": {
+            "code": 717928,
+            "region": "Traveling Cart Tuesday",
+            "tags": ["TRAVELING_MERCHANT"],
             "content_packs": []
         },
         "Traveling Merchant Wednesday Item 1": {
@@ -2661,13 +2751,43 @@
         "Traveling Merchant Wednesday Item 2": {
             "code": 717932,
             "region": "Traveling Cart Wednesday",
-            "tags": ["MANDATORY", "TRAVELING_MERCHANT"],
+            "tags": ["TRAVELING_MERCHANT"],
             "content_packs": []
         },
         "Traveling Merchant Wednesday Item 3": {
             "code": 717933,
             "region": "Traveling Cart Wednesday",
-            "tags": ["MANDATORY", "TRAVELING_MERCHANT"],
+            "tags": ["TRAVELING_MERCHANT"],
+            "content_packs": []
+        },
+        "Traveling Merchant Wednesday Item 4": {
+            "code": 717934,
+            "region": "Traveling Cart Wednesday",
+            "tags": ["TRAVELING_MERCHANT"],
+            "content_packs": []
+        },
+        "Traveling Merchant Wednesday Item 5": {
+            "code": 717935,
+            "region": "Traveling Cart Wednesday",
+            "tags": ["TRAVELING_MERCHANT"],
+            "content_packs": []
+        },
+        "Traveling Merchant Wednesday Item 6": {
+            "code": 717936,
+            "region": "Traveling Cart Wednesday",
+            "tags": ["TRAVELING_MERCHANT"],
+            "content_packs": []
+        },
+        "Traveling Merchant Wednesday Item 7": {
+            "code": 717937,
+            "region": "Traveling Cart Wednesday",
+            "tags": ["TRAVELING_MERCHANT"],
+            "content_packs": []
+        },
+        "Traveling Merchant Wednesday Item 8": {
+            "code": 717938,
+            "region": "Traveling Cart Wednesday",
+            "tags": ["TRAVELING_MERCHANT"],
             "content_packs": []
         },
         "Traveling Merchant Thursday Item 1": {
@@ -2679,13 +2799,43 @@
         "Traveling Merchant Thursday Item 2": {
             "code": 717942,
             "region": "Traveling Cart Thursday",
-            "tags": ["MANDATORY", "TRAVELING_MERCHANT"],
+            "tags": ["TRAVELING_MERCHANT"],
             "content_packs": []
         },
         "Traveling Merchant Thursday Item 3": {
             "code": 717943,
             "region": "Traveling Cart Thursday",
-            "tags": ["MANDATORY", "TRAVELING_MERCHANT"],
+            "tags": ["TRAVELING_MERCHANT"],
+            "content_packs": []
+        },
+        "Traveling Merchant Thursday Item 4": {
+            "code": 717944,
+            "region": "Traveling Cart Thursday",
+            "tags": ["TRAVELING_MERCHANT"],
+            "content_packs": []
+        },
+        "Traveling Merchant Thursday Item 5": {
+            "code": 717945,
+            "region": "Traveling Cart Thursday",
+            "tags": ["TRAVELING_MERCHANT"],
+            "content_packs": []
+        },
+        "Traveling Merchant Thursday Item 6": {
+            "code": 717946,
+            "region": "Traveling Cart Thursday",
+            "tags": ["TRAVELING_MERCHANT"],
+            "content_packs": []
+        },
+        "Traveling Merchant Thursday Item 7": {
+            "code": 717947,
+            "region": "Traveling Cart Thursday",
+            "tags": ["TRAVELING_MERCHANT"],
+            "content_packs": []
+        },
+        "Traveling Merchant Thursday Item 8": {
+            "code": 717948,
+            "region": "Traveling Cart Thursday",
+            "tags": ["TRAVELING_MERCHANT"],
             "content_packs": []
         },
         "Traveling Merchant Friday Item 1": {
@@ -2697,13 +2847,43 @@
         "Traveling Merchant Friday Item 2": {
             "code": 717952,
             "region": "Traveling Cart Friday",
-            "tags": ["MANDATORY", "TRAVELING_MERCHANT"],
+            "tags": ["TRAVELING_MERCHANT"],
             "content_packs": []
         },
         "Traveling Merchant Friday Item 3": {
             "code": 717953,
             "region": "Traveling Cart Friday",
-            "tags": ["MANDATORY", "TRAVELING_MERCHANT"],
+            "tags": ["TRAVELING_MERCHANT"],
+            "content_packs": []
+        },
+        "Traveling Merchant Friday Item 4": {
+            "code": 717954,
+            "region": "Traveling Cart Friday",
+            "tags": ["TRAVELING_MERCHANT"],
+            "content_packs": []
+        },
+        "Traveling Merchant Friday Item 5": {
+            "code": 717955,
+            "region": "Traveling Cart Friday",
+            "tags": ["TRAVELING_MERCHANT"],
+            "content_packs": []
+        },
+        "Traveling Merchant Friday Item 6": {
+            "code": 717956,
+            "region": "Traveling Cart Friday",
+            "tags": ["TRAVELING_MERCHANT"],
+            "content_packs": []
+        },
+        "Traveling Merchant Friday Item 7": {
+            "code": 717957,
+            "region": "Traveling Cart Friday",
+            "tags": ["TRAVELING_MERCHANT"],
+            "content_packs": []
+        },
+        "Traveling Merchant Friday Item 8": {
+            "code": 717958,
+            "region": "Traveling Cart Friday",
+            "tags": ["TRAVELING_MERCHANT"],
             "content_packs": []
         },
         "Traveling Merchant Saturday Item 1": {
@@ -2715,13 +2895,43 @@
         "Traveling Merchant Saturday Item 2": {
             "code": 717962,
             "region": "Traveling Cart Saturday",
-            "tags": ["MANDATORY", "TRAVELING_MERCHANT"],
+            "tags": ["TRAVELING_MERCHANT"],
             "content_packs": []
         },
         "Traveling Merchant Saturday Item 3": {
             "code": 717963,
             "region": "Traveling Cart Saturday",
-            "tags": ["MANDATORY", "TRAVELING_MERCHANT"],
+            "tags": ["TRAVELING_MERCHANT"],
+            "content_packs": []
+        },
+        "Traveling Merchant Saturday Item 4": {
+            "code": 717964,
+            "region": "Traveling Cart Saturday",
+            "tags": ["TRAVELING_MERCHANT"],
+            "content_packs": []
+        },
+        "Traveling Merchant Saturday Item 5": {
+            "code": 717965,
+            "region": "Traveling Cart Saturday",
+            "tags": ["TRAVELING_MERCHANT"],
+            "content_packs": []
+        },
+        "Traveling Merchant Saturday Item 6": {
+            "code": 717966,
+            "region": "Traveling Cart Saturday",
+            "tags": ["TRAVELING_MERCHANT"],
+            "content_packs": []
+        },
+        "Traveling Merchant Saturday Item 7": {
+            "code": 717967,
+            "region": "Traveling Cart Saturday",
+            "tags": ["TRAVELING_MERCHANT"],
+            "content_packs": []
+        },
+        "Traveling Merchant Saturday Item 8": {
+            "code": 717968,
+            "region": "Traveling Cart Saturday",
+            "tags": ["TRAVELING_MERCHANT"],
             "content_packs": []
         },
         "Fishsanity: Carp": {
@@ -10677,14 +10887,14 @@
         "Shipsanity: Hyper Speed-Gro": {
             "code": 719940,
             "region": "Shipping",
-            "tags": ["GINGER_ISLAND", "SHIPSANITY"],
-            "content_packs": ["Ginger Island (Vanilla)"]
+            "tags": ["GINGER_ISLAND", "REQUIRES_QI_ORDERS", "SHIPSANITY"],
+            "content_packs": ["Ginger Island (Vanilla)", "Qi Board (Vanilla)"]
         },
         "Shipsanity: Magic Bait": {
             "code": 719941,
             "region": "Shipping",
-            "tags": ["GINGER_ISLAND", "SHIPSANITY"],
-            "content_packs": ["Ginger Island (Vanilla)"]
+            "tags": ["GINGER_ISLAND", "REQUIRES_QI_ORDERS", "SHIPSANITY"],
+            "content_packs": ["Ginger Island (Vanilla)", "Qi Board (Vanilla)"]
         },
         "Shipsanity: Banana": {
             "code": 719942,
@@ -12519,8 +12729,8 @@
         "Craft Hyper Speed-Gro": {
             "code": 720425,
             "region": "Farm",
-            "tags": ["CRAFTSANITY", "CRAFTSANITY_CRAFT", "GINGER_ISLAND"],
-            "content_packs": ["Ginger Island (Vanilla)"]
+            "tags": ["CRAFTSANITY", "CRAFTSANITY_CRAFT", "GINGER_ISLAND", "REQUIRES_QI_ORDERS"],
+            "content_packs": ["Ginger Island (Vanilla)", "Qi Board (Vanilla)"]
         },
         "Craft Basic Retaining Soil": {
             "code": 720426,
@@ -12735,8 +12945,8 @@
         "Craft Magic Bait": {
             "code": 720461,
             "region": "Farm",
-            "tags": ["CRAFTSANITY", "CRAFTSANITY_CRAFT", "GINGER_ISLAND"],
-            "content_packs": ["Ginger Island (Vanilla)"]
+            "tags": ["CRAFTSANITY", "CRAFTSANITY_CRAFT", "GINGER_ISLAND", "REQUIRES_QI_ORDERS"],
+            "content_packs": ["Ginger Island (Vanilla)", "Qi Board (Vanilla)"]
         },
         "Craft Crab Pot": {
             "code": 720462,
@@ -12969,8 +13179,8 @@
         "Craft Heavy Tapper": {
             "code": 720500,
             "region": "Farm",
-            "tags": ["CRAFTSANITY", "CRAFTSANITY_CRAFT", "GINGER_ISLAND"],
-            "content_packs": ["Ginger Island (Vanilla)"]
+            "tags": ["CRAFTSANITY", "CRAFTSANITY_CRAFT", "GINGER_ISLAND", "REQUIRES_QI_ORDERS"],
+            "content_packs": ["Ginger Island (Vanilla)", "Qi Board (Vanilla)"]
         },
         "Craft Lightning Rod": {
             "code": 720501,
@@ -13143,8 +13353,8 @@
         "Craft Hopper": {
             "code": 720529,
             "region": "Farm",
-            "tags": ["CRAFTSANITY", "CRAFTSANITY_CRAFT", "GINGER_ISLAND"],
-            "content_packs": ["Ginger Island (Vanilla)"]
+            "tags": ["CRAFTSANITY", "CRAFTSANITY_CRAFT", "GINGER_ISLAND", "REQUIRES_QI_ORDERS"],
+            "content_packs": ["Ginger Island (Vanilla)", "Qi Board (Vanilla)"]
         },
         "Craft Cookout Kit": {
             "code": 720530,
@@ -13454,49 +13664,49 @@
         },
         "Raccoon Request 1": {
             "code": 720701,
-            "region": "Raccoon Bundles",
+            "region": "Raccoon Request 1",
             "tags": ["BUNDLE", "RACCOON_BUNDLES"],
             "content_packs": []
         },
         "Raccoon Request 2": {
             "code": 720702,
-            "region": "Raccoon Bundles",
+            "region": "Raccoon Request 2",
             "tags": ["BUNDLE", "RACCOON_BUNDLES"],
             "content_packs": []
         },
         "Raccoon Request 3": {
             "code": 720703,
-            "region": "Raccoon Bundles",
+            "region": "Raccoon Request 3",
             "tags": ["BUNDLE", "RACCOON_BUNDLES"],
             "content_packs": []
         },
         "Raccoon Request 4": {
             "code": 720704,
-            "region": "Raccoon Bundles",
+            "region": "Raccoon Request 4",
             "tags": ["BUNDLE", "RACCOON_BUNDLES"],
             "content_packs": []
         },
         "Raccoon Request 5": {
             "code": 720705,
-            "region": "Raccoon Bundles",
+            "region": "Raccoon Request 5",
             "tags": ["BUNDLE", "RACCOON_BUNDLES"],
             "content_packs": []
         },
         "Raccoon Request 6": {
             "code": 720706,
-            "region": "Raccoon Bundles",
+            "region": "Raccoon Request 6",
             "tags": ["BUNDLE", "RACCOON_BUNDLES"],
             "content_packs": []
         },
         "Raccoon Request 7": {
             "code": 720707,
-            "region": "Raccoon Bundles",
+            "region": "Raccoon Request 7",
             "tags": ["BUNDLE", "RACCOON_BUNDLES"],
             "content_packs": []
         },
         "Raccoon Request 8": {
             "code": 720708,
-            "region": "Raccoon Bundles",
+            "region": "Raccoon Request 8",
             "tags": ["BUNDLE", "RACCOON_BUNDLES"],
             "content_packs": []
         },
@@ -15192,6 +15402,12 @@
             "tags": ["SECRETSANITY", "SECRET_NOTE"],
             "content_packs": []
         },
+        "Obtain my precious fruit whenever you like": {
+            "code": 721289,
+            "region": "Farm",
+            "tags": ["EASY_SECRET", "GINGER_ISLAND", "REQUIRES_QI_ORDERS", "SECRETSANITY"],
+            "content_packs": ["Ginger Island (Vanilla)", "Qi Board (Vanilla)"]
+        },
         "Watch A Movie": {
             "code": 721301,
             "region": "Movie Theater",
@@ -15972,6 +16188,66 @@
             "tags": ["BUNDLE", "COMMUNITY_CENTER_BUNDLE", "MEME_BUNDLE"],
             "content_packs": []
         },
+        "Square Hole Bundle": {
+            "code": 721498,
+            "region": "Community Center",
+            "tags": ["BUNDLE", "COMMUNITY_CENTER_BUNDLE", "MEME_BUNDLE"],
+            "content_packs": []
+        },
+        "Hint Bundle": {
+            "code": 721499,
+            "region": "Community Center",
+            "tags": ["BUNDLE", "COMMUNITY_CENTER_BUNDLE", "MEME_BUNDLE"],
+            "content_packs": []
+        },
+        "Colored Crystals Bundle": {
+            "code": 721500,
+            "region": "Community Center",
+            "tags": ["BUNDLE", "COMMUNITY_CENTER_BUNDLE", "MEME_BUNDLE"],
+            "content_packs": []
+        },
+        "Catch And Release Bundle": {
+            "code": 721501,
+            "region": "Community Center",
+            "tags": ["BUNDLE", "COMMUNITY_CENTER_BUNDLE", "MEME_BUNDLE"],
+            "content_packs": []
+        },
+        "Pollution Bundle": {
+            "code": 721502,
+            "region": "Community Center",
+            "tags": ["BUNDLE", "COMMUNITY_CENTER_BUNDLE", "MEME_BUNDLE"],
+            "content_packs": []
+        },
+        "Sacrifice Bundle": {
+            "code": 721503,
+            "region": "Community Center",
+            "tags": ["BUNDLE", "COMMUNITY_CENTER_BUNDLE", "MEME_BUNDLE"],
+            "content_packs": []
+        },
+        "Dr Seuss Bundle": {
+            "code": 721504,
+            "region": "Community Center",
+            "tags": ["BUNDLE", "COMMUNITY_CENTER_BUNDLE", "MEME_BUNDLE"],
+            "content_packs": []
+        },
+        "TheAlGoreRhythm Bundle": {
+            "code": 721505,
+            "region": "Community Center",
+            "tags": ["BUNDLE", "COMMUNITY_CENTER_BUNDLE", "MEME_BUNDLE"],
+            "content_packs": []
+        },
+        "Distracted Bundle": {
+            "code": 721506,
+            "region": "Community Center",
+            "tags": ["BUNDLE", "COMMUNITY_CENTER_BUNDLE", "MEME_BUNDLE"],
+            "content_packs": []
+        },
+        "Reconnection Bundle": {
+            "code": 721507,
+            "region": "Community Center",
+            "tags": ["BUNDLE", "COMMUNITY_CENTER_BUNDLE", "MEME_BUNDLE"],
+            "content_packs": []
+        },
         "Wear ???": {
             "code": 721601,
             "region": "Farm",
@@ -15981,7 +16257,7 @@
         "Wear Abigail's Bow": {
             "code": 721602,
             "region": "Farm",
-            "tags": ["HATSANITY", "HAT_DIFFICULT_OR_RNG"],
+            "tags": ["HATSANITY", "HAT_RNG"],
             "content_packs": []
         },
         "Wear Arcane Hat": {
@@ -16023,13 +16299,13 @@
         "Wear Blue Cowboy Hat": {
             "code": 721609,
             "region": "Farm",
-            "tags": ["HATSANITY", "HAT_DIFFICULT_OR_RNG"],
+            "tags": ["HATSANITY", "HAT_RNG"],
             "content_packs": []
         },
         "Wear Blue Ribbon": {
             "code": 721610,
             "region": "Farm",
-            "tags": ["HATSANITY", "HAT_EASY"],
+            "tags": ["HATSANITY", "HAT_MEDIUM"],
             "content_packs": []
         },
         "Wear Bluebird Mask": {
@@ -16041,7 +16317,7 @@
         "Wear Bowler Hat": {
             "code": 721612,
             "region": "Farm",
-            "tags": ["HATSANITY", "HAT_DIFFICULT_OR_RNG"],
+            "tags": ["HATSANITY", "HAT_DIFFICULT"],
             "content_packs": []
         },
         "Wear Bridal Veil": {
@@ -16053,7 +16329,7 @@
         "Wear Bucket Hat": {
             "code": 721614,
             "region": "Farm",
-            "tags": ["HATSANITY", "HAT_EASY"],
+            "tags": ["HATSANITY", "HAT_MEDIUM"],
             "content_packs": []
         },
         "Wear Butterfly Bow": {
@@ -16077,7 +16353,7 @@
         "Wear Chicken Mask": {
             "code": 721618,
             "region": "Farm",
-            "tags": ["HATSANITY", "HAT_DIFFICULT_OR_RNG"],
+            "tags": ["HATSANITY", "HAT_NEAR_PERFECTION"],
             "content_packs": []
         },
         "Wear Cone Hat": {
@@ -16107,13 +16383,13 @@
         "Wear Cowgal Hat": {
             "code": 721623,
             "region": "Farm",
-            "tags": ["HATSANITY", "HAT_DIFFICULT_OR_RNG"],
+            "tags": ["HATSANITY", "HAT_DIFFICULT"],
             "content_packs": []
         },
         "Wear Cowpoke Hat": {
             "code": 721624,
             "region": "Farm",
-            "tags": ["GINGER_ISLAND", "HATSANITY", "HAT_DIFFICULT_OR_RNG"],
+            "tags": ["GINGER_ISLAND", "HATSANITY", "HAT_DIFFICULT"],
             "content_packs": ["Ginger Island (Vanilla)"]
         },
         "Wear Daisy": {
@@ -16125,13 +16401,13 @@
         "Wear Dark Ballcap": {
             "code": 721626,
             "region": "Farm",
-            "tags": ["HATSANITY", "HAT_DIFFICULT_OR_RNG"],
+            "tags": ["HATSANITY", "HAT_RNG"],
             "content_packs": []
         },
         "Wear Dark Cowboy Hat": {
             "code": 721627,
             "region": "Farm",
-            "tags": ["HATSANITY", "HAT_DIFFICULT_OR_RNG"],
+            "tags": ["HATSANITY", "HAT_RNG"],
             "content_packs": []
         },
         "Wear Dark Velvet Bow": {
@@ -16155,7 +16431,7 @@
         "Wear Deluxe Pirate Hat": {
             "code": 721631,
             "region": "Farm",
-            "tags": ["GINGER_ISLAND", "HATSANITY", "HAT_DIFFICULT_OR_RNG"],
+            "tags": ["GINGER_ISLAND", "HATSANITY", "HAT_RNG"],
             "content_packs": ["Ginger Island (Vanilla)"]
         },
         "Wear Dinosaur Hat": {
@@ -16233,20 +16509,20 @@
         "Wear Garbage Hat": {
             "code": 721644,
             "region": "Farm",
-            "tags": ["HATSANITY", "HAT_DIFFICULT_OR_RNG"],
+            "tags": ["HATSANITY", "HAT_RNG"],
             "content_packs": []
         },
         "Wear Gil's Hat": {
             "code": 721645,
             "region": "Farm",
-            "tags": ["HATSANITY", "HAT_DIFFICULT_OR_RNG"],
+            "tags": ["HATSANITY", "HAT_DIFFICULT"],
             "content_packs": []
         },
         "Wear Gnome's Cap": {
             "code": 721646,
             "region": "Farm",
-            "tags": ["GINGER_ISLAND", "HATSANITY", "HAT_NEAR_PERFECTION"],
-            "content_packs": ["Ginger Island (Vanilla)"]
+            "tags": ["GINGER_ISLAND", "HATSANITY", "HAT_NEAR_PERFECTION", "REQUIRES_QI_ORDERS"],
+            "content_packs": ["Ginger Island (Vanilla)", "Qi Board (Vanilla)"]
         },
         "Wear Goblin Mask": {
             "code": 721647,
@@ -16269,7 +16545,7 @@
         "Wear Golden Helmet": {
             "code": 721650,
             "region": "Farm",
-            "tags": ["GINGER_ISLAND", "HATSANITY", "HAT_DIFFICULT_OR_RNG"],
+            "tags": ["GINGER_ISLAND", "HATSANITY", "HAT_RNG"],
             "content_packs": ["Ginger Island (Vanilla)"]
         },
         "Wear Golden Mask": {
@@ -16287,7 +16563,7 @@
         "Wear Governor's Hat": {
             "code": 721653,
             "region": "Farm",
-            "tags": ["HATSANITY", "HAT_EASY"],
+            "tags": ["HATSANITY", "HAT_MEDIUM"],
             "content_packs": []
         },
         "Wear Green Turban": {
@@ -16305,7 +16581,7 @@
         "Wear Hard Hat": {
             "code": 721656,
             "region": "Farm",
-            "tags": ["HATSANITY", "HAT_DIFFICULT_OR_RNG"],
+            "tags": ["HATSANITY", "HAT_DIFFICULT"],
             "content_packs": []
         },
         "Wear Hunter's Cap": {
@@ -16317,7 +16593,7 @@
         "Wear Infinity Crown": {
             "code": 721658,
             "region": "Farm",
-            "tags": ["GINGER_ISLAND", "HATSANITY", "HAT_DIFFICULT_OR_RNG"],
+            "tags": ["GINGER_ISLAND", "HATSANITY", "HAT_DIFFICULT"],
             "content_packs": ["Ginger Island (Vanilla)"]
         },
         "Wear Iridium Pan": {
@@ -16335,7 +16611,7 @@
         "Wear Joja Cap": {
             "code": 721661,
             "region": "Farm",
-            "tags": ["HATSANITY", "HAT_DIFFICULT_OR_RNG"],
+            "tags": ["HATSANITY", "HAT_RNG"],
             "content_packs": []
         },
         "Wear Junimo Hat": {
@@ -16353,7 +16629,7 @@
         "Wear Laurel Wreath Crown": {
             "code": 721664,
             "region": "Farm",
-            "tags": ["HATSANITY", "HAT_DIFFICULT_OR_RNG"],
+            "tags": ["HATSANITY", "HAT_RNG"],
             "content_packs": []
         },
         "Wear Leprechaun Hat": {
@@ -16365,7 +16641,7 @@
         "Wear Living Hat": {
             "code": 721666,
             "region": "Farm",
-            "tags": ["HATSANITY", "HAT_NEAR_PERFECTION"],
+            "tags": ["HATSANITY", "HAT_RNG"],
             "content_packs": []
         },
         "Wear Logo Cap": {
@@ -16383,13 +16659,13 @@
         "Wear Magic Cowboy Hat": {
             "code": 721669,
             "region": "Farm",
-            "tags": ["HATSANITY", "HAT_DIFFICULT_OR_RNG"],
+            "tags": ["HATSANITY", "HAT_DIFFICULT"],
             "content_packs": []
         },
         "Wear Magic Turban": {
             "code": 721670,
             "region": "Farm",
-            "tags": ["HATSANITY", "HAT_DIFFICULT_OR_RNG"],
+            "tags": ["HATSANITY", "HAT_DIFFICULT"],
             "content_packs": []
         },
         "Wear Mouse Ears": {
@@ -16413,13 +16689,13 @@
         "Wear Mushroom Cap": {
             "code": 721674,
             "region": "Farm",
-            "tags": ["HATSANITY", "HAT_DIFFICULT_OR_RNG"],
+            "tags": ["HATSANITY", "HAT_RNG"],
             "content_packs": []
         },
         "Wear Mystery Hat": {
             "code": 721675,
             "region": "Farm",
-            "tags": ["HATSANITY", "HAT_MEDIUM"],
+            "tags": ["HATSANITY", "HAT_RNG"],
             "content_packs": []
         },
         "Wear Official Cap": {
@@ -16431,7 +16707,7 @@
         "Wear Pageboy Cap": {
             "code": 721677,
             "region": "Farm",
-            "tags": ["GINGER_ISLAND", "HATSANITY", "HAT_DIFFICULT_OR_RNG"],
+            "tags": ["GINGER_ISLAND", "HATSANITY", "HAT_NEAR_PERFECTION"],
             "content_packs": ["Ginger Island (Vanilla)"]
         },
         "Wear Panda Hat": {
@@ -16479,7 +16755,7 @@
         "Wear Plum Chapeau": {
             "code": 721685,
             "region": "Farm",
-            "tags": ["HATSANITY", "HAT_MEDIUM"],
+            "tags": ["HATSANITY", "HAT_DIFFICULT"],
             "content_packs": []
         },
         "Wear Polka Bow": {
@@ -16515,13 +16791,13 @@
         "Wear Radioactive Goggles": {
             "code": 721691,
             "region": "Farm",
-            "tags": ["GINGER_ISLAND", "HATSANITY", "HAT_TAILORING"],
-            "content_packs": ["Ginger Island (Vanilla)"]
+            "tags": ["GINGER_ISLAND", "HATSANITY", "HAT_TAILORING", "REQUIRES_QI_ORDERS"],
+            "content_packs": ["Ginger Island (Vanilla)", "Qi Board (Vanilla)"]
         },
         "Wear Red Cowboy Hat": {
             "code": 721692,
             "region": "Farm",
-            "tags": ["HATSANITY", "HAT_DIFFICULT_OR_RNG"],
+            "tags": ["HATSANITY", "HAT_RNG"],
             "content_packs": []
         },
         "Wear Red Fez": {
@@ -16551,7 +16827,7 @@
         "Wear Small Cap": {
             "code": 721697,
             "region": "Farm",
-            "tags": ["GINGER_ISLAND", "HATSANITY", "HAT_EASY"],
+            "tags": ["GINGER_ISLAND", "HATSANITY", "HAT_MEDIUM"],
             "content_packs": ["Ginger Island (Vanilla)"]
         },
         "Wear Sombrero": {
@@ -16569,7 +16845,7 @@
         "Wear Space Helmet": {
             "code": 721700,
             "region": "Farm",
-            "tags": ["GINGER_ISLAND", "HATSANITY", "HAT_MEDIUM"],
+            "tags": ["GINGER_ISLAND", "HATSANITY", "HAT_DIFFICULT"],
             "content_packs": ["Ginger Island (Vanilla)"]
         },
         "Wear Sports Cap": {
@@ -16587,13 +16863,13 @@
         "Wear Squid Hat": {
             "code": 721703,
             "region": "Farm",
-            "tags": ["HATSANITY", "HAT_EASY"],
+            "tags": ["HATSANITY", "HAT_MEDIUM"],
             "content_packs": []
         },
         "Wear Squire's Helmet": {
             "code": 721704,
             "region": "Farm",
-            "tags": ["HATSANITY", "HAT_MEDIUM"],
+            "tags": ["HATSANITY", "HAT_RNG"],
             "content_packs": []
         },
         "Wear Star Helmet": {
@@ -16611,7 +16887,7 @@
         "Wear Straw Hat": {
             "code": 721707,
             "region": "Farm",
-            "tags": ["HATSANITY", "HAT_EASY"],
+            "tags": ["HATSANITY", "HAT_MEDIUM"],
             "content_packs": []
         },
         "Wear Sunglasses": {
@@ -16635,7 +16911,7 @@
         "Wear Tiger Hat": {
             "code": 721711,
             "region": "Farm",
-            "tags": ["GINGER_ISLAND", "HATSANITY", "HAT_DIFFICULT_OR_RNG"],
+            "tags": ["GINGER_ISLAND", "HATSANITY", "HAT_RNG"],
             "content_packs": ["Ginger Island (Vanilla)"]
         },
         "Wear Top Hat": {
@@ -16653,7 +16929,7 @@
         "Wear Tricorn Hat": {
             "code": 721714,
             "region": "Farm",
-            "tags": ["HATSANITY", "HAT_DIFFICULT_OR_RNG"],
+            "tags": ["HATSANITY", "HAT_RNG"],
             "content_packs": []
         },
         "Wear Tropiclip": {
@@ -16677,7 +16953,7 @@
         "Wear Watermelon Band": {
             "code": 721718,
             "region": "Farm",
-            "tags": ["HATSANITY", "HAT_DIFFICULT_OR_RNG"],
+            "tags": ["HATSANITY", "HAT_DIFFICULT"],
             "content_packs": []
         },
         "Wear Wearable Dwarf Helm": {
@@ -16689,7 +16965,7 @@
         "Wear White Bow": {
             "code": 721720,
             "region": "Farm",
-            "tags": ["HATSANITY", "HAT_DIFFICULT_OR_RNG"],
+            "tags": ["HATSANITY", "HAT_DIFFICULT"],
             "content_packs": []
         },
         "Wear White Turban": {
@@ -17862,464 +18138,482 @@
             "tags": ["EATSANITY", "EATSANITY_ARTISAN"],
             "content_packs": []
         },
-        "Eat Anchovy": {
+        "Eat Smoked Fish": {
+            "code": 721959,
+            "region": "Farm",
+            "tags": ["EATSANITY", "EATSANITY_ARTISAN"],
+            "content_packs": []
+        },
+        "Eat Dried Fruit": {
+            "code": 721960,
+            "region": "Farm",
+            "tags": ["EATSANITY", "EATSANITY_ARTISAN"],
+            "content_packs": []
+        },
+        "Eat Dried Mushrooms": {
             "code": 721961,
             "region": "Farm",
-            "tags": ["EATSANITY", "EATSANITY_FISH"],
+            "tags": ["EATSANITY", "EATSANITY_ARTISAN"],
             "content_packs": []
         },
-        "Eat Tuna": {
-            "code": 721962,
-            "region": "Farm",
-            "tags": ["EATSANITY", "EATSANITY_FISH"],
-            "content_packs": []
-        },
-        "Eat Sardine": {
-            "code": 721963,
-            "region": "Farm",
-            "tags": ["EATSANITY", "EATSANITY_FISH"],
-            "content_packs": []
-        },
-        "Eat Bream": {
-            "code": 721964,
-            "region": "Farm",
-            "tags": ["EATSANITY", "EATSANITY_FISH"],
-            "content_packs": []
-        },
-        "Eat Largemouth Bass": {
-            "code": 721965,
-            "region": "Farm",
-            "tags": ["EATSANITY", "EATSANITY_FISH"],
-            "content_packs": []
-        },
-        "Eat Smallmouth Bass": {
-            "code": 721966,
-            "region": "Farm",
-            "tags": ["EATSANITY", "EATSANITY_FISH"],
-            "content_packs": []
-        },
-        "Eat Rainbow Trout": {
-            "code": 721967,
-            "region": "Farm",
-            "tags": ["EATSANITY", "EATSANITY_FISH"],
-            "content_packs": []
-        },
-        "Eat Salmon": {
-            "code": 721968,
-            "region": "Farm",
-            "tags": ["EATSANITY", "EATSANITY_FISH"],
-            "content_packs": []
-        },
-        "Eat Walleye": {
-            "code": 721969,
-            "region": "Farm",
-            "tags": ["EATSANITY", "EATSANITY_FISH"],
-            "content_packs": []
-        },
-        "Eat Perch": {
-            "code": 721970,
-            "region": "Farm",
-            "tags": ["EATSANITY", "EATSANITY_FISH"],
-            "content_packs": []
-        },
-        "Eat Carp": {
+        "Eat Anchovy": {
             "code": 721971,
             "region": "Farm",
             "tags": ["EATSANITY", "EATSANITY_FISH"],
             "content_packs": []
         },
-        "Eat Catfish": {
+        "Eat Tuna": {
             "code": 721972,
             "region": "Farm",
             "tags": ["EATSANITY", "EATSANITY_FISH"],
             "content_packs": []
         },
-        "Eat Pike": {
+        "Eat Sardine": {
             "code": 721973,
             "region": "Farm",
             "tags": ["EATSANITY", "EATSANITY_FISH"],
             "content_packs": []
         },
-        "Eat Sunfish": {
+        "Eat Bream": {
             "code": 721974,
             "region": "Farm",
             "tags": ["EATSANITY", "EATSANITY_FISH"],
             "content_packs": []
         },
-        "Eat Red Mullet": {
+        "Eat Largemouth Bass": {
             "code": 721975,
             "region": "Farm",
             "tags": ["EATSANITY", "EATSANITY_FISH"],
             "content_packs": []
         },
-        "Eat Herring": {
+        "Eat Smallmouth Bass": {
             "code": 721976,
             "region": "Farm",
             "tags": ["EATSANITY", "EATSANITY_FISH"],
             "content_packs": []
         },
-        "Eat Eel": {
+        "Eat Rainbow Trout": {
             "code": 721977,
             "region": "Farm",
             "tags": ["EATSANITY", "EATSANITY_FISH"],
             "content_packs": []
         },
-        "Eat Red Snapper": {
+        "Eat Salmon": {
             "code": 721978,
             "region": "Farm",
             "tags": ["EATSANITY", "EATSANITY_FISH"],
             "content_packs": []
         },
-        "Eat Squid": {
+        "Eat Walleye": {
             "code": 721979,
             "region": "Farm",
             "tags": ["EATSANITY", "EATSANITY_FISH"],
             "content_packs": []
         },
-        "Eat Seaweed": {
+        "Eat Perch": {
             "code": 721980,
             "region": "Farm",
             "tags": ["EATSANITY", "EATSANITY_FISH"],
             "content_packs": []
         },
-        "Eat Green Algae": {
+        "Eat Carp": {
             "code": 721981,
             "region": "Farm",
             "tags": ["EATSANITY", "EATSANITY_FISH"],
             "content_packs": []
         },
-        "Eat Super Cucumber": {
+        "Eat Catfish": {
             "code": 721982,
             "region": "Farm",
             "tags": ["EATSANITY", "EATSANITY_FISH"],
             "content_packs": []
         },
-        "Eat Ghostfish": {
+        "Eat Pike": {
             "code": 721983,
             "region": "Farm",
             "tags": ["EATSANITY", "EATSANITY_FISH"],
             "content_packs": []
         },
-        "Eat White Algae": {
+        "Eat Sunfish": {
             "code": 721984,
             "region": "Farm",
             "tags": ["EATSANITY", "EATSANITY_FISH"],
             "content_packs": []
         },
-        "Eat Crimsonfish": {
+        "Eat Red Mullet": {
             "code": 721985,
             "region": "Farm",
             "tags": ["EATSANITY", "EATSANITY_FISH"],
             "content_packs": []
         },
-        "Eat Angler": {
+        "Eat Herring": {
             "code": 721986,
             "region": "Farm",
             "tags": ["EATSANITY", "EATSANITY_FISH"],
             "content_packs": []
         },
-        "Eat Ice Pip": {
+        "Eat Eel": {
             "code": 721987,
             "region": "Farm",
             "tags": ["EATSANITY", "EATSANITY_FISH"],
             "content_packs": []
         },
-        "Eat Lava Eel": {
+        "Eat Red Snapper": {
             "code": 721988,
             "region": "Farm",
             "tags": ["EATSANITY", "EATSANITY_FISH"],
             "content_packs": []
         },
-        "Eat Legend": {
+        "Eat Squid": {
             "code": 721989,
             "region": "Farm",
             "tags": ["EATSANITY", "EATSANITY_FISH"],
             "content_packs": []
         },
-        "Eat Sandfish": {
+        "Eat Seaweed": {
             "code": 721990,
             "region": "Farm",
             "tags": ["EATSANITY", "EATSANITY_FISH"],
             "content_packs": []
         },
-        "Eat Mutant Carp": {
+        "Eat Green Algae": {
             "code": 721991,
             "region": "Farm",
             "tags": ["EATSANITY", "EATSANITY_FISH"],
             "content_packs": []
         },
-        "Eat Sturgeon": {
+        "Eat Super Cucumber": {
             "code": 721992,
             "region": "Farm",
             "tags": ["EATSANITY", "EATSANITY_FISH"],
             "content_packs": []
         },
-        "Eat Tiger Trout": {
+        "Eat Ghostfish": {
             "code": 721993,
             "region": "Farm",
             "tags": ["EATSANITY", "EATSANITY_FISH"],
             "content_packs": []
         },
-        "Eat Bullhead": {
+        "Eat White Algae": {
             "code": 721994,
             "region": "Farm",
             "tags": ["EATSANITY", "EATSANITY_FISH"],
             "content_packs": []
         },
-        "Eat Tilapia": {
+        "Eat Crimsonfish": {
             "code": 721995,
             "region": "Farm",
             "tags": ["EATSANITY", "EATSANITY_FISH"],
             "content_packs": []
         },
-        "Eat Chub": {
+        "Eat Angler": {
             "code": 721996,
             "region": "Farm",
             "tags": ["EATSANITY", "EATSANITY_FISH"],
             "content_packs": []
         },
-        "Eat Dorado": {
+        "Eat Ice Pip": {
             "code": 721997,
             "region": "Farm",
             "tags": ["EATSANITY", "EATSANITY_FISH"],
             "content_packs": []
         },
-        "Eat Albacore": {
+        "Eat Lava Eel": {
             "code": 721998,
             "region": "Farm",
             "tags": ["EATSANITY", "EATSANITY_FISH"],
             "content_packs": []
         },
-        "Eat Shad": {
+        "Eat Legend": {
             "code": 721999,
             "region": "Farm",
             "tags": ["EATSANITY", "EATSANITY_FISH"],
             "content_packs": []
         },
-        "Eat Lingcod": {
+        "Eat Sandfish": {
             "code": 722000,
             "region": "Farm",
             "tags": ["EATSANITY", "EATSANITY_FISH"],
             "content_packs": []
         },
-        "Eat Halibut": {
+        "Eat Mutant Carp": {
             "code": 722001,
             "region": "Farm",
             "tags": ["EATSANITY", "EATSANITY_FISH"],
             "content_packs": []
         },
-        "Eat Woodskip": {
+        "Eat Sturgeon": {
             "code": 722002,
             "region": "Farm",
             "tags": ["EATSANITY", "EATSANITY_FISH"],
             "content_packs": []
         },
-        "Eat Glacierfish": {
+        "Eat Tiger Trout": {
             "code": 722003,
             "region": "Farm",
             "tags": ["EATSANITY", "EATSANITY_FISH"],
             "content_packs": []
         },
-        "Eat Void Salmon": {
+        "Eat Bullhead": {
             "code": 722004,
             "region": "Farm",
             "tags": ["EATSANITY", "EATSANITY_FISH"],
             "content_packs": []
         },
-        "Eat Slimejack": {
+        "Eat Tilapia": {
             "code": 722005,
             "region": "Farm",
             "tags": ["EATSANITY", "EATSANITY_FISH"],
             "content_packs": []
         },
-        "Eat Midnight Squid": {
+        "Eat Chub": {
             "code": 722006,
             "region": "Farm",
             "tags": ["EATSANITY", "EATSANITY_FISH"],
             "content_packs": []
         },
-        "Eat Spook Fish": {
+        "Eat Dorado": {
             "code": 722007,
             "region": "Farm",
             "tags": ["EATSANITY", "EATSANITY_FISH"],
             "content_packs": []
         },
-        "Eat Blobfish": {
+        "Eat Albacore": {
             "code": 722008,
             "region": "Farm",
             "tags": ["EATSANITY", "EATSANITY_FISH"],
             "content_packs": []
         },
-        "Eat Flounder": {
+        "Eat Shad": {
             "code": 722009,
             "region": "Farm",
             "tags": ["EATSANITY", "EATSANITY_FISH"],
             "content_packs": []
         },
-        "Eat Midnight Carp": {
+        "Eat Lingcod": {
             "code": 722010,
             "region": "Farm",
             "tags": ["EATSANITY", "EATSANITY_FISH"],
             "content_packs": []
         },
-        "Eat Stingray": {
+        "Eat Halibut": {
             "code": 722011,
             "region": "Farm",
-            "tags": ["EATSANITY", "EATSANITY_FISH", "GINGER_ISLAND"],
-            "content_packs": ["Ginger Island (Vanilla)"]
+            "tags": ["EATSANITY", "EATSANITY_FISH"],
+            "content_packs": []
         },
-        "Eat Lionfish": {
+        "Eat Woodskip": {
             "code": 722012,
             "region": "Farm",
-            "tags": ["EATSANITY", "EATSANITY_FISH", "GINGER_ISLAND"],
-            "content_packs": ["Ginger Island (Vanilla)"]
+            "tags": ["EATSANITY", "EATSANITY_FISH"],
+            "content_packs": []
         },
-        "Eat Blue Discus": {
+        "Eat Glacierfish": {
             "code": 722013,
             "region": "Farm",
-            "tags": ["EATSANITY", "EATSANITY_FISH", "GINGER_ISLAND"],
-            "content_packs": ["Ginger Island (Vanilla)"]
+            "tags": ["EATSANITY", "EATSANITY_FISH"],
+            "content_packs": []
         },
-        "Eat Son of Crimsonfish": {
+        "Eat Void Salmon": {
             "code": 722014,
             "region": "Farm",
-            "tags": ["EATSANITY", "EATSANITY_FISH", "GINGER_ISLAND", "REQUIRES_QI_ORDERS"],
-            "content_packs": ["Ginger Island (Vanilla)", "Qi Board (Vanilla)"]
+            "tags": ["EATSANITY", "EATSANITY_FISH"],
+            "content_packs": []
         },
-        "Eat Ms. Angler": {
+        "Eat Slimejack": {
             "code": 722015,
             "region": "Farm",
-            "tags": ["EATSANITY", "EATSANITY_FISH", "GINGER_ISLAND", "REQUIRES_QI_ORDERS"],
-            "content_packs": ["Ginger Island (Vanilla)", "Qi Board (Vanilla)"]
+            "tags": ["EATSANITY", "EATSANITY_FISH"],
+            "content_packs": []
         },
-        "Eat Legend II": {
+        "Eat Midnight Squid": {
             "code": 722016,
             "region": "Farm",
-            "tags": ["EATSANITY", "EATSANITY_FISH", "GINGER_ISLAND", "REQUIRES_QI_ORDERS"],
-            "content_packs": ["Ginger Island (Vanilla)", "Qi Board (Vanilla)"]
+            "tags": ["EATSANITY", "EATSANITY_FISH"],
+            "content_packs": []
         },
-        "Eat Radioactive Carp": {
+        "Eat Spook Fish": {
             "code": 722017,
             "region": "Farm",
-            "tags": ["EATSANITY", "EATSANITY_FISH", "GINGER_ISLAND", "REQUIRES_QI_ORDERS"],
-            "content_packs": ["Ginger Island (Vanilla)", "Qi Board (Vanilla)"]
+            "tags": ["EATSANITY", "EATSANITY_FISH"],
+            "content_packs": []
         },
-        "Eat Glacierfish Jr.": {
+        "Eat Blobfish": {
             "code": 722018,
             "region": "Farm",
-            "tags": ["EATSANITY", "EATSANITY_FISH", "GINGER_ISLAND", "REQUIRES_QI_ORDERS"],
-            "content_packs": ["Ginger Island (Vanilla)", "Qi Board (Vanilla)"]
+            "tags": ["EATSANITY", "EATSANITY_FISH"],
+            "content_packs": []
         },
-        "Eat Sea Jelly": {
+        "Eat Flounder": {
             "code": 722019,
             "region": "Farm",
             "tags": ["EATSANITY", "EATSANITY_FISH"],
             "content_packs": []
         },
-        "Eat Cave Jelly": {
+        "Eat Midnight Carp": {
             "code": 722020,
             "region": "Farm",
             "tags": ["EATSANITY", "EATSANITY_FISH"],
             "content_packs": []
         },
-        "Eat River Jelly": {
+        "Eat Stingray": {
             "code": 722021,
+            "region": "Farm",
+            "tags": ["EATSANITY", "EATSANITY_FISH", "GINGER_ISLAND"],
+            "content_packs": ["Ginger Island (Vanilla)"]
+        },
+        "Eat Lionfish": {
+            "code": 722022,
+            "region": "Farm",
+            "tags": ["EATSANITY", "EATSANITY_FISH", "GINGER_ISLAND"],
+            "content_packs": ["Ginger Island (Vanilla)"]
+        },
+        "Eat Blue Discus": {
+            "code": 722023,
+            "region": "Farm",
+            "tags": ["EATSANITY", "EATSANITY_FISH", "GINGER_ISLAND"],
+            "content_packs": ["Ginger Island (Vanilla)"]
+        },
+        "Eat Son of Crimsonfish": {
+            "code": 722024,
+            "region": "Farm",
+            "tags": ["EATSANITY", "EATSANITY_FISH", "GINGER_ISLAND", "REQUIRES_QI_ORDERS"],
+            "content_packs": ["Ginger Island (Vanilla)", "Qi Board (Vanilla)"]
+        },
+        "Eat Ms. Angler": {
+            "code": 722025,
+            "region": "Farm",
+            "tags": ["EATSANITY", "EATSANITY_FISH", "GINGER_ISLAND", "REQUIRES_QI_ORDERS"],
+            "content_packs": ["Ginger Island (Vanilla)", "Qi Board (Vanilla)"]
+        },
+        "Eat Legend II": {
+            "code": 722026,
+            "region": "Farm",
+            "tags": ["EATSANITY", "EATSANITY_FISH", "GINGER_ISLAND", "REQUIRES_QI_ORDERS"],
+            "content_packs": ["Ginger Island (Vanilla)", "Qi Board (Vanilla)"]
+        },
+        "Eat Radioactive Carp": {
+            "code": 722027,
+            "region": "Farm",
+            "tags": ["EATSANITY", "EATSANITY_FISH", "GINGER_ISLAND", "REQUIRES_QI_ORDERS"],
+            "content_packs": ["Ginger Island (Vanilla)", "Qi Board (Vanilla)"]
+        },
+        "Eat Glacierfish Jr.": {
+            "code": 722028,
+            "region": "Farm",
+            "tags": ["EATSANITY", "EATSANITY_FISH", "GINGER_ISLAND", "REQUIRES_QI_ORDERS"],
+            "content_packs": ["Ginger Island (Vanilla)", "Qi Board (Vanilla)"]
+        },
+        "Eat Sea Jelly": {
+            "code": 722029,
+            "region": "Farm",
+            "tags": ["EATSANITY", "EATSANITY_FISH"],
+            "content_packs": []
+        },
+        "Eat Cave Jelly": {
+            "code": 722030,
+            "region": "Farm",
+            "tags": ["EATSANITY", "EATSANITY_FISH"],
+            "content_packs": []
+        },
+        "Eat River Jelly": {
+            "code": 722031,
             "region": "Farm",
             "tags": ["EATSANITY", "EATSANITY_FISH"],
             "content_packs": []
         },
         "Drink Joja Cola": {
-            "code": 722022,
+            "code": 722032,
             "region": "Farm",
             "tags": ["EATSANITY", "EATSANITY_FISH"],
             "content_packs": []
         },
         "Eat Magic Rock Candy": {
-            "code": 722031,
+            "code": 722041,
             "region": "Farm",
             "tags": ["EATSANITY", "EATSANITY_SHOP"],
             "content_packs": []
         },
         "Drink Energy Tonic": {
-            "code": 722032,
+            "code": 722042,
             "region": "Farm",
             "tags": ["EATSANITY", "EATSANITY_SHOP"],
             "content_packs": []
         },
         "Drink Muscle Remedy": {
-            "code": 722033,
+            "code": 722043,
             "region": "Farm",
             "tags": ["EATSANITY", "EATSANITY_SHOP"],
             "content_packs": []
         },
         "Drink Pina Colada": {
-            "code": 722034,
+            "code": 722044,
             "region": "Farm",
             "tags": ["EATSANITY", "EATSANITY_SHOP", "GINGER_ISLAND"],
             "content_packs": ["Ginger Island (Vanilla)"]
         },
         "Eat Stardrop": {
-            "code": 722035,
+            "code": 722045,
             "region": "Farm",
             "tags": ["EATSANITY", "EATSANITY_SHOP"],
             "content_packs": []
         },
         "Eat Sap": {
-            "code": 722041,
+            "code": 722051,
             "region": "Farm",
             "tags": ["EATSANITY", "EATSANITY_CROP", "EATSANITY_POISONOUS"],
             "content_packs": []
         },
         "Eat Holly": {
-            "code": 722042,
+            "code": 722052,
             "region": "Farm",
             "tags": ["EATSANITY", "EATSANITY_CROP", "EATSANITY_POISONOUS"],
             "content_packs": []
         },
         "Eat Red Mushroom": {
-            "code": 722043,
+            "code": 722053,
             "region": "Farm",
             "tags": ["EATSANITY", "EATSANITY_CROP", "EATSANITY_POISONOUS"],
             "content_packs": []
         },
         "Eat Void Egg": {
-            "code": 722044,
+            "code": 722054,
             "region": "Farm",
             "tags": ["EATSANITY", "EATSANITY_ARTISAN", "EATSANITY_POISONOUS"],
             "content_packs": []
         },
         "Drink Void Mayonnaise": {
-            "code": 722045,
+            "code": 722055,
             "region": "Farm",
             "tags": ["EATSANITY", "EATSANITY_ARTISAN", "EATSANITY_POISONOUS"],
             "content_packs": []
         },
         "Eat Pufferfish": {
-            "code": 722046,
+            "code": 722056,
             "region": "Farm",
             "tags": ["EATSANITY", "EATSANITY_FISH", "EATSANITY_POISONOUS"],
             "content_packs": []
         },
         "Eat Sea Cucumber": {
-            "code": 722047,
+            "code": 722057,
             "region": "Farm",
             "tags": ["EATSANITY", "EATSANITY_FISH", "EATSANITY_POISONOUS"],
             "content_packs": []
         },
         "Eat Goby": {
-            "code": 722048,
+            "code": 722058,
             "region": "Farm",
             "tags": ["EATSANITY", "EATSANITY_FISH", "EATSANITY_POISONOUS"],
             "content_packs": []
         },
         "Eat Scorpion Carp": {
-            "code": 722049,
+            "code": 722059,
             "region": "Farm",
             "tags": ["EATSANITY", "EATSANITY_FISH", "EATSANITY_POISONOUS"],
             "content_packs": []
         },
         "Drink Iridium Snake Milk": {
-            "code": 722050,
+            "code": 722060,
             "region": "Farm",
             "tags": ["EATSANITY", "EATSANITY_ARTISAN", "EATSANITY_POISONOUS"],
             "content_packs": []
@@ -21813,8 +22107,8 @@
         "Craft Radioactive Slot Machine": {
             "code": 774443,
             "region": "Farm",
-            "tags": ["CRAFTSANITY", "CRAFTSANITY_CRAFT", "GINGER_ISLAND"],
-            "content_packs": ["Ginger Island (Vanilla)", "Luck Skill"]
+            "tags": ["CRAFTSANITY", "CRAFTSANITY_CRAFT", "GINGER_ISLAND", "REQUIRES_QI_ORDERS"],
+            "content_packs": ["Ginger Island (Vanilla)", "Luck Skill", "Qi Board (Vanilla)"]
         },
         "Magic Elixir Recipe": {
             "code": 774451,
@@ -21948,7 +22242,7 @@
             "tags": ["SPECIAL_ORDER_BOARD"],
             "content_packs": ["Stardew Valley Expanded"]
         },
-        "Corrupted Crops Task": {
+        "Quest: Corrupted Crops Task": {
             "code": 774519,
             "region": "Witch's Swamp",
             "tags": ["GINGER_ISLAND"],
@@ -21966,7 +22260,7 @@
             "tags": ["STORY_QUEST"],
             "content_packs": ["Distant Lands - Witch Swamp Overhaul"]
         },
-        "Witch's order": {
+        "Quest: Witch's order": {
             "code": 774522,
             "region": "Witch's Swamp",
             "tags": ["GINGER_ISLAND"],

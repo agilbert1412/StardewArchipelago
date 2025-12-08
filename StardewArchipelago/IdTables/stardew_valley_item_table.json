@@ -334,7 +334,7 @@
         },
         "Iridium Snake Milk": {
             "code": 717099,
-            "classification": "useful"
+            "classification": "progression"
         },
         "JotPK: Progressive Boots": {
             "code": 717100,
@@ -782,7 +782,7 @@
         },
         "Golden Pumpkin": {
             "code": 717211,
-            "classification": "useful"
+            "classification": "progression"
         },
         "Barbed Hook": {
             "code": 717212,
@@ -1118,7 +1118,7 @@
         },
         "Glow Ring": {
             "code": 717296,
-            "classification": "useful"
+            "classification": "filler"
         },
         "Small Magnet Ring": {
             "code": 717297,
@@ -1126,7 +1126,7 @@
         },
         "Magnet Ring": {
             "code": 717298,
-            "classification": "useful"
+            "classification": "filler"
         },
         "Slime Charmer Ring": {
             "code": 717299,
@@ -1166,27 +1166,27 @@
         },
         "Amethyst Ring": {
             "code": 717308,
-            "classification": "useful"
+            "classification": "filler"
         },
         "Topaz Ring": {
             "code": 717309,
-            "classification": "useful"
+            "classification": "filler"
         },
         "Aquamarine Ring": {
             "code": 717310,
-            "classification": "useful"
+            "classification": "filler"
         },
         "Jade Ring": {
             "code": 717311,
-            "classification": "useful"
+            "classification": "filler"
         },
         "Emerald Ring": {
             "code": 717312,
-            "classification": "useful"
+            "classification": "filler"
         },
         "Ruby Ring": {
             "code": 717313,
-            "classification": "useful"
+            "classification": "filler"
         },
         "Wedding Ring": {
             "code": 717314,
@@ -2206,7 +2206,7 @@
         },
         "Fishing Enzyme": {
             "code": 717627,
-            "classification": "useful"
+            "classification": "progression"
         },
         "Mining Enzyme": {
             "code": 717628,
@@ -2240,137 +2240,165 @@
             "code": 717635,
             "classification": "trap"
         },
-        "Forest Magic": {
+        "Attack Enzyme": {
             "code": 717636,
-            "classification": "progression"
+            "classification": "useful"
         },
-        "Landslide Removed": {
-            "code": 717637,
-            "classification": "progression"
-        },
-        "Magic Ink": {
-            "code": 717638,
-            "classification": "progression"
-        },
-        "Community Center Key": {
-            "code": 717639,
-            "classification": "progression"
-        },
-        "Wizard Invitation": {
+        "Forest Magic": {
             "code": 717640,
             "classification": "progression"
         },
-        "Pam House": {
+        "Landslide Removed": {
             "code": 717641,
             "classification": "progression"
         },
-        "Forest To Beach Shortcut": {
+        "Magic Ink": {
             "code": 717642,
             "classification": "progression"
         },
-        "Mountain Shortcuts": {
+        "Community Center Key": {
             "code": 717643,
             "classification": "progression"
         },
-        "Town To Tide Pools Shortcut": {
+        "Wizard Invitation": {
+            "code": 717644,
+            "classification": "progression"
+        },
+        "Pam House": {
             "code": 717645,
             "classification": "progression"
         },
-        "Tunnel To Backwoods Shortcut": {
+        "Forest To Beach Shortcut": {
             "code": 717646,
             "classification": "progression"
         },
-        "Statue Of Endless Fortune": {
-            "code": 717648,
-            "classification": "useful"
+        "Mountain Shortcuts": {
+            "code": 717647,
+            "classification": "progression"
         },
-        "Catalogue": {
+        "Town To Tide Pools Shortcut": {
+            "code": 717648,
+            "classification": "progression"
+        },
+        "Tunnel To Backwoods Shortcut": {
             "code": 717649,
             "classification": "progression"
         },
-        "Furniture Catalogue": {
+        "Statue Of Endless Fortune": {
             "code": 717650,
             "classification": "progression"
         },
-        "Joja Furniture Catalogue": {
+        "Catalogue": {
             "code": 717651,
             "classification": "progression"
         },
-        "Junimo Catalogue": {
+        "Furniture Catalogue": {
             "code": 717652,
             "classification": "progression"
         },
-        "Retro Catalogue": {
+        "Joja Furniture Catalogue": {
             "code": 717653,
             "classification": "progression"
         },
-        "Trash Catalogue": {
+        "Junimo Catalogue": {
             "code": 717654,
             "classification": "progression"
         },
-        "Wizard Catalogue": {
+        "Retro Catalogue": {
             "code": 717655,
             "classification": "progression"
         },
-        "Abigail Portrait": {
+        "Trash Catalogue": {
             "code": 717656,
-            "classification": "filler"
+            "classification": "progression"
         },
-        "Alex Portrait": {
+        "Wizard Catalogue": {
             "code": 717657,
-            "classification": "filler"
+            "classification": "progression"
         },
-        "Elliott Portrait": {
+        "Abigail Portrait": {
             "code": 717658,
             "classification": "filler"
         },
-        "Emily Portrait": {
+        "Alex Portrait": {
             "code": 717659,
             "classification": "filler"
         },
-        "Haley Portrait": {
+        "Elliott Portrait": {
             "code": 717660,
             "classification": "filler"
         },
-        "Harvey Portrait": {
+        "Emily Portrait": {
             "code": 717661,
             "classification": "filler"
         },
-        "Krobus Portrait": {
+        "Haley Portrait": {
             "code": 717662,
             "classification": "filler"
         },
-        "Leah Portrait": {
+        "Harvey Portrait": {
             "code": 717663,
             "classification": "filler"
         },
-        "Maru Portrait": {
+        "Krobus Portrait": {
             "code": 717664,
             "classification": "filler"
         },
-        "Penny Portrait": {
+        "Leah Portrait": {
             "code": 717665,
             "classification": "filler"
         },
-        "Sam Portrait": {
+        "Maru Portrait": {
             "code": 717666,
             "classification": "filler"
         },
-        "Sebastian Portrait": {
+        "Penny Portrait": {
             "code": 717667,
             "classification": "filler"
         },
-        "Shane Portrait": {
+        "Sam Portrait": {
             "code": 717668,
             "classification": "filler"
         },
-        "Trash Bear Arrival": {
+        "Sebastian Portrait": {
             "code": 717669,
+            "classification": "filler"
+        },
+        "Shane Portrait": {
+            "code": 717670,
+            "classification": "filler"
+        },
+        "Trash Bear Arrival": {
+            "code": 717671,
             "classification": "progression"
         },
         "Trash Bear Cleanup": {
-            "code": 717670,
+            "code": 717672,
             "classification": "filler"
+        },
+        "Progressive Bookseller Days": {
+            "code": 717673,
+            "classification": "progression"
+        },
+        "Bookseller Stock: Progressive Experience Books": {
+            "code": 717674,
+            "classification": "progression"
+        },
+        "Bookseller Stock: Progressive Rare Books": {
+            "code": 717675,
+            "classification": "progression"
+        },
+        "Bookseller Stock: Permanent Books": {
+            "code": 717676,
+            "classification": "progression"
+        },
+        "Men's Locker Key": {
+            "code": 717677,
+            "classification": "progression"
+        },
+        "Women's Locker Key": {
+            "code": 717678,
+            "classification": "progression"
         },
         "Burnt Trap": {
             "code": 721001,
