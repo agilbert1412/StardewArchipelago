@@ -478,9 +478,9 @@ namespace StardewArchipelago.Locations.Jojapocalypse
 
             // Backpacks & Buildings
             { "Big", new[] { "" } },
-            { "Large", new[] { "" } },
-            { "Deluxe", new[] { "", "Big", "Large" } },
-            { "Premium", new[] { "", "Large", "Deluxe" } },
+            { "Large", new[] { "", "Small" } },
+            { "Deluxe", new[] { "", "Big", "Large", "Small" } },
+            { "Premium", new[] { "", "Large", "Deluxe", "Small" } },
         };
     }
 }
