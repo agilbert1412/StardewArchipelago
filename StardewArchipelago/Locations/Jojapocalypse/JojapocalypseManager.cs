@@ -40,7 +40,7 @@ namespace StardewArchipelago.Locations.Jojapocalypse
                 return;
             }
 
-            _jojaDisabler.DisablePerfectionWaivers();
+            // _jojaDisabler.DisablePerfectionWaivers(); // We allow this on Jojapocalypse?
             _jojapocalypseShopPatcher.PatchJojaShops();
             _jojaConsequencesPatcher.PatchAllConsequences();
         }
