@@ -76,7 +76,7 @@ namespace StardewArchipelago.Locations.Jojapocalypse
                 return false;
             }
 
-            if (!ValidateBundleLocation(location))
+            if (!ValidateCommunityCenterLocation(location))
             {
                 return false;
             }
@@ -92,6 +92,11 @@ namespace StardewArchipelago.Locations.Jojapocalypse
             }
 
             if (!ValidateCooksanityLocation(location))
+            {
+                return false;
+            }
+
+            if (!ValidateCraftsanityLocation(location))
             {
                 return false;
             }
@@ -324,7 +329,22 @@ namespace StardewArchipelago.Locations.Jojapocalypse
             return _archipelago.HasReceivedItem(APItem.MAGNIFYING_GLASS);
         }
 
-        private bool ValidateBundleLocation(StardewArchipelagoLocation location)
+        private bool ValidateCommunityCenterLocation(StardewArchipelagoLocation location)
+        {
+            if (!ValidateBundleRoomLocation(location))
+            {
+                return false;
+            }
+
+            if (!ValidateBundleLocation(location))
+            {
+                return false;
+            }
+
+            return true;
+        }
+
+        private bool ValidateBundleRoomLocation(StardewArchipelagoLocation location)
         {
             if (!location.LocationTags.Contains(LocationTag.COMMUNITY_CENTER_ROOM))
             {
@@ -354,6 +374,16 @@ namespace StardewArchipelago.Locations.Jojapocalypse
             return true;
         }
 
+        private bool ValidateBundleRoomLocation(StardewArchipelagoLocation location)
+        {
+            if (!location.LocationTags.Contains(LocationTag.COMMUNITY_CENTER_BUNDLE))
+            {
+                return true;
+            }
+
+            return _archipelago.HasReceivedItem(APItem.FOREST_MAGIC);
+        }
+
         private bool ValidateFishsanityLocation(StardewArchipelagoLocation location)
         {
             if (!location.LocationTags.Contains(LocationTag.FISHSANITY))
@@ -381,7 +411,36 @@ namespace StardewArchipelago.Locations.Jojapocalypse
                 return true;
             }
 
-            return !_archipelago.SlotData.BuildingProgression.HasFlag(BuildingProgression.Progressive) || _archipelago.HasReceivedItem(CarpenterInjections.BUILDING_PROGRESSIVE_HOUSE);
+            if (!_archipelago.SlotData.BuildingProgression.HasFlag(BuildingProgression.Progressive) || _archipelago.HasReceivedItem(CarpenterInjections.BUILDING_PROGRESSIVE_HOUSE))
+            {
+                return false;
+            }
+
+            var prefix = "Cook ";
+            if (!location.Name.StartsWith(prefix, StringComparison.InvariantCultureIgnoreCase))
+            {
+                return true;
+            }
+
+            var recipe = location.Name[prefix.Length..].Trim();
+            return Game1.player.knowsRecipe(recipe);
+        }
+
+        private bool ValidateCraftsanityLocation(StardewArchipelagoLocation location)
+        {
+            if (!location.LocationTags.Contains(LocationTag.CRAFTSANITY_CRAFT))
+            {
+                return true;
+            }
+
+            var prefix = "Craft ";
+            if (!location.Name.StartsWith(prefix, StringComparison.InvariantCultureIgnoreCase))
+            {
+                return true;
+            }
+
+            var recipe = location.Name[prefix.Length..].Trim();
+            return Game1.player.knowsRecipe(recipe);
         }
 
         private bool ValidateMovieLocation(StardewArchipelagoLocation location)
