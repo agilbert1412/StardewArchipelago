@@ -109,7 +109,7 @@ Other mods are also being considered which are smaller in scope, but are too num
 
 ## Stardew Valley Expanded Specific Instructions
 
-** Stardew Valley Expanded is no longer supported as of StardewArchipelago 7.2.x-archipelago**
+**Stardew Valley Expanded is no longer supported as of StardewArchipelago 7.2.x-archipelago**
 
 If you wish to see the mod brought back, we need someone to update it and maintain it. Most of it is still in the code, just turned off because it was becoming too unstable and was unmaintained.
 
