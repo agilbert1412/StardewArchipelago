@@ -1,26 +1,29 @@
 ﻿using HarmonyLib;
+using KaitoKid.ArchipelagoUtilities.Net.Constants;
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Audio;
+using Microsoft.Xna.Framework.Input;
 using StardewArchipelago.Archipelago;
+using StardewArchipelago.Locations.InGameLocations;
 using StardewArchipelago.Logging;
 using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Locations;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using KaitoKid.ArchipelagoUtilities.Net.Constants;
-using xTile.Dimensions;
-using StardewArchipelago.Locations.InGameLocations;
 using StardewValley.Menus;
 using StardewValley.Objects;
-using Microsoft.Xna.Framework;
-using Rectangle = xTile.Dimensions.Rectangle;
-using Microsoft.Xna.Framework.Audio;
+using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
+using StardewArchipelago.Archipelago.ApworldData;
+using xTile.Dimensions;
+using Rectangle = xTile.Dimensions.Rectangle;
 
 namespace StardewArchipelago.Locations.Jojapocalypse
 {
     public class JojapocalypseShopPatcher
     {
+        private const string JOJA_SUBSHOP_DIALOG_KEY = "Joja_SubShop";
         private const string HOLD_MUSIC_CUE = "hold-music";
 
         private static LogHandler _logger;
@@ -204,8 +207,6 @@ namespace StardewArchipelago.Locations.Jojapocalypse
 
         private static void OpenJojapocalypseShop(double priceMultiplier = 1.0, IEnumerable<string> locationTagFilters = null)
         {
-            var dialogueBox = (DialogueBox)Game1.activeClickableMenu;
-            dialogueBox.closeDialogue();
             if (locationTagFilters == null)
             {
                 locationTagFilters = Array.Empty<string>();
@@ -213,10 +214,54 @@ namespace StardewArchipelago.Locations.Jojapocalypse
 
             var items = CreateJojapocalypseItems(priceMultiplier, locationTagFilters);
 
-            Game1.activeClickableMenu = new ShopMenu($"Jojapocalypse_{string.Join("_", locationTagFilters)}", items, 0, "Morris", on_purchase: OnPurchaseJojapocalypseItem);
+            if (items.Count < 12)
+            {
+                OpenJojapocalypseShop(string.Join("_", locationTagFilters), items.Values.ToList());
+                return;
+            }
+
+            var splitItems = SplitJojapocalypseItems(items);
+
+            DisplayJojaSubShops(splitItems);
         }
 
-        private static List<ISalable> CreateJojapocalypseItems(double priceMultiplier, IEnumerable<string> locationTagFilters)
+        private static void DisplayJojaSubShops(Dictionary<string, List<ISalable>> splitItems)
+        {
+            var speaker = Morris;
+            speaker = new NPC(speaker.Sprite, Vector2.Zero, "", 0, speaker.Name, speaker.Portrait, false);
+            speaker.displayName = speaker.displayName;
+
+            var dialogueSubShops = "Which department would you like to speak with?";
+            var dialogueSubShopsWithResponses = $"$y '{dialogueSubShops}";
+            var keys = new List<(string, List<ISalable>)>();
+            foreach (var (subItemsKey, subItems) in splitItems)
+            {
+                keys.Add((subItemsKey, subItems));
+                dialogueSubShopsWithResponses += $"_{subItemsKey}_One Moment.";
+            }
+
+            var dialogue1 = new Dialogue(speaker, nameof(dialogueSubShopsWithResponses), dialogueSubShopsWithResponses);
+            dialogue1.answerQuestionBehavior = (which) => OnAnswerSubShop(keys[which]);
+
+            Morris.CurrentDialogue.Clear();
+            Morris.CurrentDialogue.Push(dialogue1);
+            Game1.drawDialogue(Morris);
+        }
+
+        private static bool OnAnswerSubShop((string, List<ISalable>) subItems)
+        {
+            OpenJojapocalypseShop(subItems.Item1, subItems.Item2.OrderBy(x => x.Name).ToList());
+            return true;
+        }
+
+        private static void OpenJojapocalypseShop(string idDifferenciator, List<ISalable> items)
+        {
+            var dialogueBox = (DialogueBox)Game1.activeClickableMenu;
+            dialogueBox.closeDialogue();
+            Game1.activeClickableMenu = new ShopMenu($"Jojapocalypse_{idDifferenciator}", items, 0, "Morris", on_purchase: OnPurchaseJojapocalypseItem);
+        }
+
+        private static Dictionary<StardewArchipelagoLocation, ISalable> CreateJojapocalypseItems(double priceMultiplier, IEnumerable<string> locationTagFilters)
         {
             var locations = _archipelago.DataPackageCache.GetAllLocations().ToArray();
             var locationsMissing = locations.Where(x => _locationChecker.IsLocationMissing(x.Name)).ToArray();
@@ -224,14 +269,79 @@ namespace StardewArchipelago.Locations.Jojapocalypse
             var locationsCanPurchaseNow = locationsFiltered.Where(_jojaFiltering.CanPurchaseJojapocalypseLocation).ToArray();
             var locationsInOrder = locationsCanPurchaseNow.OrderBy(x => x.Name).ToArray();
 
-            var salableItems = new List<ISalable>();
+            var salableItems = new Dictionary<StardewArchipelagoLocation, ISalable>();
             _jojaPriceCalculator.SetPriceMultiplier(priceMultiplier);
             foreach (var location in locationsInOrder)
             {
-                salableItems.Add(new JojaObtainableArchipelagoLocation($"Joja {location.Name}", location.Name, _logger, _modHelper, _jojaLocationChecker, _archipelago, _jojaPriceCalculator));
+                salableItems.Add(location, new JojaObtainableArchipelagoLocation($"Joja {location.Name}", location.Name, _logger, _modHelper, _jojaLocationChecker, _archipelago, _jojaPriceCalculator));
             }
 
             return salableItems;
+        }
+
+        private static Dictionary<string, List<ISalable>> SplitJojapocalypseItems(Dictionary<StardewArchipelagoLocation, ISalable> items)
+        {
+            var salablesByKeyword = new Dictionary<string, List<ISalable>>();
+            foreach (var (location, item) in items)
+            {
+                var words = location.Name.Split(" ");
+                var prefix = words.First();
+                prefix = prefix.Replace(":", "").Replace("?", "").Replace("(", "").Replace(")", "");
+                if (prefix.Length > 2)
+                {
+                    if (!salablesByKeyword.ContainsKey(prefix))
+                    {
+                        salablesByKeyword.Add(prefix, new List<ISalable>());
+                    }
+                    salablesByKeyword[prefix].Add(item);
+                }
+                if (words.Length <= 1)
+                {
+                    continue;
+                }
+                var suffix = words.Last();
+                suffix = suffix.Replace(":", "").Replace("?", "").Replace("(", "").Replace(")", "");
+                if (suffix.Length > 2)
+                {
+                    if (!salablesByKeyword.ContainsKey(suffix))
+                    {
+                        salablesByKeyword.Add(suffix, new List<ISalable>());
+                    }
+                    salablesByKeyword[suffix].Add(item);
+                }
+            }
+
+            var salablesByKeywordOrdered = salablesByKeyword.OrderByDescending(x => x.Value.Count).ToArray();
+            const int NUMBER_CATEGORIES_SPLIT = 10;
+            const string OTHER_CATEGORY = "Other";
+            var splitItems = new Dictionary<string, List<ISalable>>();
+            var otherItems = new Dictionary<string, ISalable>();
+            var alreadyCategorizedItems = new HashSet<string>();
+            for (var i = 0; i < salablesByKeywordOrdered.Length; i++)
+            {
+                var (keyword, keywordItems) = salablesByKeywordOrdered[i];
+                if (i < NUMBER_CATEGORIES_SPLIT - 1 && keywordItems.Count > 4)
+                {
+                    splitItems.Add(keyword, keywordItems);
+                    alreadyCategorizedItems.UnionWith(keywordItems.Select(x => x.Name));
+                }
+                else
+                {
+                    foreach (var keywordItem in keywordItems)
+                    {
+                        if (alreadyCategorizedItems.Contains(keywordItem.Name))
+                        {
+                            continue;
+                        }
+                        otherItems.TryAdd(keywordItem.Name, keywordItem);
+                        alreadyCategorizedItems.Add(keywordItem.Name);
+                    }
+                }
+            }
+
+            splitItems.Add(OTHER_CATEGORY, otherItems.Values.ToList());
+
+            return splitItems;
         }
 
         private static bool OnPurchaseJojapocalypseItem(ISalable salable, Farmer who, int counttaken, ItemStockInformation stock)
