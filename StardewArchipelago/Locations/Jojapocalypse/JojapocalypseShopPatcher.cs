@@ -285,29 +285,20 @@ namespace StardewArchipelago.Locations.Jojapocalypse
             foreach (var (location, item) in items)
             {
                 var words = location.Name.Split(" ");
-                var prefix = words.First();
-                prefix = prefix.Replace(":", "").Replace("?", "").Replace("(", "").Replace(")", "");
-                if (prefix.Length > 2)
+                foreach (var word in words)
                 {
-                    if (!salablesByKeyword.ContainsKey(prefix))
+                    var keyword = word.Replace(":", "").Replace("?", "").Replace("(", "").Replace(")", "");
+                    if (keyword.Length > 2)
                     {
-                        salablesByKeyword.Add(prefix, new List<ISalable>());
+                        if (!salablesByKeyword.ContainsKey(keyword))
+                        {
+                            salablesByKeyword.Add(keyword, new List<ISalable>());
+                        }
+                        if (!salablesByKeyword[keyword].Contains(item))
+                        {
+                            salablesByKeyword[keyword].Add(item);
+                        }
                     }
-                    salablesByKeyword[prefix].Add(item);
-                }
-                if (words.Length <= 1)
-                {
-                    continue;
-                }
-                var suffix = words.Last();
-                suffix = suffix.Replace(":", "").Replace("?", "").Replace("(", "").Replace(")", "");
-                if (suffix.Length > 2)
-                {
-                    if (!salablesByKeyword.ContainsKey(suffix))
-                    {
-                        salablesByKeyword.Add(suffix, new List<ISalable>());
-                    }
-                    salablesByKeyword[suffix].Add(item);
                 }
             }
 
@@ -320,7 +311,7 @@ namespace StardewArchipelago.Locations.Jojapocalypse
             for (var i = 0; i < salablesByKeywordOrdered.Length; i++)
             {
                 var (keyword, keywordItems) = salablesByKeywordOrdered[i];
-                if (i < NUMBER_CATEGORIES_SPLIT - 1 && keywordItems.Count > 4)
+                if (i < NUMBER_CATEGORIES_SPLIT - 1 && keywordItems.Count > 3)
                 {
                     splitItems.Add(keyword, keywordItems);
                     alreadyCategorizedItems.UnionWith(keywordItems.Select(x => x.Name));
