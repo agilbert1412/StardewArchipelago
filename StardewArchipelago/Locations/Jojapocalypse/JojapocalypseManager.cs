@@ -40,6 +40,12 @@ namespace StardewArchipelago.Locations.Jojapocalypse
                 return;
             }
 
+            if (_archipelago.SlotData.Jojapocalypse.Jojapocalypse == JojapocalypseSetting.Forced || _archipelago.SlotData.Jojapocalypse.PurchasesBeforeMembership <= 0)
+            {
+                SignUpForJojaMembership();
+                return;
+            }
+
             // _jojaDisabler.DisablePerfectionWaivers(); // We allow this on Jojapocalypse?
             _jojapocalypseShopPatcher.PatchJojaShops();
             _jojaConsequencesPatcher.PatchAllConsequences();
@@ -48,16 +54,22 @@ namespace StardewArchipelago.Locations.Jojapocalypse
         public void OnNewPurchase(string locationName)
         {
             UpdateAllShopPrices();
-            SignUpForJojaMembership();
+            TrySignUpForJojaMembership();
             _jojaLocationChecker.RecountTags();
         }
 
-        private void SignUpForJojaMembership()
+        private void TrySignUpForJojaMembership()
         {
             if (_jojaLocationChecker.GetAllLocationsCheckedByJoja().Count < _archipelago.SlotData.Jojapocalypse.PurchasesBeforeMembership)
             {
                 return;
             }
+
+            SignUpForJojaMembership();
+        }
+
+        private void SignUpForJojaMembership()
+        {
 
             if (Game1.player.hasOrWillReceiveMail(JojaConstants.MEMBERSHIP_MAIL))
             {
