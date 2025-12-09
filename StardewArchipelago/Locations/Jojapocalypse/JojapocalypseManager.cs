@@ -66,6 +66,10 @@ namespace StardewArchipelago.Locations.Jojapocalypse
             }
 
             SignUpForJojaMembership();
+
+            Game1.activeClickableMenu?.exitThisMenu();
+            JojaMart.Morris.setNewDialogue("Data\\ExtraDialogue:Morris_PlayerSignedUp");
+            Game1.drawDialogue(JojaMart.Morris);
         }
 
         private void SignUpForJojaMembership()
@@ -78,9 +82,6 @@ namespace StardewArchipelago.Locations.Jojapocalypse
 
             Game1.addMailForTomorrow(JojaConstants.MEMBERSHIP_MAIL, true, true);
             Game1.player.removeQuest("26");
-            Game1.activeClickableMenu?.exitThisMenu();
-            JojaMart.Morris.setNewDialogue("Data\\ExtraDialogue:Morris_PlayerSignedUp");
-            Game1.drawDialogue(JojaMart.Morris);
         }
 
         private static void UpdateAllShopPrices()
