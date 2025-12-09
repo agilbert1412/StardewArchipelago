@@ -64,27 +64,24 @@ namespace StardewArchipelago.Locations.Jojapocalypse
                 return;
             }
 
-            if (Game1.player.hasOrWillReceiveMail(JojaConstants.MEMBERSHIP_MAIL))
+            if (SignUpForJojaMembership())
             {
-                return;
+                Game1.activeClickableMenu?.exitThisMenu();
+                JojaMart.Morris.setNewDialogue("Data\\ExtraDialogue:Morris_PlayerSignedUp");
+                Game1.drawDialogue(JojaMart.Morris);
             }
-
-            SignUpForJojaMembership();
-
-            Game1.activeClickableMenu?.exitThisMenu();
-            JojaMart.Morris.setNewDialogue("Data\\ExtraDialogue:Morris_PlayerSignedUp");
-            Game1.drawDialogue(JojaMart.Morris);
         }
 
-        private void SignUpForJojaMembership()
+        private bool SignUpForJojaMembership()
         {
             if (Game1.player.hasOrWillReceiveMail(JojaConstants.MEMBERSHIP_MAIL))
             {
-                return;
+                return false;
             }
 
             Game1.addMailForTomorrow(JojaConstants.MEMBERSHIP_MAIL, true, true);
             Game1.player.removeQuest("26");
+            return true;
         }
 
         private static void UpdateAllShopPrices()
