@@ -64,6 +64,11 @@ namespace StardewArchipelago.Locations.Jojapocalypse
                 return;
             }
 
+            if (Game1.player.hasOrWillReceiveMail(JojaConstants.MEMBERSHIP_MAIL))
+            {
+                return;
+            }
+
             SignUpForJojaMembership();
 
             Game1.activeClickableMenu?.exitThisMenu();
@@ -73,7 +78,6 @@ namespace StardewArchipelago.Locations.Jojapocalypse
 
         private void SignUpForJojaMembership()
         {
-
             if (Game1.player.hasOrWillReceiveMail(JojaConstants.MEMBERSHIP_MAIL))
             {
                 return;
