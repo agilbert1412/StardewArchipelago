@@ -43,7 +43,6 @@ namespace StardewArchipelago.Locations.Jojapocalypse
             if (_archipelago.SlotData.Jojapocalypse.Jojapocalypse == JojapocalypseSetting.Forced || _archipelago.SlotData.Jojapocalypse.PurchasesBeforeMembership <= 0)
             {
                 SignUpForJojaMembership();
-                return;
             }
 
             // _jojaDisabler.DisablePerfectionWaivers(); // We allow this on Jojapocalypse?
