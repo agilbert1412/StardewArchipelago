@@ -246,14 +246,24 @@ namespace StardewArchipelago.Locations.Jojapocalypse
                 return true;
             }
 
-            return location.Name switch
+            var questsBySeason = new Dictionary<string, IEnumerable<string>>
             {
-                "Robin's Lost Axe" or "Jodi's Request" or "Fresh Fruit" or "Granny's Gift" => SeasonsRandomizer.GetUnlockedSeasons().Contains("Spring"),
-                "Crop Research" or "Knee Therapy" or "Aquatic Research" or "A Soldier's Star" => SeasonsRandomizer.GetUnlockedSeasons().Contains("Summer"),
-                "Blackberry Basket" or "Cow's Delight" or "Carving Pumpkins" => SeasonsRandomizer.GetUnlockedSeasons().Contains("Fall"),
-                "A Winter Mystery" or "Catch A Squid" or "Fish Stew" or "Catch a Lingcod" => SeasonsRandomizer.GetUnlockedSeasons().Contains("Winter"),
-                _ => true,
+                { "Spring", new[] { "Robin's Lost Axe", "Jodi's Request", "Fresh Fruit", "Granny's Gift" }.Select(x => $"Quest: {x}") },
+                { "Summer", new[] { "Crop Research", "Knee Therapy", "Aquatic Research", "A Soldier's Star" }.Select(x => $"Quest: {x}") },
+                { "Fall", new[] { "Blackberry Basket", "Cow's Delight", "Carving Pumpkins" }.Select(x => $"Quest: {x}").ToArray() },
+                { "Winter", new[] { "A Winter Mystery", "Catch A Squid", "Fish Stew", "Catch a Lingcod" }.Select(x => $"Quest: {x}") },
             };
+
+            var bannedQuests = new List<string>();
+            foreach (var (season, quests) in questsBySeason)
+            {
+                if (!SeasonsRandomizer.GetUnlockedSeasons().Contains(season))
+                {
+                    bannedQuests.AddRange(quests);
+                }
+            }
+
+            return !bannedQuests.Contains(location.Name);
         }
 
         private bool ValidateSpecialOrderLocation(StardewArchipelagoLocation location)
