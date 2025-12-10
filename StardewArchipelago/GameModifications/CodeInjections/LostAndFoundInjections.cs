@@ -119,6 +119,23 @@ namespace StardewArchipelago.GameModifications.CodeInjections
                     continue;
                 }
 
+                var numPlayers = Game1.getAllFarmers().Count();
+                var numberTools = 0;
+                Utility.ForEachItem((x) =>
+                {
+                    if (x is Tool toolInWorld && x.GetType() == lostAndFoundTool.GetType() && GetToolBaseName(toolInWorld) == baseName)
+                    {
+                        numberTools++;
+                    }
+                    return true;
+                });
+
+                if (numberTools > numPlayers)
+                {
+                    team.returnedDonations.Remove(lostAndFoundItem);
+                    continue;
+                }
+
                 continue;
             }
 

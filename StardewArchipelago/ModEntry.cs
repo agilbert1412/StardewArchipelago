@@ -264,6 +264,9 @@ namespace StardewArchipelago
                 }
 
                 InitializeAfterConnection();
+
+                Game1.player.team.returnedDonations.Clear();
+                Game1.player.team.newLostAndFoundItems.Value = false;
             }
             catch (Exception)
             {
