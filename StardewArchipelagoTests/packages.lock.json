@@ -72,11 +72,11 @@
       },
       "KaitoKid.ArchipelagoUtilities.Net": {
         "type": "Transitive",
-        "resolved": "3.1.0",
-        "contentHash": "uC4EAe7dDE4FwmvApg9NrDUiu2mN9vtp4iehDmvcRzIdPgZ7h/QVV7SFsSW0vMje5LxoIsBYp/FtLLAk3vTDbQ==",
+        "resolved": "3.1.3",
+        "contentHash": "DhFleZHDIbVCjzJTZqt6YlvKXSN3ZWbKL90D1pjgs6MuQeSBb4QQkxBG2fmZsDbBlWxbmYlfRYfWZpFHXoqYJw==",
         "dependencies": {
           "Archipelago.MultiClient.Net": "6.6.0",
-          "KaitoKid.ArchipelagoUtilities.AssetDownloader": "3.1.0",
+          "KaitoKid.ArchipelagoUtilities.AssetDownloader": "3.1.2",
           "KaitoKid.Utilities.Interfaces": "1.0.1"
         }
       },
@@ -648,7 +648,7 @@
           "Archipelago.Gifting.Net": "[0.4.3, )",
           "Archipelago.MultiClient.Net": "[6.7.0, )",
           "KaitoKid.ArchipelagoUtilities.AssetDownloader": "[3.1.2, )",
-          "KaitoKid.ArchipelagoUtilities.Net": "[3.1.0, )",
+          "KaitoKid.ArchipelagoUtilities.Net": "[3.1.3, )",
           "Pathoschild.Stardew.ModBuildConfig": "[4.4.0, )"
         }
       }
