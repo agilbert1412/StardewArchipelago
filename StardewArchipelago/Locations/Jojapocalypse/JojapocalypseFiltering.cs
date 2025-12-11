@@ -196,7 +196,7 @@ namespace StardewArchipelago.Locations.Jojapocalypse
                     continue;
                 }
 
-                if (!Game1.player.friendshipData.ContainsKey(name) || Game1.player.friendshipData[name].Points <= 0)
+                if (!Game1.player.friendshipData.ContainsKey(name))
                 {
                     return false;
                 }

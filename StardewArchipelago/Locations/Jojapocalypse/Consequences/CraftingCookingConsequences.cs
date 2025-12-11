@@ -101,7 +101,7 @@ namespace StardewArchipelago.Locations.Jojapocalypse.Consequences
             }
             catch (Exception ex)
             {
-                _logger.LogError($"Failed in {nameof(ClickCraftingRecipePrefix)}:\n{ex}");
+                _logger.LogError($"Failed in {nameof(ClickCookingRecipePrefix)}:\n{ex}");
                 return MethodPrefix.RUN_ORIGINAL_METHOD;
             }
         }
