@@ -231,6 +231,11 @@ namespace StardewArchipelago.GameModifications.CodeInjections
 
         public static void OpenBackwoodsShortcuts(GameLocation backwoods)
         {
+            if (!_archipelago.HasReceivedItem("Tunnel To Backwoods Shortcut"))
+            {
+                return;
+            }
+
             // protected HashSet<string> _appliedMapOverrides;
             var _appliedMapOverridesField = _modHelper.Reflection.GetField<HashSet<string>>(backwoods, "_appliedMapOverrides");
             if (_appliedMapOverridesField.GetValue().Contains("Backwoods_Staircase"))
