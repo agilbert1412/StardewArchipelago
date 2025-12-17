@@ -70,6 +70,10 @@ namespace StardewArchipelago.Locations
         {
             var random = Utility.CreateDaySaveRandom();
             var missing = _locationChecker.GetAllMissingLocationNames().ToArray();
+            if (!missing.Any())
+            {
+                return string.Empty;
+            }
             var index = random.Next(missing.Length);
             return missing[index];
         }

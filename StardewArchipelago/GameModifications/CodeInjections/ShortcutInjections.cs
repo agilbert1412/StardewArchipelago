@@ -112,7 +112,6 @@ namespace StardewArchipelago.GameModifications.CodeInjections
 
         public static void OpenMountainShortcuts(Mountain mountain)
         {
-
             if (!_archipelago.HasReceivedItem("Mountain Shortcuts"))
             {
                 return;

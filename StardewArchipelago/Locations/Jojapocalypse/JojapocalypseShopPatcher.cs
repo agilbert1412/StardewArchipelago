@@ -386,22 +386,30 @@ namespace StardewArchipelago.Locations.Jojapocalypse
                     var dialoguePart2 = " If you purchase it now, you can be the proud owner of {0} for the modest sum of {1}g!";
                     var offeredLocation = _jojaLocationChecker.GetTodayRandomOfferLocation();
                     _jojaPriceCalculator.SetPriceMultiplier(0.4);
-                    var offeredPrice = _jojaPriceCalculator.GetNextItemPrice();
-                    var dialoguePart2Resolved = string.Format(dialoguePart2, offeredLocation, offeredPrice);
-
-                    var responsePositive = "What a good deal!";
-                    var responseNegative = Game1.content.LoadString("Strings\\Characters:Phone_HangUp");
-                    var dialoguePart2WithResponses = $"$y '{dialoguePart2Resolved}_{responsePositive}_Thank you._{responseNegative}_Have a good day.'";
-
                     var dialogue1 = new Dialogue(speaker, nameof(dialoguePart1), dialoguePart1);
-                    var dialogue2 = new Dialogue(speaker, nameof(dialoguePart2WithResponses), dialoguePart2WithResponses);
-                    dialogue2.answerQuestionBehavior = OnAnswerPhoneAd;
-                    dialogue1.onFinish = () =>
+
+                    if (string.IsNullOrWhiteSpace(offeredLocation))
                     {
-                        Morris.CurrentDialogue.Clear();
-                        Morris.CurrentDialogue.Push(dialogue2);
-                        Game1.drawDialogue(Morris);
-                    };
+                        dialoguePart1 = "Hello! This is your Jojamart customer service representative." +
+                                            " Is everything going Jojamazing? Don't hesitate to call us if you need anything!";
+                        dialogue1 = new Dialogue(speaker, nameof(dialoguePart1), dialoguePart1);
+                    }
+                    else
+                    {
+                        var responsePositive = "What a good deal!";
+                        var responseNegative = Game1.content.LoadString("Strings\\Characters:Phone_HangUp");
+                        var offeredPrice = _jojaPriceCalculator.GetNextItemPrice();
+                        var dialoguePart2Resolved = string.Format(dialoguePart2, offeredLocation, offeredPrice);
+                        var dialoguePart2WithResponses = $"$y '{dialoguePart2Resolved}_{responsePositive}_Thank you._{responseNegative}_Have a good day.'";
+                        var dialogue2 = new Dialogue(speaker, nameof(dialoguePart2WithResponses), dialoguePart2WithResponses);
+                        dialogue2.answerQuestionBehavior = OnAnswerPhoneAd;
+                        dialogue1.onFinish = () =>
+                        {
+                            Morris.CurrentDialogue.Clear();
+                            Morris.CurrentDialogue.Push(dialogue2);
+                            Game1.drawDialogue(Morris);
+                        };
+                    }
 
                     Morris.CurrentDialogue.Clear();
                     Morris.CurrentDialogue.Push(dialogue1);
@@ -423,6 +431,11 @@ namespace StardewArchipelago.Locations.Jojapocalypse
             if (whichresponse == 0)
             {
                 var offeredLocation = _jojaLocationChecker.GetTodayRandomOfferLocation();
+                if (string.IsNullOrWhiteSpace(offeredLocation))
+                {
+                    return false;
+                }
+
                 _jojaPriceCalculator.SetPriceMultiplier(0.4);
                 var offeredPrice = _jojaPriceCalculator.GetNextItemPrice();
                 if (Game1.player.Money >= offeredPrice)
