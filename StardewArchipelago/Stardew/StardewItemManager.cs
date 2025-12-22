@@ -7,6 +7,7 @@ using StardewValley.GameData.Objects;
 using StardewValley.GameData.Shirts;
 using StardewValley.GameData.Weapons;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -23,6 +24,7 @@ namespace StardewArchipelago.Stardew
 
         private Dictionary<string, StardewItem> _itemsByQualifiedId;
         private Dictionary<string, StardewObject> _objectsById;
+        private Dictionary<string, StardewObject> _objectsByQualifiedId;
         private Dictionary<string, StardewObject> _objectsByName;
         private Dictionary<string, List<StardewObject>> _objectsByColor;
         private Dictionary<string, List<StardewObject>> _objectsByType;
@@ -125,7 +127,7 @@ namespace StardewArchipelago.Stardew
                 return false;
             }
 
-            return _objectsById.ContainsKey(itemId);
+            return _objectsById.ContainsKey(itemId) || _objectsByQualifiedId.ContainsKey(itemId);
         }
 
         public bool ObjectExists(string itemName)
@@ -221,6 +223,11 @@ namespace StardewArchipelago.Stardew
                 return _objectsById[itemId];
             }
 
+            if (_objectsByQualifiedId.ContainsKey(itemId))
+            {
+                return _objectsByQualifiedId[itemId];
+            }
+
             throw new ArgumentException($"Item not found: {itemId}");
         }
 
@@ -256,6 +263,11 @@ namespace StardewArchipelago.Stardew
                 return _objectsByType[type];
             }
             throw new ArgumentException($"Type not found: {type}");
+        }
+
+        public StardewObject[] GetAllObjects()
+        {
+            return _objectsById.Values.ToArray();
         }
 
         public BigCraftable GetBigCraftableById(string itemId)
@@ -333,7 +345,7 @@ namespace StardewArchipelago.Stardew
             throw new ArgumentException($"Weapon not found: {weaponName}");
         }
 
-        public StardewRecipe GetRecipeByName(string recipeName)
+        public StardewRecipe GetRecipeByName(string recipeName, bool logError)
         {
             if (_cookingRecipesByName.ContainsKey(recipeName))
             {
@@ -345,7 +357,10 @@ namespace StardewArchipelago.Stardew
                 return _craftingRecipesByName[recipeName];
             }
 
-            _logger.LogError($"Recipe not found: {recipeName}");
+            if (logError)
+            {
+                _logger.LogError($"Recipe not found: {recipeName}");
+            }
             return null;
         }
 
@@ -378,6 +393,7 @@ namespace StardewArchipelago.Stardew
         private void InitializeObjects()
         {
             _objectsById = new Dictionary<string, StardewObject>();
+            _objectsByQualifiedId = new Dictionary<string, StardewObject>();
             _objectsByName = new Dictionary<string, StardewObject>();
             _objectsByColor = new Dictionary<string, List<StardewObject>>();
             _objectsByType = new Dictionary<string, List<StardewObject>>();
@@ -409,6 +425,7 @@ namespace StardewArchipelago.Stardew
                 AddObjectByType(objectData, stardewItem);
 
                 _objectsById.Add(id, stardewItem);
+                _objectsByQualifiedId.Add(stardewItem.GetQualifiedId(), stardewItem);
                 _itemsByQualifiedId.Add(stardewItem.GetQualifiedId(), stardewItem);
                 AddItemAndAliasesToNamesDictionary(stardewItem);
             }

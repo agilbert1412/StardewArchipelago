@@ -239,7 +239,12 @@ namespace StardewArchipelago.GameModifications
             var existingItem = shopData.Items.Find(x => x.ItemId.Equals(itemId, StringComparison.InvariantCultureIgnoreCase));
             if (existingItem != null)
             {
-                shopData.Items.Remove(existingItem);
+                existingItem.Id = itemId;
+                existingItem.ItemId = itemId;
+                existingItem.MinStack = stack;
+                existingItem.MaxStack = -1;
+                existingItem.Price = pricePerUnit;
+                return;
             }
 
             var item = new ShopItemData()

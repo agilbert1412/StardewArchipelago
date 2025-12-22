@@ -1,13 +1,14 @@
 ﻿using HarmonyLib;
-using StardewModdingAPI;
 using StardewArchipelago.Archipelago;
+using StardewArchipelago.Archipelago.SlotData.SlotEnums;
 using StardewArchipelago.Locations.InGameLocations;
 using StardewArchipelago.Logging;
-using StardewValley;
-using StardewValley.Menus;
-using StardewValley.Locations;
-using StardewArchipelago.Archipelago.SlotData.SlotEnums;
+using StardewArchipelago.Stardew;
+using StardewModdingAPI;
 using StardewModdingAPI.Events;
+using StardewValley;
+using StardewValley.Locations;
+using StardewValley.Menus;
 
 namespace StardewArchipelago.Locations.Jojapocalypse
 {
@@ -21,14 +22,14 @@ namespace StardewArchipelago.Locations.Jojapocalypse
         private readonly JojaPriceCalculator _jojaPriceCalculator;
         private readonly JojapocalypseConsequencesPatcher _jojaConsequencesPatcher;
 
-        public JojapocalypseManager(LogHandler logger, IModHelper modHelper, ModConfig config, Harmony harmony, StardewArchipelagoClient archipelago, StardewLocationChecker locationChecker, JojaLocationChecker jojaLocationChecker)
+        public JojapocalypseManager(LogHandler logger, IModHelper modHelper, ModConfig config, Harmony harmony, StardewArchipelagoClient archipelago, StardewLocationChecker locationChecker, JojaLocationChecker jojaLocationChecker, StardewItemManager stardewItemManager)
         {
             _config = config;
             _archipelago = archipelago;
             _jojaLocationChecker = jojaLocationChecker;
             _jojaDisabler = new JojaDisabler(logger, modHelper, harmony);
             _jojaPriceCalculator = new JojaPriceCalculator(logger, _archipelago, locationChecker);
-            _jojapocalypseShopPatcher = new JojapocalypseShopPatcher(logger, modHelper, harmony, _archipelago, locationChecker, jojaLocationChecker, this, _jojaPriceCalculator);
+            _jojapocalypseShopPatcher = new JojapocalypseShopPatcher(logger, modHelper, harmony, _archipelago, locationChecker, jojaLocationChecker, stardewItemManager, this, _jojaPriceCalculator);
             _jojaConsequencesPatcher = new JojapocalypseConsequencesPatcher(logger, modHelper, harmony, _archipelago, jojaLocationChecker);
         }
 
@@ -48,6 +49,11 @@ namespace StardewArchipelago.Locations.Jojapocalypse
             // _jojaDisabler.DisablePerfectionWaivers(); // We allow this on Jojapocalypse?
             _jojapocalypseShopPatcher.PatchJojaShops();
             _jojaConsequencesPatcher.PatchAllConsequences();
+        }
+
+        public void CleanAllJojaLogic()
+        {
+            _jojapocalypseShopPatcher.CleanJojaShopEvents();
         }
 
         public void OnNewPurchase(string locationName)

@@ -79,7 +79,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
                 return true;
             }
 
-            var recipe = _stardewItemManager.GetRecipeByName(recipeId);
+            var recipe = _stardewItemManager.GetRecipeByName(recipeId, true);
             if (recipe?.YieldItem == null)
             {
                 _logger.LogWarning($"Tried to check Craftsanity locationName for recipe {recipeId}, but could not find it");

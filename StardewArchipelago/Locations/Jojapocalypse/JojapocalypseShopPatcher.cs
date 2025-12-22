@@ -4,10 +4,15 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Input;
 using StardewArchipelago.Archipelago;
+using StardewArchipelago.Archipelago.ApworldData;
+using StardewArchipelago.Constants.Vanilla;
 using StardewArchipelago.Locations.InGameLocations;
+using StardewArchipelago.Locations.ShopStockModifiers;
 using StardewArchipelago.Logging;
 using StardewModdingAPI;
+using StardewModdingAPI.Events;
 using StardewValley;
+using StardewValley.GameData.Shops;
 using StardewValley.Locations;
 using StardewValley.Menus;
 using StardewValley.Objects;
@@ -15,13 +20,16 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using StardewArchipelago.Archipelago.ApworldData;
+using System.Runtime.CompilerServices;
+using StardewArchipelago.Constants;
+using StardewArchipelago.Stardew;
 using xTile.Dimensions;
+using Object = StardewValley.Object;
 using Rectangle = xTile.Dimensions.Rectangle;
 
 namespace StardewArchipelago.Locations.Jojapocalypse
 {
-    public class JojapocalypseShopPatcher
+    public class JojapocalypseShopPatcher : ShopStockModifier
     {
         private const string JOJA_SUBSHOP_DIALOG_KEY = "Joja_SubShop";
         private const string HOLD_MUSIC_CUE = "hold-music";
@@ -36,7 +44,7 @@ namespace StardewArchipelago.Locations.Jojapocalypse
         private static JojaPriceCalculator _jojaPriceCalculator;
         private static JojapocalypseFiltering _jojaFiltering;
 
-        public JojapocalypseShopPatcher(LogHandler logger, IModHelper modHelper, Harmony harmony, StardewArchipelagoClient archipelago, StardewLocationChecker locationChecker, JojaLocationChecker jojaLocationChecker, JojapocalypseManager jojapocalypseManager, JojaPriceCalculator jojaPriceCalculator)
+        public JojapocalypseShopPatcher(LogHandler logger, IModHelper modHelper, Harmony harmony, StardewArchipelagoClient archipelago, StardewLocationChecker locationChecker, JojaLocationChecker jojaLocationChecker, StardewItemManager stardewItemManager, JojapocalypseManager jojapocalypseManager, JojaPriceCalculator jojaPriceCalculator) : base(logger, modHelper, archipelago, stardewItemManager)
         {
             _logger = logger;
             _modHelper = modHelper;
@@ -52,6 +60,8 @@ namespace StardewArchipelago.Locations.Jojapocalypse
 
         public void PatchJojaShops()
         {
+            _modHelper.Events.Content.AssetRequested += OnShopStockRequested;
+
             _harmony.Patch(
                 original: AccessTools.Method(typeof(JojaMart), nameof(JojaMart.checkAction)),
                 prefix: new HarmonyMethod(typeof(JojapocalypseShopPatcher), nameof(CheckAction_JojapocalypseShops_Prefix))
@@ -68,6 +78,11 @@ namespace StardewArchipelago.Locations.Jojapocalypse
                 original: AccessTools.Method(typeof(Phone), nameof(Phone.GetIncomingCallAction)),
                 prefix: new HarmonyMethod(typeof(JojapocalypseShopPatcher), nameof(GetIncomingCallAction_JojaIncomingCall_Prefix))
             );
+        }
+
+        public void CleanJojaShopEvents()
+        {
+            _modHelper.Events.Content.AssetRequested -= OnShopStockRequested;
         }
 
         private static void RegisterHoldMusic()
@@ -468,6 +483,136 @@ namespace StardewArchipelago.Locations.Jojapocalypse
                 }
                 return JojaMart.Morris;
             }
+        }
+
+        public override void OnShopStockRequested(object sender, AssetRequestedEventArgs e)
+        {
+            if (!AssetIsShops(e))
+            {
+                return;
+            }
+
+            e.Edit(asset =>
+                {
+                    var shopsData = asset.AsDictionary<string, ShopData>().Data;
+                    var jojaShop = shopsData["Joja"];
+                    AddObjectsToJojaShop(jojaShop);
+                },
+                AssetEditPriority.Late
+            );
+        }
+
+        private void AddObjectsToJojaShop(ShopData shopData)
+        {
+            var allApItems = _archipelago.DataPackageCache.GetAllItems().ToDictionary(x => x.Name, x => x);
+            var allQualifiedIds = new HashSet<string>();
+            for (var i = shopData.Items.Count - 1; i >= 0; i--)
+            {
+                var item = shopData.Items[i];
+                var itemId = string.IsNullOrWhiteSpace(item.ItemId) ? item.ItemId : item.Id;
+                if (!ItemRegistry.IsQualifiedItemId(itemId))
+                {
+                    itemId = ItemRegistry.QualifyItemId(itemId);
+                }
+
+                allQualifiedIds.Add(itemId);
+
+                if (!_stardewItemManager.ObjectExistsById(itemId))
+                {
+                    continue;
+                }
+
+                var stardewItem = _stardewItemManager.GetObjectById(itemId);
+
+                if (allApItems.ContainsKey(stardewItem.Name) && (item.Condition == null || !item.Condition.Contains(GameStateCondition.HAS_RECEIVED_ITEM)))
+                {
+                    item.Condition = item.Condition.AddCondition(GameStateConditionProvider.CreateHasReceivedItemCondition(stardewItem.Name));
+                }
+            }
+
+            foreach (var stardewItem in _stardewItemManager.GetAllItems())
+            {
+                var qualifiedId = stardewItem.GetQualifiedId();
+                var realItem = ItemRegistry.Create(qualifiedId);
+                if (allQualifiedIds.Contains(qualifiedId) || !JojaCanSellItem(qualifiedId, realItem))
+                {
+                    continue;
+                }
+
+                allQualifiedIds.Add(qualifiedId);
+
+                if (allApItems.ContainsKey(stardewItem.Name) && TryGetItemValue(realItem, stardewItem, out var itemValue))
+                {
+                    var maxStack = realItem.maximumStackSize();
+                    var shopObject = new ShopItemData()
+                    {
+                        Id = qualifiedId,
+                        ItemId = qualifiedId,
+                        AvailableStock = 1,
+                        Price = itemValue * Math.Min(maxStack, 8),
+                        IsRecipe = false,
+                        MaxItems = 1,
+                        MinStack = Math.Min(maxStack, 10),
+                        MaxStack = -1,
+                        Condition = GameStateConditionProvider.CreateHasReceivedItemCondition(stardewItem.Name),
+                    };
+
+                    shopData.Items.Add(shopObject);
+                }
+            }
+        }
+
+        private bool TryGetItemValue(Item realItem, StardewItem stardewItem, out int itemValue)
+        {
+            itemValue = realItem.salePrice();
+            var recipe = _stardewItemManager.GetRecipeByName(stardewItem.Name, false);
+            if (itemValue > 0 && recipe == null)
+            {
+                return true;
+            }
+
+            if (recipe == null)
+            {
+                return false;
+            }
+
+            var ingredientsPrice = 0;
+            foreach (var (ingredientId, ingredientAmount) in recipe.Ingredients)
+            {
+                var ingredient = ItemRegistry.Create(ingredientId);
+                var ingredientPrice = ingredient.salePrice();
+                if (ingredientPrice <= 0)
+                {
+                    return false;
+                }
+                ingredientsPrice += ingredientPrice * ingredientAmount;
+            }
+
+            ingredientsPrice = (int)Math.Round(ingredientsPrice * 1.25); // Service Charge
+
+            if (ingredientsPrice >= 0)
+            {
+                itemValue = ingredientsPrice;
+                return true;
+            }
+
+            return false;
+        }
+
+        private bool JojaCanSellItem(string qualifiedId, Item realItem)
+        {
+            var illegalIds = new[] { QualifiedItemIds.STARDROP };
+            if (illegalIds.Contains(qualifiedId))
+            {
+                return false;
+            }
+
+            return !realItem.isLostItem &&
+                   !realItem.specialItem &&
+                   realItem.CanBeLostOnDeath() &&
+                   realItem.canBeTrashed() &&
+                   realItem.canBeDropped() &&
+                   (realItem is not Object realObject || !realObject.questItem.Value);
         }
     }
 }

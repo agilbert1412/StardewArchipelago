@@ -151,6 +151,7 @@ namespace StardewArchipelago
 
             _harmony.UnpatchAll(ModManifest.UniqueID);
             _locationsPatcher?.CleanEvents();
+            _jojapocalypseManager?.CleanAllJojaLogic();
             _logicPatcher?.CleanEvents();
             _modLogicPatcher?.CleanEvents();
             _bundlesManager?.CleanEvents();
@@ -297,7 +298,7 @@ namespace StardewArchipelago
             var friends = new Friends();
             ArchipelagoLocationDataDefinition.Initialize(_logger, _helper, _archipelago, _locationChecker);
             _logicPatcher = new RandomizedLogicPatcher(_logger, _helper, Config, _harmony, _archipelago, _locationChecker, _stardewItemManager, _entranceManager, seedShopStockModifier, nameSimplifier, friends, State, new BundleReader());
-            _jojapocalypseManager = new JojapocalypseManager(_logger, _helper, Config, _harmony, _archipelago, _locationChecker, _jojaLocationChecker);
+            _jojapocalypseManager = new JojapocalypseManager(_logger, _helper, Config, _harmony, _archipelago, _locationChecker, _jojaLocationChecker, _stardewItemManager);
             _seasonsRandomizer = new SeasonsRandomizer(_logger, _helper, _archipelago, State);
             _appearanceRandomizer = new AppearanceRandomizer(_logger, _helper, _archipelago, _harmony);
 
