@@ -43,6 +43,7 @@ namespace StardewArchipelago.Archipelago.Gifting
             _mail = mail;
             _archipelago = archipelago;
             _giftSender = new GiftSender(_logger, _archipelago, _itemManager);
+            _closeTraitParser = new BKTreeCloseTraitParser<string>();
             _giftReceiver = new GiftReceiver(_logger, _archipelago, _itemManager, _mail, _closeTraitParser, giftTrapManager);
 
             if (archipelago.SlotData.Gifting)
@@ -113,7 +114,6 @@ namespace StardewArchipelago.Archipelago.Gifting
 
         private void RegisterAllAvailableGifts()
         {
-            _closeTraitParser = new BKTreeCloseTraitParser<string>();
             var items = GetAllGiftAndTraitsByName();
             foreach (var (item, traits) in items)
             {
