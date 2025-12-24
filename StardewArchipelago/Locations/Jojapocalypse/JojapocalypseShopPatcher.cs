@@ -554,7 +554,7 @@ namespace StardewArchipelago.Locations.Jojapocalypse
                         MaxItems = 1,
                         MinStack = Math.Min(maxStack, 10),
                         MaxStack = -1,
-                        Condition = null, //GameStateConditionProvider.CreateHasReceivedItemCondition(stardewItem.Name),
+                        Condition = GameStateConditionProvider.CreateHasReceivedItemCondition(stardewItem.Name),
                     };
 
                     shopData.Items.Add(shopObject);
@@ -564,6 +564,20 @@ namespace StardewArchipelago.Locations.Jojapocalypse
 
         private bool TryGetItemValue(Item realItem, StardewItem stardewItem, out int itemValue)
         {
+            var specialSellPrices = new Dictionary<string, int>()
+            {
+                { QualifiedItemIds.PRIZE_TICKET, 500 },
+                { QualifiedItemIds.GOLDEN_EGG, 50000 },
+                { QualifiedItemIds.CACTUS_SEEDS, 75 },
+                { QualifiedItemIds.STRAWBERRY_SEEDS, 50 },
+                { QualifiedItemIds.ANCIENT_SEEDS, 200 },
+            };
+
+            if (specialSellPrices.TryGetValue(stardewItem.GetQualifiedId(), out itemValue))
+            {
+                return true;
+            }
+
             itemValue = realItem.salePrice();
             var recipe = _stardewItemManager.GetRecipeByName(stardewItem.Name, false);
             if (itemValue > 0 && recipe == null)
@@ -580,8 +594,7 @@ namespace StardewArchipelago.Locations.Jojapocalypse
             foreach (var (ingredientId, ingredientAmount) in recipe.Ingredients)
             {
                 var ingredient = ItemRegistry.Create(ingredientId);
-                var ingredientPrice = ingredient.salePrice();
-                if (ingredientPrice <= 0)
+                if (!TryGetItemValue(ingredient, _stardewItemManager.GetItemByQualifiedId(ingredient.QualifiedItemId), out var ingredientPrice))
                 {
                     return false;
                 }
