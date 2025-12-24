@@ -1,29 +1,32 @@
-﻿using StardewArchipelago.Archipelago.Gifting;
-using StardewArchipelago.Items.Traps.Shuffle;
-using StardewModdingAPI;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.Xna.Framework;
-using StardewArchipelago.Archipelago;
-using StardewArchipelago.Stardew;
-using StardewValley;
-using StardewValley.Locations;
+﻿using Archipelago.MultiClient.Net.Enums;
 using KaitoKid.ArchipelagoUtilities.Net.Constants;
 using KaitoKid.ArchipelagoUtilities.Net.Extensions;
+using KaitoKid.Utilities.Interfaces;
+using Microsoft.Xna.Framework;
+using Newtonsoft.Json.Linq;
+using StardewArchipelago.Archipelago;
+using StardewArchipelago.Archipelago.Gifting;
+using StardewArchipelago.Archipelago.SlotData.SlotEnums;
+using StardewArchipelago.GameModifications.MultiSleep;
+using StardewArchipelago.Items.Traps.Shuffle;
+using StardewArchipelago.Stardew;
+using StardewModdingAPI;
+using StardewValley;
 using StardewValley.BellsAndWhistles;
 using StardewValley.Characters;
+using StardewValley.Locations;
+using StardewValley.Network.ChestHit;
 using StardewValley.Objects;
 using StardewValley.TerrainFeatures;
 using StardewValley.Tools;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Numerics;
 using System.Threading;
-using Archipelago.MultiClient.Net.Enums;
-using KaitoKid.Utilities.Interfaces;
-using StardewArchipelago.Archipelago.SlotData.SlotEnums;
-using StardewValley.Network.ChestHit;
+using System.Threading.Tasks;
 using Object = StardewValley.Object;
-using StardewArchipelago.GameModifications.MultiSleep;
+using Vector2 = Microsoft.Xna.Framework.Vector2;
 
 namespace StardewArchipelago.Items.Traps
 {
@@ -661,29 +664,13 @@ namespace StardewArchipelago.Items.Traps
         {
             try
             {
-                switch (__instance.ParentSheetIndex)
+                if (GetInflatableSalePrice(__instance, out var salePrice))
                 {
-                    case 378:
-                        __result = GetInflatedPrice(80);
-                        return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
-                    case 380:
-                        __result = GetInflatedPrice(150);
-                        return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
-                    case 382:
-                        __result = GetInflatedPrice(120);
-                        return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
-                    case 384:
-                        __result = GetInflatedPrice(350);
-                        return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
-                    case 388:
-                        __result = GetInflatedPrice(10);
-                        return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
-                    case 390:
-                        __result = GetInflatedPrice(20);
-                        return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
-                    default:
-                        return MethodPrefix.RUN_ORIGINAL_METHOD;
+                    __result = GetInflatedPrice(salePrice);
+                    return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
                 }
+
+                return MethodPrefix.RUN_ORIGINAL_METHOD;
             }
             catch (Exception ex)
             {
@@ -692,11 +679,92 @@ namespace StardewArchipelago.Items.Traps
             }
         }
 
+        public static bool GetInflatableSalePrice(Object objectToPrice, out int salePrice)
+        {
+
+            switch (objectToPrice.ParentSheetIndex)
+            {
+                case 378:
+                    salePrice = 80;
+                    return true;
+                case 380:
+                    salePrice = 150;
+                    return true;
+                case 382:
+                    salePrice = 120;
+                    return true;
+                case 384:
+                    salePrice = 350;
+                    return true;
+                case 388:
+                    salePrice = 10;
+                    return true;
+                case 390:
+                    salePrice = 20;
+                    return true;
+                default:
+                    salePrice = 0;
+                    return false;
+            }
+        }
+
         private static int GetInflatedPrice(int price)
         {
             var inflationRate = _difficultyBalancer.InflationAmount[_archipelago.SlotData.TrapItemsDifficulty];
-            var totalInflation = Math.Pow(inflationRate, _archipelago.GetReceivedItemCount("Inflation Trap"));
-            return (int)(price * totalInflation);
+            var inflationMultiplier = GetInflationMultiplier(inflationRate, _archipelago.GetReceivedItemCount("Inflation Trap"));
+            return (int)(price * inflationMultiplier);
+        }
+
+        public static double GetInflationMultiplier(double inflationRate, int trapCount)
+        {
+            var totalInflation = Math.Pow(inflationRate, trapCount);
+            if (double.IsInfinity(totalInflation))
+            {
+                totalInflation = SoftCapBigInteger(inflationRate, trapCount);
+            }
+            else
+            {
+                var softCapTier = 2;
+                var baseSoftCap = Math.Pow(10, softCapTier - 1);
+                while (totalInflation > baseSoftCap)
+                {
+                    totalInflation = baseSoftCap + Math.Pow(totalInflation - baseSoftCap, 1.0 / softCapTier);
+                    baseSoftCap = Math.Pow(10, softCapTier);
+                    softCapTier++;
+                }
+            }
+
+            return totalInflation;
+        }
+
+        private static double SoftCapBigInteger(double inflationRate, int trapCount)
+        {
+            var totalInflation = BigInteger.Pow((BigInteger)inflationRate, trapCount);
+            var softCapTier = 2;
+            var baseSoftCap = BigInteger.Pow(10, softCapTier - 1);
+            while (totalInflation > baseSoftCap)
+            {
+                totalInflation = baseSoftCap + BigIntegerRoot(totalInflation - baseSoftCap, softCapTier);
+                baseSoftCap = BigInteger.Pow(10, softCapTier);
+                softCapTier++;
+            }
+
+            return (double)totalInflation;
+        }
+
+        private static BigInteger BigIntegerSqrt(BigInteger value)
+        {
+            return BigIntegerRoot(value, 2);
+        }
+
+        private static BigInteger BigIntegerCbrt(BigInteger value)
+        {
+            return BigIntegerRoot(value, 3);
+        }
+
+        private static BigInteger BigIntegerRoot(BigInteger value, int rootDegree)
+        {
+            return new BigInteger(Math.Exp(BigInteger.Log(value) / rootDegree));
         }
 
         public void Explode()

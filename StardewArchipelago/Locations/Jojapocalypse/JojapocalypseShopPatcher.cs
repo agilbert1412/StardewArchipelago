@@ -554,7 +554,7 @@ namespace StardewArchipelago.Locations.Jojapocalypse
                         MaxItems = 1,
                         MinStack = Math.Min(maxStack, 10),
                         MaxStack = -1,
-                        Condition = GameStateConditionProvider.CreateHasReceivedItemCondition(stardewItem.Name),
+                        Condition = null, //GameStateConditionProvider.CreateHasReceivedItemCondition(stardewItem.Name),
                     };
 
                     shopData.Items.Add(shopObject);
@@ -601,7 +601,7 @@ namespace StardewArchipelago.Locations.Jojapocalypse
 
         private bool JojaCanSellItem(string qualifiedId, Item realItem)
         {
-            var illegalIds = new[] { QualifiedItemIds.STARDROP, QualifiedItemIds.DWARVISH_TRANSLATION_GUIDE };
+            var illegalIds = new[] { QualifiedItemIds.STARDROP, QualifiedItemIds.DWARVISH_TRANSLATION_GUIDE, QualifiedItemIds.GOLDEN_WALNUT };
             if (illegalIds.Contains(qualifiedId))
             {
                 return false;
