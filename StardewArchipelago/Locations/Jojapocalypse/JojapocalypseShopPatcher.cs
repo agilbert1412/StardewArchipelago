@@ -601,7 +601,7 @@ namespace StardewArchipelago.Locations.Jojapocalypse
 
         private bool JojaCanSellItem(string qualifiedId, Item realItem)
         {
-            var illegalIds = new[] { QualifiedItemIds.STARDROP };
+            var illegalIds = new[] { QualifiedItemIds.STARDROP, QualifiedItemIds.DWARVISH_TRANSLATION_GUIDE };
             if (illegalIds.Contains(qualifiedId))
             {
                 return false;

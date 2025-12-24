@@ -39,7 +39,7 @@ namespace StardewArchipelago.Locations.Jojapocalypse.Consequences
                 }
 
 
-                if (JojapocalypseConsequencesPatcher.RollConsequenceChance(0.03, numberEatsanityPurchased, Game1.ticks))
+                if (JojapocalypseConsequencesPatcher.RollConsequenceChance(0.008, numberEatsanityPurchased, Game1.ticks))
                 {
                     DoneEatingDropOnFloor(__instance);
                     return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;

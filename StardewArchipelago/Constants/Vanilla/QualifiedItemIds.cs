@@ -107,6 +107,7 @@ namespace StardewArchipelago.Constants.Vanilla
         public static readonly string DRIFTWOOD = QualifiedObjectId(ObjectIds.DRIFTWOOD);
         public static readonly string DUCK_MAYONNAISE = QualifiedObjectId(ObjectIds.DUCK_MAYONNAISE);
         public static readonly string DWARVISH_SAFETY_MANUAL = QualifiedObjectId(ObjectIds.DWARVISH_SAFETY_MANUAL);
+        public static readonly string DWARVISH_TRANSLATION_GUIDE = QualifiedObjectId(ObjectIds.DWARVISH_TRANSLATION_GUIDE);
         public static readonly string EARTH_CRYSTAL = QualifiedObjectId(ObjectIds.EARTH_CRYSTAL);
         public static readonly string EGGPLANT_SEEDS = QualifiedObjectId(ObjectIds.EGGPLANT_SEEDS);
         public static readonly string EMERALD = QualifiedObjectId(ObjectIds.EMERALD);
