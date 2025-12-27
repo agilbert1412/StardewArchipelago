@@ -41,6 +41,8 @@ namespace StardewArchipelago.Locations.ShopStockModifiers
                     ReplaceToolUpgradesWithApChecks(toolShopData);
                     ReplaceVanillaToolUpgradesWithCustomQuery(toolShopData);
                     MakeEverythingCheaper(toolShopData);
+                    var oresShopData = shopsData["Blacksmith"];
+                    MakeOresRespectInflation(oresShopData);
                 },
                 AssetEditPriority.Late
             );
@@ -199,6 +201,22 @@ namespace StardewArchipelago.Locations.ShopStockModifiers
                 itemQueryResultList.Add(itemQueryResult);
             }
             return itemQueryResultList;
+        }
+
+        private void MakeOresRespectInflation(ShopData oresShopData)
+        {
+            for (var i = oresShopData.Items.Count - 1; i >= 0; i--)
+            {
+                var oreItem = oresShopData.Items[i];
+                if (oreItem.Condition == "YEAR 2")
+                {
+                    oresShopData.Items.RemoveAt(i);
+                    continue;
+                }
+
+                oreItem.Condition = null;
+                oreItem.Price = -1; // Dynamically check price and inflation
+            }
         }
     }
 }

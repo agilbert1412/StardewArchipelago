@@ -711,7 +711,8 @@ namespace StardewArchipelago.Items.Traps
         private static int GetInflatedPrice(int price)
         {
             var inflationRate = _difficultyBalancer.InflationAmount[_archipelago.SlotData.TrapItemsDifficulty];
-            var inflationMultiplier = GetInflationMultiplier(inflationRate, _archipelago.GetReceivedItemCount("Inflation Trap"));
+            var receivedCount = _archipelago.GetReceivedItemCount("Inflation Trap");
+            var inflationMultiplier = GetInflationMultiplier(inflationRate, receivedCount);
             return (int)(price * inflationMultiplier);
         }
 
