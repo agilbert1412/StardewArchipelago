@@ -414,7 +414,7 @@ namespace StardewArchipelago.Locations.Jojapocalypse
                         var responsePositive = "What a good deal!";
                         var responseNegative = Game1.content.LoadString("Strings\\Characters:Phone_HangUp");
                         var offeredPrice = _jojaPriceCalculator.GetNextItemPrice();
-                        var dialoguePart2Resolved = string.Format(dialoguePart2, offeredLocation, offeredPrice);
+                        var dialoguePart2Resolved = string.Format(dialoguePart2, offeredLocation.Replace("#", ""), offeredPrice);
                         var dialoguePart2WithResponses = $"$y '{dialoguePart2Resolved}_{responsePositive}_Thank you._{responseNegative}_Have a good day.'";
                         var dialogue2 = new Dialogue(speaker, nameof(dialoguePart2WithResponses), dialoguePart2WithResponses);
                         dialogue2.answerQuestionBehavior = OnAnswerPhoneAd;
