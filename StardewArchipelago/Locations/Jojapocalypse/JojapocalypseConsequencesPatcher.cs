@@ -1,11 +1,12 @@
 ﻿using HarmonyLib;
-using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
 using StardewArchipelago.Archipelago;
 using StardewModdingAPI;
 using StardewValley.Locations;
 using System;
+using KaitoKid.Utilities.Interfaces;
 using Microsoft.Xna.Framework;
 using StardewArchipelago.Locations.Jojapocalypse.Consequences;
+using StardewModdingAPI.Events;
 using StardewValley;
 using StardewValley.Buildings;
 using StardewValley.Menus;
@@ -58,8 +59,13 @@ namespace StardewArchipelago.Locations.Jojapocalypse
             // Booksanity should increase bookseller prices
             // Secretsanity should decrease secret note spawn chance
             // Movie should increase ticket and snack costs
-            // Hatsanity sometimes your hat falls off lmao
-            // Eatsanity should decrease food efficiency
+            HatConsequences.Initialize(_logger, _modHelper, _archipelago, _jojaLocationChecker); // Hatsanity sometimes your hat falls off lmao
+            EatConsequences.Initialize(_logger, _modHelper, _archipelago, _jojaLocationChecker); // Eatsanity should decrease food efficiency. Also sometimes you drop the food on the floor instead of eating it
+        }
+
+        public void OnUpdateTicked(UpdateTickedEventArgs updateTickedEventArgs)
+        {
+            HatConsequences.OnUpdateTicked(updateTickedEventArgs);
         }
 
         public void PatchAllConsequences()
@@ -96,6 +102,11 @@ namespace StardewArchipelago.Locations.Jojapocalypse
             _harmony.Patch(
                 original: AccessTools.Method(typeof(Building), nameof(Building.CreateInstanceFromId)),
                 postfix: new HarmonyMethod(typeof(BuildingConsequences), nameof(BuildingConsequences.CreateInstanceFromId_AddConstructionDays_Postfix))
+            );
+
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(Farmer), nameof(Farmer.doneEating)),
+                prefix: new HarmonyMethod(typeof(EatConsequences), nameof(EatConsequences.DoneEating_DropOnTheFloor_Prefix))
             );
         }
 

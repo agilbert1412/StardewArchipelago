@@ -1,6 +1,5 @@
 ﻿using HarmonyLib;
 using KaitoKid.ArchipelagoUtilities.Net;
-using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using StardewArchipelago.Archipelago;
@@ -34,10 +33,10 @@ using StardewValley.SpecialOrders;
 using StardewValley.TerrainFeatures;
 using StardewValley.Tools;
 using System;
+using KaitoKid.Utilities.Interfaces;
 using StardewArchipelago.Bundles;
 using StardewArchipelago.Constants.Modded;
 using xTile.Dimensions;
-using static System.Collections.Specialized.BitVector32;
 using EventInjections = StardewArchipelago.Locations.CodeInjections.Vanilla.EventInjections;
 using Object = StardewValley.Object;
 using Rectangle = Microsoft.Xna.Framework.Rectangle;

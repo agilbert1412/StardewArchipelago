@@ -3,7 +3,7 @@ using StardewArchipelago.Archipelago.ApworldData;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
+using KaitoKid.Utilities.Interfaces;
 using StardewArchipelago.Archipelago;
 using StardewArchipelago.Archipelago.SlotData.SlotEnums;
 using StardewArchipelago.GameModifications.Seasons;
@@ -76,7 +76,7 @@ namespace StardewArchipelago.Locations.Jojapocalypse
                 return false;
             }
 
-            if (!ValidateBundleLocation(location))
+            if (!ValidateCommunityCenterLocation(location))
             {
                 return false;
             }
@@ -92,6 +92,11 @@ namespace StardewArchipelago.Locations.Jojapocalypse
             }
 
             if (!ValidateCooksanityLocation(location))
+            {
+                return false;
+            }
+
+            if (!ValidateCraftsanityLocation(location))
             {
                 return false;
             }
@@ -191,7 +196,7 @@ namespace StardewArchipelago.Locations.Jojapocalypse
                     continue;
                 }
 
-                if (!Game1.player.friendshipData.ContainsKey(name) || Game1.player.friendshipData[name].Points <= 0)
+                if (!Game1.player.friendshipData.ContainsKey(name))
                 {
                     return false;
                 }
@@ -241,14 +246,24 @@ namespace StardewArchipelago.Locations.Jojapocalypse
                 return true;
             }
 
-            return location.Name switch
+            var questsBySeason = new Dictionary<string, IEnumerable<string>>
             {
-                "Robin's Lost Axe" or "Jodi's Request" or "Fresh Fruit" or "Granny's Gift" => SeasonsRandomizer.GetUnlockedSeasons().Contains("Spring"),
-                "Crop Research" or "Knee Therapy" or "Aquatic Research" or "A Soldier's Star" => SeasonsRandomizer.GetUnlockedSeasons().Contains("Summer"),
-                "Blackberry Basket" or "Cow's Delight" or "Carving Pumpkins" => SeasonsRandomizer.GetUnlockedSeasons().Contains("Fall"),
-                "A Winter Mystery" or "Catch A Squid" or "Fish Stew" or "Catch a Lingcod" => SeasonsRandomizer.GetUnlockedSeasons().Contains("Winter"),
-                _ => true,
+                { "Spring", new[] { "Robin's Lost Axe", "Jodi's Request", "Fresh Fruit", "Granny's Gift" }.Select(x => $"Quest: {x}") },
+                { "Summer", new[] { "Crop Research", "Knee Therapy", "Aquatic Research", "A Soldier's Star" }.Select(x => $"Quest: {x}") },
+                { "Fall", new[] { "Blackberry Basket", "Cow's Delight", "Carving Pumpkins" }.Select(x => $"Quest: {x}").ToArray() },
+                { "Winter", new[] { "A Winter Mystery", "Catch A Squid", "Fish Stew", "Catch a Lingcod" }.Select(x => $"Quest: {x}") },
             };
+
+            var bannedQuests = new List<string>();
+            foreach (var (season, quests) in questsBySeason)
+            {
+                if (!SeasonsRandomizer.GetUnlockedSeasons().Contains(season))
+                {
+                    bannedQuests.AddRange(quests);
+                }
+            }
+
+            return !bannedQuests.Contains(location.Name);
         }
 
         private bool ValidateSpecialOrderLocation(StardewArchipelagoLocation location)
@@ -324,7 +339,22 @@ namespace StardewArchipelago.Locations.Jojapocalypse
             return _archipelago.HasReceivedItem(APItem.MAGNIFYING_GLASS);
         }
 
-        private bool ValidateBundleLocation(StardewArchipelagoLocation location)
+        private bool ValidateCommunityCenterLocation(StardewArchipelagoLocation location)
+        {
+            if (!ValidateBundleRoomLocation(location))
+            {
+                return false;
+            }
+
+            if (!ValidateBundleLocation(location))
+            {
+                return false;
+            }
+
+            return true;
+        }
+
+        private bool ValidateBundleRoomLocation(StardewArchipelagoLocation location)
         {
             if (!location.LocationTags.Contains(LocationTag.COMMUNITY_CENTER_ROOM))
             {
@@ -354,6 +384,16 @@ namespace StardewArchipelago.Locations.Jojapocalypse
             return true;
         }
 
+        private bool ValidateBundleLocation(StardewArchipelagoLocation location)
+        {
+            if (!location.LocationTags.Contains(LocationTag.COMMUNITY_CENTER_BUNDLE))
+            {
+                return true;
+            }
+
+            return _archipelago.HasReceivedItem(APItem.FOREST_MAGIC);
+        }
+
         private bool ValidateFishsanityLocation(StardewArchipelagoLocation location)
         {
             if (!location.LocationTags.Contains(LocationTag.FISHSANITY))
@@ -381,7 +421,36 @@ namespace StardewArchipelago.Locations.Jojapocalypse
                 return true;
             }
 
-            return !_archipelago.SlotData.BuildingProgression.HasFlag(BuildingProgression.Progressive) || _archipelago.HasReceivedItem(CarpenterInjections.BUILDING_PROGRESSIVE_HOUSE);
+            if (!_archipelago.SlotData.BuildingProgression.HasFlag(BuildingProgression.Progressive) || _archipelago.HasReceivedItem(CarpenterInjections.BUILDING_PROGRESSIVE_HOUSE))
+            {
+                return false;
+            }
+
+            var prefix = "Cook ";
+            if (!location.Name.StartsWith(prefix, StringComparison.InvariantCultureIgnoreCase))
+            {
+                return true;
+            }
+
+            var recipe = location.Name[prefix.Length..].Trim();
+            return Game1.player.knowsRecipe(recipe);
+        }
+
+        private bool ValidateCraftsanityLocation(StardewArchipelagoLocation location)
+        {
+            if (!location.LocationTags.Contains(LocationTag.CRAFTSANITY_CRAFT))
+            {
+                return true;
+            }
+
+            var prefix = "Craft ";
+            if (!location.Name.StartsWith(prefix, StringComparison.InvariantCultureIgnoreCase))
+            {
+                return true;
+            }
+
+            var recipe = location.Name[prefix.Length..].Trim();
+            return Game1.player.knowsRecipe(recipe);
         }
 
         private bool ValidateMovieLocation(StardewArchipelagoLocation location)
@@ -419,9 +488,9 @@ namespace StardewArchipelago.Locations.Jojapocalypse
 
             // Backpacks & Buildings
             { "Big", new[] { "" } },
-            { "Large", new[] { "" } },
-            { "Deluxe", new[] { "", "Big", "Large" } },
-            { "Premium", new[] { "", "Large", "Deluxe" } },
+            { "Large", new[] { "", "Small" } },
+            { "Deluxe", new[] { "", "Big", "Large", "Small" } },
+            { "Premium", new[] { "", "Large", "Deluxe", "Small" } },
         };
     }
 }

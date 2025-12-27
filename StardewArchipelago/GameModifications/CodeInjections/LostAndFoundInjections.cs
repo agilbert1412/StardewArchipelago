@@ -1,19 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using KaitoKid.ArchipelagoUtilities.Net.Constants;
-using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
+using KaitoKid.Utilities.Interfaces;
 using StardewArchipelago.Archipelago;
 using StardewArchipelago.Archipelago.SlotData.SlotEnums;
-using StardewArchipelago.Constants.Vanilla;
 using StardewArchipelago.Items.Mail;
-using StardewArchipelago.Locations.InGameLocations;
 using StardewValley;
-using StardewValley.Buildings;
-using StardewValley.Delegates;
 using StardewValley.Internal;
-using StardewValley.Objects;
-using StardewValley.SpecialOrders;
 using StardewValley.Tools;
 
 namespace StardewArchipelago.GameModifications.CodeInjections
@@ -121,6 +114,23 @@ namespace StardewArchipelago.GameModifications.CodeInjections
                 var receivedUpgrades = _archipelago.GetReceivedItemCount(apName);
                 var startedWithout = _archipelago.SlotData.StartWithout.HasFlag(StartWithout.Tools);
                 if (startedWithout && receivedUpgrades <= 0)
+                {
+                    team.returnedDonations.Remove(lostAndFoundItem);
+                    continue;
+                }
+
+                var numPlayers = Game1.getAllFarmers().Count();
+                var numberTools = 0;
+                Utility.ForEachItem((x) =>
+                {
+                    if (x is Tool toolInWorld && x.GetType() == lostAndFoundTool.GetType() && GetToolBaseName(toolInWorld) == baseName)
+                    {
+                        numberTools++;
+                    }
+                    return true;
+                });
+
+                if (numberTools > numPlayers)
                 {
                     team.returnedDonations.Remove(lostAndFoundItem);
                     continue;

@@ -14,7 +14,6 @@ A reasonable effort will be made to stay up to date, but it has to be understood
 The following mods are currently supported:
 
 General: 
-- [Stardew Valley Expanded](#stardew-valley-expanded-specific-instructions), by FlashShifter, Version 1.14.46 **Requires additional installation steps and patch files**
 - [Skull Cavern Elevator](https://www.nexusmods.com/stardewvalley/mods/963), by Lestoph, Version 1.6.x
 - [Bigger Backpack](https://www.nexusmods.com/stardewvalley/mods/1845), by spacechase0, Version 7.3.x
 - [Tractor Mod](https://www.nexusmods.com/stardewvalley/mods/1401), by Pathoschild, Version 4.24.x
@@ -37,9 +36,6 @@ Custom NPCs:
 
 In addition, a [Content Patcher mod](https://github.com/Witchybun/SDV-Randomizer-Content-Patcher/releases) may be required for the mod to properly function alongside your game.  Include these alongside StardewArchipelago.
 "x" is used to denote a wildcard digit, that is flexibleand allows for variations. We assume that supported mods will not break on patch updates, and if they do, we may have to be more strict in the future.
-
-Here is what you should see in SMAPI, when installing a mod that requires an additional patch. This example is Stardew Valley Expanded, which has two additional patches that are needed to be loaded properly.
-![image](https://i.imgur.com/y3lBIkw.png)
 
 ## How to add supported mods to my Archipelago slot?
 
@@ -72,19 +68,6 @@ You can pick **all** of your settings from this page, if you wish, or you can fo
 - This is the most important step. Ensure you **save** the file to wherever you'd like to save it to. 
 - For good measure, open the saved file again to make sure that it saved properly. You've now added mods to your yaml file! 
 
-## Stardew Valley Expanded Specific Instructions
-
-1) Download [Stardew Valley Expanded](https://www.nexusmods.com/stardewvalley/mods/3753) Version **1.14.46** and all dependencies.
-2) Extract them all into your mods folder.
-3) Download these [two additional patches](https://github.com/Witchybun/SDV-Randomizer-Content-Patcher/releases) `StardewAP - SVE Patch` and `StardewValleyExpanded 1.14.x-archipelago`.
-     - The first patch fixes some Content patcher things to be compatible with Archipelago, and the 2nd patches allows the SVE 1.14.46 code to be loaded into Stardew Valley 1.6.9+). Once patched, the version number in SMAPI will display as `Stardew Valley Expanded 1.14.31-archipelago by FlashShifter, Esca, super-aardvark, and kittycatcasey. Updated for Stardew 1.6.9 by Kaito Kid`. This is because I had to base my patch off of the 1.14.31 code, since the 1.14.46 code was not available. The Content pack for it will maintain its 1.14.46 displayed version number
-4) Extract the patch file folders directly into your mods folder, so that the Stardew Valley Expanded folder is getting partially overwritten.
-      **NOTE**: if your operating system did not prompt you to overwrite some files, you have likely installed SVE or the patch files incorrectly. Common errors include: not extracting the mods from their zip files, and installing the mods in the wrong folder.
-6) You should now have the Stardew Valley Expanded and StardewAP - SVE Patch folders in your Mods folder. If your yaml settings were also correctly set up in the above sections, you should be ready to play with SVE.
-
-### What your Mods folder would look like at minimum if correctly installed
-![Minimum mods needed to run SVE with SDV](/Documentation/Images/SVE%20Min%20Mods.png?raw=true)
-
 ## Weren't there more mods supported?
 
 The addition of 1.6 caused a bit of strain for every mod developer, and so not every mod was updated to be compatible with 1.6.
@@ -100,6 +83,7 @@ The following mods have technical mod support, but are temporarily deprecated as
 - ['Prophet' Wellwick](https://www.nexusmods.com/stardewvalley/mods/6462), by Jyangnam, Version 1.0.0
 - [Shiko - New Custom NPC](https://www.nexusmods.com/stardewvalley/mods/3732), by Papaya, Version 1.1.0
 - [Delores - Custom NPC](https://www.nexusmods.com/stardewvalley/mods/5510), by blaaze6 and Obamoose, Version 1.1.2
+- [Stardew Valley Expanded](#stardew-valley-expanded-specific-instructions), by FlashShifter, Version 1.14.46 **Requires additional installation steps and patch files**
 
 ## Bug Reports
 
@@ -122,3 +106,25 @@ following mods are in the works to be supported:
 - East Scarp
 
 Other mods are also being considered which are smaller in scope, but are too numerous to be listed here.  These can be suggested either in #stardew-valley or its thread "Mod Support".
+
+## Stardew Valley Expanded Specific Instructions
+
+**Stardew Valley Expanded is no longer supported as of StardewArchipelago 7.2.x**
+
+If you wish to see the mod brought back, we need someone to update it and maintain it. Most of it is still in the code, just turned off because it was becoming too unstable and was unmaintained.
+
+The specific instructions that we needed for it are below
+
+Here is what you should see in SMAPI, when installing a mod that requires an additional patch. This example is Stardew Valley Expanded, which has two additional patches that are needed to be loaded properly.
+![image](https://i.imgur.com/y3lBIkw.png)
+
+1) Download [Stardew Valley Expanded](https://www.nexusmods.com/stardewvalley/mods/3753) Version **1.14.46** and all dependencies.
+2) Extract them all into your mods folder.
+3) Download these [two additional patches](https://github.com/Witchybun/SDV-Randomizer-Content-Patcher/releases) `StardewAP - SVE Patch` and `StardewValleyExpanded 1.14.x-archipelago`.
+     - The first patch fixes some Content patcher things to be compatible with Archipelago, and the 2nd patches allows the SVE 1.14.46 code to be loaded into Stardew Valley 1.6.9+). Once patched, the version number in SMAPI will display as `Stardew Valley Expanded 1.14.31-archipelago by FlashShifter, Esca, super-aardvark, and kittycatcasey. Updated for Stardew 1.6.9 by Kaito Kid`. This is because I had to base my patch off of the 1.14.31 code, since the 1.14.46 code was not available. The Content pack for it will maintain its 1.14.46 displayed version number
+4) Extract the patch file folders directly into your mods folder, so that the Stardew Valley Expanded folder is getting partially overwritten.
+      **NOTE**: if your operating system did not prompt you to overwrite some files, you have likely installed SVE or the patch files incorrectly. Common errors include: not extracting the mods from their zip files, and installing the mods in the wrong folder.
+6) You should now have the Stardew Valley Expanded and StardewAP - SVE Patch folders in your Mods folder. If your yaml settings were also correctly set up in the above sections, you should be ready to play with SVE.
+
+### What your Mods folder would look like at minimum if correctly installed
+![Minimum mods needed to run SVE with SDV](/Documentation/Images/SVE%20Min%20Mods.png?raw=true)

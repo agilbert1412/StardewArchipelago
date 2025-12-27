@@ -1,22 +1,27 @@
-﻿using System;
-using System.IO;
-using System.Linq;
-using Microsoft.Xna.Framework.Audio;
+﻿using Microsoft.Xna.Framework.Audio;
+using StardewArchipelago.Archipelago;
+using StardewArchipelago.Archipelago.SlotData.SlotEnums;
 using StardewArchipelago.Constants.Modded;
+using StardewArchipelago.Constants.Vanilla;
+using StardewArchipelago.Items;
+using StardewArchipelago.Locations;
 using StardewArchipelago.Locations.CodeInjections.Vanilla;
 using StardewArchipelago.Locations.CodeInjections.Vanilla.MonsterSlayer;
+using StardewArchipelago.Locations.Jojapocalypse;
+using StardewArchipelago.Logging;
 using StardewArchipelago.Stardew;
 using StardewModdingAPI;
 using StardewValley;
+using StardewValley.Extensions;
 using StardewValley.Locations;
 using StardewValley.Menus;
-using StardewArchipelago.Archipelago;
-using StardewArchipelago.Locations;
-using StardewArchipelago.Archipelago.SlotData.SlotEnums;
-using StardewArchipelago.Constants.Vanilla;
-using StardewArchipelago.Items;
-using StardewArchipelago.Logging;
-using StardewValley.Extensions;
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using StardewArchipelago.Archipelago.ApworldData;
+using StardewArchipelago.Constants;
+using StardewArchipelago.Locations.ShopStockModifiers;
 using Object = StardewValley.Object;
 
 namespace StardewArchipelago.Goals
@@ -27,15 +32,17 @@ namespace StardewArchipelago.Goals
 
         private static LogHandler _logger;
         private static IModHelper _modHelper;
+        private static ModConfig _config;
         private static StardewArchipelagoClient _archipelago;
         private static StardewLocationChecker _locationChecker;
         private static BundleReader _bundleReader;
         private static MonsterKillList _killList;
 
-        public static void Initialize(LogHandler logger, IModHelper modHelper, StardewArchipelagoClient archipelago, StardewLocationChecker locationChecker, BundleReader bundleReader, MonsterKillList killList)
+        public static void Initialize(LogHandler logger, IModHelper modHelper, ModConfig config, StardewArchipelagoClient archipelago, StardewLocationChecker locationChecker, BundleReader bundleReader, MonsterKillList killList)
         {
             _logger = logger;
             _modHelper = modHelper;
+            _config = config;
             _archipelago = archipelago;
             _locationChecker = locationChecker;
             _bundleReader = bundleReader;
@@ -49,12 +56,17 @@ namespace StardewArchipelago.Goals
                 return;
             }
 
+            if (ShouldJojaBlockGoal(new []{LocationTag.COMMUNITY_CENTER_BUNDLE, LocationTag.COMMUNITY_CENTER_ROOM}, harderRequiredItems: new[] { APItem.BUS_REPAIR, APItem.FRIENDSHIP_BONUS, APItem.MINECARTS_REPAIR, APItem.GLITTERING_BOULDER, APItem.GREENHOUSE, APItem.BRIDGE_REPAIR }))
+            {
+                return;
+            }
+
             if (!_bundleReader.IsCommunityCenterComplete())
             {
                 return;
             }
 
-            _archipelago.ReportGoalCompletion();
+            ReportGoalIfQualified();
         }
 
         public static void CheckGrandpaEvaluationGoalCompletion()
@@ -71,7 +83,7 @@ namespace StardewArchipelago.Goals
                 return;
             }
 
-            _archipelago.ReportGoalCompletion();
+            ReportGoalIfQualified();
         }
 
         public static void CheckBottomOfTheMinesGoalCompletion()
@@ -88,7 +100,7 @@ namespace StardewArchipelago.Goals
                 return;
             }
 
-            _archipelago.ReportGoalCompletion();
+            ReportGoalIfQualified();
         }
 
         public static void CheckCrypticNoteGoalCompletion()
@@ -103,7 +115,7 @@ namespace StardewArchipelago.Goals
                 return;
             }
 
-            _archipelago.ReportGoalCompletion();
+            ReportGoalIfQualified();
         }
 
         public static void CheckMasterAnglerGoalCompletion(bool vanillaGoal = false)
@@ -127,9 +139,14 @@ namespace StardewArchipelago.Goals
                 {
                     return;
                 }
+
+                if (ShouldJojaBlockGoal(LocationTag.FISHSANITY, harderRequiredLocationTags: new[]{LocationTag.FISHING_LEVEL, LocationTag.FISHING_ROD_UPGRADE, LocationTag.FISHING_SECRET}, harderExtraCondition:  () => Game1.player.FishingLevel >= 10 && Utility.doesItemExistAnywhere("(T)AdvancedIridiumRod")))
+                {
+                    return;
+                }
             }
 
-            _archipelago.ReportGoalCompletion();
+            ReportGoalIfQualified();
         }
 
         private static void SendMasterAnglerLetterExcludingIsland()
@@ -183,7 +200,7 @@ namespace StardewArchipelago.Goals
                 return;
             }
 
-            _archipelago.ReportGoalCompletion();
+            ReportGoalIfQualified();
         }
 
         public static void CheckFullHouseGoalCompletion()
@@ -198,7 +215,7 @@ namespace StardewArchipelago.Goals
                 return;
             }
 
-            _archipelago.ReportGoalCompletion();
+            ReportGoalIfQualified();
         }
 
         public static void CheckWalnutHunterGoalCompletion()
@@ -213,7 +230,7 @@ namespace StardewArchipelago.Goals
                 return;
             }
 
-            _archipelago.ReportGoalCompletion();
+            ReportGoalIfQualified();
         }
 
         public static void CheckProtectorOfTheValleyGoalCompletion(bool vanillaGoal = false)
@@ -236,9 +253,14 @@ namespace StardewArchipelago.Goals
                 {
                     return;
                 }
+
+                if (ShouldJojaBlockGoal(LocationTag.MONSTERSANITY, harderExtraCondition: () => Game1.player.CombatLevel >= 10 && _killList.AreAllGoalsComplete()))
+                {
+                    return;
+                }
             }
 
-            _archipelago.ReportGoalCompletion();
+            ReportGoalIfQualified();
         }
 
         public static void CheckFullShipmentGoalCompletion(bool vanillaGoal)
@@ -261,9 +283,14 @@ namespace StardewArchipelago.Goals
                 {
                     return;
                 }
+
+                if (ShouldJojaBlockGoal(LocationTag.SHIPSANITY, harderRequiredItems: new[]{ CarpenterShopStockModifier.BUILDING_SHIPPING_BIN }, harderExtraCondition: HasShippedAllItems))
+                {
+                    return;
+                }
             }
 
-            _archipelago.ReportGoalCompletion();
+            ReportGoalIfQualified();
         }
 
         public static void CheckGourmetChefGoalCompletion()
@@ -286,9 +313,14 @@ namespace StardewArchipelago.Goals
                 {
                     return;
                 }
+
+                if (ShouldJojaBlockGoal(LocationTag.COOKSANITY, harderRequiredItems: new[] { "Progressive House" }, harderRequiredLocationTags: new []{LocationTag.CHEFSANITY}, harderExtraCondition: HasCookedAllRecipes))
+                {
+                    return;
+                }
             }
 
-            _archipelago.ReportGoalCompletion();
+            ReportGoalIfQualified();
         }
 
         public static void CheckCraftMasterGoalCompletion()
@@ -311,9 +343,14 @@ namespace StardewArchipelago.Goals
                 {
                     return;
                 }
+
+                if (ShouldJojaBlockGoal(LocationTag.CRAFTSANITY, harderExtraCondition: HasCraftedAllRecipes))
+                {
+                    return;
+                }
             }
 
-            _archipelago.ReportGoalCompletion();
+            ReportGoalIfQualified();
         }
 
         public static void CheckLegendGoalCompletion()
@@ -328,7 +365,7 @@ namespace StardewArchipelago.Goals
                 return;
             }
 
-            _archipelago.ReportGoalCompletion();
+            ReportGoalIfQualified();
         }
 
         public static void CheckMysteryOfTheStardropsGoalCompletion()
@@ -343,7 +380,7 @@ namespace StardewArchipelago.Goals
                 return;
             }
 
-            _archipelago.ReportGoalCompletion();
+            ReportGoalIfQualified();
         }
 
         public static void CheckMadHatterGoalCompletion()
@@ -358,7 +395,7 @@ namespace StardewArchipelago.Goals
                 return;
             }
 
-            _archipelago.ReportGoalCompletion();
+            ReportGoalIfQualified();
         }
 
         public static void CheckUltimateFoodieGoalCompletion()
@@ -374,7 +411,7 @@ namespace StardewArchipelago.Goals
                 return;
             }
 
-            _archipelago.ReportGoalCompletion();
+            ReportGoalIfQualified();
         }
 
         public static void CheckAllsanityGoalCompletion()
@@ -389,7 +426,7 @@ namespace StardewArchipelago.Goals
                 return;
             }
 
-            _archipelago.ReportGoalCompletion();
+            ReportGoalIfQualified();
         }
 
         public static void CheckPerfectionGoalCompletion()
@@ -404,7 +441,7 @@ namespace StardewArchipelago.Goals
                 return;
             }
 
-            _archipelago.ReportGoalCompletion();
+            ReportGoalIfQualified();
         }
 
         public static void DoAreaCompleteReward_CommunityCenterGoal_PostFix(CommunityCenter __instance, int whichArea)
@@ -430,7 +467,7 @@ namespace StardewArchipelago.Goals
                     return;
                 }
 
-                _archipelago.ReportGoalCompletion();
+                ReportGoalIfQualified();
             }
             catch (Exception ex)
             {
@@ -577,7 +614,7 @@ namespace StardewArchipelago.Goals
                     return;
                 }
 
-                _archipelago.ReportGoalCompletion();
+                ReportGoalIfQualified();
             }
             catch (Exception ex)
             {
@@ -596,7 +633,7 @@ namespace StardewArchipelago.Goals
                     return;
                 }
 
-                _archipelago.ReportGoalCompletion();
+                ReportGoalIfQualified();
             }
             catch (Exception ex)
             {
@@ -682,6 +719,91 @@ namespace StardewArchipelago.Goals
                 default:
                     throw new NotImplementedException();
             }
+        }
+
+        public static void ReportGoalIfQualified()
+        {
+            if (Game1.player.hasOrWillReceiveMail(JojaConstants.MEMBERSHIP_MAIL) && _config.JojapocalypseMinimumCompletionPercentToGoal > 0)
+            {
+                var percentChecked = _locationChecker.GetPercentLocationsChecked() * 100;
+                if (percentChecked < _config.JojapocalypseMinimumCompletionPercentToGoal)
+                {
+                    return;
+                }
+            }
+            _archipelago.ReportGoalCompletion();
+        }
+
+        private static bool ShouldJojaBlockGoal(string requiredLocationTag, Dictionary<string, int> harderRequiredItems = null, string[] harderRequiredLocationTags = null, Func<bool> harderExtraCondition = null)
+        {
+            return ShouldJojaBlockGoal(new[] { requiredLocationTag }, harderRequiredItems, harderRequiredLocationTags, harderExtraCondition);
+        }
+
+        private static bool ShouldJojaBlockGoal(string requiredLocationTags, string[] harderRequiredItems, string[] harderRequiredLocationTags = null, Func<bool> harderExtraCondition = null)
+        {
+            return ShouldJojaBlockGoal(requiredLocationTags, harderRequiredItems.ToDictionary(x => x, _ => 1), harderRequiredLocationTags, harderExtraCondition);
+        }
+
+        private static bool ShouldJojaBlockGoal(string[] requiredLocationTags, string[] harderRequiredItems, string[] harderRequiredLocationTags = null, Func<bool> harderExtraCondition = null)
+        {
+            return ShouldJojaBlockGoal(requiredLocationTags, harderRequiredItems.ToDictionary(x => x, _ => 1), harderRequiredLocationTags, harderExtraCondition);
+        }
+
+        private static bool ShouldJojaBlockGoal(string[] requiredLocationTags = null, Dictionary<string, int> harderRequiredItems = null, string[] harderRequiredLocationTags = null, Func<bool> harderExtraCondition = null)
+        {
+            if (!Game1.player.hasOrWillReceiveMail(JojaConstants.MEMBERSHIP_MAIL))
+            {
+                return false;
+            }
+
+            if (requiredLocationTags != null)
+            {
+                foreach (var requiredLocationTag in requiredLocationTags)
+                {
+                    var missingLocations = _locationChecker.GetMissingLocationsByTag(requiredLocationTag);
+
+                    if (missingLocations.Any())
+                    {
+                        return true;
+                    }
+                }
+            }
+
+            if (!_config.JojapocalypseHarderGoals)
+            {
+                return false;
+            }
+
+            if (harderRequiredLocationTags != null)
+            {
+                foreach (var requiredLocationTag in harderRequiredLocationTags)
+                {
+                    var missingLocations = _locationChecker.GetMissingLocationsByTag(requiredLocationTag);
+
+                    if (missingLocations.Any())
+                    {
+                        return true;
+                    }
+                }
+            }
+
+            if (harderRequiredItems != null)
+            {
+                foreach (var (requiredItem, requiredCount) in harderRequiredItems)
+                {
+                    if (_archipelago.GetReceivedItemCount(requiredItem) < requiredCount)
+                    {
+                        return true;
+                    }
+                }
+            }
+
+            if (harderExtraCondition != null && !harderExtraCondition())
+            {
+                return true;
+            }
+
+            return false;
         }
     }
 }

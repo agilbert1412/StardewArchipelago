@@ -2,7 +2,7 @@
 using HarmonyLib;
 using KaitoKid.ArchipelagoUtilities.Net;
 using KaitoKid.ArchipelagoUtilities.Net.Client;
-using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
+using KaitoKid.Utilities.Interfaces;
 using StardewArchipelago.Archipelago;
 using StardewArchipelago.Items.Mail;
 using StardewArchipelago.Items.Traps;
@@ -101,7 +101,7 @@ namespace StardewArchipelago.Items
             if (receivedItem.ItemName.EndsWith(RECIPE_SUFFIX))
             {
                 var itemOfRecipe = receivedItem.ItemName[..^RECIPE_SUFFIX.Length];
-                var recipe = _itemManager.GetRecipeByName(itemOfRecipe);
+                var recipe = _itemManager.GetRecipeByName(itemOfRecipe, true);
                 if (recipe == null)
                 {
                     _logger.LogError($"Could not process received recipe: {receivedItem.ItemName}. Generating an empty letter.");

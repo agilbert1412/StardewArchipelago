@@ -4,7 +4,7 @@ using System.Linq;
 using HarmonyLib;
 using KaitoKid.ArchipelagoUtilities.Net.Client;
 using KaitoKid.ArchipelagoUtilities.Net.Client.ConnectionResults;
-using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
+using KaitoKid.Utilities.Interfaces;
 using Microsoft.Xna.Framework;
 using StardewArchipelago.Archipelago;
 using StardewArchipelago.Archipelago.ConnectionResults;
@@ -137,6 +137,7 @@ namespace StardewArchipelago
 
             _registry.RegisterOnModEntry();
 
+            ModsManager.WarnForModVersions(_logger, _helper);
         }
 
         private void ResetArchipelago()
@@ -150,6 +151,7 @@ namespace StardewArchipelago
 
             _harmony.UnpatchAll(ModManifest.UniqueID);
             _locationsPatcher?.CleanEvents();
+            _jojapocalypseManager?.CleanAllJojaLogic();
             _logicPatcher?.CleanEvents();
             _modLogicPatcher?.CleanEvents();
             _bundlesManager?.CleanEvents();
@@ -182,6 +184,7 @@ namespace StardewArchipelago
             State.LocationsChecked = new List<string>();
             State.JojaLocationsChecked = new List<string>();
             State.LocationsScouted = new Dictionary<string, ScoutedLocation>();
+            State.LocationsScoutHinted = new List<string>();
             State.LettersGenerated = new Dictionary<string, string>();
             SkillInjections.ResetSkillExperience();
             FriendshipInjections.ResetArchipelagoFriendshipPoints();
@@ -223,6 +226,7 @@ namespace StardewArchipelago
             }
             State.JojaLocationsChecked = _jojaLocationChecker.GetAllLocationsCheckedByJoja();
             State.LocationsScouted = _archipelago.ScoutedLocations;
+            State.LocationsScoutHinted = _archipelago.ScoutHintedLocations.ToList();
             // _state.SeasonOrder should be fine?
 
             DebugAssertStateValues(State);
@@ -261,6 +265,9 @@ namespace StardewArchipelago
                 }
 
                 InitializeAfterConnection();
+
+                Game1.player.team.returnedDonations.Clear();
+                Game1.player.team.newLostAndFoundItems.Value = false;
             }
             catch (Exception)
             {
@@ -291,7 +298,7 @@ namespace StardewArchipelago
             var friends = new Friends();
             ArchipelagoLocationDataDefinition.Initialize(_logger, _helper, _archipelago, _locationChecker);
             _logicPatcher = new RandomizedLogicPatcher(_logger, _helper, Config, _harmony, _archipelago, _locationChecker, _stardewItemManager, _entranceManager, seedShopStockModifier, nameSimplifier, friends, State, new BundleReader());
-            _jojapocalypseManager = new JojapocalypseManager(_logger, _helper, Config, _harmony, _archipelago, _locationChecker, _jojaLocationChecker);
+            _jojapocalypseManager = new JojapocalypseManager(_logger, _helper, Config, _harmony, _archipelago, _locationChecker, _jojaLocationChecker, _stardewItemManager);
             _seasonsRandomizer = new SeasonsRandomizer(_logger, _helper, _archipelago, State);
             _appearanceRandomizer = new AppearanceRandomizer(_logger, _helper, _archipelago, _harmony);
 
@@ -412,6 +419,7 @@ namespace StardewArchipelago
             {
                 State = state;
                 _archipelago.ScoutedLocations = State.LocationsScouted;
+                _archipelago.ScoutHintedLocations = State.LocationsScoutHinted.ToHashSet();
             }
 
             var apExperience = _helper.Data.ReadSaveData<Dictionary<int, int>>(AP_EXPERIENCE_KEY);
@@ -499,6 +507,7 @@ namespace StardewArchipelago
             }
 
             MovementInjections.UpdateMove(e);
+            _jojapocalypseManager?.OnUpdateTicked(e);
         }
 
         private void OnReturnedToTitle(object sender, ReturnedToTitleEventArgs e)

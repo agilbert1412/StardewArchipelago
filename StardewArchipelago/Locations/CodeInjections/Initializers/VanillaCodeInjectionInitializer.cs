@@ -1,5 +1,5 @@
 ﻿using KaitoKid.ArchipelagoUtilities.Net;
-using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
+using KaitoKid.Utilities.Interfaces;
 using StardewArchipelago.Archipelago;
 using StardewArchipelago.Archipelago.Gifting;
 using StardewArchipelago.Archipelago.SlotData.SlotEnums;
@@ -35,7 +35,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Initializers
             CopperPanInjections.Initialize(logger, modHelper, archipelago, locationChecker);
             var bundleReader = new BundleReader();
             var killList = new MonsterKillList(archipelago);
-            GoalCodeInjection.Initialize(logger, modHelper, archipelago, locationChecker, bundleReader, killList);
+            GoalCodeInjection.Initialize(logger, modHelper, config, archipelago, locationChecker, bundleReader, killList);
             InitializeBundleInjections(logger, modHelper, archipelago, state, locationChecker, bundlesManager, bundleReader, trapManager, bank, giftSender);
             MineshaftInjections.Initialize(logger, modHelper, config, archipelago, locationChecker, jojaLocationChecker);
             InitializeSkills(logger, modHelper, archipelago, locationChecker);

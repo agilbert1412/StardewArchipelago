@@ -1,11 +1,11 @@
-﻿using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
-using StardewArchipelago.Archipelago;
+﻿using StardewArchipelago.Archipelago;
 using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Locations;
 using StardewValley.TerrainFeatures;
 using System;
 using System.Collections.Generic;
+using KaitoKid.Utilities.Interfaces;
 using Microsoft.Xna.Framework;
 
 namespace StardewArchipelago.GameModifications.CodeInjections
@@ -112,7 +112,6 @@ namespace StardewArchipelago.GameModifications.CodeInjections
 
         public static void OpenMountainShortcuts(Mountain mountain)
         {
-
             if (!_archipelago.HasReceivedItem("Mountain Shortcuts"))
             {
                 return;
@@ -231,6 +230,11 @@ namespace StardewArchipelago.GameModifications.CodeInjections
 
         public static void OpenBackwoodsShortcuts(GameLocation backwoods)
         {
+            if (!_archipelago.HasReceivedItem("Tunnel To Backwoods Shortcut"))
+            {
+                return;
+            }
+
             // protected HashSet<string> _appliedMapOverrides;
             var _appliedMapOverridesField = _modHelper.Reflection.GetField<HashSet<string>>(backwoods, "_appliedMapOverrides");
             if (_appliedMapOverridesField.GetValue().Contains("Backwoods_Staircase"))

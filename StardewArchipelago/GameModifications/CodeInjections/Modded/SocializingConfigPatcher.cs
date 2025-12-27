@@ -1,6 +1,6 @@
 ﻿using HarmonyLib;
 using StardewModdingAPI;
-using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
+using KaitoKid.Utilities.Interfaces;
 
 namespace StardewArchipelago.GameModifications.CodeInjections.Modded
 {

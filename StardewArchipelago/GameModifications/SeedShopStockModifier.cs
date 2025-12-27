@@ -1,20 +1,21 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using KaitoKid.ArchipelagoUtilities.Net;
-using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
+﻿using KaitoKid.ArchipelagoUtilities.Net;
+using KaitoKid.Utilities.Interfaces;
 using StardewArchipelago.Archipelago;
 using StardewArchipelago.Archipelago.SlotData.SlotEnums;
 using StardewArchipelago.Constants;
 using StardewArchipelago.Constants.Vanilla;
 using StardewArchipelago.Extensions;
 using StardewArchipelago.Locations.CodeInjections.Vanilla;
+using StardewArchipelago.Locations.Jojapocalypse;
 using StardewArchipelago.Stardew;
 using StardewModdingAPI;
 using StardewModdingAPI.Events;
 using StardewValley;
 using StardewValley.GameData;
 using StardewValley.GameData.Shops;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using Category = StardewArchipelago.Constants.Vanilla.Category;
 
 namespace StardewArchipelago.GameModifications
@@ -238,7 +239,12 @@ namespace StardewArchipelago.GameModifications
             var existingItem = shopData.Items.Find(x => x.ItemId.Equals(itemId, StringComparison.InvariantCultureIgnoreCase));
             if (existingItem != null)
             {
-                shopData.Items.Remove(existingItem);
+                existingItem.Id = itemId;
+                existingItem.ItemId = itemId;
+                existingItem.MinStack = stack;
+                existingItem.MaxStack = -1;
+                existingItem.Price = pricePerUnit;
+                return;
             }
 
             var item = new ShopItemData()
@@ -289,6 +295,12 @@ namespace StardewArchipelago.GameModifications
             if (itemSeason != null && itemSeason != Game1.currentSeason)
             {
                 priceMultiplier *= 1.5f;
+            }
+
+            if (Game1.player.hasOrWillReceiveMail(JojaConstants.MEMBERSHIP_MAIL))
+            {
+                priceMultiplier *= 1.5f;
+                maxAmount /= 2;
             }
 
             if (hasStocklist)

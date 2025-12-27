@@ -1,6 +1,5 @@
 ﻿using KaitoKid.ArchipelagoUtilities.Net.Client;
 using KaitoKid.ArchipelagoUtilities.Net.Constants;
-using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
 using StardewArchipelago.Constants;
 using StardewArchipelago.Locations.Jojapocalypse;
 using StardewModdingAPI;
@@ -8,6 +7,7 @@ using StardewValley.Locations;
 using StardewValley;
 using System;
 using System.Collections.Generic;
+using KaitoKid.Utilities.Interfaces;
 using Microsoft.Xna.Framework;
 using StardewArchipelago.Constants.Vanilla;
 
@@ -51,10 +51,26 @@ namespace StardewArchipelago.GameModifications.CodeInjections
 
         private static bool MakeMapModificationsJojaRoutePrefix(Town town)
         {
-            if (_archipelago.GetReceivedItemCount(APItem.MOVIE_THEATER) >= 2)
+            var numberReceivedTheaters = _archipelago.GetReceivedItemCount(APItem.MOVIE_THEATER);
+            if (numberReceivedTheaters <= 0)
+            {
+                _hasSeenCcCeremonyCutscene = Utility.HasAnyPlayerSeenEvent(EventIds.COMMUNITY_CENTER_COMPLETE);
+                if (_hasSeenCcCeremonyCutscene)
+                {
+                    Game1.player.eventsSeen.Remove(EventIds.COMMUNITY_CENTER_COMPLETE);
+                }
+
+                return MethodPrefix.RUN_ORIGINAL_METHOD;
+            }
+
+            // private void refurbishCommunityCenter()
+            var refurbishCommunityCenterMethod = _modHelper.Reflection.GetMethod(town, "refurbishCommunityCenter");
+            refurbishCommunityCenterMethod.Invoke();
+
+            if (numberReceivedTheaters >= 2)
             {
                 // protected string loadedMapPath;
-                var loadedMapPathField = _modHelper.Reflection.GetField<HashSet<string>>(town, "loadedMapPath");
+                var loadedMapPathField = _modHelper.Reflection.GetField<string>(town, "loadedMapPath");
                 var loadedMapPath = loadedMapPathField.GetValue();
 
                 var rectangle = new Rectangle(46, 11, 15, 17);
@@ -68,20 +84,6 @@ namespace StardewArchipelago.GameModifications.CodeInjections
                 }
                 town.ApplyMapOverride("Town-TheaterCC" + (IsHalloween ? "-Halloween2" : ""), new Rectangle?(rectangle), new Rectangle?(rectangle));
                 return MethodPrefix.RUN_ORIGINAL_METHOD;
-            }
-
-            if (_archipelago.GetReceivedItemCount(APItem.MOVIE_THEATER) >= 1)
-            {
-                // private void refurbishCommunityCenter()
-                var refurbishCommunityCenterMethod = _modHelper.Reflection.GetMethod(town, "refurbishCommunityCenter");
-                refurbishCommunityCenterMethod.Invoke();
-                return MethodPrefix.RUN_ORIGINAL_METHOD;
-            }
-
-            _hasSeenCcCeremonyCutscene = Utility.HasAnyPlayerSeenEvent(EventIds.COMMUNITY_CENTER_COMPLETE);
-            if (_hasSeenCcCeremonyCutscene)
-            {
-                Game1.player.eventsSeen.Remove(EventIds.COMMUNITY_CENTER_COMPLETE);
             }
 
             return MethodPrefix.RUN_ORIGINAL_METHOD;

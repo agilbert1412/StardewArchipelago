@@ -2,6 +2,13 @@
 {
     public static class APItem
     {
+        public const string BRIDGE_REPAIR = "Bridge Repair";
+        public const string GREENHOUSE = "Greenhouse";
+        public const string GLITTERING_BOULDER = "Glittering Boulder Removed";
+        public const string MINECARTS_REPAIR = "Minecarts Repair";
+        public const string BUS_REPAIR = "Bus Repair";
+        public const string FRIENDSHIP_BONUS = "Friendship Bonus (2 <3)";
+
         public const string FOREST_MAGIC = "Forest Magic";
         public const string DWARVISH_TRANSLATION_GUIDE = "Dwarvish Translation Guide";
         public const string RUSTY_KEY = "Rusty Key";

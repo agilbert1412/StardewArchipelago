@@ -1,26 +1,37 @@
 ﻿using HarmonyLib;
+using KaitoKid.ArchipelagoUtilities.Net.Constants;
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Audio;
+using Microsoft.Xna.Framework.Input;
 using StardewArchipelago.Archipelago;
+using StardewArchipelago.Archipelago.ApworldData;
+using StardewArchipelago.Constants.Vanilla;
+using StardewArchipelago.Locations.InGameLocations;
+using StardewArchipelago.Locations.ShopStockModifiers;
 using StardewArchipelago.Logging;
 using StardewModdingAPI;
+using StardewModdingAPI.Events;
 using StardewValley;
+using StardewValley.GameData.Shops;
 using StardewValley.Locations;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using KaitoKid.ArchipelagoUtilities.Net.Constants;
-using xTile.Dimensions;
-using StardewArchipelago.Locations.InGameLocations;
 using StardewValley.Menus;
 using StardewValley.Objects;
-using Microsoft.Xna.Framework;
-using Rectangle = xTile.Dimensions.Rectangle;
-using Microsoft.Xna.Framework.Audio;
+using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
+using System.Runtime.CompilerServices;
+using StardewArchipelago.Constants;
+using StardewArchipelago.Stardew;
+using xTile.Dimensions;
+using Object = StardewValley.Object;
+using Rectangle = xTile.Dimensions.Rectangle;
 
 namespace StardewArchipelago.Locations.Jojapocalypse
 {
-    public class JojapocalypseShopPatcher
+    public class JojapocalypseShopPatcher : ShopStockModifier
     {
+        private const string JOJA_SUBSHOP_DIALOG_KEY = "Joja_SubShop";
         private const string HOLD_MUSIC_CUE = "hold-music";
 
         private static LogHandler _logger;
@@ -33,7 +44,7 @@ namespace StardewArchipelago.Locations.Jojapocalypse
         private static JojaPriceCalculator _jojaPriceCalculator;
         private static JojapocalypseFiltering _jojaFiltering;
 
-        public JojapocalypseShopPatcher(LogHandler logger, IModHelper modHelper, Harmony harmony, StardewArchipelagoClient archipelago, StardewLocationChecker locationChecker, JojaLocationChecker jojaLocationChecker, JojapocalypseManager jojapocalypseManager, JojaPriceCalculator jojaPriceCalculator)
+        public JojapocalypseShopPatcher(LogHandler logger, IModHelper modHelper, Harmony harmony, StardewArchipelagoClient archipelago, StardewLocationChecker locationChecker, JojaLocationChecker jojaLocationChecker, StardewItemManager stardewItemManager, JojapocalypseManager jojapocalypseManager, JojaPriceCalculator jojaPriceCalculator) : base(logger, modHelper, archipelago, stardewItemManager)
         {
             _logger = logger;
             _modHelper = modHelper;
@@ -49,6 +60,8 @@ namespace StardewArchipelago.Locations.Jojapocalypse
 
         public void PatchJojaShops()
         {
+            _modHelper.Events.Content.AssetRequested += OnShopStockRequested;
+
             _harmony.Patch(
                 original: AccessTools.Method(typeof(JojaMart), nameof(JojaMart.checkAction)),
                 prefix: new HarmonyMethod(typeof(JojapocalypseShopPatcher), nameof(CheckAction_JojapocalypseShops_Prefix))
@@ -65,6 +78,11 @@ namespace StardewArchipelago.Locations.Jojapocalypse
                 original: AccessTools.Method(typeof(Phone), nameof(Phone.GetIncomingCallAction)),
                 prefix: new HarmonyMethod(typeof(JojapocalypseShopPatcher), nameof(GetIncomingCallAction_JojaIncomingCall_Prefix))
             );
+        }
+
+        public void CleanJojaShopEvents()
+        {
+            _modHelper.Events.Content.AssetRequested -= OnShopStockRequested;
         }
 
         private static void RegisterHoldMusic()
@@ -204,8 +222,6 @@ namespace StardewArchipelago.Locations.Jojapocalypse
 
         private static void OpenJojapocalypseShop(double priceMultiplier = 1.0, IEnumerable<string> locationTagFilters = null)
         {
-            var dialogueBox = (DialogueBox)Game1.activeClickableMenu;
-            dialogueBox.closeDialogue();
             if (locationTagFilters == null)
             {
                 locationTagFilters = Array.Empty<string>();
@@ -213,10 +229,54 @@ namespace StardewArchipelago.Locations.Jojapocalypse
 
             var items = CreateJojapocalypseItems(priceMultiplier, locationTagFilters);
 
-            Game1.activeClickableMenu = new ShopMenu($"Jojapocalypse_{string.Join("_", locationTagFilters)}", items, 0, "Morris", on_purchase: OnPurchaseJojapocalypseItem);
+            if (items.Count < 12)
+            {
+                OpenJojapocalypseShop(string.Join("_", locationTagFilters), items.Values.ToList());
+                return;
+            }
+
+            var splitItems = SplitJojapocalypseItems(items);
+
+            DisplayJojaSubShops(splitItems);
         }
 
-        private static List<ISalable> CreateJojapocalypseItems(double priceMultiplier, IEnumerable<string> locationTagFilters)
+        private static void DisplayJojaSubShops(Dictionary<string, List<ISalable>> splitItems)
+        {
+            var speaker = Morris;
+            speaker = new NPC(speaker.Sprite, Vector2.Zero, "", 0, speaker.Name, speaker.Portrait, false);
+            speaker.displayName = speaker.displayName;
+
+            var dialogueSubShops = "Which department would you like to speak with?";
+            var dialogueSubShopsWithResponses = $"$y '{dialogueSubShops}";
+            var keys = new List<(string, List<ISalable>)>();
+            foreach (var (subItemsKey, subItems) in splitItems)
+            {
+                keys.Add((subItemsKey, subItems));
+                dialogueSubShopsWithResponses += $"_{subItemsKey}_One Moment.";
+            }
+
+            var dialogue1 = new Dialogue(speaker, nameof(dialogueSubShopsWithResponses), dialogueSubShopsWithResponses);
+            dialogue1.answerQuestionBehavior = (which) => OnAnswerSubShop(keys[which]);
+
+            Morris.CurrentDialogue.Clear();
+            Morris.CurrentDialogue.Push(dialogue1);
+            Game1.drawDialogue(Morris);
+        }
+
+        private static bool OnAnswerSubShop((string, List<ISalable>) subItems)
+        {
+            OpenJojapocalypseShop(subItems.Item1, subItems.Item2.OrderBy(x => x.Name).ToList());
+            return true;
+        }
+
+        private static void OpenJojapocalypseShop(string idDifferenciator, List<ISalable> items)
+        {
+            var dialogueBox = (DialogueBox)Game1.activeClickableMenu;
+            dialogueBox.closeDialogue();
+            Game1.activeClickableMenu = new ShopMenu($"Jojapocalypse_{idDifferenciator}", items, 0, "Morris", on_purchase: OnPurchaseJojapocalypseItem);
+        }
+
+        private static Dictionary<StardewArchipelagoLocation, ISalable> CreateJojapocalypseItems(double priceMultiplier, IEnumerable<string> locationTagFilters)
         {
             var locations = _archipelago.DataPackageCache.GetAllLocations().ToArray();
             var locationsMissing = locations.Where(x => _locationChecker.IsLocationMissing(x.Name)).ToArray();
@@ -224,14 +284,70 @@ namespace StardewArchipelago.Locations.Jojapocalypse
             var locationsCanPurchaseNow = locationsFiltered.Where(_jojaFiltering.CanPurchaseJojapocalypseLocation).ToArray();
             var locationsInOrder = locationsCanPurchaseNow.OrderBy(x => x.Name).ToArray();
 
-            var salableItems = new List<ISalable>();
+            var salableItems = new Dictionary<StardewArchipelagoLocation, ISalable>();
             _jojaPriceCalculator.SetPriceMultiplier(priceMultiplier);
             foreach (var location in locationsInOrder)
             {
-                salableItems.Add(new JojaObtainableArchipelagoLocation($"Joja {location.Name}", location.Name, _logger, _modHelper, _jojaLocationChecker, _archipelago, _jojaPriceCalculator));
+                salableItems.Add(location, new JojaObtainableArchipelagoLocation($"Joja {location.Name}", location.Name, _logger, _modHelper, _jojaLocationChecker, _archipelago, _jojaPriceCalculator));
             }
 
             return salableItems;
+        }
+
+        private static Dictionary<string, List<ISalable>> SplitJojapocalypseItems(Dictionary<StardewArchipelagoLocation, ISalable> items)
+        {
+            var salablesByKeyword = new Dictionary<string, List<ISalable>>();
+            foreach (var (location, item) in items)
+            {
+                var words = location.Name.Split(" ");
+                foreach (var word in words)
+                {
+                    var keyword = word.Replace(":", "").Replace("?", "").Replace("(", "").Replace(")", "");
+                    if (keyword.Length > 2)
+                    {
+                        if (!salablesByKeyword.ContainsKey(keyword))
+                        {
+                            salablesByKeyword.Add(keyword, new List<ISalable>());
+                        }
+                        if (!salablesByKeyword[keyword].Contains(item))
+                        {
+                            salablesByKeyword[keyword].Add(item);
+                        }
+                    }
+                }
+            }
+
+            var salablesByKeywordOrdered = salablesByKeyword.OrderByDescending(x => x.Value.Count).ToArray();
+            const int NUMBER_CATEGORIES_SPLIT = 10;
+            const string OTHER_CATEGORY = "Other";
+            var splitItems = new Dictionary<string, List<ISalable>>();
+            var otherItems = new Dictionary<string, ISalable>();
+            var alreadyCategorizedItems = new HashSet<string>();
+            for (var i = 0; i < salablesByKeywordOrdered.Length; i++)
+            {
+                var (keyword, keywordItems) = salablesByKeywordOrdered[i];
+                if (i < NUMBER_CATEGORIES_SPLIT - 1 && keywordItems.Count > 3)
+                {
+                    splitItems.Add(keyword, keywordItems);
+                    alreadyCategorizedItems.UnionWith(keywordItems.Select(x => x.Name));
+                }
+                else
+                {
+                    foreach (var keywordItem in keywordItems)
+                    {
+                        if (alreadyCategorizedItems.Contains(keywordItem.Name))
+                        {
+                            continue;
+                        }
+                        otherItems.TryAdd(keywordItem.Name, keywordItem);
+                        alreadyCategorizedItems.Add(keywordItem.Name);
+                    }
+                }
+            }
+
+            splitItems.Add(OTHER_CATEGORY, otherItems.Values.ToList());
+
+            return splitItems;
         }
 
         private static bool OnPurchaseJojapocalypseItem(ISalable salable, Farmer who, int counttaken, ItemStockInformation stock)
@@ -285,22 +401,30 @@ namespace StardewArchipelago.Locations.Jojapocalypse
                     var dialoguePart2 = " If you purchase it now, you can be the proud owner of {0} for the modest sum of {1}g!";
                     var offeredLocation = _jojaLocationChecker.GetTodayRandomOfferLocation();
                     _jojaPriceCalculator.SetPriceMultiplier(0.4);
-                    var offeredPrice = _jojaPriceCalculator.GetNextItemPrice();
-                    var dialoguePart2Resolved = string.Format(dialoguePart2, offeredLocation, offeredPrice);
-
-                    var responsePositive = "What a good deal!";
-                    var responseNegative = Game1.content.LoadString("Strings\\Characters:Phone_HangUp");
-                    var dialoguePart2WithResponses = $"$y '{dialoguePart2Resolved}_{responsePositive}_Thank you._{responseNegative}_Have a good day.'";
-
                     var dialogue1 = new Dialogue(speaker, nameof(dialoguePart1), dialoguePart1);
-                    var dialogue2 = new Dialogue(speaker, nameof(dialoguePart2WithResponses), dialoguePart2WithResponses);
-                    dialogue2.answerQuestionBehavior = OnAnswerPhoneAd;
-                    dialogue1.onFinish = () =>
+
+                    if (string.IsNullOrWhiteSpace(offeredLocation))
                     {
-                        Morris.CurrentDialogue.Clear();
-                        Morris.CurrentDialogue.Push(dialogue2);
-                        Game1.drawDialogue(Morris);
-                    };
+                        dialoguePart1 = "Hello! This is your Jojamart customer service representative." +
+                                            " Is everything going Jojamazing? Don't hesitate to call us if you need anything!";
+                        dialogue1 = new Dialogue(speaker, nameof(dialoguePart1), dialoguePart1);
+                    }
+                    else
+                    {
+                        var responsePositive = "What a good deal!";
+                        var responseNegative = Game1.content.LoadString("Strings\\Characters:Phone_HangUp");
+                        var offeredPrice = _jojaPriceCalculator.GetNextItemPrice();
+                        var dialoguePart2Resolved = string.Format(dialoguePart2, offeredLocation, offeredPrice);
+                        var dialoguePart2WithResponses = $"$y '{dialoguePart2Resolved}_{responsePositive}_Thank you._{responseNegative}_Have a good day.'";
+                        var dialogue2 = new Dialogue(speaker, nameof(dialoguePart2WithResponses), dialoguePart2WithResponses);
+                        dialogue2.answerQuestionBehavior = OnAnswerPhoneAd;
+                        dialogue1.onFinish = () =>
+                        {
+                            Morris.CurrentDialogue.Clear();
+                            Morris.CurrentDialogue.Push(dialogue2);
+                            Game1.drawDialogue(Morris);
+                        };
+                    }
 
                     Morris.CurrentDialogue.Clear();
                     Morris.CurrentDialogue.Push(dialogue1);
@@ -322,6 +446,11 @@ namespace StardewArchipelago.Locations.Jojapocalypse
             if (whichresponse == 0)
             {
                 var offeredLocation = _jojaLocationChecker.GetTodayRandomOfferLocation();
+                if (string.IsNullOrWhiteSpace(offeredLocation))
+                {
+                    return false;
+                }
+
                 _jojaPriceCalculator.SetPriceMultiplier(0.4);
                 var offeredPrice = _jojaPriceCalculator.GetNextItemPrice();
                 if (Game1.player.Money >= offeredPrice)
@@ -354,6 +483,149 @@ namespace StardewArchipelago.Locations.Jojapocalypse
                 }
                 return JojaMart.Morris;
             }
+        }
+
+        public override void OnShopStockRequested(object sender, AssetRequestedEventArgs e)
+        {
+            if (!AssetIsShops(e))
+            {
+                return;
+            }
+
+            e.Edit(asset =>
+                {
+                    var shopsData = asset.AsDictionary<string, ShopData>().Data;
+                    var jojaShop = shopsData["Joja"];
+                    AddObjectsToJojaShop(jojaShop);
+                },
+                AssetEditPriority.Late
+            );
+        }
+
+        private void AddObjectsToJojaShop(ShopData shopData)
+        {
+            var allApItems = _archipelago.DataPackageCache.GetAllItems().ToDictionary(x => x.Name, x => x);
+            var allQualifiedIds = new HashSet<string>();
+            for (var i = shopData.Items.Count - 1; i >= 0; i--)
+            {
+                var item = shopData.Items[i];
+                var itemId = string.IsNullOrWhiteSpace(item.ItemId) ? item.ItemId : item.Id;
+                if (!ItemRegistry.IsQualifiedItemId(itemId))
+                {
+                    itemId = ItemRegistry.QualifyItemId(itemId);
+                }
+
+                allQualifiedIds.Add(itemId);
+
+                if (!_stardewItemManager.ObjectExistsById(itemId))
+                {
+                    continue;
+                }
+
+                var stardewItem = _stardewItemManager.GetObjectById(itemId);
+
+                if (allApItems.ContainsKey(stardewItem.Name) && (item.Condition == null || !item.Condition.Contains(GameStateCondition.HAS_RECEIVED_ITEM)))
+                {
+                    item.Condition = item.Condition.AddCondition(GameStateConditionProvider.CreateHasReceivedItemCondition(stardewItem.Name));
+                }
+            }
+
+            foreach (var stardewItem in _stardewItemManager.GetAllItems())
+            {
+                var qualifiedId = stardewItem.GetQualifiedId();
+                var realItem = ItemRegistry.Create(qualifiedId);
+                if (allQualifiedIds.Contains(qualifiedId) || !JojaCanSellItem(qualifiedId, realItem))
+                {
+                    continue;
+                }
+
+                allQualifiedIds.Add(qualifiedId);
+
+                if (allApItems.ContainsKey(stardewItem.Name) && TryGetItemValue(realItem, stardewItem, out var itemValue))
+                {
+                    var maxStack = realItem.maximumStackSize();
+                    var shopObject = new ShopItemData()
+                    {
+                        Id = qualifiedId,
+                        ItemId = qualifiedId,
+                        AvailableStock = 1,
+                        Price = itemValue * Math.Min(maxStack, 8),
+                        IsRecipe = false,
+                        MaxItems = 1,
+                        MinStack = Math.Min(maxStack, 10),
+                        MaxStack = -1,
+                        Condition = GameStateConditionProvider.CreateHasReceivedItemCondition(stardewItem.Name),
+                    };
+
+                    shopData.Items.Add(shopObject);
+                }
+            }
+        }
+
+        private bool TryGetItemValue(Item realItem, StardewItem stardewItem, out int itemValue)
+        {
+            var specialSellPrices = new Dictionary<string, int>()
+            {
+                { QualifiedItemIds.PRIZE_TICKET, 500 },
+                { QualifiedItemIds.GOLDEN_EGG, 50000 },
+                { QualifiedItemIds.CACTUS_SEEDS, 75 },
+                { QualifiedItemIds.STRAWBERRY_SEEDS, 50 },
+                { QualifiedItemIds.ANCIENT_SEEDS, 200 },
+            };
+
+            if (specialSellPrices.TryGetValue(stardewItem.GetQualifiedId(), out itemValue))
+            {
+                return true;
+            }
+
+            itemValue = realItem.salePrice();
+            var recipe = _stardewItemManager.GetRecipeByName(stardewItem.Name, false);
+            if (itemValue > 0 && recipe == null)
+            {
+                return true;
+            }
+
+            if (recipe == null)
+            {
+                return false;
+            }
+
+            var ingredientsPrice = 0;
+            foreach (var (ingredientId, ingredientAmount) in recipe.Ingredients)
+            {
+                var ingredient = ItemRegistry.Create(ingredientId);
+                if (!TryGetItemValue(ingredient, _stardewItemManager.GetItemByQualifiedId(ingredient.QualifiedItemId), out var ingredientPrice))
+                {
+                    return false;
+                }
+                ingredientsPrice += ingredientPrice * ingredientAmount;
+            }
+
+            ingredientsPrice = (int)Math.Round(ingredientsPrice * 1.25); // Service Charge
+
+            if (ingredientsPrice >= 0)
+            {
+                itemValue = ingredientsPrice;
+                return true;
+            }
+
+            return false;
+        }
+
+        private bool JojaCanSellItem(string qualifiedId, Item realItem)
+        {
+            var illegalIds = new[] { QualifiedItemIds.STARDROP, QualifiedItemIds.DWARVISH_TRANSLATION_GUIDE, QualifiedItemIds.GOLDEN_WALNUT };
+            if (illegalIds.Contains(qualifiedId))
+            {
+                return false;
+            }
+
+            return !realItem.isLostItem &&
+                   !realItem.specialItem &&
+                   realItem.CanBeLostOnDeath() &&
+                   realItem.canBeTrashed() &&
+                   realItem.canBeDropped() &&
+                   (realItem is not Object realObject || !realObject.questItem.Value);
         }
     }
 }

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using KaitoKid.ArchipelagoUtilities.Net.Constants;
-using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
+using KaitoKid.Utilities.Interfaces;
 using Microsoft.Xna.Framework;
 using StardewArchipelago.Archipelago;
 using StardewArchipelago.Archipelago.ApworldData;
@@ -101,7 +101,7 @@ namespace StardewArchipelago.Locations.Jojapocalypse.Consequences
             }
             catch (Exception ex)
             {
-                _logger.LogError($"Failed in {nameof(ClickCraftingRecipePrefix)}:\n{ex}");
+                _logger.LogError($"Failed in {nameof(ClickCookingRecipePrefix)}:\n{ex}");
                 return MethodPrefix.RUN_ORIGINAL_METHOD;
             }
         }
@@ -110,19 +110,19 @@ namespace StardewArchipelago.Locations.Jojapocalypse.Consequences
         {
             try
             {
-                var numberCraftsanityCraftPurchased = _jojaLocationChecker.CountCheckedLocationsWithTag(LocationTag.CRAFTSANITY_CRAFT);
-                var numberCraftsanityRecipePurchased = _jojaLocationChecker.CountCheckedLocationsWithTag(LocationTag.CRAFTSANITY_RECIPE);
+                var numberCraftsanityCraftPurchased = _jojaLocationChecker.CountCheckedLocationsWithTag(LocationTag.CRAFTSANITY_CRAFT); // Total 150
+                var numberCraftsanityRecipePurchased = _jojaLocationChecker.CountCheckedLocationsWithTag(LocationTag.CRAFTSANITY_RECIPE); // Total 30
                 if (numberCraftsanityCraftPurchased <= 0 && numberCraftsanityRecipePurchased <= 0)
                 {
                     return MethodPrefix.RUN_ORIGINAL_METHOD;
                 }
 
-                if (JojapocalypseConsequencesPatcher.RollConsequenceChance(0.1, numberCraftsanityRecipePurchased, Game1.ticks))
+                if (JojapocalypseConsequencesPatcher.RollConsequenceChance(0.04, numberCraftsanityRecipePurchased, Game1.ticks))
                 {
                     ConsumeRandomUnrelatedIngredient(craftingPage, recipe);
                 }
 
-                if (JojapocalypseConsequencesPatcher.RollConsequenceChance(0.01, numberCraftsanityCraftPurchased, Game1.ticks / 2))
+                if (JojapocalypseConsequencesPatcher.RollConsequenceChance(0.008, numberCraftsanityCraftPurchased, Game1.ticks / 2))
                 {
                     recipe.consumeIngredients(craftingPage._materialContainers);
                     if (playSound)

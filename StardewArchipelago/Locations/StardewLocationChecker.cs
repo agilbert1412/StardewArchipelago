@@ -1,7 +1,9 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using KaitoKid.ArchipelagoUtilities.Net;
 using KaitoKid.ArchipelagoUtilities.Net.Client;
-using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
+using KaitoKid.Utilities.Interfaces;
+using StardewArchipelago.Archipelago;
 using StardewArchipelago.Goals;
 
 namespace StardewArchipelago.Locations
@@ -11,10 +13,12 @@ namespace StardewArchipelago.Locations
     {
         private const bool PREVENT_SENDING_CHECKS = false;
 
+        private readonly StardewArchipelagoClient _archipelago;
         private readonly LocationNameMatcher _locationNameMatcher;
 
-        public StardewLocationChecker(ILogger logger, ArchipelagoClient archipelago, List<string> locationsAlreadyChecked) : base(logger, archipelago, locationsAlreadyChecked)
+        public StardewLocationChecker(ILogger logger, StardewArchipelagoClient archipelago, List<string> locationsAlreadyChecked) : base(logger, archipelago, locationsAlreadyChecked)
         {
+            _archipelago = archipelago;
             _locationNameMatcher = new LocationNameMatcher();
         }
 
@@ -75,6 +79,27 @@ namespace StardewArchipelago.Locations
         public bool IsAnyLocationNotCheckedEndingWith(string prefix)
         {
             return _locationNameMatcher.IsAnyLocationEndingWith(GetAllLocationsNotChecked(), prefix);
+        }
+
+        public IEnumerable<string> GetLocationsByTag(string locationTag)
+        {
+            return GetAllLocations().Where(x => _archipelago.DataPackageCache.GetLocation(x).LocationTags.Contains(locationTag));
+        }
+
+        public IEnumerable<string> GetMissingLocationsByTag(string locationTag)
+        {
+            return GetAllMissingLocationNames().Where(x => _archipelago.DataPackageCache.GetLocation(x).LocationTags.Contains(locationTag));
+        }
+
+        public IEnumerable<string> GetCheckedLocationsByTag(string locationTag)
+        {
+            return GetAllLocationsAlreadyChecked().Where(x => _archipelago.DataPackageCache.GetLocation(x).LocationTags.Contains(locationTag));
+        }
+        public double GetPercentLocationsChecked()
+        {
+            var numChecked = GetAllLocationsAlreadyChecked().Count;
+            var numTotal = GetAllLocations().Count();
+            return (double)numChecked / (double)numTotal;
         }
     }
 }

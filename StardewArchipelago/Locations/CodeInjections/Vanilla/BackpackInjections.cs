@@ -7,7 +7,6 @@ using Microsoft.Xna.Framework.Graphics;
 using StardewArchipelago.Constants.Modded;
 using StardewValley;
 using StardewValley.Locations;
-using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
 using StardewArchipelago.Archipelago;
 using StardewArchipelago.Archipelago.SlotData.SlotEnums;
 using StardewArchipelago.PriceMath;
@@ -18,6 +17,7 @@ using StardewModdingAPI;
 using xTile.Dimensions;
 using Rectangle = Microsoft.Xna.Framework.Rectangle;
 using HarmonyLib;
+using KaitoKid.Utilities.Interfaces;
 using StardewArchipelago.Textures;
 
 namespace StardewArchipelago.Locations.CodeInjections.Vanilla

@@ -1,12 +1,14 @@
 ﻿using HarmonyLib;
-using StardewModdingAPI;
 using StardewArchipelago.Archipelago;
+using StardewArchipelago.Archipelago.SlotData.SlotEnums;
 using StardewArchipelago.Locations.InGameLocations;
 using StardewArchipelago.Logging;
+using StardewArchipelago.Stardew;
+using StardewModdingAPI;
+using StardewModdingAPI.Events;
 using StardewValley;
-using StardewValley.Menus;
 using StardewValley.Locations;
-using StardewArchipelago.Archipelago.SlotData.SlotEnums;
+using StardewValley.Menus;
 
 namespace StardewArchipelago.Locations.Jojapocalypse
 {
@@ -20,14 +22,14 @@ namespace StardewArchipelago.Locations.Jojapocalypse
         private readonly JojaPriceCalculator _jojaPriceCalculator;
         private readonly JojapocalypseConsequencesPatcher _jojaConsequencesPatcher;
 
-        public JojapocalypseManager(LogHandler logger, IModHelper modHelper, ModConfig config, Harmony harmony, StardewArchipelagoClient archipelago, StardewLocationChecker locationChecker, JojaLocationChecker jojaLocationChecker)
+        public JojapocalypseManager(LogHandler logger, IModHelper modHelper, ModConfig config, Harmony harmony, StardewArchipelagoClient archipelago, StardewLocationChecker locationChecker, JojaLocationChecker jojaLocationChecker, StardewItemManager stardewItemManager)
         {
             _config = config;
             _archipelago = archipelago;
             _jojaLocationChecker = jojaLocationChecker;
             _jojaDisabler = new JojaDisabler(logger, modHelper, harmony);
             _jojaPriceCalculator = new JojaPriceCalculator(logger, _archipelago, locationChecker);
-            _jojapocalypseShopPatcher = new JojapocalypseShopPatcher(logger, modHelper, harmony, _archipelago, locationChecker, jojaLocationChecker, this, _jojaPriceCalculator);
+            _jojapocalypseShopPatcher = new JojapocalypseShopPatcher(logger, modHelper, harmony, _archipelago, locationChecker, jojaLocationChecker, stardewItemManager, this, _jojaPriceCalculator);
             _jojaConsequencesPatcher = new JojapocalypseConsequencesPatcher(logger, modHelper, harmony, _archipelago, jojaLocationChecker);
         }
 
@@ -39,35 +41,53 @@ namespace StardewArchipelago.Locations.Jojapocalypse
                 return;
             }
 
-            _jojaDisabler.DisablePerfectionWaivers();
+            if (_archipelago.SlotData.Jojapocalypse.Jojapocalypse == JojapocalypseSetting.Forced || _archipelago.SlotData.Jojapocalypse.PurchasesBeforeMembership <= 0)
+            {
+                SignUpForJojaMembership();
+            }
+
+            // _jojaDisabler.DisablePerfectionWaivers(); // We allow this on Jojapocalypse?
             _jojapocalypseShopPatcher.PatchJojaShops();
             _jojaConsequencesPatcher.PatchAllConsequences();
+        }
+
+        public void CleanAllJojaLogic()
+        {
+            _jojapocalypseShopPatcher.CleanJojaShopEvents();
         }
 
         public void OnNewPurchase(string locationName)
         {
             UpdateAllShopPrices();
-            SignUpForJojaMembership();
+            TrySignUpForJojaMembership();
             _jojaLocationChecker.RecountTags();
         }
 
-        private void SignUpForJojaMembership()
+        private void TrySignUpForJojaMembership()
         {
             if (_jojaLocationChecker.GetAllLocationsCheckedByJoja().Count < _archipelago.SlotData.Jojapocalypse.PurchasesBeforeMembership)
             {
                 return;
             }
 
+            if (SignUpForJojaMembership())
+            {
+                Game1.activeClickableMenu?.exitThisMenu();
+                JojaMart.Morris.setNewDialogue("Data\\ExtraDialogue:Morris_PlayerSignedUp");
+                Game1.drawDialogue(JojaMart.Morris);
+            }
+        }
+
+        private bool SignUpForJojaMembership()
+        {
             if (Game1.player.hasOrWillReceiveMail(JojaConstants.MEMBERSHIP_MAIL))
             {
-                return;
+                return false;
             }
 
             Game1.addMailForTomorrow(JojaConstants.MEMBERSHIP_MAIL, true, true);
             Game1.player.removeQuest("26");
-            Game1.activeClickableMenu?.exitThisMenu();
-            JojaMart.Morris.setNewDialogue("Data\\ExtraDialogue:Morris_PlayerSignedUp");
-            Game1.drawDialogue(JojaMart.Morris);
+            return true;
         }
 
         private static void UpdateAllShopPrices()
@@ -86,6 +106,11 @@ namespace StardewArchipelago.Locations.Jojapocalypse
 
                 stockInfo.Price = jojaLocation.salePrice();
             }
+        }
+
+        public void OnUpdateTicked(UpdateTickedEventArgs updateTickedEventArgs)
+        {
+            _jojaConsequencesPatcher?.OnUpdateTicked(updateTickedEventArgs);
         }
     }
 

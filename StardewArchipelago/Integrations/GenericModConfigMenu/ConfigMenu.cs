@@ -397,6 +397,41 @@ namespace StardewArchipelago.Integrations.GenericModConfigMenu
                 getValue: () => Config.UseLegacyRandomization,
                 setValue: (value) => Config.UseLegacyRandomization = value
             );
+
+            var bonusWalnutsValues = Enum.GetValues(typeof(BonusRepeatableWalnutsPreference)).Cast<int>().ToArray();
+            var bonusWalnutsMin = bonusWalnutsValues.Min();
+            var bonusWalnutsMax = bonusWalnutsValues.Max();
+            configMenu.AddNumberOption(
+                mod: ModManifest,
+                name: () => "Bonus Repeatable Walnuts",
+                tooltip: () => "Whether to allow bonus repeatable walnuts to spawn after the 5th one. This can be required to compensate if the players wastes his walnuts. This can trivialize the Walnut Hunter goal.",
+                min: bonusWalnutsMin,
+                max: bonusWalnutsMax,
+                interval: 1,
+                getValue: () => (int)Config.BonusRepeatableWalnuts,
+                setValue: (value) => Config.BonusRepeatableWalnuts = (BonusRepeatableWalnutsPreference)value,
+                formatValue: (value) => ((BonusRepeatableWalnutsPreference)value).ToString()
+            );
+
+            configMenu.AddBoolOption(
+                mod: ModManifest,
+                name: () => "Jojapocalypse Harder Goals",
+                tooltip: () => $"This will make it so some Jojapocalypse goals have extra conditions, in addition to locations checked, to trigger.",
+                getValue: () => Config.JojapocalypseHarderGoals,
+                setValue: (value) => Config.JojapocalypseHarderGoals = value
+            );
+
+            configMenu.AddNumberOption(
+                mod: ModManifest,
+                name: () => "Jojapocalypse Minimum Completion Percent",
+                tooltip: () => "Prevent sending goal as a Joja member until this percent of locations are checked.",
+                min: 0,
+                max: 100,
+                interval: 1,
+                getValue: () => Config.JojapocalypseMinimumCompletionPercentToGoal,
+                setValue: (value) => Config.JojapocalypseMinimumCompletionPercentToGoal = value,
+                formatValue: (value) => $"{value}%"
+            );
         }
     }
 }

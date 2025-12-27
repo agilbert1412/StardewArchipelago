@@ -108,6 +108,7 @@ namespace StardewArchipelago.Constants.Vanilla
         public static readonly string DRIFTWOOD = QualifiedObjectId(ObjectIds.DRIFTWOOD);
         public static readonly string DUCK_MAYONNAISE = QualifiedObjectId(ObjectIds.DUCK_MAYONNAISE);
         public static readonly string DWARVISH_SAFETY_MANUAL = QualifiedObjectId(ObjectIds.DWARVISH_SAFETY_MANUAL);
+        public static readonly string DWARVISH_TRANSLATION_GUIDE = QualifiedObjectId(ObjectIds.DWARVISH_TRANSLATION_GUIDE);
         public static readonly string EARTH_CRYSTAL = QualifiedObjectId(ObjectIds.EARTH_CRYSTAL);
         public static readonly string EGGPLANT_SEEDS = QualifiedObjectId(ObjectIds.EGGPLANT_SEEDS);
         public static readonly string EMERALD = QualifiedObjectId(ObjectIds.EMERALD);
@@ -307,6 +308,7 @@ namespace StardewArchipelago.Constants.Vanilla
         public static readonly string STRANGE_BUN = QualifiedObjectId(ObjectIds.STRANGE_BUN);
         public static readonly string STRANGE_DOLL_GREEN = QualifiedObjectId(ObjectIds.STRANGE_DOLL_GREEN);
         public static readonly string STRAWBERRY = QualifiedObjectId(ObjectIds.STRAWBERRY);
+        public static readonly string STRAWBERRY_SEEDS = QualifiedObjectId(ObjectIds.STRAWBERRY_SEEDS);
         public static readonly string SUGAR = QualifiedObjectId(ObjectIds.SUGAR);
         public static readonly string SUMMER_SEEDS = QualifiedObjectId(ObjectIds.SUMMER_SEEDS);
         public static readonly string SUNFLOWER = QualifiedObjectId(ObjectIds.SUNFLOWER);

@@ -1,5 +1,5 @@
 ﻿using System;
-using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
+using KaitoKid.Utilities.Interfaces;
 using StardewArchipelago.Archipelago;
 using StardewArchipelago.Archipelago.ApworldData;
 using StardewArchipelago.Archipelago.SlotData.SlotEnums;
@@ -31,20 +31,25 @@ namespace StardewArchipelago.Locations.Jojapocalypse.Consequences
                     return profitMargin;
                 }
 
-                var numberPurchased = _jojaLocationChecker.CountCheckedLocationsWithTag(LocationTag.SHIPSANITY);
-                if (numberPurchased <= 0)
+                var numberShipsanityPurchased = _jojaLocationChecker.CountCheckedLocationsWithTag(LocationTag.SHIPSANITY);
+                var numberEndgamePurchased = _jojaLocationChecker.CountCheckedLocationsWithTag(LocationTag.ENDGAME_LOCATIONS);
+                if (numberShipsanityPurchased <= 0 && numberEndgamePurchased <= 0)
                 {
                     return profitMargin;
                 }
 
-                var profitMultiplierPerPurchase = 0.99;
+                var profitMultiplierPerEndgamePurchase = 0.95;
+                var profitMultiplierPerShipsanityPurchase = 0.99;
                 if (_archipelago.SlotData.Shipsanity == Shipsanity.Everything)
                 {
-                    profitMultiplierPerPurchase = 0.997;
+                    profitMultiplierPerShipsanityPurchase = 0.997;
                 }
 
-                var newProfitMargin = profitMargin * Math.Pow(profitMultiplierPerPurchase, numberPurchased);
+                var newProfitMargin = profitMargin * 
+                                      Math.Pow(profitMultiplierPerShipsanityPurchase, numberShipsanityPurchased) * 
+                                      Math.Pow(profitMultiplierPerEndgamePurchase, numberEndgamePurchased);
                 return newProfitMargin;
+
             }
             catch (Exception ex)
             {

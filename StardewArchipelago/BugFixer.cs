@@ -1,12 +1,11 @@
 ﻿using KaitoKid.ArchipelagoUtilities.Net;
-using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
-using Netcode;
 using StardewArchipelago.Locations.CodeInjections.Vanilla;
 using StardewValley;
 using StardewValley.Locations;
 using StardewValley.Network;
 using System;
 using System.Collections.Generic;
+using KaitoKid.Utilities.Interfaces;
 using StardewArchipelago.Archipelago;
 
 namespace StardewArchipelago
