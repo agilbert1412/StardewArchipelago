@@ -8,6 +8,7 @@ using StardewArchipelago.Constants;
 using StardewArchipelago.Constants.Vanilla;
 using StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles.Remakes;
 using StardewArchipelago.Serialization;
+using StardewArchipelago.Stardew;
 using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Locations;
@@ -81,6 +82,14 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
             if (bundleFromArchipelago is not ItemBundle itemBundle)
             {
                 return;
+            }
+
+            if (name == MemeBundleNames.THEALGORERHYTM)
+            {
+                foreach (var ingredient in itemBundle.Items)
+                {
+                    ingredient.Amount = 2;
+                }
             }
 
             RewardDescription = string.Empty;

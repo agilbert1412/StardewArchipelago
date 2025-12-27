@@ -46,11 +46,11 @@ Note that in the game, there is a keybind to swap your hotbar with the next row 
 This feature is extremely wonky, when used with backpacks of a size that is not a multiple of 12, because it offsets your inventory by 12 slots (1 row), and it will therefore lead to items suddenly switching columns from one cycle to the next.
 This is generally considered undesirable, so if you rely on this keybind a lot, smaller backpack sizes might be annoying for you.
 
-### Start Without Tools
+### Start Without Backpack
 
-Within the setting ~~[Tool Progression](./tool_progression.md)~~, is an option to "Start without tools". This includes the backpack.
+Within the setting ~~[Start Without](./start_without.md)~~, is an option to "Start Without: Backpack".
 
-For logic reasons, the player will still start with at least 4 backpack slots, which is the bare minimum to be able to complete every location check in the game without having to write convoluted inventory logic.
+For logic reasons, the player will still start with at least 4 backpack slots (6 if they start with tools), which is the bare minimum to be able to complete every location check in the game without having to write convoluted inventory logic.
 It is possible that, in the future, we eventually write the convoluted inventory logic, and allow the player to start with a true zero-slot backpack.
 
 When starting with fewer backpack slots, more upgrades are added to the pool, so that the maximum total is still 36. The backpack upgrades from slot 1 to 12 are called `Small Pack`, and use a custom price of 500g for the total of all of them.

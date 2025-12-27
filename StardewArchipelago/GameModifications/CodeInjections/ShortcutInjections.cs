@@ -105,11 +105,6 @@ namespace StardewArchipelago.GameModifications.CodeInjections
 
         public static void OpenTownShortcuts(Town town)
         {
-            if (!_archipelago.SlotData.IncludeEndgameLocations)
-            {
-                return;
-            }
-
             OpenTownToMountainShortcut(town);
             OpenJojamartToMountainShortcut(town);
             OpenTownToTidePoolsShortcut(town);
@@ -117,10 +112,6 @@ namespace StardewArchipelago.GameModifications.CodeInjections
 
         public static void OpenMountainShortcuts(Mountain mountain)
         {
-            if (!_archipelago.SlotData.IncludeEndgameLocations)
-            {
-                return;
-            }
 
             if (!_archipelago.HasReceivedItem("Mountain Shortcuts"))
             {
@@ -140,11 +131,6 @@ namespace StardewArchipelago.GameModifications.CodeInjections
 
         public static void OpenForestShortcuts(Forest forest)
         {
-            if (!_archipelago.SlotData.IncludeEndgameLocations)
-            {
-                return;
-            }
-
             if (!_archipelago.HasReceivedItem("Forest To Beach Shortcut"))
             {
                 return;
@@ -177,11 +163,6 @@ namespace StardewArchipelago.GameModifications.CodeInjections
 
         public static void OpenBeachShortcuts(Beach beach)
         {
-            if (!_archipelago.SlotData.IncludeEndgameLocations)
-            {
-                return;
-            }
-
             // private bool hasShownCCUpgrade;
             //var hasShownCCUpgradeField = _modHelper.Reflection.GetField<bool>(beach, "hasShownCCUpgrade");
             //if (hasShownCCUpgradeField.GetValue())
@@ -195,10 +176,6 @@ namespace StardewArchipelago.GameModifications.CodeInjections
 
         public static void OpenBeachShortcuts(BeachNightMarket beach)
         {
-            if (!_archipelago.SlotData.IncludeEndgameLocations)
-            {
-                return;
-            }
 
             // private bool hasShownCCUpgrade;
             //var hasShownCCUpgradeField = _modHelper.Reflection.GetField<bool>(beach, "hasShownCCUpgrade");
@@ -254,16 +231,6 @@ namespace StardewArchipelago.GameModifications.CodeInjections
 
         public static void OpenBackwoodsShortcuts(GameLocation backwoods)
         {
-            if (!_archipelago.SlotData.IncludeEndgameLocations)
-            {
-                return;
-            }
-
-            if (!_archipelago.HasReceivedItem("Tunnel To Backwoods Shortcut"))
-            {
-                return;
-            }
-
             // protected HashSet<string> _appliedMapOverrides;
             var _appliedMapOverridesField = _modHelper.Reflection.GetField<HashSet<string>>(backwoods, "_appliedMapOverrides");
             if (_appliedMapOverridesField.GetValue().Contains("Backwoods_Staircase"))

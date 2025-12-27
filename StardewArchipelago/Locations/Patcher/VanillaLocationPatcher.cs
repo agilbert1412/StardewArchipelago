@@ -34,6 +34,7 @@ using StardewValley.SpecialOrders;
 using StardewValley.TerrainFeatures;
 using StardewValley.Tools;
 using System;
+using StardewArchipelago.Bundles;
 using StardewArchipelago.Constants.Modded;
 using xTile.Dimensions;
 using static System.Collections.Specialized.BitVector32;
@@ -240,19 +241,13 @@ namespace StardewArchipelago.Locations.Patcher
                 original: AccessTools.Method(typeof(Building), nameof(Building.doAction)),
                 prefix: new HarmonyMethod(typeof(ThrowInWaterInjections), nameof(ThrowInWaterInjections.DoAction_ThrowHoneyInWell_Prefix))
             );
-            _harmony.Patch(
-                original: AccessTools.Method(typeof(GameLocation), nameof(GameLocation.checkAction)),
-                prefix: new HarmonyMethod(typeof(ThrowInWaterInjections), nameof(ThrowInWaterInjections.CheckAction_ThrowPollutionAndFishInWater_Prefix))
-            );
-            _harmony.Patch(
-                original: AccessTools.Method(typeof(GameLocation), nameof(GameLocation.UpdateWhenCurrentLocation)),
-                postfix: new HarmonyMethod(typeof(ThrowInWaterInjections), nameof(ThrowInWaterInjections.UpdateWhenCurrentLocation_WaterWithFish_Postfix))
-            );
-            _harmony.Patch(
-                original: AccessTools.Method(typeof(GameLocation), nameof(GameLocation.draw)),
-                postfix: new HarmonyMethod(typeof(ThrowInWaterInjections), nameof(ThrowInWaterInjections.Draw_JumpingFish_Postfix))
-            );
 
+            PatchFeedHorse();
+            PatchThrowInWater();
+            PatchJunimoHair();
+        }
+        private void PatchFeedHorse()
+        {
             _harmony.Patch(
                 original: AccessTools.Method(typeof(Horse), nameof(Horse.checkAction)),
                 prefix: new HarmonyMethod(typeof(HorseInjections), nameof(HorseInjections.CheckAction_FeedPomnutItems_Prefix))
@@ -263,7 +258,34 @@ namespace StardewArchipelago.Locations.Patcher
                 prefix: new HarmonyMethod(typeof(HorseInjections), nameof(HorseInjections.Draw_EatingOtherItems_Prefix)),
                 postfix: new HarmonyMethod(typeof(HorseInjections), nameof(HorseInjections.Draw_EatingOtherItems_Postfix))
             );
+        }
 
+        private void PatchThrowInWater()
+        {
+            if (!ArchipelagoJunimoNoteMenu.IsBundleRemaining(MemeBundleNames.POLLUTION) && 
+                !ArchipelagoJunimoNoteMenu.IsBundleRemaining(MemeBundleNames.CATCH_AND_RELEASE))
+            {
+                return;
+            }
+
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(GameLocation), nameof(GameLocation.checkAction)),
+                prefix: new HarmonyMethod(typeof(ThrowInWaterInjections), nameof(ThrowInWaterInjections.CheckAction_ThrowPollutionAndFishInWater_Prefix))
+            );
+
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(GameLocation), nameof(GameLocation.UpdateWhenCurrentLocation)),
+                postfix: new HarmonyMethod(typeof(ThrowInWaterInjections), nameof(ThrowInWaterInjections.UpdateWhenCurrentLocation_WaterWithFish_Postfix))
+            );
+
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(GameLocation), nameof(GameLocation.draw)),
+                postfix: new HarmonyMethod(typeof(ThrowInWaterInjections), nameof(ThrowInWaterInjections.Draw_JumpingFish_Postfix))
+            );
+        }
+
+        private void PatchJunimoHair()
+        {
             _harmony.Patch(
                 original: AccessTools.Method(typeof(Junimo), nameof(Junimo.draw), new []{typeof(SpriteBatch), typeof(float)}),
                 postfix: new HarmonyMethod(typeof(JunimoInjections), nameof(JunimoInjections.Draw_DrawBeautifulHair_Postfix))

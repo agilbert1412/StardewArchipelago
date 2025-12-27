@@ -46,6 +46,7 @@ namespace StardewArchipelago.Locations.Jojapocalypse
             TravelingCartConsequences.Initialize(_logger, _modHelper, _archipelago, _jojaLocationChecker); // Sometimes she doesn't come to pelican town
             FishingConsequences.Initialize(_logger, _modHelper, _archipelago, _jojaLocationChecker); // Sometimes you catch trash instead of fish
             GeodeConsequences.Initialize(_logger, _modHelper, _archipelago, _jojaLocationChecker); // Museumsanity should make geodes sometimes empty
+            // Artifact spot related checks should reduce the spawn rate of artifact spots
             // Festivals get sometimes cancelled
             // Desert Festival and skull cavern should increase Bus cost (?)
             SpecialOrderConsequences.Initialize(_logger, _modHelper, _archipelago, _jojaLocationChecker); // Special orders require extras

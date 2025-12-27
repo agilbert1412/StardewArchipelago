@@ -766,22 +766,29 @@ namespace StardewArchipelago.Stardew
 
         private StardewObject ParseStardewObjectData(string id, ObjectData objectData)
         {
-            var name = objectData.Name;
-            var sellPrice = objectData.Price;
-            var edibility = objectData.Edibility;
-            var type = objectData.Type;
-            var category = objectData.Category;
-            var displayName = objectData.DisplayName;
-            var description = objectData.Description;
-
-            name = NormalizeName(id, name);
-
-            if (type == "Ring")
+            try
             {
-                return new StardewRing(id, name, sellPrice, edibility, type, category, displayName, description);
-            }
+                var name = objectData.Name;
+                var sellPrice = objectData.Price;
+                var edibility = objectData.Edibility;
+                var type = objectData.Type;
+                var category = objectData.Category;
+                var displayName = objectData.DisplayName;
+                var description = objectData.Description;
 
-            return new StardewObject(id, name, sellPrice, edibility, type, category, displayName, description);
+                name = NormalizeName(id, name);
+
+                if (type == "Ring")
+                {
+                    return new StardewRing(id, name, sellPrice, edibility, type, category, displayName, description);
+                }
+
+                return new StardewObject(id, name, sellPrice, edibility, type, category, displayName, description);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Failed at parsing Object data for [{id}].{Environment.NewLine}Data: {objectData}", ex);
+            }
         }
 
         public string NormalizeName(string id, string name)
@@ -796,167 +803,230 @@ namespace StardewArchipelago.Stardew
 
         private static BigCraftable ParseStardewBigCraftableData(string id, BigCraftableData bigCraftableData)
         {
-            var name = bigCraftableData.Name;
-            var price = bigCraftableData.Price;
-            var description = bigCraftableData.Description;
-            var canBePlacedOutdoors = bigCraftableData.CanBePlacedOutdoors;
-            var canBePlacedIndoors = bigCraftableData.CanBePlacedIndoors;
-            var fragility = bigCraftableData.Fragility;
-            var displayName = bigCraftableData.DisplayName;
+            try
+            {
+                var name = bigCraftableData.Name;
+                var price = bigCraftableData.Price;
+                var description = bigCraftableData.Description;
+                var canBePlacedOutdoors = bigCraftableData.CanBePlacedOutdoors;
+                var canBePlacedIndoors = bigCraftableData.CanBePlacedIndoors;
+                var fragility = bigCraftableData.Fragility;
+                var displayName = bigCraftableData.DisplayName;
 
-            var bigCraftable = new BigCraftable(id, name, price, description, canBePlacedOutdoors, canBePlacedIndoors, fragility, displayName);
-            return bigCraftable;
+                var bigCraftable = new BigCraftable(id, name, price, description, canBePlacedOutdoors, canBePlacedIndoors, fragility, displayName);
+                return bigCraftable;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Failed at parsing BigCraftable data for [{id}].{Environment.NewLine}Data: {bigCraftableData}", ex);
+            }
         }
 
         private static StardewBoots ParseStardewBootsData(string id, string bootsInfo)
         {
-            var fields = bootsInfo.Split("/");
-            var name = fields[0];
-            var description = fields[1];
-            var sellPrice = int.Parse(fields[2]);
-            var addedDefense = int.Parse(fields[3]);
-            var addedImmunity = int.Parse(fields[4]);
-            var colorIndex = int.Parse(fields[5]);
-            var displayName = fields.Length > 6 ? fields[6] : name;
+            try
+            {
+                var fields = bootsInfo.Split("/");
+                var name = fields[0];
+                var description = fields[1];
+                var sellPrice = int.Parse(fields[2]);
+                var addedDefense = int.Parse(fields[3]);
+                var addedImmunity = int.Parse(fields[4]);
+                var colorIndex = int.Parse(fields[5]);
+                var displayName = fields.Length > 6 ? fields[6] : name;
 
-            var bigCraftable = new StardewBoots(id, name, sellPrice, description, addedDefense,
-                addedImmunity, colorIndex, displayName);
-            return bigCraftable;
+                var bigCraftable = new StardewBoots(id, name, sellPrice, description, addedDefense,
+                    addedImmunity, colorIndex, displayName);
+                return bigCraftable;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Failed at parsing Boots data for [{id}].{Environment.NewLine}Data: {bootsInfo}", ex);
+            }
         }
 
         private static StardewFurniture ParseStardewFurnitureData(string id, string furnitureInfo)
         {
-            var fields = furnitureInfo.Split("/");
-            var name = fields[0];
-            var type = fields[1];
-            var tilesheetSize = fields[2];
-            var boundingBoxSize = fields[3];
-            var price = int.Parse(fields[5]);
-            var rotations = fields.Length > 6 ? fields[6] : "1";
-            var displayName = fields.Length > 7 ? fields[7] : name;
-            var placementRestriction = fields.Length > 8 ? fields[8] : "";
+            try
+            {
+                var fields = furnitureInfo.Split("/");
+                var name = fields[0];
+                var type = fields[1];
+                var tilesheetSize = fields[2];
+                var boundingBoxSize = fields[3];
+                var price = int.Parse(fields[5]);
+                var rotations = fields.Length > 6 ? fields[6] : "1";
+                var displayName = fields.Length > 7 ? fields[7] : name;
+                var placementRestriction = fields.Length > 8 ? fields[8] : "";
 
-            var furniture = new StardewFurniture(id, name, type, tilesheetSize, boundingBoxSize, rotations, price, displayName, placementRestriction);
-            return furniture;
+                var furniture = new StardewFurniture(id, name, type, tilesheetSize, boundingBoxSize, rotations, price, displayName, placementRestriction);
+                return furniture;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Failed at parsing Furniture data for [{id}].{Environment.NewLine}Data: {furnitureInfo}", ex);
+            }
         }
 
         private static StardewMannequin ParseStardewMannequinData(string id, MannequinData mannequinData)
         {
-            var name = mannequinData.DisplayName;
-            var cursed = mannequinData.Cursed;
-            var price = 0;
-            var displayName = mannequinData.DisplayName;
-            var description = mannequinData.Description;
+            try
+            {
+                var name = mannequinData.DisplayName;
+                var cursed = mannequinData.Cursed;
+                var price = 0;
+                var displayName = mannequinData.DisplayName;
+                var description = mannequinData.Description;
 
-            var mannequin = new StardewMannequin(id, name, cursed, price, displayName, description);
-            return mannequin;
+                var mannequin = new StardewMannequin(id, name, cursed, price, displayName, description);
+                return mannequin;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Failed at parsing Mannequin data for [{id}].{Environment.NewLine}Data: {mannequinData}", ex);
+            }
         }
 
         private static StardewHat ParseStardewHatData(string id, string hatInfo)
         {
-            var fields = hatInfo.Split("/");
-            var name = fields[0];
-            var description = fields[1];
-            var skipHairDraw = fields[2];
-            var ignoreHairstyleOffset = bool.Parse(fields[3]);
-            var displayName = fields.Length > 4 ? fields[4] : name;
+            try
+            {
+                var fields = hatInfo.Split("/");
+                var name = fields[0];
+                var description = fields[1];
+                var skipHairDraw = fields[2];
+                var ignoreHairstyleOffset = bool.Parse(fields[3]);
+                var displayName = fields.Length > 4 ? fields[4] : name;
 
-            var hat = new StardewHat(id, name, description, skipHairDraw, ignoreHairstyleOffset, displayName);
-            return hat;
+                var hat = new StardewHat(id, name, description, skipHairDraw, ignoreHairstyleOffset, displayName);
+                return hat;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Failed at parsing Hat data for [{id}].{Environment.NewLine}Data: {hatInfo}", ex);
+            }
         }
 
         private static StardewShirt ParseStardewShirtData(string id, ShirtData shirtData)
         {
-            var name = shirtData.Name;
-            var description = shirtData.Description;
-            var hasSleeves = shirtData.HasSleeves;
-            var price = shirtData.Price;
-            var spriteIndex = shirtData.SpriteIndex;
-            var isPrismatic = shirtData.IsPrismatic;
-            var texture = shirtData.Texture;
-            var canBeDyed = shirtData.CanBeDyed;
-            var canChooseDuringCharacterCustomization = shirtData.CanChooseDuringCharacterCustomization;
-            var defaultColor = shirtData.DefaultColor;
-            var displayName = string.IsNullOrWhiteSpace(shirtData.DisplayName) ? name : shirtData.DisplayName;
+            try
+            {
+                var name = shirtData.Name;
+                var description = shirtData.Description;
+                var hasSleeves = shirtData.HasSleeves;
+                var price = shirtData.Price;
+                var spriteIndex = shirtData.SpriteIndex;
+                var isPrismatic = shirtData.IsPrismatic;
+                var texture = shirtData.Texture;
+                var canBeDyed = shirtData.CanBeDyed;
+                var canChooseDuringCharacterCustomization = shirtData.CanChooseDuringCharacterCustomization;
+                var defaultColor = shirtData.DefaultColor;
+                var displayName = string.IsNullOrWhiteSpace(shirtData.DisplayName) ? name : shirtData.DisplayName;
 
-            var shirt = new StardewShirt(id, name, description, price, displayName);
-            return shirt;
+                var shirt = new StardewShirt(id, name, description, price, displayName);
+                return shirt;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Failed at parsing Shirt data for [{id}].{Environment.NewLine}Data: {shirtData}", ex);
+            }
         }
 
         private static StardewWeapon ParseStardewWeaponData(string id, WeaponData weaponData)
         {
-            var name = weaponData.Name;
-            var description = weaponData.Description;
-            var minDamage = weaponData.MinDamage;
-            var maxDamage = weaponData.MaxDamage;
-            var knockBack = weaponData.Knockback;
-            var speed = weaponData.Speed;
-            var precision = weaponData.Precision;
-            var defence = weaponData.Defense;
-            var type = weaponData.Type;
-            var mineBaseLevel = weaponData.MineBaseLevel;
-            var mineMinLevel = weaponData.MineMinLevel;
-            var areaOfEffect = weaponData.AreaOfEffect;
-            var criticalChance = weaponData.CritChance;
-            var criticalDamage = weaponData.CritMultiplier;
-            var displayName = weaponData.DisplayName;
-
-            if (type == 4)
+            try
             {
-                return new StardewSlingshot(id, name, description, minDamage, maxDamage, knockBack, speed,
-                    precision, defence, type, mineBaseLevel, mineMinLevel, areaOfEffect, criticalChance,
-                    criticalDamage, displayName, id == WeaponIds.SLINGSHOT ? 500 : (id == WeaponIds.MASTER_SLINGSHOT ? 1000 : 2000));
-            }
+                var name = weaponData.Name;
+                var description = weaponData.Description;
+                var minDamage = weaponData.MinDamage;
+                var maxDamage = weaponData.MaxDamage;
+                var knockBack = weaponData.Knockback;
+                var speed = weaponData.Speed;
+                var precision = weaponData.Precision;
+                var defence = weaponData.Defense;
+                var type = weaponData.Type;
+                var mineBaseLevel = weaponData.MineBaseLevel;
+                var mineMinLevel = weaponData.MineMinLevel;
+                var areaOfEffect = weaponData.AreaOfEffect;
+                var criticalChance = weaponData.CritChance;
+                var criticalDamage = weaponData.CritMultiplier;
+                var displayName = weaponData.DisplayName;
 
-            var meleeWeapon = new StardewWeapon(id, name, description, minDamage, maxDamage, knockBack, speed,
-                precision, defence, type, mineBaseLevel, mineMinLevel, areaOfEffect, criticalChance,
-                criticalDamage, displayName);
-            return meleeWeapon;
+                if (type == 4)
+                {
+                    return new StardewSlingshot(id, name, description, minDamage, maxDamage, knockBack, speed,
+                        precision, defence, type, mineBaseLevel, mineMinLevel, areaOfEffect, criticalChance,
+                        criticalDamage, displayName, id == WeaponIds.SLINGSHOT ? 500 : (id == WeaponIds.MASTER_SLINGSHOT ? 1000 : 2000));
+                }
+
+                var meleeWeapon = new StardewWeapon(id, name, description, minDamage, maxDamage, knockBack, speed,
+                    precision, defence, type, mineBaseLevel, mineMinLevel, areaOfEffect, criticalChance,
+                    criticalDamage, displayName);
+                return meleeWeapon;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Failed at parsing Weapon data for [{id}].{Environment.NewLine}Data: {weaponData}", ex);
+            }
         }
 
         private StardewCookingRecipe ParseStardewCookingRecipeData(string recipeName, string recipeInfo)
         {
-            var fields = recipeInfo.Split("/");
-            var ingredientsField = fields[0].Split(" ");
-            var ingredients = new Dictionary<string, int>();
-            for (var i = 0; i < ingredientsField.Length - 1; i += 2)
+            try
             {
-                ingredients.Add(ingredientsField[i], int.Parse(ingredientsField[i + 1]));
+                var fields = recipeInfo.Split("/");
+                var ingredientsField = fields[0].Split(" ");
+                var ingredients = new Dictionary<string, int>();
+                for (var i = 0; i < ingredientsField.Length - 1; i += 2)
+                {
+                    ingredients.Add(ingredientsField[i], int.Parse(ingredientsField[i + 1]));
+                }
+                var unusedField = fields[1];
+                var yieldField = fields[2].Split(" ");
+                var yieldItemId = yieldField[0];
+                var yieldAmount = yieldField.Length > 1 ? int.Parse(yieldField[1]) : 1;
+                var unlockConditions = fields[3];
+                var displayName = fields.Length > 4 ? fields[4] : recipeName;
+
+                var yieldItem = _objectsById[yieldItemId];
+
+                var cookingRecipe = new StardewCookingRecipe(recipeName, ingredients, yieldItem, yieldAmount, unlockConditions, displayName);
+                return cookingRecipe;
             }
-            var unusedField = fields[1];
-            var yieldField = fields[2].Split(" ");
-            var yieldItemId = yieldField[0];
-            var yieldAmount = yieldField.Length > 1 ? int.Parse(yieldField[1]) : 1;
-            var unlockConditions = fields[3];
-            var displayName = fields.Length > 4 ? fields[4] : recipeName;
-
-            var yieldItem = _objectsById[yieldItemId];
-
-            var cookingRecipe = new StardewCookingRecipe(recipeName, ingredients, yieldItem, yieldAmount, unlockConditions, displayName);
-            return cookingRecipe;
+            catch (Exception ex)
+            {
+                throw new Exception($"Failed at parsing Cooking Recipe data for [{recipeName}].{Environment.NewLine}Data: {recipeInfo}", ex);
+            }
         }
 
         private StardewCraftingRecipe ParseStardewCraftingRecipeData(string recipeName, string recipeInfo)
         {
-            var fields = recipeInfo.Split("/");
-            var ingredientsField = fields[0].Split(" ");
-            var ingredients = new Dictionary<string, int>();
-            for (var i = 0; i < ingredientsField.Length - 1; i += 2)
+            try
             {
-                ingredients.Add(ingredientsField[i], int.Parse(ingredientsField[i + 1]));
+                var fields = recipeInfo.Split("/");
+                var ingredientsField = fields[0].Split(" ");
+                var ingredients = new Dictionary<string, int>();
+                for (var i = 0; i < ingredientsField.Length - 1; i += 2)
+                {
+                    ingredients.Add(ingredientsField[i], int.Parse(ingredientsField[i + 1]));
+                }
+                var unusedField = fields[1];
+                var yieldField = fields[2].Split(" ");
+                var yieldItemId = yieldField[0];
+                var yieldAmount = yieldField.Length > 1 ? int.Parse(yieldField[1]) : 1;
+                var bigCraftable = fields[3];
+                var unlockConditions = fields[4];
+                var displayName = fields.Length > 5 ? fields[5] : recipeName;
+
+                var yieldItem = GetYieldItem(bigCraftable, yieldItemId);
+
+                var craftingRecipe = new StardewCraftingRecipe(recipeName, ingredients, yieldItem, yieldAmount, bigCraftable, unlockConditions, displayName);
+                return craftingRecipe;
             }
-            var unusedField = fields[1];
-            var yieldField = fields[2].Split(" ");
-            var yieldItemId = yieldField[0];
-            var yieldAmount = yieldField.Length > 1 ? int.Parse(yieldField[1]) : 1;
-            var bigCraftable = fields[3];
-            var unlockConditions = fields[4];
-            var displayName = fields.Length > 5 ? fields[5] : recipeName;
-
-            var yieldItem = GetYieldItem(bigCraftable, yieldItemId);
-
-            var craftingRecipe = new StardewCraftingRecipe(recipeName, ingredients, yieldItem, yieldAmount, bigCraftable, unlockConditions, displayName);
-            return craftingRecipe;
+            catch (Exception ex)
+            {
+                throw new Exception($"Failed at parsing Crafting Recipe data for [{recipeName}].{Environment.NewLine}Data: {recipeInfo}", ex);
+            }
         }
 
         private StardewItem GetYieldItem(string bigCraftable, string yieldItemId)
@@ -1047,6 +1117,7 @@ namespace StardewArchipelago.Stardew
                 yield return "{\"" + stardewItem.Name + "\", \"" + stardewItem.DisplayName + "\"}";
             }
         }
+
         private bool IsPascalCaseName(string furnitureName)
         {
             if (string.IsNullOrWhiteSpace(furnitureName) || furnitureName.Length < 4 || furnitureName.Contains(" "))

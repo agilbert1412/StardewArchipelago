@@ -76,6 +76,14 @@ namespace StardewArchipelago.Locations.ShopStockModifiers
                 // shopData.Items.RemoveAt(i);
 
                 var apShopItem = CreateArchipelagoLocation(item, locationName);
+                if (item.Id == QualifiedItemIds.GOLDEN_EGG)
+                {
+                    apShopItem.Condition = GameStateConditionProvider.CreateHasReceivedItemCondition("Golden Egg");
+                }
+                else
+                {
+                    apShopItem.Condition = null;
+                }
                 shopData.Items.Insert(i, apShopItem);
             }
         }
