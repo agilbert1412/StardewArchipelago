@@ -24,7 +24,7 @@ namespace StardewArchipelago.GameModifications.CodeInjections
         {
             try
             {
-                if (Game1.isFestival())
+                if (Game1.isFestival() || Game1.eventUp || Game1.CurrentEvent != null)
                 {
                     return MethodPrefix.RUN_ORIGINAL_METHOD;
                 }
