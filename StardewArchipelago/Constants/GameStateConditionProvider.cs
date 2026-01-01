@@ -129,6 +129,23 @@ namespace StardewArchipelago.Constants
             return CreateCondition(GameStateCondition.FOUND_MINERAL, minerals);
         }
 
+        public static string CreateKnowsAnyRecipeCondition(string itemName)
+        {
+            var crafting = CreateKnowsCraftingRecipeCondition(itemName);
+            var cooking = CreateKnowsCookingRecipeCondition(itemName);
+            return CreateOrCondition(new[] { crafting, cooking });
+        }
+
+        public static string CreateKnowsCraftingRecipeCondition(string itemName)
+        {
+            return CreateCondition(GameStateCondition.HAS_CRAFTING_RECIPE, new[] { "Current", itemName });
+        }
+
+        public static string CreateKnowsCookingRecipeCondition(string itemName)
+        {
+            return CreateCondition(GameStateCondition.HAS_COOKING_RECIPE, new []{"Current", itemName});
+        }
+
         public static string CreateCondition(string condition, string[] arguments)
         {
             return !arguments.Any() ? condition : $"{condition} {string.Join(' ', arguments)}";

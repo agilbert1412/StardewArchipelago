@@ -318,8 +318,9 @@ namespace StardewArchipelago.Locations.Jojapocalypse
             }
 
             var salablesByKeywordOrdered = salablesByKeyword.OrderByDescending(x => x.Value.Count).ToArray();
-            const int NUMBER_CATEGORIES_SPLIT = 10;
+            const int NUMBER_CATEGORIES_SPLIT = 8;
             const string OTHER_CATEGORY = "Other";
+            const string ALL_CATEGORY = "Everything";
             var splitItems = new Dictionary<string, List<ISalable>>();
             var otherItems = new Dictionary<string, ISalable>();
             var alreadyCategorizedItems = new HashSet<string>();
@@ -346,6 +347,7 @@ namespace StardewArchipelago.Locations.Jojapocalypse
             }
 
             splitItems.Add(OTHER_CATEGORY, otherItems.Values.ToList());
+            splitItems.Add(ALL_CATEGORY, items.Values.ToList());
 
             return splitItems;
         }
@@ -544,17 +546,20 @@ namespace StardewArchipelago.Locations.Jojapocalypse
                 if (allApItems.ContainsKey(stardewItem.Name) && TryGetItemValue(realItem, stardewItem, out var itemValue))
                 {
                     var maxStack = realItem.maximumStackSize();
+                    var receivedApCondition = GameStateConditionProvider.CreateHasReceivedItemCondition(stardewItem.Name);
+                    var receivedApRecipeCondition = GameStateConditionProvider.CreateHasReceivedItemCondition($"{stardewItem.Name} Recipe");
+                    var knowsRecipeCondition = GameStateConditionProvider.CreateKnowsAnyRecipeCondition(stardewItem.Name);
+                    var condition = GameStateConditionProvider.CreateOrCondition(new[] { receivedApCondition, receivedApRecipeCondition, knowsRecipeCondition });
                     var shopObject = new ShopItemData()
                     {
                         Id = qualifiedId,
                         ItemId = qualifiedId,
-                        AvailableStock = 1,
                         Price = itemValue * Math.Min(maxStack, 8),
                         IsRecipe = false,
                         MaxItems = 1,
                         MinStack = Math.Min(maxStack, 10),
                         MaxStack = -1,
-                        Condition = GameStateConditionProvider.CreateHasReceivedItemCondition(stardewItem.Name),
+                        Condition = condition,
                     };
 
                     shopData.Items.Add(shopObject);
