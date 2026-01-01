@@ -375,7 +375,7 @@ namespace StardewArchipelago.Locations.Jojapocalypse
                 var bundleIndex = int.Parse(bundleKey.Split("/").Last());
                 var bundleName = bundleData.Split("/").First();
                 var isComplete = communityCenter.isBundleComplete(bundleIndex);
-                if (!isComplete || _locationChecker.IsLocationMissing($"{bundleName} Bundle"))
+                if (!isComplete && _locationChecker.IsLocationMissing($"{bundleName} Bundle"))
                 {
                     return false;
                 }
