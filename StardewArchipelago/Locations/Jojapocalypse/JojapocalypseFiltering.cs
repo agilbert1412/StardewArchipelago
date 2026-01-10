@@ -1,19 +1,20 @@
 ﻿using KaitoKid.ArchipelagoUtilities.Net;
+using KaitoKid.Utilities.Interfaces;
+using StardewArchipelago.Archipelago;
 using StardewArchipelago.Archipelago.ApworldData;
+using StardewArchipelago.Archipelago.SlotData.SlotEnums;
+using StardewArchipelago.Constants;
+using StardewArchipelago.GameModifications.Seasons;
+using StardewArchipelago.Items.Unlocks.Vanilla;
+using StardewArchipelago.Locations.CodeInjections.Vanilla;
+using StardewArchipelago.Locations.Festival;
+using StardewArchipelago.Locations.ShopStockModifiers;
+using StardewArchipelago.Stardew.NameMapping;
+using StardewValley;
+using StardewValley.Locations;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using KaitoKid.Utilities.Interfaces;
-using StardewArchipelago.Archipelago;
-using StardewArchipelago.Archipelago.SlotData.SlotEnums;
-using StardewArchipelago.GameModifications.Seasons;
-using StardewArchipelago.Items.Unlocks.Vanilla;
-using StardewArchipelago.Locations.Festival;
-using StardewValley;
-using StardewValley.Locations;
-using StardewArchipelago.Constants;
-using StardewArchipelago.Locations.CodeInjections.Vanilla;
-using StardewArchipelago.Locations.ShopStockModifiers;
 
 namespace StardewArchipelago.Locations.Jojapocalypse
 {
@@ -22,12 +23,14 @@ namespace StardewArchipelago.Locations.Jojapocalypse
         private readonly ILogger _logger;
         private readonly StardewArchipelagoClient _archipelago;
         private readonly LocationChecker _locationChecker;
+        private CompoundNameMapper _nameMapper;
 
         public JojapocalypseFiltering(ILogger logger, StardewArchipelagoClient archipelago, LocationChecker locationChecker)
         {
             _logger = logger;
             _archipelago = archipelago;
             _locationChecker = locationChecker;
+            _nameMapper = new CompoundNameMapper(archipelago.SlotData);
         }
 
         public bool CanPurchaseJojapocalypseLocation(StardewArchipelagoLocation location)
@@ -39,11 +42,11 @@ namespace StardewArchipelago.Locations.Jojapocalypse
                 {
                     return false;
                 }
+            }
 
-                if (!ValidateKeywordsLocation(nameWords, i))
-                {
-                    return false;
-                }
+            if (!ValidateKeywordsLocation(nameWords, 0))
+            {
+                return false;
             }
 
             if (!ValidateMasteriesLocation(location.Name))
@@ -433,7 +436,13 @@ namespace StardewArchipelago.Locations.Jojapocalypse
             }
 
             var recipe = location.Name[prefix.Length..].Trim();
-            return Game1.player.knowsRecipe(recipe);
+            if (Game1.player.knowsRecipe(recipe))
+            {
+                return true;
+            }
+
+            var mappedName = _nameMapper.GetRecipeName(recipe);
+            return Game1.player.knowsRecipe(mappedName);
         }
 
         private bool ValidateCraftsanityLocation(StardewArchipelagoLocation location)
@@ -450,7 +459,13 @@ namespace StardewArchipelago.Locations.Jojapocalypse
             }
 
             var recipe = location.Name[prefix.Length..].Trim();
-            return Game1.player.knowsRecipe(recipe);
+            if (Game1.player.knowsRecipe(recipe))
+            {
+                return true;
+            }
+
+            var mappedName = _nameMapper.GetRecipeName(recipe);
+            return Game1.player.knowsRecipe(mappedName);
         }
 
         private bool ValidateMovieLocation(StardewArchipelagoLocation location)

@@ -11,6 +11,7 @@ namespace StardewArchipelago.Stardew.NameMapping
             { "Wild Seeds (Su)", "Summer Seeds" },
             { "Wild Seeds (Fa)", "Fall Seeds" },
             { "Wild Seeds (Wi)", "Winter Seeds" },
+            { "Oil Of Garlic", "Oil of Garlic" },
         };
 
         private static readonly Dictionary<string, string> _itemToRecipeNames =
