@@ -30,6 +30,7 @@ namespace StardewArchipelago.Locations.ShopStockModifiers
                 {
                     var shopsData = asset.AsDictionary<string, ShopData>().Data;
                     var cartShopData = shopsData["Traveler"];
+                    ChangeTeaSetYear(cartShopData);
                     SetUpRandomItemsStockSize(cartShopData);
                     AddMetalDetectorItems(cartShopData);
                     AddChecks(cartShopData);
@@ -38,6 +39,24 @@ namespace StardewArchipelago.Locations.ShopStockModifiers
                 },
                 AssetEditPriority.Late - 1
             );
+        }
+
+        private void ChangeTeaSetYear(ShopData cartShopData)
+        {
+            for (var i = 0; i < cartShopData.Items.Count; i++)
+            {
+                var item = cartShopData.Items[i];
+                if (string.IsNullOrWhiteSpace(item.Condition))
+                {
+                    continue;
+                }
+
+                if (!item.Condition.Contains("YEAR 25"))
+                {
+                    continue;
+                }
+                item.Condition = item.Condition.Replace("YEAR 25", "YEAR 10");
+            }
         }
 
         private void SetUpRandomItemsStockSize(ShopData cartShopData)
