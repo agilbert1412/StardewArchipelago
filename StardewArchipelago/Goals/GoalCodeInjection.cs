@@ -480,7 +480,21 @@ namespace StardewArchipelago.Goals
 
         private static bool HasCraftedAllRecipes()
         {
-            var numberOfUnavailableRecipes = _archipelago.SlotData.ExcludeGingerIsland ? 8 : 0;
+            /*
+               List of crafts that require Ginger Island
+               Hyper Speed-Gro
+               Deluxe Retaining Soil
+               Magic Bait
+               Fairy Dust
+               Warp Totem: Island
+               Heavy Tapper
+               Ostrich Incubator
+               Solar Panel
+               Hopper
+               Blue Grass Starter
+               Mini-Forge
+             */
+            var numberOfUnavailableRecipes = _archipelago.SlotData.ExcludeGingerIsland ? 11 : 0;
             numberOfUnavailableRecipes += _archipelago.SlotData.Mods.HasMod(ModNames.BOARDING_HOUSE) ? 5 : 0; // Restore crafts are ignored
             var allRecipes = DataLoader.CraftingRecipes(Game1.content);
             var numberOfMissedRecipes = 0;
