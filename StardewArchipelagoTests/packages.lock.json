@@ -50,8 +50,8 @@
       },
       "Archipelago.Gifting.Net": {
         "type": "Transitive",
-        "resolved": "0.4.3",
-        "contentHash": "gEtGgWJJTqlVBq1xDEobjoHXDPPw2d0EZAoOM9NUvlWd8YVruTG2z3X3+3R1x0uoXuYGZ0jidJkN7BHxNOL/3Q==",
+        "resolved": "0.4.4",
+        "contentHash": "wo7sakhF6UUbZGASFlx0wPpPOftMr65mn9ItYPVAhtXKXOAK2vYdVj/fFdCegLE5YxpoXQZ1lVcaDGSs8YEipA==",
         "dependencies": {
           "Archipelago.MultiClient.Net": "6.6.0"
         }
@@ -63,20 +63,19 @@
       },
       "KaitoKid.ArchipelagoUtilities.AssetDownloader": {
         "type": "Transitive",
-        "resolved": "3.1.2",
-        "contentHash": "PjDxthkiRvWXEQNUK4A4DiVJ46UaawkBy2aP/JHfsCzMRU00DoMYiOrKBbRRuOu5IIKJL5Z0/vwZ8KYnz/jUIg==",
+        "resolved": "3.1.5",
+        "contentHash": "qIFgLBEZbmXI/wYDvUXDn1CS2m3OUnkgogyWsvNqL12CRR65EiR2IngJOHBmXpF5ec4sL9aPKNZcOiv1H0PpJg==",
         "dependencies": {
-          "KaitoKid.Utilities.Interfaces": "1.0.1",
-          "System.Text.Json": "10.0.0"
+          "KaitoKid.Utilities.Interfaces": "1.0.1"
         }
       },
       "KaitoKid.ArchipelagoUtilities.Net": {
         "type": "Transitive",
-        "resolved": "3.1.3",
-        "contentHash": "DhFleZHDIbVCjzJTZqt6YlvKXSN3ZWbKL90D1pjgs6MuQeSBb4QQkxBG2fmZsDbBlWxbmYlfRYfWZpFHXoqYJw==",
+        "resolved": "3.1.5",
+        "contentHash": "4X9S4892vlew1rF2dF0lbuz4BU5Ys4ReDZgpKOhIeQYJXRnGRoLll7GfacZqljbqpnCCdedHfPMwjvUHmUpO6Q==",
         "dependencies": {
           "Archipelago.MultiClient.Net": "6.6.0",
-          "KaitoKid.ArchipelagoUtilities.AssetDownloader": "3.1.2",
+          "KaitoKid.ArchipelagoUtilities.AssetDownloader": "3.1.5",
           "KaitoKid.Utilities.Interfaces": "1.0.1"
         }
       },
@@ -84,11 +83,6 @@
         "type": "Transitive",
         "resolved": "1.0.1",
         "contentHash": "yJNh8D8823yGAWST6GShQUhU7TQylFDX6m70Ao28JUnCaAuUOGegwof0o8qPFntOwGiX1ys9eKdf4HQ19Yu6aA=="
-      },
-      "Microsoft.Bcl.AsyncInterfaces": {
-        "type": "Transitive",
-        "resolved": "10.0.0",
-        "contentHash": "vFuwSLj9QJBbNR0NeNO4YVASUbokxs+i/xbuu8B+Fs4FAZg5QaFa6eGrMaRqTzzNI5tAb97T7BhSxtLckFyiRA=="
       },
       "Microsoft.CodeCoverage": {
         "type": "Transitive",
@@ -192,11 +186,6 @@
         "type": "Transitive",
         "resolved": "4.4.0",
         "contentHash": "Yi7/8bZlLS1bqZxft1yZWxJmIBfIoRxQBFIwWrF0AjC4/j/HmWdDC7dbNzzM4ZtOTtjOAQ8AC7WjP6KHgLPpdg=="
-      },
-      "System.Buffers": {
-        "type": "Transitive",
-        "resolved": "4.6.1",
-        "contentHash": "N8GXpmiLMtljq7gwvyS+1QvKT/W2J8sNAvx+HVg4NGmsG/H+2k/y9QI23auLJRterrzCiDH+IWAw4V/GPwsMlw=="
       },
       "System.Collections": {
         "type": "Transitive",
@@ -303,16 +292,6 @@
           "System.Runtime": "4.1.0"
         }
       },
-      "System.IO.Pipelines": {
-        "type": "Transitive",
-        "resolved": "10.0.0",
-        "contentHash": "M1eb3nfXntaRJPrrMVM9EFS8I1bDTnt0uvUS6QP/SicZf/ZZjydMD5NiXxfmwW/uQwaMDP/yX2P+zQN1NBHChg==",
-        "dependencies": {
-          "System.Buffers": "4.6.1",
-          "System.Memory": "4.6.3",
-          "System.Threading.Tasks.Extensions": "4.6.3"
-        }
-      },
       "System.Linq": {
         "type": "Transitive",
         "resolved": "4.1.0",
@@ -348,11 +327,6 @@
           "System.Runtime.Extensions": "4.1.0",
           "System.Threading": "4.0.11"
         }
-      },
-      "System.Memory": {
-        "type": "Transitive",
-        "resolved": "4.6.3",
-        "contentHash": "qdcDOgnFZY40+Q9876JUHnlHu7bosOHX8XISRoH94fwk6hgaeQGSgfZd8srWRZNt5bV9ZW2TljcegDNxsf+96A=="
       },
       "System.ObjectModel": {
         "type": "Transitive",
@@ -467,11 +441,6 @@
           "Microsoft.NETCore.Targets": "1.0.1"
         }
       },
-      "System.Runtime.CompilerServices.Unsafe": {
-        "type": "Transitive",
-        "resolved": "6.1.2",
-        "contentHash": "2hBr6zdbIBTDE3EhK7NSVNdX58uTK6iHW/P/Axmm9sl1xoGSLqDvMtpecn226TNwHByFokYwJmt/aQQNlO5CRw=="
-      },
       "System.Runtime.Extensions": {
         "type": "Transitive",
         "resolved": "4.1.0",
@@ -540,30 +509,6 @@
           "System.Text.Encoding": "4.0.11"
         }
       },
-      "System.Text.Encodings.Web": {
-        "type": "Transitive",
-        "resolved": "10.0.0",
-        "contentHash": "257hh1ep1Gqm1Lm0ulxf7vVBVMJuGN6EL4xSWjpi46DffXzm1058IiWsfSC06zSm7SniN+Tb5160UnXsSa8rRg==",
-        "dependencies": {
-          "System.Buffers": "4.6.1",
-          "System.Memory": "4.6.3",
-          "System.Runtime.CompilerServices.Unsafe": "6.1.2"
-        }
-      },
-      "System.Text.Json": {
-        "type": "Transitive",
-        "resolved": "10.0.0",
-        "contentHash": "1Dpjwq9peG/Wt5BNbrzIhTpclfOSqBWZsUO28vVr59yQlkvL5jLBWfpfzRmJ1OY+6DciaY0DUcltyzs4fuZHjw==",
-        "dependencies": {
-          "Microsoft.Bcl.AsyncInterfaces": "10.0.0",
-          "System.Buffers": "4.6.1",
-          "System.IO.Pipelines": "10.0.0",
-          "System.Memory": "4.6.3",
-          "System.Runtime.CompilerServices.Unsafe": "6.1.2",
-          "System.Text.Encodings.Web": "10.0.0",
-          "System.Threading.Tasks.Extensions": "4.6.3"
-        }
-      },
       "System.Text.RegularExpressions": {
         "type": "Transitive",
         "resolved": "4.1.0",
@@ -598,8 +543,13 @@
       },
       "System.Threading.Tasks.Extensions": {
         "type": "Transitive",
-        "resolved": "4.6.3",
-        "contentHash": "7sCiwilJLYbTZELaKnc7RecBBXWXA+xMLQWZKWawBxYjp6DBlSE3v9/UcvKBvr1vv2tTOhipiogM8rRmxlhrVA=="
+        "resolved": "4.0.0",
+        "contentHash": "pH4FZDsZQ/WmgJtN4LWYmRdJAEeVkyriSwrv2Teoe5FOU0Yxlb6II6GL8dBPOfRmutHGATduj3ooMt7dJ2+i+w==",
+        "dependencies": {
+          "System.Collections": "4.0.11",
+          "System.Runtime": "4.1.0",
+          "System.Threading.Tasks": "4.0.11"
+        }
       },
       "System.Xml.ReaderWriter": {
         "type": "Transitive",
@@ -645,10 +595,10 @@
       "stardewarchipelago": {
         "type": "Project",
         "dependencies": {
-          "Archipelago.Gifting.Net": "[0.4.3, )",
+          "Archipelago.Gifting.Net": "[0.4.4, )",
           "Archipelago.MultiClient.Net": "[6.7.0, )",
-          "KaitoKid.ArchipelagoUtilities.AssetDownloader": "[3.1.2, )",
-          "KaitoKid.ArchipelagoUtilities.Net": "[3.1.3, )",
+          "KaitoKid.ArchipelagoUtilities.AssetDownloader": "[3.1.5, )",
+          "KaitoKid.ArchipelagoUtilities.Net": "[3.1.5, )",
           "Pathoschild.Stardew.ModBuildConfig": "[4.4.0, )"
         }
       }
