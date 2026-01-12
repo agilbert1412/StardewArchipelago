@@ -457,6 +457,7 @@ namespace StardewArchipelago
             FarmInjections.ForcePetIfNeeded(_mail);
             _locationChecker.VerifyNewLocationChecksWithArchipelago();
             _locationChecker.SendAllLocationChecks();
+            ArchipelagoJunimoNoteMenu.CompleteBundlesFromServer();
             _itemManager.ReceiveAllNewItems(false);
             _mailPatcher.ReceiveFirstFewBackpacks();
             _goalManager.CheckGoalCompletion();

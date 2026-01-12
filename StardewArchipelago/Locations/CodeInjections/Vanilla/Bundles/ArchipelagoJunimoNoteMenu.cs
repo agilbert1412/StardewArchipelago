@@ -2350,6 +2350,18 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
 
             return 0;
         }
+        public static void CompleteBundlesFromServer()
+        {
+            if (!ModEntry.Instance.Config.RemoteCommunityCenter && !Game1.MasterPlayer.hasOrWillReceiveMail("JojaMember"))
+            {
+                return;
+            }
+            var checkedBundleLocations = _locationChecker.GetAllLocationsAlreadyChecked().Where(x => x.EndsWith(" Bundle"));
+            foreach (var location in checkedBundleLocations)
+            {
+                CompleteBundleIfExists(location);
+            }
+        }
 
         public static void CompleteBundleIfExists(string bundleName)
         {

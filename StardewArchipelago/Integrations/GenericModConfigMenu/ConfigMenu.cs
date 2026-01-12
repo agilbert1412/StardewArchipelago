@@ -118,6 +118,14 @@ namespace StardewArchipelago.Integrations.GenericModConfigMenu
 
             configMenu.AddBoolOption(
                 mod: ModManifest,
+                name: () => "Remote Community Center",
+                tooltip: () => "Whether the local community center should automatically synchronize to the server state. This will complete bundles if they are marked as completed on the server",
+                getValue: () => Config.RemoteCommunityCenter,
+                setValue: (value) => Config.RemoteCommunityCenter = value
+            );
+
+            configMenu.AddBoolOption(
+                mod: ModManifest,
                 name: () => "Enable Seed Shop Overhaul",
                 tooltip: () => "Seed shops are rebalanced to be more in line with the lore and intended gameplay design of Archipelago",
                 getValue: () => Config.EnableSeedShopOverhaul,
@@ -134,18 +142,18 @@ namespace StardewArchipelago.Integrations.GenericModConfigMenu
 
             configMenu.AddBoolOption(
                 mod: ModManifest,
-                name: () => "Hide NPC Gift Mail",
-                tooltip: () => "All received NPC gifts will be skipped, reducing clutter",
-                getValue: () => Config.HideNpcGiftMail,
-                setValue: (value) => Config.HideNpcGiftMail = value
-            );
-
-            configMenu.AddBoolOption(
-                mod: ModManifest,
                 name: () => "Disable Letter Templates",
                 tooltip: () => "All Archipelago letters will now use a very short and concise format instead of the funny ones full of fluff",
                 getValue: () => Config.DisableLetterTemplates,
                 setValue: (value) => Config.DisableLetterTemplates = value
+            );
+
+            configMenu.AddBoolOption(
+                mod: ModManifest,
+                name: () => "Hide NPC Gift Mail",
+                tooltip: () => "All received NPC gifts will be skipped, reducing clutter",
+                getValue: () => Config.HideNpcGiftMail,
+                setValue: (value) => Config.HideNpcGiftMail = value
             );
 
             configMenu.AddBoolOption(

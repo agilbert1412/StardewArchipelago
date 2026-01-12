@@ -5,6 +5,11 @@ namespace StardewArchipelago
     public class ModConfig
     {
         /// <summary>
+        /// When the server considers a bundle to be complete, it should also get completed locally
+        /// </summary>
+        public bool RemoteCommunityCenter { get; set; } = true;
+
+        /// <summary>
         /// When enabled, Pierre and Sandy sell limited stocks of seeds.
         /// Jojamart sells cheaper seeds, but forces you to purchase large packs instead of one at a time
         /// </summary>
@@ -16,17 +21,17 @@ namespace StardewArchipelago
         /// Examples include NPC Hearts, Seasons, Carpenter building unlocks, etc
         /// </summary>
         public bool HideEmptyArchipelagoLetters { get; set; } = false;
-        
-        /// <summary>
-        /// Automatically removes random gifts received in mail from NPCs
-        /// </summary>
-        public bool HideNpcGiftMail { get; set; } = false;
 
         /// <summary>
         /// All Archipelago letters will now use a very short and concise format
         /// instead of the funny ones full of fluff
         /// </summary>
         public bool DisableLetterTemplates { get; set; } = false;
+
+        /// <summary>
+        /// Automatically removes random gifts received in mail from NPCs
+        /// </summary>
+        public bool HideNpcGiftMail { get; set; } = false;
 
         /// <summary>
         /// When the archipelago icon shows up in-game, two version of the icons are available.
