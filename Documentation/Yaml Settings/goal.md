@@ -31,7 +31,7 @@ Restore the community center, by completing every bundle in every room. External
 - This goal can be **Short** and it can be **Long**. This will be mostly decided by the setting [Bundle Price](./bundle_price.md)
 - This goal is partially *Adaptable*. Settings like [Bundle Randomization](./bundle_randomization.md) and [Bundle Price](./bundle_price.md) will change the content of the bundles and therefore have a significant impact on the goal. Settings like [Exclude Ginger Island](./exclude_ginger_island.md) will have a slight impact, by allowing or banning certain items from appearing in bundles.
 - This goal is **not** *Focused*. You will be doing a bit of everything to fulfill bundles.
-- This goal is **not** *Coopable*. To win, a save file must exist with a fully locally completed Community Center
+- This goal is *Coopable* if you turn on the config setting `RemoteCommunityCenter`. To win, a save file must exist with a fully locally completed Community Center. When this config is set to true, local bundles will atuomatically get completed at the start of each day to match the server state, which means several people can complete bundles and it will synchronise between them.
 
 ### Grandpa's Evaluation
 
