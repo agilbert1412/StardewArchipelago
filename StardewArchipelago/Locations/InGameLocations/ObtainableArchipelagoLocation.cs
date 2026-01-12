@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using Archipelago.MultiClient.Net.Enums;
+﻿using Archipelago.MultiClient.Net.Enums;
 using Archipelago.MultiClient.Net.Models;
 using KaitoKid.ArchipelagoUtilities.AssetDownloader.ItemSprites;
 using KaitoKid.ArchipelagoUtilities.Net.Client;
@@ -16,6 +13,10 @@ using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Internal;
 using StardewValley.Objects;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text.Json;
 using Color = Microsoft.Xna.Framework.Color;
 
 namespace StardewArchipelago.Locations.InGameLocations
@@ -87,7 +88,7 @@ namespace StardewArchipelago.Locations.InGameLocations
             if (_itemSprites == null && ModEntry.Instance.Config.CustomAssets)
             {
                 var redownloadDelay = TimeSpan.FromDays(28);
-                _itemSprites = new ArchipelagoItemSprites(logger, redownloadDelay);
+                _itemSprites = new ArchipelagoItemSprites(logger, DeserializeAliases, redownloadDelay);
             }
 
             // Prefix removed for now, because the inconsistency makes it ugly
@@ -119,6 +120,13 @@ namespace StardewArchipelago.Locations.InGameLocations
                 _archipelagoTexture = GetCorrectTexture(logger, modHelper, null, archipelago, null);
                 _description = ScoutedLocation.GenericItemName();
             }
+        }
+
+        private ItemSpriteAliases DeserializeAliases(string jsonAliases)
+        {
+            var options = new JsonSerializerOptions { AllowTrailingCommas = true };
+            var aliases = JsonSerializer.Deserialize<ItemSpriteAliases>(jsonAliases, options);
+            return aliases;
         }
 
         protected virtual Texture2D GetCorrectTexture(LogHandler logger, IModHelper modHelper, ScoutedLocation scoutedLocation, StardewArchipelagoClient archipelago, Hint relatedHint)
