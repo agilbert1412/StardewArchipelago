@@ -82,13 +82,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
                 return;
             }
 
-            foreach (var specialOrderReward in specialOrder.rewards)
-            {
-                if (specialOrderReward is MailReward mailReward)
-                {
-                    mailReward.noLetter.Set(true);
-                }
-            }
+            SetAllMailRewardsToNoletter(specialOrder);
 
             if (checkMissing)
             {
@@ -115,6 +109,17 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
                 specialOrder.rewards.RemoveAt(i);
             }
             return;
+        }
+        private static void SetAllMailRewardsToNoletter(SpecialOrder specialOrder)
+        {
+
+            foreach (var specialOrderReward in specialOrder.rewards)
+            {
+                if (specialOrderReward is MailReward mailReward)
+                {
+                    mailReward.noLetter.Set(true);
+                }
+            }
         }
 
         private static void AdjustRequirements(SpecialOrder specialOrder)
