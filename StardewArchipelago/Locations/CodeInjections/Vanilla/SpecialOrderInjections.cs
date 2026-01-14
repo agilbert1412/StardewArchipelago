@@ -82,9 +82,17 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
                 return;
             }
 
+            foreach (var specialOrderReward in specialOrder.rewards)
+            {
+                if (specialOrderReward is MailReward mailReward)
+                {
+                    mailReward.noLetter.Set(true);
+                }
+            }
+
             if (checkMissing)
             {
-                specialOrder.rewards.Clear();
+                specialOrder.rewards.RemoveWhere(x => x is not MailReward);
                 Game1.player.team.specialOrders.Remove(specialOrder); // Might as well, and it cleans up SVE special orders.
                 return;
             }
