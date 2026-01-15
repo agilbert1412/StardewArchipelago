@@ -1,8 +1,6 @@
 ﻿using KaitoKid.ArchipelagoUtilities.Net.Client;
-using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using KaitoKid.ArchipelagoUtilities.Net.Client;
 using KaitoKid.Utilities.Interfaces;
 using StardewArchipelago.Locations.CodeInjections.Vanilla;
 using StardewArchipelago.Logging;
@@ -11,9 +9,9 @@ using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Menus;
 using StardewValley.SpecialOrders;
-using StardewValley.TokenizableStrings;
 using System;
 using System.Linq;
+using StardewArchipelago.Locations;
 
 namespace StardewArchipelago.GameModifications.Tooltips
 {
