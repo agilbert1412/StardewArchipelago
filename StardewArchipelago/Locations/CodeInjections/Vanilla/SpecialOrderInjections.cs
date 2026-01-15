@@ -26,6 +26,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
         private static StardewArchipelagoClient _archipelago;
         private static StardewLocationChecker _locationChecker;
         private static ContentManager _englishContentManager;
+        private static uint _rerollCount = 0;
 
         public static void Initialize(ILogger logger, IModHelper modHelper, StardewArchipelagoClient archipelago, StardewLocationChecker locationChecker)
         {
@@ -34,6 +35,12 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
             _archipelago = archipelago;
             _locationChecker = locationChecker;
             _englishContentManager = new ContentManager(Game1.game1.Content.ServiceProvider, Game1.game1.Content.RootDirectory);
+            _rerollCount = Game1.stats.DaysPlayed;
+        }
+
+        public static void IncrementRerollCount()
+        {
+            _rerollCount++;
         }
 
         // public static bool IsSpecialOrdersBoardUnlocked()
@@ -253,7 +260,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
 
             SpecialOrder.RemoveAllSpecialOrders(orderType);
 
-            var random = Utility.CreateRandom((double)Game1.uniqueIDForThisGame, (double)Game1.stats.DaysPlayed * 1.3);
+            var random = Utility.CreateRandom((double)Game1.uniqueIDForThisGame, (double)Game1.stats.DaysPlayed * 1.3, _rerollCount);
             var allSpecialOrdersData = DataLoader.SpecialOrders(Game1.content);
             var specialOrdersThatCanBeStartedToday = FilterToSpecialOrdersThatCanBeStartedToday(allSpecialOrdersData, orderType);
 
@@ -376,7 +383,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
         private static void ChooseTwoOrders(Dictionary<string, SpecialOrder> specialOrders,
             Hint[] hints, Random random)
         {
-            const double chanceOfPreferentialPick = 0.75;
+            const double chanceOfPreferentialPick = 0.25;
 
             var allSpecialOrders = specialOrders.Select(x => x.Key).ToList();
 
