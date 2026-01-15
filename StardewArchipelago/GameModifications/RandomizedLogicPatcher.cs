@@ -138,6 +138,7 @@ namespace StardewArchipelago.GameModifications
             MakeLegendaryFishAndVoidMayoRecatchable();
             PatchRecipes();
             PatchTooltips();
+            PatchSpecialOrderBoard();
             PatchBundles();
             PatchCraftingPage();
             PatchPanningSpots();
@@ -812,7 +813,23 @@ namespace StardewArchipelago.GameModifications
 
             _harmony.Patch(
                 original: AccessTools.Method(typeof(SpecialOrdersBoard), nameof(SpecialOrdersBoard.draw), boardDrawParameters),
-                postfix: new HarmonyMethod(typeof(SpecialOrderBoardInjections), nameof(SpecialOrderBoardInjections.Draw_AddArchipelagoIndicators_Postfix))
+                postfix: new HarmonyMethod(typeof(SpecialOrderBoardInjections), nameof(SpecialOrderBoardInjections.Draw_AddArchipelagoAdditions_Postfix))
+            );
+        }
+
+        private void PatchSpecialOrderBoard()
+        {
+            _harmony.Patch(
+                original: AccessTools.Constructor(typeof(SpecialOrdersBoard), new[] { typeof(string) }),
+                postfix: new HarmonyMethod(typeof(SpecialOrderBoardInjections), nameof(SpecialOrderBoardInjections.SpecialOrdersBoardConstructor_AddRerollButton_Postfix))
+            );
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(SpecialOrdersBoard), nameof(SpecialOrdersBoard.performHoverAction)),
+                postfix: new HarmonyMethod(typeof(SpecialOrderBoardInjections), nameof(SpecialOrderBoardInjections.PerformHoverAction_HoverRerollButton_Postfix))
+            );
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(SpecialOrdersBoard), nameof(SpecialOrdersBoard.receiveLeftClick)),
+                postfix: new HarmonyMethod(typeof(SpecialOrderBoardInjections), nameof(SpecialOrderBoardInjections.ReceiveLeftClick_ClickRerollButton_Postfix))
             );
         }
 
