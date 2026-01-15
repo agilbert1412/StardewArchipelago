@@ -99,6 +99,7 @@ These settings are only available in the 7.x.x Pre-release version of the mod
 - ~~[Include Endgame Locations](./include_endgame_locations.md)~~
 - ~~[Bundle Whitelist](./bundle_whitelist.md)~~
 - ~~[Bundle Blacklist](./bundle_blacklist.md)~~
+- ~~[Allowed Filler Items](./allowed_filler_items.md)~~
 - ~~[Jojapocalypse](./jojapocalypse.md)~~
 - ~~[Joja Start Price](./joja_start_price.md)~~
 - ~~[Joja End Price](./joja_end_price.md)~~

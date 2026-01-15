@@ -106,11 +106,13 @@ This goal pairs well with ~~[Friendsanity](./friendsanity.md)~~, as without it, 
 
 You must obtain a total of 130 walnuts over the course of your entire game. If using ~~[Walnutsanity](./walnutsanity.md)~~, the walnuts that you *receive* are the ones that are counted, not the locations. Walnuts that you spend are still counted for the goal.
 
-In vanilla, there are 130 walnuts total. But in Archipelago, due to some technical limitations, you can obtain extra walnuts as part of an anti-softlock mechanic. This means that this goal will generally be easier than the vanilla version of it, and a knowledgeable player can make it even easier by grinding the correct things.
+In vanilla, there are 130 walnuts total. But in Archipelago, there is an optional anti-softlock mechanic available on the mod side that allows finding extra walnuts at a reduced rate. It is in the mod config, and defaults to enabled.
+Furthermore, as part of ~~[Allowed Filler Items](./allowed_filler_items.md)~~, you can enable filler resource packs of special currencies, which can roll bonus packs of Golden Walnuts.
+This means that this goal will generally be easier than the vanilla version of it, and a knowledgeable player can make it even easier by grinding the correct things.
 
 If this goal is picked, but [Exclude Ginger Island](./exclude_ginger_island.md) is enabled, your Ginger Island setting will get force-disabled, as the goal is impossible without Ginger Island.
 
-- This goal is **not** *Adaptable*. The task remains the same regardless of settings.
+- This goal is **not** *Adaptable*. The task remains the same regardless of settings. Which walnuts are shuffled, and which are vanilla, can be customized, but 130 need to be found regardless.
 - This goal is **not** *Focused*. If you are using ~~[Walnutsanity](./walnutsanity.md)~~, this goal is essentially a Macguffin Hunt where the goal is to receive several specific items, and you cannot focus on them specifically.
 - This goal is **not** *Coopable*. One player must have received all 130 walnuts to complete the goal
 
