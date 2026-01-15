@@ -153,7 +153,7 @@ You must cook every recipe available in the Kitchen. This goal pairs well with b
 
 #### Craft Every Item
 
-You must craft every item available in the Crafting Menu. This goal pairs well with both ~~[Craftsanity](./craftsanity.md)~~
+You must craft every item available in the Crafting Menu. This goal pairs well with ~~[Craftsanity](./craftsanity.md)~~
 
 - This goal is *Adaptable*. If ~~[Craftsanity](./craftsanity.md)~~ is enabled, the goal is to complete your craftsanity checks.
 - This goal is *Focused*. You will be mostly doing crafting.
