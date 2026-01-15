@@ -135,7 +135,7 @@ You must ship every item in the collections shipping tab, or every ~~[Shipsanity
 Selling items to vendors does not count. Shipping through the Ginger Island shipping bin or a mini-shipping bin counts.
 
 - This goal is *Adaptable*. If ~~[Shipsanity](./shipsanity.md)~~ is enabled, the goal is to complete your shipsanity checks. This means you can make the goal much easier or much harder than the vanilla version.
-- This goal is **not** *Focused*. Unless using something specific, like ~~[Shipsanity](./shipsanity.md)~~: Fish, you can generally expect that shipping every includes interacting with many game mechanics.
+- This goal is **not** *Focused*. Unless using something specific, like ~~[Shipsanity](./shipsanity.md)~~: Fish, you can generally expect that shipping everything includes interacting with many game mechanics.
 - This goal is *Coopable*. If using ~~[Shipsanity](./shipsanity.md)~~, the goal is to complete every shipsanity check, which can be done by several players.
 
 ### Gourmet Chef
