@@ -36,5 +36,40 @@ namespace StardewArchipelago.Constants.Locations
             { "Trash", new[] { "Trash Can Upgrade" } },
             { "Turnip", new[] { "Rarecrow #1 (Turnip Head)" } },
         };
+
+        // TODO expand that list, it basically only has quests currently
+        public static readonly Dictionary<string, string[]> ItemNeededForLocations = new()
+        {
+            { "Albacore", new[] { "Fish Stew" } },
+            { "Amaranth", new[] { "Cow's Delight" } },
+            { "Amethyst", new[] { "Clint's Attempt" } },
+            { "Apricot", new[] { "Fresh Fruit" } },
+            { "Battery Pack", new[] { "Pam Needs Juice", "Repair Ticket Machine" } },
+            { "Beet", new[] { "The Mysterious Qi" } },
+            { "Cauliflower", new[] { "Jodi's Request" } },
+            { "Cave Carrot", new[] { "Marnie's Request" } },
+            { "Coconut", new[] { "Exotic Spirits" } },
+            { "Hardwood", new[] { "Repair Boat Hull", "Robin's Request", "The Giant Stump" } },
+            { "Hot Pepper", new[] { "Knee Therapy" } },
+            { "Iridium Bar", new[] { "Repair Boat Anchor", "Staff of Power" } },
+            { "Iron Bar", new[] { "A Favor For Clint" } },
+            { "Largemouth Bass", new[] { "Fish Casserole" } },
+            { "Leek", new[] { "Gifts For George", "Granny's Gift" } },
+            { "Maple Syrup", new[] { "Strange Note" } },
+            { "Melon", new[] { "Crop Research" } },
+            { "Pale Ale", new[] { "Pam Is Thirsty" } },
+            { "Potato", new[] { "The Strong Stuff" } },
+            { "Prismatic Shard", new[] { "Galaxy Sword Shrine" } },
+            { "Pufferfish", new[] { "Aquatic Research" } },
+            { "Pumpkin", new[] { "Carving Pumpkins" } },
+            { "Rainbow Shell", new[] { "The Mysterious Qi" } },
+            { "Sashimi", new[] { "Pierre's Notice" } },
+            { "Solar Essence", new[] { "The Mysterious Qi" } },
+            { "Starfruit", new[] { "A Soldier's Star" } },
+            { "Sweet Gem Berry", new[] { "Old Master Cannoli" } },
+            { "Truffle Oil", new[] { "Mayor's Need" } },
+            { "Void Essence", new[] { "A Dark Reagent" } },
+            { "Void Mayonnaise", new[] { "Goblin Problem" } },
+        };
     }
 }
