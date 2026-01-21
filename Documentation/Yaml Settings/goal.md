@@ -130,13 +130,13 @@ You must complete all the Monster Slayer goals visible on the board at the Adven
 
 #### Ship every item
 
-You must ship every item in the collections shipping tab, or every ~~[Shipsanity](./shipsanity.md)~~ check in your slot, depending on if ~~[Shipsanity](./shipsanity.md)~~ is enabled.
+You must ship every item in the collections shipping tab, or every [Shipsanity](./shipsanity.md) check in your slot, depending on if [Shipsanity](./shipsanity.md) is enabled.
 
 Selling items to vendors does not count. Shipping through the Ginger Island shipping bin or a mini-shipping bin counts.
 
-- This goal is *Adaptable*. If ~~[Shipsanity](./shipsanity.md)~~ is enabled, the goal is to complete your shipsanity checks. This means you can make the goal much easier or much harder than the vanilla version.
-- This goal is **not** *Focused*. Unless using something specific, like ~~[Shipsanity](./shipsanity.md)~~: Fish, you can generally expect that shipping every includes interacting with many game mechanics.
-- This goal is *Coopable*. If using ~~[Shipsanity](./shipsanity.md)~~, the goal is to complete every shipsanity check, which can be done by several players.
+- This goal is *Adaptable*. If [Shipsanity](./shipsanity.md) is enabled, the goal is to complete your shipsanity checks. This means you can make the goal much easier or much harder than the vanilla version.
+- This goal is **not** *Focused*. Unless using something specific, like [Shipsanity](./shipsanity.md): Fish, you can generally expect that shipping every item includes interacting with many game mechanics.
+- This goal is *Coopable*. If using [Shipsanity](./shipsanity.md), the goal is to complete every shipsanity check, which can be done by several players.
 
 ### Gourmet Chef
 
@@ -153,7 +153,7 @@ You must cook every recipe available in the Kitchen. This goal pairs well with b
 
 #### Craft Every Item
 
-You must craft every item available in the Crafting Menu. This goal pairs well with both ~~[Craftsanity](./craftsanity.md)~~
+You must craft every item available in the Crafting Menu. This goal pairs well with ~~[Craftsanity](./craftsanity.md)~~
 
 - This goal is *Adaptable*. If ~~[Craftsanity](./craftsanity.md)~~ is enabled, the goal is to complete your craftsanity checks.
 - This goal is *Focused*. You will be mostly doing crafting.
@@ -213,6 +213,16 @@ In many cases, if shuffled, the received items are what counts, for example hear
 - This goal is **not** *Coopable*. The perfection tracker is almost entirely based on the local save state, so a single player must do everything.
 - This goal is *Long*. This is arguably the longest goal, and will take tens of hours to complete.
 
+### Mad Hatter
+
+#### This setting is not released yet, and is only present in the 7.x.x development branch.
+
+Complete all your hatsanity locations. If hatsanity is disabled, will enable it on "Easy+Tailoring".
+
+- This goal is *Adaptable*. You can change which hat areas are needed.
+- This goal is **not** *focused*. You will have to interact with many areas of the game to obtain every hat needed.
+- This goal is *Coopable*. If using ~~[Hatsanity](./hatsanity.md)~~, the goal is to complete every hatsanity check, which can be done by several players.
+- This goal is *Long*. While the duration is variable, and can technically be made medium or short, in the vast majority of cases, this goal will be a very long one due to having so many requirements and needing to obtain different hats.
 
 ## [Return to Index](./index.md)
 
