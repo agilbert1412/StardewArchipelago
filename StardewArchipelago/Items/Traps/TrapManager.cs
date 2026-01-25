@@ -181,7 +181,7 @@ namespace StardewArchipelago.Items.Traps
             _traps.Add(BABIES, TrapExecutor.SpawnTemporaryBabies);
             _traps.Add(MEOW, TrapExecutor.PlayMeows);
             _traps.Add(BARK, TrapExecutor.PlayBarks);
-            _traps.Add(DEPRESSION, TrapExecutor.ForceNextMultisleep);
+            // _traps.Add(DEPRESSION, TrapExecutor.ForceNextMultisleep);
             _traps.Add(UNGROWTH, TrapExecutor.UngrowCrops);
             _traps.Add(INFLATION, TrapExecutor.ActivateInflation);
             _traps.Add(BOMB, TrapExecutor.Explode);
