@@ -3,6 +3,8 @@ namespace StardewArchipelago.Constants
 {
     public class Community
     {
+        public const string NAME_TOKEN = "[CommunityName]";
+
         public static readonly string[] AllNames =
         {
             "Albrekka",

@@ -2,6 +2,7 @@
 using System.Linq;
 using KaitoKid.Utilities.Interfaces;
 using StardewArchipelago.Archipelago;
+using StardewArchipelago.Constants;
 using StardewArchipelago.Extensions;
 using StardewArchipelago.Serialization;
 using StardewValley;
@@ -78,6 +79,11 @@ namespace StardewArchipelago.Items.Mail
         {
             var mailContentTemplate = GetRandomApMailString();
             var mailContent = string.Format(mailContentTemplate, apItemName, findingPlayer.ToAnonymousName(), locationName, embedString, Game1.player.farmName.Value);
+            if (mailContent.Contains(Community.NAME_TOKEN))
+            {
+                var randomName = Community.AllNames[_random.Next(0, Community.AllNames.Length)];
+                mailContent = mailContent.Replace(Community.NAME_TOKEN, randomName);
+            }
             GenerateMail(mailKey, mailContent);
         }
 
@@ -268,7 +274,7 @@ namespace StardewArchipelago.Items.Mail
             "I have no idea what's going on, but I found this {0} with your name on it.^^    -{1}",
             "Hey, Pierre sent me this {0}, but I can't stand the things. So now it's yours.^^    -{1}",
             "I couldn't get Oak's Parcel back from the thieves, but hopefully you can put {0} to good use instead^^    -{1}",
-            "You should show this {0} to Mati, I bet she didn't even know it existed!^^    -{1}",
+            "You should show this {0} to " + Community.NAME_TOKEN + ", I bet they didn't even know it existed!^^    -{1}",
             "Try putting this {0} in the Luau soup!^^    -{1}",
             "I'm entrusting you with this {0}. I know you'll treat it well. See to it that it makes it to the destination^^    -{1}",
             "Hi, I work for one of Joja's competitors, the up and coming {2} Mart! We sell a variety of goods and services. Here, I'd like you to have this {0} as a promotional item! A {0} can be used at any time, so it's even more useful than a Pokemon Center! Have a nice day and please stop by sometime.^^    -{1}",
