@@ -40,7 +40,7 @@ namespace StardewArchipelago.GameModifications.EntranceRandomizer
         public void ResetCheckedEntrancesToday(SlotData slotData)
         {
             _checkedEntrancesToday = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
-            if (slotData.EntranceRandomization == EntranceRandomization.Chaos)
+            if ((slotData.EntranceRandomizationBehaviour & EntranceRandomizationBehaviour.Chaos) != 0)
             {
                 ReshuffleEntrances(slotData);
             }
@@ -83,63 +83,6 @@ namespace StardewArchipelago.GameModifications.EntranceRandomizer
             {
                 RegisterRandomizedEntrance(originalEntrance, replacementEntrance);
             }
-
-            if (slotData.EntranceRandomization == EntranceRandomization.PelicanTown ||
-                slotData.EntranceRandomization == EntranceRandomization.NonProgression ||
-                slotData.EntranceRandomization == EntranceRandomization.BuildingsWithoutHouse)
-            {
-                return;
-            }
-
-            AddFarmhouseToModifiedEntrances(slotData);
-
-            if (slotData.EntranceRandomization == EntranceRandomization.Chaos)
-            {
-                return;
-            }
-
-            SwapFarmhouseEntranceWithAnotherEmptyAreaEntrance(slotData);
-        }
-
-        private void AddFarmhouseToModifiedEntrances(SlotData slotData)
-        {
-            var farmhouseToFarm = ReverseKey(FARM_TO_FARMHOUSE);
-            ModifiedEntrances.Add(FARM_TO_FARMHOUSE, FARM_TO_FARMHOUSE);
-            ModifiedEntrances.Add(farmhouseToFarm, farmhouseToFarm);
-        }
-
-        private void SwapFarmhouseEntranceWithAnotherEmptyAreaEntrance(SlotData slotData)
-        {
-            var outsideAreas = new List<string>() { "Town", "Mountain", "Farm", "Forest", "BusStop", "Desert", "Beach" };
-            outsideAreas.AddRange(GetModOutsideEntrances(slotData));
-            var random = new Random(int.Parse(slotData.Seed));
-            var chosenEntrance = "";
-            var replacementIsOutside = false;
-            var entrancesWhereCannotPlaceFarm = GetEntranceWhereCannotPlaceFarm(slotData);
-
-            while (!replacementIsOutside)
-            {
-
-                chosenEntrance = ModifiedEntrances.Keys.ToArray()[random.Next(ModifiedEntrances.Keys.Count)];
-                var barredEntranceRule = entrancesWhereCannotPlaceFarm.All(x => !chosenEntrance.Contains(x));
-                replacementIsOutside = outsideAreas.Contains(chosenEntrance.Split(TRANSITIONAL_STRING)[0]) && barredEntranceRule; // 67|17 is Quarry Mine
-            }
-
-            SwapTwoEntrances(ModifiedEntrances, chosenEntrance, FARM_TO_FARMHOUSE);
-        }
-        private static List<string> GetEntranceWhereCannotPlaceFarm(SlotData slotData)
-        {
-            var entrancesWhereCannotPlaceFarm = new List<string> { "Mine|67|17", "SpriteSpring" };
-            if (slotData.StartWithout.HasFlag(StartWithout.Landslide))
-            {
-                entrancesWhereCannotPlaceFarm.Add("Mine|18|13");
-                entrancesWhereCannotPlaceFarm.Add("AdventureGuild");
-            }
-            if (slotData.StartWithout.HasFlag(StartWithout.CommunityCenter))
-            {
-                entrancesWhereCannotPlaceFarm.Add("CommunityCenter");
-            }
-            return entrancesWhereCannotPlaceFarm;
         }
 
         private IEnumerable<string> GetModOutsideEntrances(SlotData slotData)
