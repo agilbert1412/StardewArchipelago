@@ -133,7 +133,12 @@ namespace StardewArchipelago.Registry
             var slot = arg2[1];
             var password = arg2.Length >= 3 ? arg2[2] : "";
             _mod.ArchipelagoConnectionOverride = new ArchipelagoConnectionInfo(ip, port, slot, null, password);
-            _logger.Log($"Your next connection attempt will instead use {ip}:{port} on slot {slot}.", LogLevel.Info);
+            var message = $"Your next connection attempt will instead use `{ip}:{port}` on slot `{slot}`.";
+            if (!string.IsNullOrEmpty(password))
+            {
+                message += $" With password: `{password}`";
+            }
+            _logger.Log(message, LogLevel.Info);
         }
 
         private void ExportGifts(string arg1, string[] arg2)
