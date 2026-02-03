@@ -1,22 +1,23 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using KaitoKid.ArchipelagoUtilities.Net.Client;
+using KaitoKid.Utilities.Interfaces;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using KaitoKid.ArchipelagoUtilities.Net.Client;
-using KaitoKid.Utilities.Interfaces;
 using StardewArchipelago.Constants.Vanilla;
 using StardewArchipelago.Extensions;
 using StardewArchipelago.Locations;
 using StardewArchipelago.Locations.CodeInjections.Vanilla;
 using StardewArchipelago.Locations.CodeInjections.Vanilla.Relationship;
 using StardewArchipelago.Locations.Festival;
+using StardewArchipelago.Locations.Secrets;
 using StardewArchipelago.Logging;
 using StardewArchipelago.Textures;
 using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Menus;
 using StardewValley.Quests;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace StardewArchipelago.GameModifications.Tooltips
 {
@@ -140,7 +141,7 @@ namespace StardewArchipelago.GameModifications.Tooltips
             var day = index + 1;
             var dayComponent = calendarDays[index];
 
-            if (!GetMissingFestivalChecks(day).Any() && !GetMissingNpcChecks(birthdaysToday).Any() && !GetMissingTravelingCartChecks(day).Any() && !GetMissingSpecificDayChecks(day).Any())
+            if (!GetMissingFestivalChecks(day).Any() && !GetMissingNpcChecks(birthdaysToday).Any() && !GetMissingTravelingCartChecks(day).Any() && !GetMissingSecretsChecks(day).Any())
             {
                 return;
             }
@@ -202,7 +203,7 @@ namespace StardewArchipelago.GameModifications.Tooltips
                     var missingFestivalChecks = GetMissingFestivalChecks(day);
                     var missingNpcChecks = GetMissingNpcChecks(birthdaysToday);
                     var missingCartChecks = GetMissingTravelingCartChecks(day);
-                    var missingSpecificDayChecks = GetMissingSpecificDayChecks(day);
+                    var missingSecretsChecks = GetMissingSecretsChecks(day);
 
                     foreach (var location in missingFestivalChecks)
                     {
@@ -219,7 +220,7 @@ namespace StardewArchipelago.GameModifications.Tooltips
                         hoverText += $"{Environment.NewLine}- {location}";
                     }
 
-                    foreach (var location in missingSpecificDayChecks)
+                    foreach (var location in missingSecretsChecks)
                     {
                         hoverText += $"{Environment.NewLine}- {location}";
                     }
@@ -285,14 +286,24 @@ namespace StardewArchipelago.GameModifications.Tooltips
             return _locationChecker.GetAllLocationsNotCheckedContainingWord(merchantItemPatern);
         }
 
-        private static IEnumerable<string> GetMissingSpecificDayChecks(int day)
+        private static IEnumerable<string> GetMissingSecretsChecks(int day)
         {
-            if (Game1.season == Season.Spring && day == 17)
+            var season = Game1.season;
+            foreach (var secretDate in SecretsLocationNames.SECRET_DATES)
             {
-                const string potOfGold = "Pot Of Gold";
-                if (_locationChecker.IsLocationMissing(potOfGold))
+                var secretName = secretDate.Name;
+                var secretSeasons = secretDate.Seasons;
+                var secretDays = secretDate.Days;
+
+                if (!secretSeasons.Contains(season) || !secretDays.Contains(day))
                 {
-                    yield return potOfGold;
+                    continue;
+                }
+
+
+                if (_locationChecker.IsLocationMissing(secretName))
+                {
+                    yield return secretName;
                 }
             }
         }

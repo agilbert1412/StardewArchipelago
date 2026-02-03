@@ -1,10 +1,13 @@
 ﻿using System.Collections.Generic;
 using StardewArchipelago.Constants.Vanilla;
+using StardewValley;
 
 namespace StardewArchipelago.Locations.Secrets
 {
     public class SecretsLocationNames
     {
+        public const string OLD_MASTER_CANNOLI = "Old Master Cannoli";
+        public const string POT_OF_GOLD = "Pot Of Gold";
         public const string POISON_THE_GOVERNOR = "Poison The Governor";
         public const string GRANGE_DISPLAY_BRIBE = "Grange Display Bribe";
         public const string PURPLE_LETTUCE = "Purple Lettuce";
@@ -150,6 +153,21 @@ namespace StardewArchipelago.Locations.Secrets
             },
             { SECRET_NOTE_9, new List<RequiredGift> { new(NPCNames.ALEX, ObjectIds.COMPLETE_BREAKFAST, ObjectIds.SALMON_DINNER) } },
         };
+
+        public static readonly List<SecretData> SECRET_DATES = new List<SecretData>()
+        {
+            new(POT_OF_GOLD, Season.Spring, 17),
+            new(POISON_THE_GOVERNOR, Season.Summer, 11),
+            new(GRANGE_DISPLAY_BRIBE, Season.Fall, 16),
+            new(PURPLE_LETTUCE, Season.Fall, 16),
+            new(SOMETHING_FOR_SANTA, Season.Winter, 24),
+            new(ANNOY_THE_MOON_MAN, 27),
+            new(FREE_THE_FORSAKEN_SOULS, Season.Fall, 26),
+
+            new(SECRET_NOTE_13, 28),
+            new(SECRET_NOTE_14, Season.Spring, 2),
+            new(SECRET_NOTE_15, Season.Winter, new[] { 15, 16, 17 }),
+        };
     }
 
     public class RequiredGift
@@ -161,6 +179,36 @@ namespace StardewArchipelago.Locations.Secrets
         {
             Npc = npc;
             Gifts = new List<string>(gifts);
+        }
+    }
+
+    public class SecretData
+    {
+        public string Name { get; }
+        public Season[] Seasons { get; }
+        public int[] Days { get; }
+
+        public SecretData(string name, int day) : this(name, new[] { Season.Spring, Season.Summer, Season.Fall, Season.Winter }, new[] { day })
+        {
+        }
+
+        public SecretData(string name, Season season, int day) : this(name, new[] { season }, new[] { day })
+        {
+        }
+
+        public SecretData(string name, Season[] seasons, int day) : this(name, seasons, new[] { day })
+        {
+        }
+
+        public SecretData(string name, Season season, int[] days) : this(name, new[] { season }, days)
+        {
+        }
+
+        public SecretData(string name, Season[] seasons, int[] days)
+        {
+            Name = name;
+            Seasons = seasons;
+            Days = days;
         }
     }
 }

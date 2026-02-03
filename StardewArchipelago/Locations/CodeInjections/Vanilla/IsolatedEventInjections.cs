@@ -16,16 +16,15 @@ using KaitoKid.ArchipelagoUtilities.Net.Constants;
 using KaitoKid.Utilities.Interfaces;
 using StardewArchipelago.Archipelago;
 using StardewArchipelago.Archipelago.SlotData.SlotEnums;
+using StardewArchipelago.Locations.Secrets;
 
 namespace StardewArchipelago.Locations.CodeInjections.Vanilla
 {
     public static class IsolatedEventInjections
     {
-        public const string OLD_MASTER_CANNOLI_AP_LOCATION = "Old Master Cannoli";
         public const string BEACH_BRIDGE_AP_LOCATION = "Beach Bridge Repair";
         public const string GALAXY_SWORD_SHRINE_AP_LOCATION = "Galaxy Sword Shrine";
         public const string RUSTY_SWORD_AP_LOCATION = "The Mines Entrance Cutscene";
-        public const string POT_OF_GOLD_AP_LOCATION = "Pot Of Gold";
 
         private static ILogger _logger;
         private static IModHelper _helper;
@@ -40,7 +39,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
             _locationChecker = locationChecker;
         }
 
-        public static bool CheckAction_OldMasterCanolli_Prefix(Woods __instance, Location tileLocation, Rectangle viewport, Farmer who, ref bool __result)
+        public static bool CheckAction_OldMasterCannoli_Prefix(Woods __instance, Location tileLocation, Rectangle viewport, Farmer who, ref bool __result)
         {
             try
             {
@@ -53,7 +52,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
 
                 if (__instance.hasUnlockedStatue.Value && !__instance.localPlayerHasFoundStardrop() && who.freeSpotsInInventory() > 0)
                 {
-                    _locationChecker.AddCheckedLocation(OLD_MASTER_CANNOLI_AP_LOCATION);
+                    _locationChecker.AddCheckedLocation(SecretsLocationNames.OLD_MASTER_CANNOLI);
                     if (!Game1.player.mailReceived.Contains("CF_Statue"))
                     {
                         Game1.player.mailReceived.Add("CF_Statue");
@@ -65,7 +64,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
             }
             catch (Exception ex)
             {
-                _logger.LogError($"Failed in {nameof(CheckAction_OldMasterCanolli_Prefix)}:\n{ex}");
+                _logger.LogError($"Failed in {nameof(CheckAction_OldMasterCannoli_Prefix)}:\n{ex}");
                 return MethodPrefix.RUN_ORIGINAL_METHOD;
             }
         }
@@ -307,14 +306,14 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
                     Game1.createMultipleItemDebris(ItemRegistry.Create("(H)LeprechuanHat"), __instance.TileLocation * 64f + new Vector2(32f), 1);
                 }
 
-                if (_locationChecker.IsLocationMissing(POT_OF_GOLD_AP_LOCATION))
+                if (_locationChecker.IsLocationMissing(SecretsLocationNames.POT_OF_GOLD))
                 {
                     Game1.playSound("hammer");
                     Game1.playSound("moneyDial");
                     __instance.Location.removeObject(__instance.TileLocation, false);
                     Utility.addDirtPuffs(__instance.Location, (int)__instance.TileLocation.X, (int)__instance.TileLocation.Y, 1, 1, 3);
                     Utility.addStarsAndSpirals(__instance.Location, (int)__instance.TileLocation.X, (int)__instance.TileLocation.Y, 1, 1, 100, 30, Color.White);
-                    _locationChecker.AddCheckedLocation(POT_OF_GOLD_AP_LOCATION);
+                    _locationChecker.AddCheckedLocation(SecretsLocationNames.POT_OF_GOLD);
                     return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
                 }
 
