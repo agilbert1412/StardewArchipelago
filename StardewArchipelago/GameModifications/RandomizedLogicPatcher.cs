@@ -48,7 +48,6 @@ namespace StardewArchipelago.GameModifications
         private readonly StartingResources _startingResources;
         private readonly SeedShopStockModifier _seedShopStockModifier;
         private readonly RecipeDataRemover _recipeDataRemover;
-        private readonly AnimalShopStockModifier _animalShopStockModifier;
         private readonly PowersModifier _powersModifier;
 
         public RandomizedLogicPatcher(LogHandler logger, IModHelper modHelper, ModConfig config, Harmony harmony, StardewArchipelagoClient archipelago, StardewLocationChecker locationChecker, StardewItemManager stardewItemManager, EntranceManager entranceManager, SeedShopStockModifier seedShopStockModifier, NameSimplifier nameSimplifier, Friends friends, ArchipelagoStateDto state, BundleReader bundleReader)
@@ -80,7 +79,6 @@ namespace StardewArchipelago.GameModifications
             WorldChangeEventInjections.Initialize(logger);
             CropInjections.Initialize(logger, archipelago, stardewItemManager, state.Wallet);
             KentInjections.Initialize(logger, archipelago);
-            _animalShopStockModifier = new AnimalShopStockModifier(logger, modHelper, archipelago, stardewItemManager);
             GoldenClockInjections.Initialize(logger, archipelago);
             ZeldaAnimationInjections.Initialize(logger, archipelago);
             ItemTooltipInjections.Initialize(logger, modHelper, config, archipelago, locationChecker, nameSimplifier);
@@ -131,7 +129,6 @@ namespace StardewArchipelago.GameModifications
             PatchCleanupBeforeSave();
             PatchProfitMargin();
             PatchKent();
-            PatchGoldenEgg();
             PatchPowers();
             PatchGoldenClock();
             PatchZeldaAnimations();
@@ -161,7 +158,6 @@ namespace StardewArchipelago.GameModifications
             UnpatchSeedShops();
             UnpatchJodiFishQuest();
             UnPatchRecipes();
-            CleanGoldenEggEvent();
             CleanPowersEvents();
         }
 
@@ -649,16 +645,6 @@ namespace StardewArchipelago.GameModifications
                 original: AccessTools.Method(typeof(Game1), nameof(Game1.AddCharacterIfNecessary)),
                 prefix: new HarmonyMethod(typeof(KentInjections), nameof(KentInjections.AddCharacterIfNecessary_ConsiderSeasonsRandomizerForKent_Prefix))
             );
-        }
-
-        private void PatchGoldenEgg()
-        {
-            _helper.Events.Content.AssetRequested += _animalShopStockModifier.OnShopStockRequested;
-        }
-
-        private void CleanGoldenEggEvent()
-        {
-            _helper.Events.Content.AssetRequested -= _animalShopStockModifier.OnShopStockRequested;
         }
 
         private void PatchPowers()

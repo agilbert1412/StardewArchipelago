@@ -37,7 +37,9 @@ namespace StardewArchipelago.Locations.ShopStockModifiers
             {
                 var shopsData = asset.AsDictionary<string, ShopData>().Data;
                 var qiGemShop = shopsData["QiGemShop"];
+                var animalShop = shopsData["AnimalShop"];
                 ReplaceEndgameLocationsWithChecks(qiGemShop);
+                ReplaceEndgameLocationsWithChecks(animalShop);
             },
                 AssetEditPriority.Late
             );
@@ -78,7 +80,9 @@ namespace StardewArchipelago.Locations.ShopStockModifiers
                 var apShopItem = CreateArchipelagoLocation(item, locationName);
                 if (item.Id == QualifiedItemIds.GOLDEN_EGG)
                 {
-                    apShopItem.Condition = GameStateConditionProvider.CreateHasReceivedItemCondition("Golden Egg");
+                    var hasGoldenEggCondition = GameStateConditionProvider.CreateHasReceivedItemCondition("Golden Egg");
+                    apShopItem.Condition = hasGoldenEggCondition;
+                    item.Condition = hasGoldenEggCondition;
                 }
                 else
                 {
