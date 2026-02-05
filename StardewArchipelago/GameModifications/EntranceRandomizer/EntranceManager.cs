@@ -402,6 +402,17 @@ namespace StardewArchipelago.GameModifications.EntranceRandomizer
             { "Minecart Mines", "Mine|13|9" },
             { "Minecart Bus Stop", "BusStop|14|4"},
             { "Minecart Quarry", "Mountain|124|12"},
+            { "Island South Ridge", "IslandSouth|27|1" },
+            { "Parrot Express Volcano", "IslandNorth|60|17" },
+            { "Parrot Express Docks", "IslandSouth|6|32" },
+            { "Parrot Express Dig Site", "IslandNorth|46|48" },
+            { "Parrot Express Jungle", "IslandEast|28|29" },
+            { "Parrot Express Farm", "IslandWest|74|10" },
+            { "Use Water Obelisk", "Farm to Beach" },
+            { "Use Earth Obelisk", "Farm to Mountain" },
+            { "Use Desert Obelisk", "Farm to Desert" },
+            { "Use Island Obelisk", "Farm to IslandSouth" },
+            { "Use Farm Obelisk", "IslandWest to Farm" },
         };
 
         private readonly Dictionary<string, string> _locationsSingleWordAliases = new()
