@@ -17,7 +17,6 @@ namespace StardewArchipelago.GameModifications.EntranceRandomizer
     public class EntranceManager
     {
         public const string TRANSITIONAL_STRING = " to ";
-        private const string FARM_TO_FARMHOUSE = "Farm to FarmHouse";
 
         private readonly ILogger _logger;
         private readonly EquivalentWarps _equivalentAreas;
@@ -140,6 +139,7 @@ namespace StardewArchipelago.GameModifications.EntranceRandomizer
         {
             var aliasedOriginal = TurnAliased(originalEntrance);
             var aliasedReplacement = TurnAliased(replacementEntrance);
+            _logger.LogMessage($"Aliased {originalEntrance} => {replacementEntrance} to {aliasedOriginal} => {aliasedReplacement}");
             RegisterRandomizedEntranceWithCoordinates(aliasedOriginal, aliasedReplacement);
         }
 
@@ -159,7 +159,9 @@ namespace StardewArchipelago.GameModifications.EntranceRandomizer
 
             var defaultCurrentLocationName = _equivalentAreas.GetDefaultEquivalentEntrance(currentLocationName);
             var defaultLocationRequestName = _equivalentAreas.GetDefaultEquivalentEntrance(locationRequestName);
+            _logger.LogMessage($"replacing entrance {defaultCurrentLocationName} ({currentLocationName}) => {defaultLocationRequestName} ({locationRequestName}), pos {targetPosition}");
             targetPosition = targetPosition.CheckSpecialVolcanoEdgeCaseWarp(defaultLocationRequestName);
+            _logger.LogMessage($"target: {targetPosition}");
             var key = GetKeys(defaultCurrentLocationName, defaultLocationRequestName, targetPosition);
             // return false;
             if (!TryGetModifiedWarpName(key, out var desiredWarpName))
@@ -169,6 +171,7 @@ namespace StardewArchipelago.GameModifications.EntranceRandomizer
             }
 
             var correctDesiredWarpName = _equivalentAreas.GetCorrectEquivalentEntrance(desiredWarpName);
+            _logger.LogMessage($"To go to {correctDesiredWarpName} ({desiredWarpName})");
 
             if (_checkedEntrancesToday.Contains(correctDesiredWarpName))
             {
@@ -186,7 +189,7 @@ namespace StardewArchipelago.GameModifications.EntranceRandomizer
 
         private bool TryGetModifiedWarpName(IEnumerable<string> keys, out string desiredWarpName)
         {
-            foreach (var key in keys)
+            foreach (var key in keys.OrderByDescending(x => x.Length))
             {
                 if (ModifiedEntrances.ContainsKey(key))
                 {
@@ -208,6 +211,7 @@ namespace StardewArchipelago.GameModifications.EntranceRandomizer
             var (locationOriginName, locationDestinationName) = GetLocationNames(desiredWarpKey);
             _checkedEntrancesToday.Add(desiredWarpKey);
 
+            _logger.LogMessage($"Getting closest warp point: {locationOriginName} => {locationDestinationName}");
             if (!locationOriginName.TryGetClosestWarpPointTo(ref locationDestinationName, _equivalentAreas, out var locationOrigin, out var warpPoint))
             {
                 _logger.LogError($"Could not find closest warp for {desiredWarpKey}, returning a null warpRequest.");
@@ -381,10 +385,23 @@ namespace StardewArchipelago.GameModifications.EntranceRandomizer
             { "Volcano Entrance", "VolcanoDungeon0|31|53" },
             { "Volcano River", "VolcanoDungeon0|6|49" },
             { "Secret Beach", "IslandNorth|12|31" },
+            { "Secret Woods", "Woods" },
             { "Professor Snail Cave", "IslandNorthCave1" },
             { "Qi Walnut Room", "QiNutRoom" },
             { "Mutant Bug Lair", "BugLand" },
             { "Purple Shorts Maze", "LewisBasement"},
+            { "Mountain Shortcut at Fence", "Mountain|57|40" },
+            { "Town Shortcut at Fence", "Town|90|0" },
+            { "Mountain Shortcut near Quarry Bridge", "Mountain|85|40" },
+            { "Town Shortcut through Cave", "Town|98|0" },
+            { "Tide Pools Shortcut", "Beach|67|0" },
+            { "Town Shortcut below Museum", "Town|94|109" },
+            { "Beach Shortcut", "Beach" },
+            { "Forest Shortcut", "Forest" },
+            { "Minecart Town", "Town|105|80" },
+            { "Minecart Mines", "Mine|13|9" },
+            { "Minecart Bus Stop", "BusStop|14|4"},
+            { "Minecart Quarry", "Mountain|124|12"},
         };
 
         private readonly Dictionary<string, string> _locationsSingleWordAliases = new()
