@@ -139,7 +139,6 @@ namespace StardewArchipelago.GameModifications.EntranceRandomizer
         {
             var aliasedOriginal = TurnAliased(originalEntrance);
             var aliasedReplacement = TurnAliased(replacementEntrance);
-            _logger.LogMessage($"Aliased {originalEntrance} => {replacementEntrance} to {aliasedOriginal} => {aliasedReplacement}");
             RegisterRandomizedEntranceWithCoordinates(aliasedOriginal, aliasedReplacement);
         }
 
@@ -159,9 +158,7 @@ namespace StardewArchipelago.GameModifications.EntranceRandomizer
 
             var defaultCurrentLocationName = _equivalentAreas.GetDefaultEquivalentEntrance(currentLocationName);
             var defaultLocationRequestName = _equivalentAreas.GetDefaultEquivalentEntrance(locationRequestName);
-            _logger.LogMessage($"replacing entrance {defaultCurrentLocationName} ({currentLocationName}) => {defaultLocationRequestName} ({locationRequestName}), pos {targetPosition}");
             targetPosition = targetPosition.CheckSpecialVolcanoEdgeCaseWarp(defaultLocationRequestName);
-            _logger.LogMessage($"target: {targetPosition}");
             var key = GetKeys(defaultCurrentLocationName, defaultLocationRequestName, targetPosition);
             // return false;
             if (!TryGetModifiedWarpName(key, out var desiredWarpName))
@@ -171,7 +168,6 @@ namespace StardewArchipelago.GameModifications.EntranceRandomizer
             }
 
             var correctDesiredWarpName = _equivalentAreas.GetCorrectEquivalentEntrance(desiredWarpName);
-            _logger.LogMessage($"To go to {correctDesiredWarpName} ({desiredWarpName})");
 
             if (_checkedEntrancesToday.Contains(correctDesiredWarpName))
             {
@@ -211,7 +207,6 @@ namespace StardewArchipelago.GameModifications.EntranceRandomizer
             var (locationOriginName, locationDestinationName) = GetLocationNames(desiredWarpKey);
             _checkedEntrancesToday.Add(desiredWarpKey);
 
-            _logger.LogMessage($"Getting closest warp point: {locationOriginName} => {locationDestinationName}");
             if (!locationOriginName.TryGetClosestWarpPointTo(ref locationDestinationName, _equivalentAreas, out var locationOrigin, out var warpPoint))
             {
                 _logger.LogError($"Could not find closest warp for {desiredWarpKey}, returning a null warpRequest.");
