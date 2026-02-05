@@ -41,6 +41,22 @@ namespace StardewArchipelago.Extensions
             { new WarpRequest(Game1.getLocationRequest("Custom_EnchantedGrove"), 43, 25, FacingDirection.Up), new WarpRequest(Game1.getLocationRequest("Custom_AdventurerSummit"), 8, 24, FacingDirection.Down) },
             { new WarpRequest(Game1.getLocationRequest("Forest"), 19, 110, FacingDirection.Down), new WarpRequest(Game1.getLocationRequest("Custom_JunimoWoods"), 37, 2, FacingDirection.Down) },
             { new WarpRequest(Game1.getLocationRequest("ManorHouse"), 22, 9, FacingDirection.Left), new WarpRequest(Game1.getLocationRequest("LewisBasement"), 4, 4, FacingDirection.Down) },
+            // { new WarpRequest(Game1.getLocationRequest("BusStop"), 14, 4, FacingDirection.Up), new WarpRequest(Game1.getLocationRequest("Mine"),13,9,FacingDirection.Down) },
+            // { new WarpRequest(Game1.getLocationRequest("BusStop"), 14, 4, FacingDirection.Up), new WarpRequest(Game1.getLocationRequest("Town"),105,80,FacingDirection.Down) },
+            // { new WarpRequest(Game1.getLocationRequest("BusStop"), 14, 4, FacingDirection.Up), new WarpRequest(Game1.getLocationRequest("Mountain"),124,12,FacingDirection.Down) },
+            // { new WarpRequest(Game1.getLocationRequest("Mine"), 13, 9, FacingDirection.Up), new WarpRequest(Game1.getLocationRequest("Town"),105,80,FacingDirection.Down) },
+            // { new WarpRequest(Game1.getLocationRequest("Mine"), 13, 9, FacingDirection.Up), new WarpRequest(Game1.getLocationRequest("Mountain"),124,12,FacingDirection.Down) },
+            // { new WarpRequest(Game1.getLocationRequest("Mountain"), 124, 12, FacingDirection.Up), new WarpRequest(Game1.getLocationRequest("Town"),105,80,FacingDirection.Down) },
+            // { new WarpRequest(Game1.getLocationRequest("IslandSouth"), 27, 1, FacingDirection.Up), new WarpRequest(Game1.getLocationRequest("IslandEast"), 28, 29, FacingDirection.Down) },
+            // { new WarpRequest(Game1.getLocationRequest("IslandSouth"), 27, 1, FacingDirection.Up), new WarpRequest(Game1.getLocationRequest("IslandNorth"), 60, 17, FacingDirection.Down) },
+            // { new WarpRequest(Game1.getLocationRequest("IslandSouth"), 27, 1, FacingDirection.Up), new WarpRequest(Game1.getLocationRequest("IslandNorth"), 46, 48, FacingDirection.Down) },
+            // { new WarpRequest(Game1.getLocationRequest("IslandSouth"), 27, 1, FacingDirection.Up), new WarpRequest(Game1.getLocationRequest("IslandWest"), 74, 10, FacingDirection.Down) },
+            // { new WarpRequest(Game1.getLocationRequest("IslandEast"), 28, 29, FacingDirection.Up), new WarpRequest(Game1.getLocationRequest("IslandNorth"), 60, 17, FacingDirection.Down) },
+            // { new WarpRequest(Game1.getLocationRequest("IslandEast"), 28, 29, FacingDirection.Up), new WarpRequest(Game1.getLocationRequest("IslandNorth"), 46, 48, FacingDirection.Down) },
+            // { new WarpRequest(Game1.getLocationRequest("IslandEast"), 28, 29, FacingDirection.Up), new WarpRequest(Game1.getLocationRequest("IslandWest"), 74, 10, FacingDirection.Down) },
+            // { new WarpRequest(Game1.getLocationRequest("IslandNorth"), 60, 17, FacingDirection.Up), new WarpRequest(Game1.getLocationRequest("IslandNorth"), 46, 48, FacingDirection.Down) },
+            // { new WarpRequest(Game1.getLocationRequest("IslandNorth"), 60, 17, FacingDirection.Up), new WarpRequest(Game1.getLocationRequest("IslandWest"), 74, 10, FacingDirection.Down) },
+            // { new WarpRequest(Game1.getLocationRequest("IslandNorth"), 46, 48, FacingDirection.Up), new WarpRequest(Game1.getLocationRequest("IslandWest"), 74, 10, FacingDirection.Down) },
         };
 
         private static readonly Dictionary<WarpRequest, WarpRequest> ExtraWarpsBothWays = ExtraWarps.Union(ExtraWarps.ToDictionary(x => x.Value, x => x.Key)).ToDictionary(x => x.Key, x => x.Value);
