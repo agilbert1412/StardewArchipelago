@@ -57,7 +57,7 @@ namespace StardewArchipelago.GameModifications.CodeInjections
                     message += "Even with these traps??^";
                     anyHardSetting = true;
                 }
-                if ((_archipelago.SlotData.EntranceRandomizationBehaviour & EntranceRandomizationBehaviour.Chaos) != 0)
+                if (_archipelago.SlotData.EntranceRandomizationBehaviour.HasFlag(EntranceRandomizationBehaviour.Chaos))
                 {
                     message += "Even on Chaos ER?!? You scare me.^";
                     anyHardSetting = true;
