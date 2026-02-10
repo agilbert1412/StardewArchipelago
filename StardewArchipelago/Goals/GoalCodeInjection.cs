@@ -11,10 +11,12 @@ using StardewValley;
 using StardewValley.Locations;
 using StardewValley.Menus;
 using StardewArchipelago.Archipelago;
+using StardewArchipelago.Constants.Vanilla;
 using StardewArchipelago.Locations;
 using StardewArchipelago.Items;
 using StardewArchipelago.Logging;
 using StardewValley.Extensions;
+using Category = StardewArchipelago.Stardew.Category;
 using Object = StardewValley.Object;
 
 namespace StardewArchipelago.Goals
@@ -152,7 +154,8 @@ namespace StardewArchipelago.Goals
                 }
 
                 ++totalFishExist;
-                if (Game1.player.fishCaught.ContainsKey(id))
+                var qualifiedId = QualifiedItemIds.QualifiedObjectId(id);
+                if (Game1.player.fishCaught.ContainsKey(qualifiedId))
                 {
                     ++uniqueFishCaught;
                 }
