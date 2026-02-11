@@ -101,7 +101,7 @@ namespace StardewArchipelago
         /// <summary>
         /// What Season to pick when multisleeping across a month transition
         /// </summary>
-        public SeasonPreference MultiSleepSeasonPreference { get; set; } = SeasonPreference.Repeat;
+        public SeasonPreference MultiSleepSeasonPreference { get; set; } = SeasonPreference.Prompt;
 
         /// <summary>
         /// Whether to display archipelago icons on grandpa's shrine to see current points
