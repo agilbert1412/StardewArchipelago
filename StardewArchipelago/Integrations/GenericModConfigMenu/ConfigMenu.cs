@@ -392,6 +392,14 @@ namespace StardewArchipelago.Integrations.GenericModConfigMenu
 
             configMenu.AddBoolOption(
                 mod: ModManifest,
+                name: () => "Show Lupini Scouted Item",
+                tooltip: () => $"When looking at a Lupini Painting for sale, whether to show the scouted item icon instead of the painting texture",
+                getValue: () => Config.ShowLupiniScoutedItem,
+                setValue: (value) => Config.ShowLupiniScoutedItem = value
+            );
+
+            configMenu.AddBoolOption(
+                mod: ModManifest,
                 name: () => "Limit hoe and watering can levels",
                 tooltip: () => $"Makes hoes and watering cans behave as if they were at the basic level no matter what. Generally used for animation cancelling.",
                 getValue: () => Config.LimitHoeWateringCanLevel,

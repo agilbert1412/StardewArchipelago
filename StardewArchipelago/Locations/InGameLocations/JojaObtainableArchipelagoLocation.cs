@@ -32,7 +32,7 @@ namespace StardewArchipelago.Locations.InGameLocations
             _maxPrice = archipelago.SlotData.Jojapocalypse.EndPrice;
         }
 
-        protected override Texture2D GetCorrectTexture(LogHandler logger, IModHelper modHelper, ScoutedLocation scoutedLocation, StardewArchipelagoClient archipelago, Hint relatedHint)
+        protected override Texture2D GetCorrectTexture(LogHandler logger, IModHelper modHelper, StardewArchipelagoClient archipelago, ScoutedLocation scoutedLocation, Hint relatedHint)
         {
             return ArchipelagoTextures.GetArchipelagoLogo(48, ArchipelagoTextures.JOJA);
         }

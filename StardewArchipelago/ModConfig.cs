@@ -165,6 +165,11 @@ namespace StardewArchipelago
         public bool CustomAssetGenericGame { get; set; } = false;
 
         /// <summary>
+        /// When seeing lupini painting for sale, whether to show the scouted item instead of the painting sprite
+        /// </summary>
+        public bool ShowLupiniScoutedItem { get; set; } = true;
+
+        /// <summary>
         /// Makes all hoes and watering cans behave as if they were at the basic level. Generally used for Animation Cancelling purposes
         /// </summary>
         public bool LimitHoeWateringCanLevel { get; set; } = false;

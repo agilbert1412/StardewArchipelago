@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using StardewModdingAPI;
@@ -13,6 +14,7 @@ using KaitoKid.ArchipelagoUtilities.Net.Constants;
 using KaitoKid.Utilities.Interfaces;
 using StardewArchipelago.Archipelago;
 using StardewArchipelago.Archipelago.SlotData.SlotEnums;
+using StardewArchipelago.Textures;
 
 namespace StardewArchipelago.Locations.Festival
 {
@@ -51,6 +53,9 @@ namespace StardewArchipelago.Locations.Festival
             }
         }
 
+        private static Texture2D _paintingTextureToday = null;
+        private static uint _lastDayUpdatedPaintingTexture = 0;
+
         // public override void draw(SpriteBatch b)
         public static void Draw_DrawCorrectPainting_Postfix(BeachNightMarket __instance, SpriteBatch b)
         {
@@ -66,7 +71,25 @@ namespace StardewArchipelago.Locations.Festival
                 // var paintingMailKey = $"NightMarketYear{Game1.year}Day{nightMarket.getDayOfNightMarket()}_paintingSold";
                 if (_locationChecker.IsLocationMissing(paintingLocationSoldToday))
                 {
-                    b.Draw(shopClosedTexture, position, sourceRectangle, Color.White, 0.0f, Vector2.Zero, 4f, SpriteEffects.None, 0.225000009f);
+                    var scoutedPainting = _archipelago.ScoutSingleLocation(paintingLocationSoldToday, false);
+
+                    if (ModEntry.Instance.Config.ShowLupiniScoutedItem && scoutedPainting != null)
+                    {
+                        if (_paintingTextureToday == null || _lastDayUpdatedPaintingTexture < Game1.stats.DaysPlayed)
+                        {
+                            var myActiveHints = _archipelago.GetMyActiveHints();
+                            var relatedHint = myActiveHints.FirstOrDefault(hint => _archipelago.GetLocationName(hint).Equals(paintingLocationSoldToday, StringComparison.OrdinalIgnoreCase));
+                            _paintingTextureToday = ItemSpritesProvider.GetCorrectTexture(_logger, _modHelper, _archipelago, scoutedPainting, relatedHint);
+                            _lastDayUpdatedPaintingTexture = Game1.stats.DaysPlayed;
+                        }
+                        position.X += 32;
+                        position.Y += 2;
+                        b.Draw(_paintingTextureToday, position, new Microsoft.Xna.Framework.Rectangle(0,0,48,48), Color.White, 0.0f, Vector2.Zero, 1f, SpriteEffects.None, 0.225000009f);
+                    }
+                    else
+                    {
+                        b.Draw(shopClosedTexture, position, sourceRectangle, Color.White, 0.0f, Vector2.Zero, 4f, SpriteEffects.None, 0.225000009f);
+                    }
                 }
                 return;
             }

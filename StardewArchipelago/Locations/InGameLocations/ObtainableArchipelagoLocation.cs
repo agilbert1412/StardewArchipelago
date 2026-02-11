@@ -23,8 +23,6 @@ namespace StardewArchipelago.Locations.InGameLocations
 {
     internal class ObtainableArchipelagoLocation : SpecialItem
     {
-        private static ArchipelagoItemSprites _itemSprites = null;
-
         private const string ARCHIPELAGO_PREFIX = "Archipelago: ";
         private const string ARCHIPELAGO_SHORT_PREFIX = "AP: ";
         private const string ARCHIPELAGO_NO_PREFIX = "";
@@ -85,11 +83,7 @@ namespace StardewArchipelago.Locations.InGameLocations
 
         public ObtainableArchipelagoLocation(string locationDisplayName, string locationName, LogHandler logger, IModHelper modHelper, ILocationChecker locationChecker, StardewArchipelagoClient archipelago, Hint[] myActiveHints, bool allowScouting)
         {
-            if (_itemSprites == null && ModEntry.Instance.Config.CustomAssets)
-            {
-                var redownloadDelay = TimeSpan.FromDays(28);
-                _itemSprites = new ArchipelagoItemSprites(logger, DeserializeAliases, redownloadDelay);
-            }
+            ItemSpritesProvider.Initialize(logger, modHelper);
 
             // Prefix removed for now, because the inconsistency makes it ugly
             // var prefix = locationDisplayName.Length < 18 ? ARCHIPELAGO_PREFIX : ARCHIPELAGO_NO_PREFIX;
@@ -107,92 +101,24 @@ namespace StardewArchipelago.Locations.InGameLocations
             if (AllowScouting)
             {
                 var scoutedLocation = archipelago.ScoutStardewLocation(LocationName);
-                _archipelagoTexture = GetCorrectTexture(logger, modHelper, scoutedLocation, archipelago, relatedHint);
+                _archipelagoTexture = GetCorrectTexture(logger, modHelper, archipelago, scoutedLocation, relatedHint);
                 _description = scoutedLocation == null ? ScoutedLocation.GenericItemName() : scoutedLocation.ToString();
             }
             else if (relatedHint != null)
             {
-                _archipelagoTexture = GetCorrectTexture(logger, modHelper, null, archipelago, relatedHint);
+                _archipelagoTexture = GetCorrectTexture(logger, modHelper, archipelago, null, relatedHint);
                 _description = archipelago.GetHintString(relatedHint);
             }
             else
             {
-                _archipelagoTexture = GetCorrectTexture(logger, modHelper, null, archipelago, null);
+                _archipelagoTexture = GetCorrectTexture(logger, modHelper, archipelago, null, null);
                 _description = ScoutedLocation.GenericItemName();
             }
         }
 
-        private ItemSpriteAliases DeserializeAliases(string jsonAliases)
+        protected virtual Texture2D GetCorrectTexture(LogHandler logger, IModHelper modHelper, StardewArchipelagoClient archipelago, ScoutedLocation scoutedLocation, Hint relatedHint)
         {
-            var options = new JsonSerializerOptions { AllowTrailingCommas = true };
-            var aliases = JsonSerializer.Deserialize<ItemSpriteAliases>(jsonAliases, options);
-            return aliases;
-        }
-
-        protected virtual Texture2D GetCorrectTexture(LogHandler logger, IModHelper modHelper, ScoutedLocation scoutedLocation, StardewArchipelagoClient archipelago, Hint relatedHint)
-        {
-            var config = ModEntry.Instance.Config;
-            if (config.CustomAssets && _itemSprites != null && _itemSprites.TryGetCustomAsset(scoutedLocation, archipelago.GameName, config.CustomAssetGameFlexible, config.CustomAssetGenericGame, out var sprite))
-            {
-                if (ArchipelagoTextures.TryGetItemSprite(logger, modHelper, sprite, out var texture2D))
-                {
-                    return texture2D;
-                }
-            }
-
-            var genericTextureName = GetCorrectGenericTextureName(scoutedLocation, relatedHint);
-            return ArchipelagoTextures.GetArchipelagoLogo(48, genericTextureName);
-        }
-
-        private static string GetCorrectGenericTextureName(ScoutedLocation scoutedLocation, Hint relatedHint)
-        {
-            if (scoutedLocation == null)
-            {
-                return ArchipelagoTextures.WHITE;
-            }
-
-            var hintTexture = GetHintTexture(relatedHint);
-            if (hintTexture != null)
-            {
-                return hintTexture;
-            }
-
-            if (scoutedLocation.ClassificationFlags.HasFlag(ItemFlags.Advancement))
-            {
-                return ArchipelagoTextures.PROGRESSION;
-            }
-
-            if (scoutedLocation.ClassificationFlags.HasFlag(ItemFlags.Trap))
-            {
-                return ArchipelagoTextures.RED;
-            }
-
-            if (scoutedLocation.ClassificationFlags.HasFlag(ItemFlags.NeverExclude))
-            {
-                return ArchipelagoTextures.COLOR;
-            }
-
-            return ArchipelagoTextures.BLACK;
-        }
-
-        private static string GetHintTexture(Hint relatedHint)
-        {
-            if (relatedHint == null || relatedHint.Found)
-            {
-                return null;
-            }
-
-            if (relatedHint.Status == HintStatus.Priority)
-            {
-                return ArchipelagoTextures.PLEADING;
-            }
-
-            if (relatedHint.Status == HintStatus.Avoid)
-            {
-                return ArchipelagoTextures.RED;
-            }
-
-            return null;
+            return ItemSpritesProvider.GetCorrectTexture(logger, modHelper, archipelago, scoutedLocation, relatedHint);
         }
 
         public override void drawInMenu(SpriteBatch spriteBatch, Vector2 location, float scaleSize, float transparency, float layerDepth,

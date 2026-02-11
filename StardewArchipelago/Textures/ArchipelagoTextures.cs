@@ -1,10 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using KaitoKid.ArchipelagoUtilities.AssetDownloader.ItemSprites;
+﻿using KaitoKid.ArchipelagoUtilities.AssetDownloader.ItemSprites;
+using KaitoKid.Utilities.Interfaces;
 using Microsoft.Xna.Framework.Graphics;
 using StardewArchipelago.Logging;
 using StardewModdingAPI;
+using System;
+using System.Collections.Generic;
+using System.IO;
 
 namespace StardewArchipelago.Textures
 {
@@ -125,7 +126,7 @@ namespace StardewArchipelago.Textures
             return GetPreferredIconSet();
         }
 
-        public static bool TryGetItemSprite(LogHandler logger, IModHelper modHelper, ItemSprite sprite, out Texture2D texture2D)
+        public static bool TryGetItemSprite(ILogger logger, IModHelper modHelper, ItemSprite sprite, out Texture2D texture2D)
         {
             var customAssetsFolder = "Custom Assets";
             var fileName = sprite.FilePath;
