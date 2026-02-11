@@ -194,7 +194,7 @@ namespace StardewArchipelago.Registry
                 return;
             }
 
-            if (_archipelago.SlotData.EntranceRandomization is EntranceRandomization.Buildings or EntranceRandomization.BuildingsWithoutHouse or EntranceRandomization.Everything)
+            if (_archipelago.SlotData.EntranceRandomization is EntranceRandomization.Buildings or EntranceRandomization.Overworld or EntranceRandomization.Everything)
             {
                 _logger.Log($"Cannot override EntranceRandomization.{_archipelago.SlotData.EntranceRandomization} because logic rules rely on it.", LogLevel.Info);
                 return;

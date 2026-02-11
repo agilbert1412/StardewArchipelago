@@ -176,12 +176,12 @@ namespace StardewArchipelago.GameModifications.CodeInjections.Television
 
         private static bool HasNonChaosEntranceRandomizer()
         {
-            return HasEntranceRandomizer() && _archipelago.SlotData.EntranceRandomization != EntranceRandomization.Chaos;
+            return HasEntranceRandomizer() && _archipelago.SlotData.EntranceRandomizationBehaviour.HasFlag(EntranceRandomizationBehaviour.Chaos);
         }
 
         private static bool HasChaosEntranceRandomizer()
         {
-            return _archipelago.SlotData.EntranceRandomization == EntranceRandomization.Chaos;
+            return _archipelago.SlotData.EntranceRandomizationBehaviour.HasFlag(EntranceRandomizationBehaviour.Chaos);
         }
 
         private static bool HasGifting()
