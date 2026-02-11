@@ -349,7 +349,8 @@ namespace StardewArchipelago.Locations.Festival
             var asset = _englishContentManager.Load<Dictionary<string, string>>(assetName);
             var loadedString = GetString(asset, key);
             var foodName = PreprocessString(loadedString);
-            
+
+            _locationChecker.AddCheckedLocation(FestivalLocationNames.DESERT_CHEF);
             _locationChecker.AddCheckedLocation(foodName);
         }
 

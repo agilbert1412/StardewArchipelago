@@ -34,27 +34,7 @@ namespace StardewArchipelago.Locations.Festival
         public const string MUMMY_MASK = "Mummy Mask";
         public const string CALICO_STATUE = "Calico Statue";
         public const string EMILYS_OUTFIT_SERVICES = "Emily's Outfit Services";
-        public const string EARTHY_MOUSSE = "Earthy Mousse";
-        public const string SWEET_BEAN_CAKE = "Sweet Bean Cake";
-        public const string SKULL_CAVERN_CASSEROLE = "Skull Cavern Casserole";
-        public const string SPICY_TACOS = "Spicy Tacos";
-        public const string MOUNTAIN_CHILI = "Mountain Chili";
-        public const string CRYSTAL_CAKE = "Crystal Cake";
-        public const string CAVE_KEBAB = "Cave Kebab";
-        public const string HOT_LOG = "Hot Log";
-        public const string SOUR_SALAD = "Sour Salad";
-        public const string SUPERFOOD_CAKE = "Superfood Cake";
-        public const string WARRIOR_SMOOTHIE = "Warrior Smoothie";
-        public const string RUMPLED_FRUIT_SKIN = "Rumpled Fruit Skin";
-        public const string CALICO_PIZZA = "Calico Pizza";
-        public const string STUFFED_MUSHROOMS = "Stuffed Mushrooms";
-        public const string ELF_QUESADILLA = "Elf Quesadilla";
-        public const string NACHOS_OF_THE_DESERT = "Nachos Of The Desert";
-        public const string CLOPPINO = "Cloppino";
-        public const string RAINFOREST_SHRIMP = "Rainforest Shrimp";
-        public const string SHRIMP_DONUT = "Shrimp Donut";
-        public const string SMELL_OF_THE_SEA = "Smell Of The Sea";
-        public const string DESERT_GUMBO = "Desert Gumbo";
+
         public const string FREE_CACTIS = "Free Cactis";
         public const string MONSTER_HUNT = "Monster Hunt";
         public const string DEEP_DIVE = "Deep Dive";
@@ -63,6 +43,29 @@ namespace StardewArchipelago.Locations.Festival
         public const string REAL_CALICO_EGG_HUNTER = "Real Calico Egg Hunter";
         public const string WILLYS_CHALLENGE = "Willy's Challenge";
         public const string DESERT_SCHOLAR = "Desert Scholar";
+
+        public const string DESERT_CHEF = "Desert Chef";
+        public const string EARTHY_MOUSSE = "Desert Chef: Earthy Mousse";
+        public const string SWEET_BEAN_CAKE = "Desert Chef: Sweet Bean Cake";
+        public const string SKULL_CAVERN_CASSEROLE = "Desert Chef: Skull Cavern Casserole";
+        public const string SPICY_TACOS = "Desert Chef: Spicy Tacos";
+        public const string MOUNTAIN_CHILI = "Desert Chef: Mountain Chili";
+        public const string CRYSTAL_CAKE = "Desert Chef: Crystal Cake";
+        public const string CAVE_KEBAB = "Desert Chef: Cave Kebab";
+        public const string HOT_LOG = "Desert Chef: Hot Log";
+        public const string SOUR_SALAD = "Desert Chef: Sour Salad";
+        public const string SUPERFOOD_CAKE = "Desert Chef: Superfood Cake";
+        public const string WARRIOR_SMOOTHIE = "Desert Chef: Warrior Smoothie";
+        public const string RUMPLED_FRUIT_SKIN = "Desert Chef: Rumpled Fruit Skin";
+        public const string CALICO_PIZZA = "Desert Chef: Calico Pizza";
+        public const string STUFFED_MUSHROOMS = "Desert Chef: Stuffed Mushrooms";
+        public const string ELF_QUESADILLA = "Desert Chef: Elf Quesadilla";
+        public const string NACHOS_OF_THE_DESERT = "Desert Chef: Nachos Of The Desert";
+        public const string CLOPPINO = "Desert Chef: Cloppino";
+        public const string RAINFOREST_SHRIMP = "Desert Chef: Rainforest Shrimp";
+        public const string SHRIMP_DONUT = "Desert Chef: Shrimp Donut";
+        public const string SMELL_OF_THE_SEA = "Desert Chef: Smell Of The Sea";
+        public const string DESERT_GUMBO = "Desert Chef: Desert Gumbo";
 
         public const string DANCE_WITH_SOMEONE = "Dance with someone";
         public const string RARECROW_5 = "Rarecrow #5 (Woman)";
@@ -131,7 +134,7 @@ namespace StardewArchipelago.Locations.Festival
 
         private static readonly string[] DESERT_FESTIVAL_ALL =
         {
-            CALICO_RACE, MUMMY_MASK, EMILYS_OUTFIT_SERVICES, EARTHY_MOUSSE, SWEET_BEAN_CAKE, SKULL_CAVERN_CASSEROLE, SPICY_TACOS,
+            CALICO_RACE, MUMMY_MASK, EMILYS_OUTFIT_SERVICES, DESERT_CHEF, EARTHY_MOUSSE, SWEET_BEAN_CAKE, SKULL_CAVERN_CASSEROLE, SPICY_TACOS,
             MOUNTAIN_CHILI, CRYSTAL_CAKE, CAVE_KEBAB, HOT_LOG, SOUR_SALAD, SUPERFOOD_CAKE, WARRIOR_SMOOTHIE, RUMPLED_FRUIT_SKIN, CALICO_PIZZA,
             STUFFED_MUSHROOMS, ELF_QUESADILLA, NACHOS_OF_THE_DESERT, CLOPPINO, RAINFOREST_SHRIMP, SHRIMP_DONUT, SMELL_OF_THE_SEA, DESERT_GUMBO,
             FREE_CACTIS, MONSTER_HUNT, DEEP_DIVE, TREASURE_HUNT, TOUCH_A_CALICO_STATUE, REAL_CALICO_EGG_HUNTER, WILLYS_CHALLENGE, DESERT_SCHOLAR,

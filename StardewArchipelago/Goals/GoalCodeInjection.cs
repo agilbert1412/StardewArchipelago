@@ -171,7 +171,8 @@ namespace StardewArchipelago.Goals
                 }
 
                 ++totalFishExist;
-                if (Game1.player.fishCaught.ContainsKey(id))
+                var qualifiedId = QualifiedItemIds.QualifiedObjectId(id);
+                if (Game1.player.fishCaught.ContainsKey(qualifiedId))
                 {
                     ++uniqueFishCaught;
                 }
