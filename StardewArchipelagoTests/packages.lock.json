@@ -63,26 +63,25 @@
       },
       "KaitoKid.ArchipelagoUtilities.AssetDownloader": {
         "type": "Transitive",
-        "resolved": "3.1.5",
-        "contentHash": "qIFgLBEZbmXI/wYDvUXDn1CS2m3OUnkgogyWsvNqL12CRR65EiR2IngJOHBmXpF5ec4sL9aPKNZcOiv1H0PpJg==",
+        "resolved": "3.1.9",
+        "contentHash": "qOCE/qpsUVRhYbo4jNV/X/ezT/38QLcPTdEo8EZBFanKj+ldaKaZlXAEmcYieMh4WspI9jFkNPXObko3wy9SHg==",
         "dependencies": {
-          "KaitoKid.Utilities.Interfaces": "1.0.1"
+          "KaitoKid.Utilities.Interfaces": "3.1.9"
         }
       },
       "KaitoKid.ArchipelagoUtilities.Net": {
         "type": "Transitive",
-        "resolved": "3.1.5",
-        "contentHash": "4X9S4892vlew1rF2dF0lbuz4BU5Ys4ReDZgpKOhIeQYJXRnGRoLll7GfacZqljbqpnCCdedHfPMwjvUHmUpO6Q==",
+        "resolved": "3.1.9",
+        "contentHash": "kYcEIOjetv6xqSeCXkWc2iN1twyK2kLcJhUPCB1/5CRePVfYPbL+gBQH9Xcz8lyKUi+X/+sMGLbb5o85fn0a1Q==",
         "dependencies": {
           "Archipelago.MultiClient.Net": "6.6.0",
-          "KaitoKid.ArchipelagoUtilities.AssetDownloader": "3.1.5",
-          "KaitoKid.Utilities.Interfaces": "1.0.1"
+          "KaitoKid.Utilities.Interfaces": "3.1.9"
         }
       },
       "KaitoKid.Utilities.Interfaces": {
         "type": "Transitive",
-        "resolved": "1.0.1",
-        "contentHash": "yJNh8D8823yGAWST6GShQUhU7TQylFDX6m70Ao28JUnCaAuUOGegwof0o8qPFntOwGiX1ys9eKdf4HQ19Yu6aA=="
+        "resolved": "3.1.9",
+        "contentHash": "v3JJeBuSPABi4luhusTbCbDa9FTKvHkRFw1qFCXfehQGzgYNCODFaIwWXDb1WcEri7yO6IYfW6Be34HsbmnjCA=="
       },
       "Microsoft.CodeCoverage": {
         "type": "Transitive",
@@ -597,8 +596,8 @@
         "dependencies": {
           "Archipelago.Gifting.Net": "[0.4.4, )",
           "Archipelago.MultiClient.Net": "[6.7.0, )",
-          "KaitoKid.ArchipelagoUtilities.AssetDownloader": "[3.1.5, )",
-          "KaitoKid.ArchipelagoUtilities.Net": "[3.1.5, )",
+          "KaitoKid.ArchipelagoUtilities.AssetDownloader": "[3.1.9, )",
+          "KaitoKid.ArchipelagoUtilities.Net": "[3.1.9, )",
           "Pathoschild.Stardew.ModBuildConfig": "[4.4.0, )"
         }
       }
