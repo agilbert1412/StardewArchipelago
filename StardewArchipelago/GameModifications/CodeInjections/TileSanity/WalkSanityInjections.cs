@@ -33,12 +33,23 @@ public static class WalkSanityInjections
         var tilePoint = __instance.TilePoint;
         if (!_farmerCurrentLocation.Equals(tilePoint))
         {
-            var apLocation = _tileSanityManager.GetTileName(tilePoint.X, tilePoint.Y, __instance);
+            var apLocation = TileSanityManager.GetTileName(tilePoint.X, tilePoint.Y, __instance);
             if (_archipelago.LocationExists(apLocation))
             {
+                var checkedLocation = false;
                 if (!_locationChecker.IsLocationChecked(apLocation))
                 {
                     _locationChecker.AddCheckedLocation(apLocation);
+                    checkedLocation = true;
+                }
+                var luckyLocation = apLocation + " (lucky)";
+                if (_archipelago.LocationExists(luckyLocation) && !_locationChecker.IsLocationChecked(luckyLocation))
+                {
+                    _locationChecker.AddCheckedLocation(luckyLocation);
+                    checkedLocation = true;
+                }
+                if (checkedLocation)
+                {
                     TileUI.CheckLocation(apLocation, _monitor);
                 }
             }
@@ -58,7 +69,7 @@ public static class WalkSanityInjections
             return true;
         }
         var (x, y) = position.Center;
-        var tileName = _tileSanityManager.GetTileName(x / 64, y / 64, Game1.player);
+        var tileName = TileSanityManager.GetTileName(x / 64, y / 64, Game1.player);
         if (IsUnlocked(tileName))
         {
             return true;

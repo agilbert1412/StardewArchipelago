@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Text.Json.Serialization;
 using System.Text.RegularExpressions;
@@ -23,6 +24,8 @@ public class TileSanityManager
     private readonly IMonitor _monitor;
 
     private static int _tilesanitySize;
+    private static string _currentLocation;
+    private static string _currentMapName;
 
     public TileSanityManager(Harmony harmony, StardewArchipelagoClient archipelago, StardewLocationChecker locationChecker, IMonitor monitor)
     {
@@ -38,43 +41,71 @@ public class TileSanityManager
 
     public static string GetMapName(Farmer farmer)
     {
-
-        var map = farmer.currentLocation.DisplayName;
-        if (map == $"{farmer.farmName} Farm")
+        return GetMapName(farmer.currentLocation);
+    }
+    
+    public static string GetMapName(GameLocation location)
+    {
+        var internalMapName = location.Name;
+        if (internalMapName != _currentLocation)
         {
-            map = farmer.currentLocation.Name;
-            if (map == "Farm")
+            string mapName;
+            var map = location.DisplayName;
+            if (map == $"{Game1.player.farmName} Farm")
             {
-                return $"{Game1.GetFarmTypeKey()} Farm";
+                if (internalMapName == "Farm")
+                {
+                    mapName = Game1.GetFarmTypeKey() switch
+                    {
+                        "FourCorners" => "Four Corners Farm",
+                        "MeadowlandsFarm" => "Meadowlands Farm",
+                        var farmName => $"{farmName} Farm",
+                    };
+                }
+                else
+                {
+                    mapName = internalMapName;
+                }
             }
-        }
-        return map switch
-        {
-            "Club" => "Casino",
-            "IslandWestCave1" => "Colored Crystals Cave",
-            "IslandNorthCave1" => "Island Mushroom Cave",
-            "Wizard's Tower" when farmer.currentLocation.Name == "WizardHouseBasement" => "WizardBasement",
-            "Spa" => farmer.currentLocation.Name switch
+            else
             {
-                "BathHouse_Entry" => "Bathhouse Entrance",
-                "BathHouse_MensLocker" => "Men's Locker Room",
-                "BathHouse_WomensLocker" => "Women's Locker Room",
-                _ => "Public Bath",
-            },
-            "QiNutRoom" => "Qi's Walnut Room",
-            "CaptainRoom" => "Shipwreck",
-            _ => map
-        };
+                mapName = map switch
+                {
+                    "Club" => "Casino",
+                    "IslandWestCave1" => "Colored Crystals Cave",
+                    "IslandNorthCave1" => "Island Mushroom Cave",
+                    "Wizard's Tower" when internalMapName == "WizardHouseBasement" => "WizardBasement",
+                    "Spa" => internalMapName switch
+                    {
+                        "BathHouse_Entry" => "Bathhouse Entrance",
+                        "BathHouse_MensLocker" => "Men's Locker Room",
+                        "BathHouse_WomensLocker" => "Women's Locker Room",
+                        _ => "Public Bath",
+                    },
+                    "QiNutRoom" => "Qi's Walnut Room",
+                    "CaptainRoom" => "Shipwreck",
+                    _ => map,
+                };
+            }
+            _currentMapName = mapName;
+            _currentLocation = internalMapName;
+        }
+        return _currentMapName;
     }
 
-    public string GetTileName(int x, int y, Farmer farmer)
+    public static string GetTileName(int x, int y, string map)
     {
-        var map = GetMapName(farmer);
 #if !NOWALK
         x /= _tilesanitySize;
         y /= _tilesanitySize;
 #endif
         return $"{TILESANITY_PREFIX}{map} ({x}-{y})";
+    }
+
+    public static string GetTileName(int x, int y, Farmer farmer)
+    {
+        var map = GetMapName(farmer);
+        return GetTileName(x, y, map);
     }
 
     public IEnumerable<(string map, int x, int y)> GetTilesFromName(string name)
@@ -99,6 +130,18 @@ public class TileSanityManager
                 yield return (map, x + i, y + j);
             }
         }
+    }
+
+    public bool HasLocationLeft(string tileName)
+    {
+        Debug.Assert(_archipelago.LocationExists(tileName));
+        if (_locationChecker.IsLocationChecked(tileName))
+        {
+            var luckyName = tileName + " (lucky)";
+            if (!_archipelago.LocationExists(luckyName) || _locationChecker.IsLocationChecked(luckyName))
+                return false;
+        }
+        return true;
     }
 
     public void PatchWalk(IModHelper modHelper)
