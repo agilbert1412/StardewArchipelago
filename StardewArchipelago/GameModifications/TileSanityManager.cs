@@ -41,12 +41,17 @@ public class TileSanityManager
 
     public static string GetMapName(Farmer farmer)
     {
-        var internalMapName = farmer.currentLocation.Name;
+        return GetMapName(farmer.currentLocation);
+    }
+    
+    public static string GetMapName(GameLocation location)
+    {
+        var internalMapName = location.Name;
         if (internalMapName != _currentLocation)
         {
             string mapName;
-            var map = farmer.currentLocation.DisplayName;
-            if (map == $"{farmer.farmName} Farm")
+            var map = location.DisplayName;
+            if (map == $"{Game1.player.farmName} Farm")
             {
                 if (internalMapName == "Farm")
                 {

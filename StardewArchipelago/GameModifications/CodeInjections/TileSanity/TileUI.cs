@@ -122,14 +122,11 @@ namespace StardewArchipelago.GameModifications.CodeInjections.Tilesanity
             {
                 return true;
             }
+            var currentMap = TileSanityManager.GetMapName(_currentLocation);
+
             var tiles = _tileSanityManager.GetTilesFromName(itemName);
             foreach (var (map, x, y) in tiles)
             {
-                var currentMap = _currentLocation.DisplayName;
-                if (currentMap == $"{Game1.player.farmName} Farm")
-                {
-                    currentMap = _currentLocation.Name;
-                }
                 // x/y here are unchecked
                 if (map == currentMap && _tileColors.GetLength(0) > x && _tileColors.GetLength(1) > y)
                 {
@@ -151,12 +148,9 @@ namespace StardewArchipelago.GameModifications.CodeInjections.Tilesanity
             {
                 return;
             }
+            var currentMap = TileSanityManager.GetMapName(_currentLocation);
+            
             var tiles = _tileSanityManager.GetTilesFromName(locationName);
-            var currentMap = _currentLocation.DisplayName;
-            if (currentMap == $"{Game1.player.farmName} Farm")
-            {
-                currentMap = _currentLocation.Name;
-            }
             foreach (var (map, x, y) in tiles)
             {
                 if (map == currentMap)
@@ -215,10 +209,10 @@ namespace StardewArchipelago.GameModifications.CodeInjections.Tilesanity
                     _tileColors[i, j] = -1;
                 }
             }
-            
+
             foreach (var (x, y) in tiles)
             {
-                _tileColors[(int) x, (int) y] = 2;
+                _tileColors[(int)x, (int)y] = 2;
             }
         }
     }
