@@ -11,6 +11,14 @@ using StardewValley;
 
 namespace StardewArchipelago.GameModifications.CodeInjections.Tilesanity
 {
+    internal static class TileColor
+    {
+        public const int EMPTY = -1;
+        public const int UNINITIALIZED = 0;
+        public const int LOCKED = 1;
+        public const int LOCATION = 2;
+    }
+    
     public static class TileUI
     {
         private static Texture2D _pixelTexture;
@@ -19,11 +27,6 @@ namespace StardewArchipelago.GameModifications.CodeInjections.Tilesanity
         private static StardewLocationChecker _locationChecker;
         private static TileSanityManager _tileSanityManager;
         private static UIColor _showUI = UIColor.None;
-
-        private const int EMPTY = -1;
-        private const int UNINITIALIZED = 0;
-        private const int LOCKED = 1;
-        private const int LOCATION = 2;
 
         public static void Initialize(StardewLocationChecker locationChecker, TileSanityManager tileSanityManager)
         {
@@ -76,27 +79,27 @@ namespace StardewArchipelago.GameModifications.CodeInjections.Tilesanity
                 for (var y = yMin; y < yMax; y++)
                 {
                     var tileColor = _tileColors[x, y];
-                    if (tileColor == UNINITIALIZED)
+                    if (tileColor == TileColor.UNINITIALIZED)
                     {
                         var tileName = TileSanityManager.GetTileName(x, y, Game1.player);
                         if (!WalkSanityInjections.IsUnlocked(tileName))
                         {
-                            _tileColors[x, y] = tileColor = LOCKED;
+                            _tileColors[x, y] = tileColor = TileColor.LOCKED;
                         }
                         else if (_locationChecker.LocationExists(tileName) && _tileSanityManager.HasLocationLeft(tileName))
                         {
-                            _tileColors[x, y] = tileColor = LOCATION;
+                            _tileColors[x, y] = tileColor = TileColor.LOCATION;
                         }
                         else
                         {
-                            _tileColors[x, y] = tileColor = EMPTY;
+                            _tileColors[x, y] = tileColor = TileColor.EMPTY;
                         }
                     }
                     var color = tileColor switch
                     {
-                        EMPTY => Color.Transparent,
-                        LOCKED => black,
-                        LOCATION => rainbow,
+                        TileColor.EMPTY => Color.Transparent,
+                        TileColor.LOCKED => black,
+                        TileColor.LOCATION => rainbow,
                         _ => throw new Exception(),
                     };
 
@@ -132,11 +135,11 @@ namespace StardewArchipelago.GameModifications.CodeInjections.Tilesanity
                 {
                     if (_tileSanityManager.HasLocationLeft(itemName))
                     {
-                        _tileColors[x, y] = LOCATION;
+                        _tileColors[x, y] = TileColor.LOCATION;
                     }
                     else
                     {
-                        _tileColors[x, y] = EMPTY;
+                        _tileColors[x, y] = TileColor.EMPTY;
                     }
                 }
             }
@@ -159,9 +162,9 @@ namespace StardewArchipelago.GameModifications.CodeInjections.Tilesanity
                     {
                         monitor.Log($"Tile index out of bounds : ({x}, {y}) max values : {_tileColors.GetLength(0)}, {_tileColors.GetLength(1)}");
                     }
-                    else if (_tileColors[x, y] == LOCATION) // Only switch color when tile is unlocked
+                    else if (_tileColors[x, y] == TileColor.LOCATION) // Only switch color when tile is unlocked
                     {
-                        _tileColors[x, y] = EMPTY;
+                        _tileColors[x, y] = TileColor.EMPTY;
                     }
                 }
             }
