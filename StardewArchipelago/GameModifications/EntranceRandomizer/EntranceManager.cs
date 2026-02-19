@@ -204,7 +204,19 @@ namespace StardewArchipelago.GameModifications.EntranceRandomizer
 
         private bool TryFindWarpToDestination(string desiredWarpKey, out WarpRequest warpRequest)
         {
+            if (desiredWarpKey.TryGetForcedWarp(out warpRequest))
+            {
+                generatedWarps[desiredWarpKey] = warpRequest;
+                return true;
+            }
+
             var (locationOriginName, locationDestinationName) = GetLocationNames(desiredWarpKey);
+            if (locationDestinationName.TryGetForcedWarp(out warpRequest))
+            {
+                generatedWarps[desiredWarpKey] = warpRequest;
+                return true;
+            }
+
             _checkedEntrancesToday.Add(desiredWarpKey);
 
             if (!locationOriginName.TryGetClosestWarpPointTo(ref locationDestinationName, _equivalentAreas, out var locationOrigin, out var warpPoint))
@@ -398,7 +410,7 @@ namespace StardewArchipelago.GameModifications.EntranceRandomizer
             { "Minecart Bus Stop", "BusStop|14|4"},
             { "Minecart Quarry", "Mountain|124|12"},
             { "Island South Ridge", "IslandSouth|27|1" },
-            { "Parrot Express Volcano", "IslandNorth|60|17" },
+            { "Parrot Express Volcano", "IslandNorth|60|15" },
             { "Parrot Express Docks", "IslandSouth|6|32" },
             { "Parrot Express Dig Site", "IslandNorth|46|48" },
             { "Parrot Express Jungle", "IslandEast|28|29" },
