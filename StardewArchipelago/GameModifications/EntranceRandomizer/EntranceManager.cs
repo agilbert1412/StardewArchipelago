@@ -17,7 +17,6 @@ namespace StardewArchipelago.GameModifications.EntranceRandomizer
     public class EntranceManager
     {
         public const string TRANSITIONAL_STRING = " to ";
-        private const string FARM_TO_FARMHOUSE = "Farm to FarmHouse";
 
         private readonly ILogger _logger;
         private readonly EquivalentWarps _equivalentAreas;
@@ -40,7 +39,7 @@ namespace StardewArchipelago.GameModifications.EntranceRandomizer
         public void ResetCheckedEntrancesToday(SlotData slotData)
         {
             _checkedEntrancesToday = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
-            if (slotData.EntranceRandomization == EntranceRandomization.Chaos)
+            if (slotData.EntranceRandomizationBehaviour.HasFlag(EntranceRandomizationBehaviour.Chaos))
             {
                 ReshuffleEntrances(slotData);
             }
@@ -83,63 +82,6 @@ namespace StardewArchipelago.GameModifications.EntranceRandomizer
             {
                 RegisterRandomizedEntrance(originalEntrance, replacementEntrance);
             }
-
-            if (slotData.EntranceRandomization == EntranceRandomization.PelicanTown ||
-                slotData.EntranceRandomization == EntranceRandomization.NonProgression ||
-                slotData.EntranceRandomization == EntranceRandomization.BuildingsWithoutHouse)
-            {
-                return;
-            }
-
-            AddFarmhouseToModifiedEntrances(slotData);
-
-            if (slotData.EntranceRandomization == EntranceRandomization.Chaos)
-            {
-                return;
-            }
-
-            SwapFarmhouseEntranceWithAnotherEmptyAreaEntrance(slotData);
-        }
-
-        private void AddFarmhouseToModifiedEntrances(SlotData slotData)
-        {
-            var farmhouseToFarm = ReverseKey(FARM_TO_FARMHOUSE);
-            ModifiedEntrances.Add(FARM_TO_FARMHOUSE, FARM_TO_FARMHOUSE);
-            ModifiedEntrances.Add(farmhouseToFarm, farmhouseToFarm);
-        }
-
-        private void SwapFarmhouseEntranceWithAnotherEmptyAreaEntrance(SlotData slotData)
-        {
-            var outsideAreas = new List<string>() { "Town", "Mountain", "Farm", "Forest", "BusStop", "Desert", "Beach" };
-            outsideAreas.AddRange(GetModOutsideEntrances(slotData));
-            var random = new Random(int.Parse(slotData.Seed));
-            var chosenEntrance = "";
-            var replacementIsOutside = false;
-            var entrancesWhereCannotPlaceFarm = GetEntranceWhereCannotPlaceFarm(slotData);
-
-            while (!replacementIsOutside)
-            {
-
-                chosenEntrance = ModifiedEntrances.Keys.ToArray()[random.Next(ModifiedEntrances.Keys.Count)];
-                var barredEntranceRule = entrancesWhereCannotPlaceFarm.All(x => !chosenEntrance.Contains(x));
-                replacementIsOutside = outsideAreas.Contains(chosenEntrance.Split(TRANSITIONAL_STRING)[0]) && barredEntranceRule; // 67|17 is Quarry Mine
-            }
-
-            SwapTwoEntrances(ModifiedEntrances, chosenEntrance, FARM_TO_FARMHOUSE);
-        }
-        private static List<string> GetEntranceWhereCannotPlaceFarm(SlotData slotData)
-        {
-            var entrancesWhereCannotPlaceFarm = new List<string> { "Mine|67|17", "SpriteSpring" };
-            if (slotData.StartWithout.HasFlag(StartWithout.Landslide))
-            {
-                entrancesWhereCannotPlaceFarm.Add("Mine|18|13");
-                entrancesWhereCannotPlaceFarm.Add("AdventureGuild");
-            }
-            if (slotData.StartWithout.HasFlag(StartWithout.CommunityCenter))
-            {
-                entrancesWhereCannotPlaceFarm.Add("CommunityCenter");
-            }
-            return entrancesWhereCannotPlaceFarm;
         }
 
         private IEnumerable<string> GetModOutsideEntrances(SlotData slotData)
@@ -243,7 +185,7 @@ namespace StardewArchipelago.GameModifications.EntranceRandomizer
 
         private bool TryGetModifiedWarpName(IEnumerable<string> keys, out string desiredWarpName)
         {
-            foreach (var key in keys)
+            foreach (var key in keys.OrderByDescending(x => x.Length))
             {
                 if (ModifiedEntrances.ContainsKey(key))
                 {
@@ -262,7 +204,19 @@ namespace StardewArchipelago.GameModifications.EntranceRandomizer
 
         private bool TryFindWarpToDestination(string desiredWarpKey, out WarpRequest warpRequest)
         {
+            if (desiredWarpKey.TryGetForcedWarp(out warpRequest))
+            {
+                generatedWarps[desiredWarpKey] = warpRequest;
+                return true;
+            }
+
             var (locationOriginName, locationDestinationName) = GetLocationNames(desiredWarpKey);
+            if (locationDestinationName.TryGetForcedWarp(out warpRequest))
+            {
+                generatedWarps[desiredWarpKey] = warpRequest;
+                return true;
+            }
+
             _checkedEntrancesToday.Add(desiredWarpKey);
 
             if (!locationOriginName.TryGetClosestWarpPointTo(ref locationDestinationName, _equivalentAreas, out var locationOrigin, out var warpPoint))
@@ -438,10 +392,34 @@ namespace StardewArchipelago.GameModifications.EntranceRandomizer
             { "Volcano Entrance", "VolcanoDungeon0|31|53" },
             { "Volcano River", "VolcanoDungeon0|6|49" },
             { "Secret Beach", "IslandNorth|12|31" },
+            { "Secret Woods", "Woods" },
             { "Professor Snail Cave", "IslandNorthCave1" },
             { "Qi Walnut Room", "QiNutRoom" },
             { "Mutant Bug Lair", "BugLand" },
             { "Purple Shorts Maze", "LewisBasement"},
+            { "Mountain Shortcut at Fence", "Mountain|57|40" },
+            { "Town Shortcut at Fence", "Town|90|0" },
+            { "Mountain Shortcut near Quarry Bridge", "Mountain|85|40" },
+            { "Town Shortcut through Cave", "Town|98|0" },
+            { "Tide Pools Shortcut", "Beach|67|0" },
+            { "Town Shortcut below Museum", "Town|94|109" },
+            { "Beach Shortcut", "Beach" },
+            { "Forest Shortcut", "Forest" },
+            { "Minecart Town", "Town|105|80" },
+            { "Minecart Mines", "Mine|13|10" },
+            { "Minecart Bus Stop", "BusStop|14|4"},
+            { "Minecart Quarry", "Mountain|124|12"},
+            { "Island South Ridge", "IslandSouth|27|1" },
+            { "Parrot Express Volcano", "IslandNorth|60|16" },
+            { "Parrot Express Docks", "IslandSouth|6|31" },
+            { "Parrot Express Dig Site", "IslandNorth|5|48" },
+            { "Parrot Express Jungle", "IslandEast|28|28" },
+            { "Parrot Express Farm", "IslandWest|74|9" },
+            { "Use Water Obelisk", "Farm to Beach" },
+            { "Use Earth Obelisk", "Farm to Mountain" },
+            { "Use Desert Obelisk", "Farm to Desert" },
+            { "Use Island Obelisk", "Farm to IslandSouth" },
+            { "Use Farm Obelisk", "IslandWest to Farm" },
         };
 
         private readonly Dictionary<string, string> _locationsSingleWordAliases = new()

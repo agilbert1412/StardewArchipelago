@@ -11,36 +11,66 @@ namespace StardewArchipelago.Extensions
 {
     public static class GameLocationExtensions
     {
+        private static readonly Dictionary<string, WarpRequest> ForcedWarps = new()
+        {
+            { "Town|105|80", new WarpRequest("Town", 105, 80, FacingDirection.Down) }, // "Minecart Town"
+            { "Mine|13|10", new WarpRequest("Mine", 13, 10, FacingDirection.Right) }, // "Minecart Mines"
+            { "BusStop|14|4", new WarpRequest("BusStop", 14, 4, FacingDirection.Down) }, // "Minecart Bus Stop"
+            { "Mountain|124|12", new WarpRequest("Mountain", 124, 12, FacingDirection.Down) }, // "Minecart Quarry"
+
+            { "IslandSouth|6|31", new WarpRequest("IslandSouth", 6, 32, FacingDirection.Down) }, // "Parrot Express Docks"
+            { "IslandNorth|60|16", new WarpRequest("IslandNorth", 60, 17, FacingDirection.Down) }, // "Parrot Express Volcano"
+            { "IslandNorth|5|48", new WarpRequest("IslandNorth", 5, 49, FacingDirection.Down) }, // "Parrot Express Dig Site"
+            { "IslandEast|28|28", new WarpRequest("IslandEast", 28, 29, FacingDirection.Down) }, // "Parrot Express Jungle"
+            { "IslandWest|74|9", new WarpRequest("IslandWest", 74, 10, FacingDirection.Down) }, // "Parrot Express Farm"
+        };
+
         private static readonly Dictionary<WarpRequest, WarpRequest> ExtraWarps = new()
         {
-            { new WarpRequest(Game1.getLocationRequest("Town"), 96, 51, FacingDirection.Down), new WarpRequest(Game1.getLocationRequest("AbandonedJojaMart"), 9, 13, FacingDirection.Up) },
-            { new WarpRequest(Game1.getLocationRequest("Town"), 96, 51, FacingDirection.Down), new WarpRequest(Game1.getLocationRequest("MovieTheater"), 13, 15, FacingDirection.Up) },
-            {new WarpRequest(Game1.getLocationRequest("Town"), 72, 69, FacingDirection.Down), new WarpRequest(Game1.getLocationRequest("Trailer_Big"), 13, 24, FacingDirection.Up)},
-            { new WarpRequest(Game1.getLocationRequest("Town"), 35, 97, FacingDirection.Down), new WarpRequest(Game1.getLocationRequest("Sewer"), 16, 11, FacingDirection.Down) },
-            { new WarpRequest(Game1.getLocationRequest("Forest"), 94, 100, FacingDirection.Down), new WarpRequest(Game1.getLocationRequest("Sewer"), 3, 48, FacingDirection.Up) },
-            { new WarpRequest(Game1.getLocationRequest("Forest"), 101, 72, FacingDirection.Down), new WarpRequest(Game1.getLocationRequest("MasteryCave"), 7, 11, FacingDirection.Up) },
+            { new WarpRequest("Town", 96, 51, FacingDirection.Down), new WarpRequest("AbandonedJojaMart", 9, 13, FacingDirection.Up) },
+            { new WarpRequest("Town", 96, 51, FacingDirection.Down), new WarpRequest("MovieTheater", 13, 15, FacingDirection.Up) },
+            { new WarpRequest("Town", 72, 69, FacingDirection.Down), new WarpRequest("Trailer_Big", 13, 24, FacingDirection.Up) },
+            { new WarpRequest("Town", 35, 97, FacingDirection.Down), new WarpRequest("Sewer", 16, 11, FacingDirection.Down) },
+            { new WarpRequest("Forest", 94, 100, FacingDirection.Down), new WarpRequest("Sewer", 3, 48, FacingDirection.Up) },
+            { new WarpRequest("Forest", 101, 72, FacingDirection.Down), new WarpRequest("MasteryCave", 7, 11, FacingDirection.Up) },
             // The warp for SVE's Forest to MasteryCave is changed from 101, 71 to 110, 81.  How do we resolve that one?
-            { new WarpRequest(Game1.getLocationRequest("Mountain"), 16, 8, FacingDirection.Down), new WarpRequest(Game1.getLocationRequest("LeoTreeHouse"), 3, 8, FacingDirection.Up) },
-            { new WarpRequest(Game1.getLocationRequest("BeachNightMarket"), 49, 11, FacingDirection.Down), new WarpRequest(Game1.getLocationRequest("ElliottHouse"), 3, 9, FacingDirection.Down) },
-            { new WarpRequest(Game1.getLocationRequest("BeachNightMarket"), 30, 34, FacingDirection.Down), new WarpRequest(Game1.getLocationRequest("FishShop"), 5, 9, FacingDirection.Down) },
-            { new WarpRequest(Game1.getLocationRequest("FishShop"), 4, 4, FacingDirection.Down), new WarpRequest(Game1.getLocationRequest("BoatTunnel"), 6, 12, FacingDirection.Up) },
-            { new WarpRequest(Game1.getLocationRequest("IslandWest"), 20, 23, FacingDirection.Down), new WarpRequest(Game1.getLocationRequest("QiNutRoom"), 7, 8, FacingDirection.Up) },
-            { new WarpRequest(Game1.getLocationRequest("WizardHouse"), 4, 5, FacingDirection.Down), new WarpRequest(Game1.getLocationRequest("WizardHouseBasement"), 4, 4, FacingDirection.Down) },
-            { new WarpRequest(Game1.getLocationRequest("IslandWest"), 77, 40, FacingDirection.Down), new WarpRequest(Game1.getLocationRequest("IslandFarmhouse"), 14, 17, FacingDirection.Down) },
-            { new WarpRequest(Game1.getLocationRequest("DeepWoods"), 20, 6, FacingDirection.Up), new WarpRequest(Game1.getLocationRequest("DeepWoodsMaxHouse"), 19, 24, FacingDirection.Up) },
-            { new WarpRequest(Game1.getLocationRequest("Custom_SpriteSpring2"), 31, 11, FacingDirection.Up), new WarpRequest(Game1.getLocationRequest("Custom_SpriteSpringCave"), 10, 14, FacingDirection.Up) },
-            { new WarpRequest(Game1.getLocationRequest("Custom_GrandpasShedRuins"), 15, 16, FacingDirection.Down), new WarpRequest(Game1.getLocationRequest("Custom_GrandpasShedOutside"), 22, 17, FacingDirection.Down) },
-            { new WarpRequest(Game1.getLocationRequest("Custom_GrandpasShed"), 15, 16, FacingDirection.Down), new WarpRequest(Game1.getLocationRequest("Custom_GrandpasShedOutside"), 22, 17, FacingDirection.Down) },
-            { new WarpRequest(Game1.getLocationRequest("Custom_GrandpasShedRuins"), 25, 14, FacingDirection.Up), new WarpRequest(Game1.getLocationRequest("Custom_GrandpasShedGreenhouse"), 30, 16, FacingDirection.Down) },
-            { new WarpRequest(Game1.getLocationRequest("Backwoods"), 21, 1, FacingDirection.Up), new WarpRequest(Game1.getLocationRequest("Custom_EnchantedGrove"), 30, 32, FacingDirection.Up) },
-            { new WarpRequest(Game1.getLocationRequest("Custom_EnchantedGrove"), 40, 10, FacingDirection.Down), new WarpRequest(Game1.getLocationRequest("Custom_GalmoranOutpost"), 39, 36, FacingDirection.Down) },
-            { new WarpRequest(Game1.getLocationRequest("Custom_EnchantedGrove"), 40, 41, FacingDirection.Up), new WarpRequest(Game1.getLocationRequest("Custom_JunimoForest"), 31, 97, FacingDirection.Down) },
-            { new WarpRequest(Game1.getLocationRequest("Custom_EnchantedGrove"), 20, 41, FacingDirection.Up), new WarpRequest(Game1.getLocationRequest("Custom_ApplesRoom"), 2, 9, FacingDirection.Down) },
-            { new WarpRequest(Game1.getLocationRequest("Custom_EnchantedGrove"), 17, 25, FacingDirection.Up), new WarpRequest(Game1.getLocationRequest("Custom_WizardBasement"), 8, 18, FacingDirection.Down) },
-            { new WarpRequest(Game1.getLocationRequest("Custom_EnchantedGrove"), 20, 10, FacingDirection.Up), new WarpRequest(Game1.getLocationRequest("Custom_SpriteSpring2"), 52, 20, FacingDirection.Down) },
-            { new WarpRequest(Game1.getLocationRequest("Custom_EnchantedGrove"), 43, 25, FacingDirection.Up), new WarpRequest(Game1.getLocationRequest("Custom_AdventurerSummit"), 8, 24, FacingDirection.Down) },
-            { new WarpRequest(Game1.getLocationRequest("Forest"), 19, 110, FacingDirection.Down), new WarpRequest(Game1.getLocationRequest("Custom_JunimoWoods"), 37, 2, FacingDirection.Down) },
-            { new WarpRequest(Game1.getLocationRequest("ManorHouse"), 22, 9, FacingDirection.Left), new WarpRequest(Game1.getLocationRequest("LewisBasement"), 4, 4, FacingDirection.Down) },
+            { new WarpRequest("Mountain", 16, 8, FacingDirection.Down), new WarpRequest("LeoTreeHouse", 3, 8, FacingDirection.Up) },
+            { new WarpRequest("BeachNightMarket", 49, 11, FacingDirection.Down), new WarpRequest("ElliottHouse", 3, 9, FacingDirection.Down) },
+            { new WarpRequest("BeachNightMarket", 30, 34, FacingDirection.Down), new WarpRequest("FishShop", 5, 9, FacingDirection.Down) },
+            { new WarpRequest("FishShop", 4, 4, FacingDirection.Down), new WarpRequest("BoatTunnel", 6, 12, FacingDirection.Up) },
+            { new WarpRequest("IslandWest", 20, 23, FacingDirection.Down), new WarpRequest("QiNutRoom", 7, 8, FacingDirection.Up) },
+            { new WarpRequest("WizardHouse", 4, 5, FacingDirection.Down), new WarpRequest("WizardHouseBasement", 4, 4, FacingDirection.Down) },
+            { new WarpRequest("IslandWest", 77, 40, FacingDirection.Down), new WarpRequest("IslandFarmhouse", 14, 17, FacingDirection.Down) },
+            { new WarpRequest("DeepWoods", 20, 6, FacingDirection.Up), new WarpRequest("DeepWoodsMaxHouse", 19, 24, FacingDirection.Up) },
+            { new WarpRequest("Custom_SpriteSpring2", 31, 11, FacingDirection.Up), new WarpRequest("Custom_SpriteSpringCave", 10, 14, FacingDirection.Up) },
+            { new WarpRequest("Custom_GrandpasShedRuins", 15, 16, FacingDirection.Down), new WarpRequest("Custom_GrandpasShedOutside", 22, 17, FacingDirection.Down) },
+            { new WarpRequest("Custom_GrandpasShed", 15, 16, FacingDirection.Down), new WarpRequest("Custom_GrandpasShedOutside", 22, 17, FacingDirection.Down) },
+            { new WarpRequest("Custom_GrandpasShedRuins", 25, 14, FacingDirection.Up), new WarpRequest("Custom_GrandpasShedGreenhouse", 30, 16, FacingDirection.Down) },
+            { new WarpRequest("Backwoods", 21, 1, FacingDirection.Up), new WarpRequest("Custom_EnchantedGrove", 30, 32, FacingDirection.Up) },
+            { new WarpRequest("Custom_EnchantedGrove", 40, 10, FacingDirection.Down), new WarpRequest("Custom_GalmoranOutpost", 39, 36, FacingDirection.Down) },
+            { new WarpRequest("Custom_EnchantedGrove", 40, 41, FacingDirection.Up), new WarpRequest("Custom_JunimoForest", 31, 97, FacingDirection.Down) },
+            { new WarpRequest("Custom_EnchantedGrove", 20, 41, FacingDirection.Up), new WarpRequest("Custom_ApplesRoom", 2, 9, FacingDirection.Down) },
+            { new WarpRequest("Custom_EnchantedGrove", 17, 25, FacingDirection.Up), new WarpRequest("Custom_WizardBasement", 8, 18, FacingDirection.Down) },
+            { new WarpRequest("Custom_EnchantedGrove", 20, 10, FacingDirection.Up), new WarpRequest("Custom_SpriteSpring2", 52, 20, FacingDirection.Down) },
+            { new WarpRequest("Custom_EnchantedGrove", 43, 25, FacingDirection.Up), new WarpRequest("Custom_AdventurerSummit", 8, 24, FacingDirection.Down) },
+            { new WarpRequest("Forest", 19, 110, FacingDirection.Down), new WarpRequest("Custom_JunimoWoods", 37, 2, FacingDirection.Down) },
+            { new WarpRequest("ManorHouse", 22, 9, FacingDirection.Left), new WarpRequest("LewisBasement", 4, 4, FacingDirection.Down) },
+            //{ new WarpRequest("BusStop", 14, 4, FacingDirection.Up), new WarpRequest("Mine", 13, 9, FacingDirection.Down) },
+            //{ new WarpRequest("BusStop", 14, 4, FacingDirection.Up), new WarpRequest("Town", 105, 80, FacingDirection.Down) },
+            //{ new WarpRequest("BusStop", 14, 4, FacingDirection.Up), new WarpRequest("Mountain", 124, 12, FacingDirection.Down) },
+            //{ new WarpRequest("Mine", 13, 9, FacingDirection.Up), new WarpRequest("Town", 105, 80, FacingDirection.Down) },
+            //{ new WarpRequest("Mine", 13, 9, FacingDirection.Up), new WarpRequest("Mountain", 124, 12, FacingDirection.Down) },
+            //{ new WarpRequest("Mountain", 124, 12, FacingDirection.Up), new WarpRequest("Town", 105, 80, FacingDirection.Down) },
+            //{ new WarpRequest("IslandSouth", 27, 1, FacingDirection.Up), new WarpRequest("IslandEast", 28, 29, FacingDirection.Down) },
+            //{ new WarpRequest("IslandSouth", 27, 1, FacingDirection.Up), new WarpRequest("IslandNorth", 60, 17, FacingDirection.Down) },
+            //{ new WarpRequest("IslandSouth", 27, 1, FacingDirection.Up), new WarpRequest("IslandNorth", 46, 48, FacingDirection.Down) },
+            //{ new WarpRequest("IslandSouth", 27, 1, FacingDirection.Up), new WarpRequest("IslandWest", 74, 10, FacingDirection.Down) },
+            //{ new WarpRequest("IslandEast", 28, 29, FacingDirection.Up), new WarpRequest("IslandNorth", 60, 17, FacingDirection.Down) },
+            //{ new WarpRequest("IslandEast", 28, 29, FacingDirection.Up), new WarpRequest("IslandNorth", 46, 48, FacingDirection.Down) },
+            //{ new WarpRequest("IslandEast", 28, 29, FacingDirection.Up), new WarpRequest("IslandWest", 74, 10, FacingDirection.Down) },
+            //{ new WarpRequest("IslandNorth", 60, 17, FacingDirection.Up), new WarpRequest("IslandNorth", 46, 48, FacingDirection.Down) },
+            //{ new WarpRequest("IslandNorth", 60, 17, FacingDirection.Up), new WarpRequest("IslandWest", 74, 10, FacingDirection.Down) },
+            //{ new WarpRequest("IslandNorth", 46, 48, FacingDirection.Up), new WarpRequest("IslandWest", 74, 10, FacingDirection.Down) },
         };
 
         private static readonly Dictionary<WarpRequest, WarpRequest> ExtraWarpsBothWays = ExtraWarps.Union(ExtraWarps.ToDictionary(x => x.Value, x => x.Key)).ToDictionary(x => x.Key, x => x.Value);
@@ -61,8 +91,6 @@ namespace StardewArchipelago.Extensions
 
             return destinationNames;
         }
-
-
 
         public static List<Point> GetAllWarpPointsTo(this GameLocation origin, string destinationName, EquivalentWarps equivalentAreas = null)
         {
@@ -534,6 +562,11 @@ namespace StardewArchipelago.Extensions
 
             closestWarpPoint = allWarpPoints.First();
             return true;
+        }
+
+        public static bool TryGetForcedWarp(this string warpKey, out WarpRequest warpRequest)
+        {
+            return ForcedWarps.TryGetValue(warpKey, out warpRequest);
         }
     }
 }
