@@ -92,12 +92,12 @@ namespace StardewArchipelago.Archipelago.SlotData
             BundlesData = slotDataReader.GetSlotSetting(SlotDataKeys.MODIFIED_BUNDLES, "");
             TrashBearRequestsData = slotDataReader.GetSlotSetting(SlotDataKeys.TRASH_BEAR_REQUESTS, "");
             EntranceRandomization = slotDataReader.GetSlotSetting(SlotDataKeys.ENTRANCE_RANDOMIZATION, EntranceRandomization.Disabled);
-            StartWithout = slotDataReader.GetSlotStartWithoutSetting();
             SeasonRandomization = slotDataReader.GetSlotSetting(SlotDataKeys.SEASON_RANDOMIZATION, SeasonRandomization.Disabled);
             Cropsanity = slotDataReader.GetSlotSetting(SlotDataKeys.CROPSANITY, Cropsanity.Disabled);
             BackpackProgression = slotDataReader.GetSlotSetting(SlotDataKeys.BACKPACK_PROGRESSION, BackpackProgression.Progressive);
             BackpackSize = slotDataReader.GetSlotSetting(SlotDataKeys.BACKPACK_SIZE, 12);
             ToolProgression = slotDataReader.GetSlotSetting(SlotDataKeys.TOOL_PROGRESSION, ToolProgression.Progressive);
+            StartWithout = slotDataReader.GetSlotStartWithoutSetting(ToolProgression);
             ElevatorProgression = slotDataReader.GetSlotSetting(SlotDataKeys.ELEVATOR_PROGRESSION, ElevatorProgression.ProgressiveFromPreviousFloor);
             SkillProgression = slotDataReader.GetSlotSetting(SlotDataKeys.SKILLS_PROGRESSION, SkillsProgression.Progressive);
             BuildingProgression = slotDataReader.GetSlotSetting(SlotDataKeys.BUILDING_PROGRESSION, BuildingProgression.Progressive);
