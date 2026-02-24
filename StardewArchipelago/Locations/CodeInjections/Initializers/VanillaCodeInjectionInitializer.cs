@@ -45,7 +45,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Initializers
             IsolatedEventInjections.Initialize(logger, modHelper, archipelago, locationChecker);
             WizardBookInjections.Initialize(logger, modHelper, archipelago, locationChecker);
             PhoneInjections.Initialize(logger, modHelper, archipelago, weaponsManager);
-            InitializeArcadeMachines(logger, modHelper, archipelago, locationChecker);
+            InitializeArcadeMachines(logger, modHelper, archipelago, locationChecker, state);
             TravelingMerchantInjections.Initialize(logger, modHelper, archipelago, locationChecker, state);
             FishingInjections.Initialize(logger, modHelper, archipelago, locationChecker, itemManager, state.Wallet);
             MuseumInjections.Initialize(logger, modHelper, archipelago, locationChecker, itemManager);
@@ -78,9 +78,9 @@ namespace StardewArchipelago.Locations.CodeInjections.Initializers
             CollectionsInjections.Initialize(logger, archipelago, locationChecker, itemManager, nightShippingBehaviors);
         }
 
-        private static void InitializeArcadeMachines(LogHandler logger, IModHelper modHelper, StardewArchipelagoClient archipelago, StardewLocationChecker locationChecker)
+        private static void InitializeArcadeMachines(LogHandler logger, IModHelper modHelper, StardewArchipelagoClient archipelago, StardewLocationChecker locationChecker, ArchipelagoStateDto state)
         {
-            JotPKInjections.Initialize(logger, modHelper, archipelago, locationChecker);
+            JotPKInjections.Initialize(logger, modHelper, archipelago, locationChecker, state);
             JunimoKartInjections.Initialize(logger, modHelper, archipelago, locationChecker);
         }
 

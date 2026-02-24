@@ -26,6 +26,8 @@ namespace StardewArchipelago.Serialization
         public List<string> QualifiedIdsClothesDonated { get; set; }
         public List<string> TrashBearItemsEaten { get; set; }
         public int LastDayLookedAtStanleyBundle { get; set; }
+        public int MaxJotPKLevelBeaten { get; set; }
+        public int MaxJunimoKartLevelBeaten { get; set; }
 
         public ArchipelagoStateDto()
         {
@@ -48,6 +50,8 @@ namespace StardewArchipelago.Serialization
             QualifiedIdsClothesDonated = new List<string>();
             TrashBearItemsEaten = new List<string>();
             LastDayLookedAtStanleyBundle = -1;
+            MaxJotPKLevelBeaten = 0;
+            MaxJunimoKartLevelBeaten = 0;
         }
     }
 }
