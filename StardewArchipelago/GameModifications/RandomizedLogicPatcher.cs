@@ -35,6 +35,7 @@ using StardewArchipelago.Locations.CodeInjections.Vanilla.Relationship;
 using StardewArchipelago.Locations.Festival;
 using StardewArchipelago.Locations.InGameLocations;
 using StardewArchipelago.GameModifications.CodeInjections.Powers;
+using StardewArchipelago.GameModifications.MultiplayerVision;
 using xTile.Dimensions;
 
 namespace StardewArchipelago.GameModifications
@@ -89,6 +90,7 @@ namespace StardewArchipelago.GameModifications
             WalnutInjections.Initialize(logger, archipelago);
             OutOfLogicInjections.Initialize(logger, archipelago, stardewItemManager);
             EmptyHandInjections.Initialize(logger, archipelago, stardewItemManager);
+            MultiplayerVisionInjections.Initialize(logger, archipelago);
             MovementInjections.Initialize(logger, archipelago);
             BundleMenuInjection.Initialize(logger, modHelper, archipelago, state, locationChecker, bundleReader);
             InventoryInjections.Initialize(logger, archipelago, state.Wallet);
@@ -148,6 +150,7 @@ namespace StardewArchipelago.GameModifications
             PatchTouchingItems();
 
             _startingResources.GivePlayerStartingResources();
+            PatchMultiplayerVision();
 
             PatchDebugMethods();
         }
@@ -962,6 +965,14 @@ namespace StardewArchipelago.GameModifications
             _harmony.Patch(
                 original: AccessTools.PropertySetter(typeof(Item), nameof(Item.HasBeenInInventory)),
                 postfix: new HarmonyMethod(typeof(InventoryInjections), nameof(InventoryInjections.HasBeenInInventorySet_TouchItems_Postfix))
+            );
+        }
+
+        private void PatchMultiplayerVision()
+        {
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(Farmer), nameof(Farmer.draw), new[] { typeof(SpriteBatch) }),
+                postfix: new HarmonyMethod(typeof(MultiplayerVisionInjections), nameof(MultiplayerVisionInjections.Draw_DrawOtherPlayers_Postfix))
             );
         }
 

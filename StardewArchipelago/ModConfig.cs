@@ -59,6 +59,11 @@ namespace StardewArchipelago
         public int BonusPerMovementSpeed { get; set; } = 5;
 
         /// <summary>
+        /// Enable the feature to see other Stardew Players from the multiworld in your own game
+        /// </summary>
+        public bool MultiplayerVision { get; set; } = true;
+
+        /// <summary>
         /// Whether to Anonymize Player names in the chatbox
         /// </summary>
         public bool AnonymizeNamesInChat { get; set; } = false;

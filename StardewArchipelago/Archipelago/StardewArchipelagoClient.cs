@@ -25,12 +25,15 @@ using System.Linq;
 using System.Numerics;
 using System.Threading.Tasks;
 using KaitoKid.Utilities.Interfaces;
+using StardewArchipelago.GameModifications.MultiplayerVision;
 using Color = Microsoft.Xna.Framework.Color;
 
 namespace StardewArchipelago.Archipelago
 {
     public class StardewArchipelagoClient : ArchipelagoClient
     {
+        public const string MULTIPLAYER_VISION_TAG = "MultiplayerVision";
+
         private readonly IModHelper _modHelper;
         private readonly IManifest _manifest;
         private readonly Harmony _harmony;
@@ -201,6 +204,7 @@ namespace StardewArchipelago.Archipelago
             {
                 case BouncePacket bouncePacket:
                     MovementInjections.HandleBouncePacket(bouncePacket);
+                    MultiplayerVisionInjections.HandleBouncePacket(bouncePacket);
                     break;
                 default:
                     return;
@@ -479,5 +483,64 @@ namespace StardewArchipelago.Archipelago
         }
 
         public StardewDatapackageCache DataPackageCache => (StardewDatapackageCache)LocalDataPackage;
+
+        public void SendMultiplayerVisionPacket(VisiblePlayer visiblePlayer)
+        {
+            EnableTag(MULTIPLAYER_VISION_TAG);
+            var tags = new[] { MULTIPLAYER_VISION_TAG };
+            var dataString = new Dictionary<string, string>()
+            {
+                {"identifier", visiblePlayer.UniqueIdentifier},
+                {"mapName", visiblePlayer.MapName},
+            };
+            var dataInt = new Dictionary<string, int>()
+            {
+                {"flip", visiblePlayer.Flip ? 1 : 0},
+                {"currentAnimationIndex", visiblePlayer.CurrentAnimationIndex},
+                {"facingDirection", visiblePlayer.FacingDirection},
+                {"isGlowing", visiblePlayer.IsGlowing ? 1 : 0},
+                {"isSitting", visiblePlayer.IsSitting ? 1 : 0},
+                {"isRidingHorse", visiblePlayer.IsRidingHorse ? 1 : 0},
+            };
+            var dataFloat = new Dictionary<string, float>()
+            {
+                {"positionX", visiblePlayer.Position.X},
+                {"positionY", visiblePlayer.Position.Y},
+                {"velocityX", visiblePlayer.Velocity.X},
+                {"velocityY", visiblePlayer.Velocity.Y},
+
+                {"xOffset", visiblePlayer.XOffset},
+                {"yOffset", visiblePlayer.YOffset},
+                {"rotation", visiblePlayer.Rotation},
+            };
+
+            if (visiblePlayer.Appearance != null)
+            {
+                var appearance = visiblePlayer.Appearance;
+
+                dataString.Add("hatId", appearance.HatId);
+                dataString.Add("shirtId", appearance.ShirtId);
+                dataString.Add("pantsId", appearance.PantsId);
+                dataString.Add("shoesId", appearance.ShoesId);
+
+                dataInt.Add("isMale", appearance.IsMale ? 1 : 0);
+                dataInt.Add("boundingBoxHeight", appearance.BoundingBoxHeight);
+                dataInt.Add("skin", appearance.Skin);
+                dataInt.Add("hair", appearance.Hair);
+                dataInt.Add("eyes", appearance.CurrentEyes);
+                dataInt.Add("accessory", appearance.Accessory);
+
+                dataInt.Add("hairColorRed", appearance.HairColorRed);
+                dataInt.Add("hairColorGreen", appearance.HairColorGreen);
+                dataInt.Add("hairColorBlue", appearance.HairColorBlue);
+
+                dataInt.Add("eyeColorRed", appearance.EyeColorRed);
+                dataInt.Add("eyeColorGreen", appearance.EyeColorGreen);
+                dataInt.Add("eyeColorBlue", appearance.EyeColorBlue);
+                dataFloat.Add("drawLayer", appearance.DrawLayer);
+            }
+
+            SendBouncePacket(tags, dataString, dataInt, dataFloat);
+        }
     }
 }

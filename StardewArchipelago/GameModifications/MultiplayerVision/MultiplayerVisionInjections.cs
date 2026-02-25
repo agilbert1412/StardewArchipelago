@@ -1,0 +1,318 @@
+﻿using Archipelago.MultiClient.Net.Packets;
+using KaitoKid.ArchipelagoUtilities.Net.Client;
+using KaitoKid.ArchipelagoUtilities.Net.Constants;
+using KaitoKid.Utilities.Interfaces;
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+using Newtonsoft.Json.Linq;
+using StardewArchipelago.Archipelago;
+using StardewArchipelago.Constants.Vanilla;
+using StardewArchipelago.GameModifications.CodeInjections;
+using StardewArchipelago.GameModifications.EntranceRandomizer;
+using StardewArchipelago.GameModifications.MoveLink;
+using StardewModdingAPI.Events;
+using StardewValley;
+using StardewValley.Objects;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace StardewArchipelago.GameModifications.MultiplayerVision
+{
+    public static class MultiplayerVisionInjections
+    {
+        private static ILogger _logger;
+        private static StardewArchipelagoClient _archipelago;
+        private static Dictionary<string, VisiblePlayer> _visiblePlayers;
+        private static Dictionary<string, PlayerAppearance> _playerAppearances;
+
+        private const float EPSILON = 0.1f;
+
+        public static void Initialize(ILogger logger, StardewArchipelagoClient archipelago)
+        {
+            _logger = logger;
+            _archipelago = archipelago;
+            _visiblePlayers = new Dictionary<string, VisiblePlayer>();
+            _playerAppearances = new Dictionary<string, PlayerAppearance>();
+        }
+
+        public static void OnUpdateTicked(UpdateTickedEventArgs eventArgs)
+        {
+            if (!ModEntry.Instance.Config.MultiplayerVision)
+            {
+                return;
+            }
+
+            if (eventArgs.IsMultipleOf(VisiblePlayer.UPDATE_FREQUENCY_TICKS))
+            {
+                SendMultiplayerVision(eventArgs.IsMultipleOf(VisiblePlayer.BROADCAST_APPEARANCE_TICKS));
+            }
+        }
+
+        // public override void draw(SpriteBatch b)
+        public static void Draw_DrawOtherPlayers_Postfix(Farmer __instance, SpriteBatch b)
+        {
+            try
+            {
+                DrawAndUpdateOtherPlayers(b, 1);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Failed in {nameof(Draw_DrawOtherPlayers_Postfix)}:\n{ex}");
+                return;
+            }
+        }
+
+        public static void SendMultiplayerVision(bool broadcastAppearance)
+        {
+            try
+            {
+                if (_logger == null || _archipelago == null || !ModEntry.Instance.Config.MultiplayerVision)
+                {
+                    return;
+                }
+
+                var farmer = Game1.player;
+                var session = _archipelago.GetSession();
+                var slotName = _archipelago.GetPlayerName();
+                var identifier = $"{session.ConnectionInfo.Slot}-{ModEntry.Instance.UniqueIdentifier}";
+
+                var movementSpeed = farmer.getMovementSpeed();
+                var xVelocity = GetXVelocity(farmer, movementSpeed);
+                var yVelocity = GetYVelocity(farmer, movementSpeed);
+
+                var visiblePlayer = new VisiblePlayer()
+                {
+                    UniqueIdentifier = identifier,
+                    MapName = Game1.currentLocation.Name,
+                    Position = Game1.player.Position,
+                    Velocity = new Vector2(xVelocity, yVelocity),
+                    Flip = farmer.FarmerSprite.CurrentAnimationFrame.flip,
+                    CurrentAnimationIndex = farmer.FarmerSprite.currentAnimationIndex,
+                    FacingDirection = farmer.FacingDirection,
+                    IsGlowing = farmer.isGlowing,
+                    XOffset = farmer.xOffset,
+                    YOffset = farmer.yOffset,
+                    IsSitting = farmer.IsSitting(),
+                    IsRidingHorse = farmer.isRidingHorse(),
+                    Rotation = farmer.rotation,
+                };
+
+                if (broadcastAppearance)
+                {
+                    var appearance = new PlayerAppearance()
+                    {
+                        IsMale = farmer.IsMale,
+                        BoundingBoxHeight = farmer.GetBoundingBox().Height,
+                        DrawLayer = farmer.getDrawLayer(),
+
+                        Skin = farmer.skin.Value,
+                        Accessory = farmer.accessory.Value,
+
+                        Hair =  farmer.getHair(),
+                        HairColorRed = farmer.hairstyleColor.R,
+                        HairColorGreen = farmer.hairstyleColor.G,
+                        HairColorBlue = farmer.hairstyleColor.B,
+
+                        CurrentEyes = farmer.currentEyes,
+                        EyeColorRed = farmer.newEyeColor.R,
+                        EyeColorGreen = farmer.newEyeColor.G,
+                        EyeColorBlue = farmer.newEyeColor.B,
+
+                        HatId = farmer.hat.Value?.ItemId ?? "",
+                        ShirtId = farmer.GetShirtId(),
+                        PantsId = farmer.GetPantsId(),
+                        ShoesId = farmer.shoes.Value,
+                    };
+                    visiblePlayer.Appearance = appearance;
+                }
+
+                _archipelago.SendMultiplayerVisionPacket(visiblePlayer);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Failed in {nameof(SendMultiplayerVision)}:\n{ex}");
+                return;
+            }
+        }
+        private static float GetXVelocity(Farmer farmer, float movementSpeed)
+        {
+            var xVelocity = 0f;
+            if (farmer.movementDirections.Contains(1))
+            {
+                xVelocity += movementSpeed;
+            }
+            if (farmer.movementDirections.Contains(3))
+            {
+                xVelocity -= movementSpeed;
+            }
+            return xVelocity;
+        }
+        private static float GetYVelocity(Farmer farmer, float movementSpeed)
+        {
+            var yVelocity = 0f;
+            if (farmer.movementDirections.Contains(0))
+            {
+                yVelocity -= movementSpeed;
+            }
+            if (farmer.movementDirections.Contains(2))
+            {
+                yVelocity += movementSpeed;
+            }
+            return yVelocity;
+        }
+
+        public static void DrawAndUpdateOtherPlayers(SpriteBatch spriteBatch, uint elapsedFrames)
+        {
+            if (!ModEntry.Instance.Config.MultiplayerVision || !_visiblePlayers.Any())
+            {
+                return;
+            }
+
+            foreach (var visiblePlayerId in _visiblePlayers.Keys.ToArray())
+            {
+                var visiblePlayer = _visiblePlayers[visiblePlayerId];
+                if (visiblePlayer.DrawAndUpdate(spriteBatch, elapsedFrames))
+                {
+                    _visiblePlayers.Remove(visiblePlayerId);
+                }
+            }
+        }
+
+        public static void HandleBouncePacket(BouncePacket bouncePacket)
+        {
+            if (!ModEntry.Instance.Config.MultiplayerVision)
+            {
+                return;
+            }
+
+            if (!bouncePacket.Tags.Contains(StardewArchipelagoClient.MULTIPLAYER_VISION_TAG))
+            {
+                return;
+            }
+
+            var identifier = bouncePacket.Data.TryGetValue("identifier", out var identifierValue) ? identifierValue.ToObject<string>() : "";
+            var mapName = bouncePacket.Data.TryGetValue("mapName", out var mapNameValue) ? mapNameValue.ToObject<string>() : "";
+            if (string.IsNullOrWhiteSpace(identifier) || string.IsNullOrWhiteSpace(mapName)) // || identifier.Contains(ModEntry.Instance.UniqueIdentifier))
+            {
+                return;
+            }
+
+            var positionX = bouncePacket.Data.TryGetValue("positionX", out var positionXValue) ? positionXValue.ToObject<float>() : 0f;
+            var positionY = bouncePacket.Data.TryGetValue("positionY", out var positionYValue) ? positionYValue.ToObject<float>() : 0f;
+            var velocityX = bouncePacket.Data.TryGetValue("velocityX", out var velocityXValue) ? velocityXValue.ToObject<float>() : 0f;
+            var velocityY = bouncePacket.Data.TryGetValue("velocityY", out var velocityYValue) ? velocityYValue.ToObject<float>() : 0f;
+            var currentAnimationIndex = bouncePacket.Data.TryGetValue("currentAnimationIndex", out var currentAnimationIndexValue) ? currentAnimationIndexValue.ToObject<int>() : 0;
+            var flip = bouncePacket.Data.TryGetValue("flip", out var flipValue) ? flipValue.ToObject<int>() >= 1 : false;
+            var facingDirection = bouncePacket.Data.TryGetValue("facingDirection", out var facingDirectionValue) ? facingDirectionValue.ToObject<int>() : 0;
+            var isGlowing = bouncePacket.Data.TryGetValue("isGlowing", out var isGlowingValue) ? isGlowingValue.ToObject<int>() >= 1 : false;
+            var xOffset = bouncePacket.Data.TryGetValue("xOffset", out var xOffsetValue) ? xOffsetValue.ToObject<float>() : 0f;
+            var yOffset = bouncePacket.Data.TryGetValue("yOffset", out var yOffsetValue) ? yOffsetValue.ToObject<float>() : 0f;
+            var isSitting = bouncePacket.Data.TryGetValue("isSitting", out var isSittingValue) ? isSittingValue.ToObject<int>() >= 1 : false;
+            var isRidingHorse = bouncePacket.Data.TryGetValue("isRidingHorse", out var isRidingHorseValue) ? isRidingHorseValue.ToObject<int>() >= 1 : false;
+            var rotation = bouncePacket.Data.TryGetValue("rotation", out var rotationValue) ? rotationValue.ToObject<float>() : 0f;
+
+            var visiblePlayer = new VisiblePlayer()
+            {
+                CurrentAnimationIndex = currentAnimationIndex,
+                Flip = flip,
+                UniqueIdentifier = identifier,
+                MapName = mapName,
+                Position = new Vector2(positionX, positionY),
+                Velocity = new Vector2(velocityX, velocityY),
+                FacingDirection = facingDirection,
+                IsGlowing = isGlowing,
+                XOffset = xOffset,
+                YOffset = yOffset,
+                IsSitting = isSitting,
+                IsRidingHorse = isRidingHorse,
+                Rotation = rotation,
+            };
+
+            var appearance = TryGetAppearance(bouncePacket.Data);
+            if (appearance != null)
+            {
+                _playerAppearances[identifier] = appearance;
+            }
+
+            if (_playerAppearances.ContainsKey(identifier))
+            {
+                visiblePlayer.Appearance = _playerAppearances[identifier];
+            }
+
+            if (_visiblePlayers.ContainsKey(identifier))
+            {
+                _visiblePlayers[identifier] = visiblePlayer;
+            }
+            else
+            {
+                _visiblePlayers.Add(identifier, visiblePlayer);
+            }
+
+            //_logger.LogInfo($"Received {ArchipelagoClient.MULTIPLAYER_VISION_TAG} packet{Environment.NewLine}" +
+            //               $"  identifier: {identifier}{Environment.NewLine}" +
+            //               $"  mapName: {mapName}{Environment.NewLine}" +
+            //               $"  positionX: {positionX}{Environment.NewLine}" +
+            //               $"  positionY: {positionY}");
+        }
+
+        private static PlayerAppearance TryGetAppearance(Dictionary<string, JToken> bouncePacketData)
+        {
+            PlayerAppearance appearance = null;
+
+            if (!bouncePacketData.TryGetValue("isMale", out var isMaleValue))
+            {
+                return appearance;
+            }
+
+            var isMale = isMaleValue.ToObject<int>() >= 1;
+            var boundingBoxHeight = bouncePacketData.TryGetValue("boundingBoxHeight", out var boundingBoxHeightValue) ? boundingBoxHeightValue.ToObject<int>() : 0;
+            var drawLayer = bouncePacketData.TryGetValue("drawLayer", out var drawLayerValue) ? drawLayerValue.ToObject<float>() : 0f;
+
+            var skin = bouncePacketData.TryGetValue("skin", out var skinValue) ? skinValue.ToObject<int>() : 0;
+            var accessory = bouncePacketData.TryGetValue("accessory", out var accessoryValue) ? accessoryValue.ToObject<int>() : 0;
+
+            var hair = bouncePacketData.TryGetValue("hair", out var hairValue) ? hairValue.ToObject<int>() : 0;
+            var hairColorRed = bouncePacketData.TryGetValue("hairColorRed", out var hairColorRedValue) ? hairColorRedValue.ToObject<int>() : 0;
+            var hairColorGreen = bouncePacketData.TryGetValue("hairColorGreen", out var hairColorGreenValue) ? hairColorGreenValue.ToObject<int>() : 0;
+            var hairColorBlue = bouncePacketData.TryGetValue("hairColorBlue", out var hairColorBlueValue) ? hairColorBlueValue.ToObject<int>() : 0;
+
+            var eyes = bouncePacketData.TryGetValue("eyes", out var eyesValue) ? eyesValue.ToObject<int>() : 0;
+            var eyeColorRed = bouncePacketData.TryGetValue("eyeColorRed", out var eyeColorRedValue) ? eyeColorRedValue.ToObject<int>() : 0;
+            var eyeColorGreen = bouncePacketData.TryGetValue("eyeColorGreen", out var eyeColorGreenValue) ? eyeColorGreenValue.ToObject<int>() : 0;
+            var eyeColorBlue = bouncePacketData.TryGetValue("eyeColorBlue", out var eyeColorBlueValue) ? eyeColorBlueValue.ToObject<int>() : 0;
+
+            var hatId = bouncePacketData.TryGetValue("hatId", out var hatIdValue) ? hatIdValue.ToObject<string>() : "";
+            var shirtId = bouncePacketData.TryGetValue("shirtId", out var shirtIdValue) ? shirtIdValue.ToObject<string>() : "";
+            var pantsId = bouncePacketData.TryGetValue("pantsId", out var pantsIdValue) ? pantsIdValue.ToObject<string>() : "";
+            var shoesId = bouncePacketData.TryGetValue("shoesId", out var shoesIdValue) ? shoesIdValue.ToObject<string>() : "";
+
+            appearance = new PlayerAppearance()
+            {
+                IsMale = isMale,
+                BoundingBoxHeight = boundingBoxHeight,
+                DrawLayer = drawLayer,
+
+                Skin = skin,
+                Accessory = accessory,
+
+                Hair = hair,
+                HairColorRed = hairColorRed,
+                HairColorGreen = hairColorGreen,
+                HairColorBlue = hairColorBlue,
+
+                CurrentEyes = eyes,
+                EyeColorRed = eyeColorRed,
+                EyeColorGreen = eyeColorGreen,
+                EyeColorBlue = eyeColorBlue,
+
+                HatId = hatId,
+                ShirtId = shirtId,
+                PantsId = pantsId,
+                ShoesId = shoesId,
+            };
+
+            return appearance;
+        }
+    }
+}
