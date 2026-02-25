@@ -61,7 +61,7 @@ namespace StardewArchipelago
         /// <summary>
         /// Enable the feature to see other Stardew Players from the multiworld in your own game
         /// </summary>
-        public bool MultiplayerVision { get; set; } = true;
+        public bool MultiplayerVision { get; set; } = false;
 
         /// <summary>
         /// Whether to Anonymize Player names in the chatbox
