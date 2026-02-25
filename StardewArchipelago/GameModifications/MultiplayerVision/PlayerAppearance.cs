@@ -8,8 +8,6 @@ namespace StardewArchipelago.GameModifications.MultiplayerVision
 {
     public class PlayerAppearance
     {
-        public float DrawLayer { get; set; }
-        public int BoundingBoxHeight { get; set; }
         public bool IsMale { get; set; }
 
         public int Skin { get; set; }
@@ -19,10 +17,13 @@ namespace StardewArchipelago.GameModifications.MultiplayerVision
         public int HairColorGreen { get; set; }
         public int HairColorBlue { get; set; }
 
-        public int CurrentEyes { get; set; }
         public int EyeColorRed { get; set; }
         public int EyeColorGreen { get; set; }
         public int EyeColorBlue { get; set; }
+
+        public int PantsColorRed { get; set; }
+        public int PantsColorGreen { get; set; }
+        public int PantsColorBlue { get; set; }
 
         public int Accessory { get; set; }
 

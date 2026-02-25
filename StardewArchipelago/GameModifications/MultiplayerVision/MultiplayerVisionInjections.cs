@@ -26,6 +26,7 @@ namespace StardewArchipelago.GameModifications.MultiplayerVision
         private static Dictionary<string, VisiblePlayer> _visiblePlayers;
         private static Dictionary<string, PlayerAppearance> _playerAppearances;
 
+        private static DateTime _timeLastBroadcast;
         private const float EPSILON = 0.1f;
 
         public static void Initialize(ILogger logger, StardewArchipelagoClient archipelago)
@@ -34,6 +35,7 @@ namespace StardewArchipelago.GameModifications.MultiplayerVision
             _archipelago = archipelago;
             _visiblePlayers = new Dictionary<string, VisiblePlayer>();
             _playerAppearances = new Dictionary<string, PlayerAppearance>();
+            _timeLastBroadcast = DateTime.MinValue;
         }
 
         public static void OnUpdateTicked(UpdateTickedEventArgs eventArgs)
@@ -45,7 +47,7 @@ namespace StardewArchipelago.GameModifications.MultiplayerVision
 
             if (eventArgs.IsMultipleOf(VisiblePlayer.UPDATE_FREQUENCY_TICKS))
             {
-                SendMultiplayerVision(eventArgs.IsMultipleOf(VisiblePlayer.BROADCAST_APPEARANCE_TICKS));
+                SendMultiplayerVision();
             }
         }
 
@@ -63,7 +65,7 @@ namespace StardewArchipelago.GameModifications.MultiplayerVision
             }
         }
 
-        public static void SendMultiplayerVision(bool broadcastAppearance)
+        public static void SendMultiplayerVision()
         {
             try
             {
@@ -87,8 +89,6 @@ namespace StardewArchipelago.GameModifications.MultiplayerVision
                     MapName = Game1.currentLocation.Name,
                     Position = Game1.player.Position,
                     Velocity = new Vector2(xVelocity, yVelocity),
-                    Flip = farmer.FarmerSprite.CurrentAnimationFrame.flip,
-                    CurrentAnimationIndex = farmer.FarmerSprite.currentAnimationIndex,
                     FacingDirection = farmer.FacingDirection,
                     IsGlowing = farmer.isGlowing,
                     XOffset = farmer.xOffset,
@@ -98,13 +98,14 @@ namespace StardewArchipelago.GameModifications.MultiplayerVision
                     Rotation = farmer.rotation,
                 };
 
-                if (broadcastAppearance)
+                var timeSinceLastBroadcast = DateTime.Now - _timeLastBroadcast;
+                if (timeSinceLastBroadcast.TotalSeconds >= VisiblePlayer.BROADCAST_APPEARANCE_SECONDS)
                 {
+                    _timeLastBroadcast = DateTime.Now;
+                    // _logger.LogWarning($"{DateTime.Now} - Broadcasting appearance...");
                     var appearance = new PlayerAppearance()
                     {
                         IsMale = farmer.IsMale,
-                        BoundingBoxHeight = farmer.GetBoundingBox().Height,
-                        DrawLayer = farmer.getDrawLayer(),
 
                         Skin = farmer.skin.Value,
                         Accessory = farmer.accessory.Value,
@@ -114,10 +115,13 @@ namespace StardewArchipelago.GameModifications.MultiplayerVision
                         HairColorGreen = farmer.hairstyleColor.G,
                         HairColorBlue = farmer.hairstyleColor.B,
 
-                        CurrentEyes = farmer.currentEyes,
                         EyeColorRed = farmer.newEyeColor.R,
                         EyeColorGreen = farmer.newEyeColor.G,
                         EyeColorBlue = farmer.newEyeColor.B,
+
+                        PantsColorRed = farmer.pantsColor.R,
+                        PantsColorGreen = farmer.pantsColor.G,
+                        PantsColorBlue = farmer.pantsColor.B,
 
                         HatId = farmer.hat.Value?.ItemId ?? "",
                         ShirtId = farmer.GetShirtId(),
@@ -181,7 +185,7 @@ namespace StardewArchipelago.GameModifications.MultiplayerVision
 
         public static void HandleBouncePacket(BouncePacket bouncePacket)
         {
-            if (!ModEntry.Instance.Config.MultiplayerVision)
+            if (!ModEntry.Instance.Config.MultiplayerVision || _logger == null)
             {
                 return;
             }
@@ -193,7 +197,7 @@ namespace StardewArchipelago.GameModifications.MultiplayerVision
 
             var identifier = bouncePacket.Data.TryGetValue("identifier", out var identifierValue) ? identifierValue.ToObject<string>() : "";
             var mapName = bouncePacket.Data.TryGetValue("mapName", out var mapNameValue) ? mapNameValue.ToObject<string>() : "";
-            if (string.IsNullOrWhiteSpace(identifier) || string.IsNullOrWhiteSpace(mapName)) // || identifier.Contains(ModEntry.Instance.UniqueIdentifier))
+            if (string.IsNullOrWhiteSpace(identifier) || string.IsNullOrWhiteSpace(mapName) || identifier.Contains(ModEntry.Instance.UniqueIdentifier))
             {
                 return;
             }
@@ -202,8 +206,6 @@ namespace StardewArchipelago.GameModifications.MultiplayerVision
             var positionY = bouncePacket.Data.TryGetValue("positionY", out var positionYValue) ? positionYValue.ToObject<float>() : 0f;
             var velocityX = bouncePacket.Data.TryGetValue("velocityX", out var velocityXValue) ? velocityXValue.ToObject<float>() : 0f;
             var velocityY = bouncePacket.Data.TryGetValue("velocityY", out var velocityYValue) ? velocityYValue.ToObject<float>() : 0f;
-            var currentAnimationIndex = bouncePacket.Data.TryGetValue("currentAnimationIndex", out var currentAnimationIndexValue) ? currentAnimationIndexValue.ToObject<int>() : 0;
-            var flip = bouncePacket.Data.TryGetValue("flip", out var flipValue) ? flipValue.ToObject<int>() >= 1 : false;
             var facingDirection = bouncePacket.Data.TryGetValue("facingDirection", out var facingDirectionValue) ? facingDirectionValue.ToObject<int>() : 0;
             var isGlowing = bouncePacket.Data.TryGetValue("isGlowing", out var isGlowingValue) ? isGlowingValue.ToObject<int>() >= 1 : false;
             var xOffset = bouncePacket.Data.TryGetValue("xOffset", out var xOffsetValue) ? xOffsetValue.ToObject<float>() : 0f;
@@ -214,8 +216,6 @@ namespace StardewArchipelago.GameModifications.MultiplayerVision
 
             var visiblePlayer = new VisiblePlayer()
             {
-                CurrentAnimationIndex = currentAnimationIndex,
-                Flip = flip,
                 UniqueIdentifier = identifier,
                 MapName = mapName,
                 Position = new Vector2(positionX, positionY),
@@ -242,6 +242,10 @@ namespace StardewArchipelago.GameModifications.MultiplayerVision
 
             if (_visiblePlayers.ContainsKey(identifier))
             {
+                //if (appearance == null)
+                //{
+                //    visiblePlayer.Farmer = _visiblePlayers[identifier].Farmer;
+                //}
                 _visiblePlayers[identifier] = visiblePlayer;
             }
             else
@@ -266,8 +270,6 @@ namespace StardewArchipelago.GameModifications.MultiplayerVision
             }
 
             var isMale = isMaleValue.ToObject<int>() >= 1;
-            var boundingBoxHeight = bouncePacketData.TryGetValue("boundingBoxHeight", out var boundingBoxHeightValue) ? boundingBoxHeightValue.ToObject<int>() : 0;
-            var drawLayer = bouncePacketData.TryGetValue("drawLayer", out var drawLayerValue) ? drawLayerValue.ToObject<float>() : 0f;
 
             var skin = bouncePacketData.TryGetValue("skin", out var skinValue) ? skinValue.ToObject<int>() : 0;
             var accessory = bouncePacketData.TryGetValue("accessory", out var accessoryValue) ? accessoryValue.ToObject<int>() : 0;
@@ -277,7 +279,6 @@ namespace StardewArchipelago.GameModifications.MultiplayerVision
             var hairColorGreen = bouncePacketData.TryGetValue("hairColorGreen", out var hairColorGreenValue) ? hairColorGreenValue.ToObject<int>() : 0;
             var hairColorBlue = bouncePacketData.TryGetValue("hairColorBlue", out var hairColorBlueValue) ? hairColorBlueValue.ToObject<int>() : 0;
 
-            var eyes = bouncePacketData.TryGetValue("eyes", out var eyesValue) ? eyesValue.ToObject<int>() : 0;
             var eyeColorRed = bouncePacketData.TryGetValue("eyeColorRed", out var eyeColorRedValue) ? eyeColorRedValue.ToObject<int>() : 0;
             var eyeColorGreen = bouncePacketData.TryGetValue("eyeColorGreen", out var eyeColorGreenValue) ? eyeColorGreenValue.ToObject<int>() : 0;
             var eyeColorBlue = bouncePacketData.TryGetValue("eyeColorBlue", out var eyeColorBlueValue) ? eyeColorBlueValue.ToObject<int>() : 0;
@@ -287,11 +288,13 @@ namespace StardewArchipelago.GameModifications.MultiplayerVision
             var pantsId = bouncePacketData.TryGetValue("pantsId", out var pantsIdValue) ? pantsIdValue.ToObject<string>() : "";
             var shoesId = bouncePacketData.TryGetValue("shoesId", out var shoesIdValue) ? shoesIdValue.ToObject<string>() : "";
 
+            var pantsColorRed = bouncePacketData.TryGetValue("pantsColorRed", out var pantsColorRedValue) ? pantsColorRedValue.ToObject<int>() : 0;
+            var pantsColorGreen = bouncePacketData.TryGetValue("pantsColorGreen", out var pantsColorGreenValue) ? pantsColorGreenValue.ToObject<int>() : 0;
+            var pantsColorBlue = bouncePacketData.TryGetValue("pantsColorBlue", out var pantsColorBlueValue) ? pantsColorBlueValue.ToObject<int>() : 0;
+
             appearance = new PlayerAppearance()
             {
                 IsMale = isMale,
-                BoundingBoxHeight = boundingBoxHeight,
-                DrawLayer = drawLayer,
 
                 Skin = skin,
                 Accessory = accessory,
@@ -301,10 +304,13 @@ namespace StardewArchipelago.GameModifications.MultiplayerVision
                 HairColorGreen = hairColorGreen,
                 HairColorBlue = hairColorBlue,
 
-                CurrentEyes = eyes,
                 EyeColorRed = eyeColorRed,
                 EyeColorGreen = eyeColorGreen,
                 EyeColorBlue = eyeColorBlue,
+
+                PantsColorRed = pantsColorRed,
+                PantsColorGreen = pantsColorGreen,
+                PantsColorBlue = pantsColorBlue,
 
                 HatId = hatId,
                 ShirtId = shirtId,

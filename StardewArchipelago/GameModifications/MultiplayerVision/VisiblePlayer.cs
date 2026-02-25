@@ -20,17 +20,21 @@ namespace StardewArchipelago.GameModifications.MultiplayerVision
 {
     public class VisiblePlayer
     {
-        public static uint UPDATE_FREQUENCY_TICKS = 15;
-        public static uint DRAW_DURATION_TICKS = UPDATE_FREQUENCY_TICKS + 5;
-        public static uint BROADCAST_APPEARANCE_TICKS = DRAW_DURATION_TICKS * 2 * 30;
+#if DEBUG
+        public static uint UPDATE_FREQUENCY_TICKS = 42;
+        public static uint DRAW_DURATION_TICKS = 60;
+        public static uint BROADCAST_APPEARANCE_SECONDS = 5;
+#else
+        public static uint UPDATE_FREQUENCY_TICKS = 42;
+        public static uint DRAW_DURATION_TICKS = 60;
+        public static uint BROADCAST_APPEARANCE_SECONDS = 60;
+#endif
 
         public string UniqueIdentifier { get; set; }
         public string MapName { get; set; }
         public Vector2 Position { get; set; }
         public uint RemainingTicks { get; set; }
         public Vector2 Velocity { get; set; }
-        public int CurrentAnimationIndex { get; set; }
-        public bool Flip { get; set; }
         public bool IsRidingHorse { get; set; }
         public int FacingDirection { get; set; }
         public float XOffset { get; set; }
@@ -39,7 +43,7 @@ namespace StardewArchipelago.GameModifications.MultiplayerVision
         public bool IsSitting { get; set; }
         public float Rotation { get; set; }
 
-        private Farmer Farmer { get; set; }
+        public Farmer Farmer { get; set; }
 
         public PlayerAppearance Appearance { get; set; }
 
@@ -78,12 +82,30 @@ namespace StardewArchipelago.GameModifications.MultiplayerVision
 
             InitializeFarmer();
 
+            if (Velocity.X > 0)
+            {
+                Farmer.movementDirections.Add(1);
+            }
+            else if (Velocity.X < 0)
+            {
+                Farmer.movementDirections.Add(3);
+            }
+            if (Velocity.Y > 0)
+            {
+                Farmer.movementDirections.Add(2);
+            }
+            else if (Velocity.Y < 0)
+            {
+                Farmer.movementDirections.Add(0);
+            }
             Farmer.Position = Position;
-            Farmer.FarmerSprite.currentAnimationIndex = CurrentAnimationIndex;
+            //Farmer.FarmerSprite.currentAnimationIndex = CurrentAnimationIndex;
             // Farmer.FarmerSprite.CurrentAnimationFrame.flip = Flip;
             Farmer.FacingDirection = FacingDirection;
             Farmer.FarmerSprite.faceDirection(FacingDirection);
-            var drawLayer = Appearance.DrawLayer;
+            Farmer.running = Math.Sqrt(Math.Pow(Velocity.X, 2) + Math.Pow(Velocity.Y, 2)) >= 5;
+            Farmer.updateMovementAnimation(Game1.currentGameTime);
+            var drawLayer = Game1.player.getDrawLayer();
             if (IsRidingHorse)
             {
                 //this.mount.SyncPositionToRider();
@@ -95,7 +117,7 @@ namespace StardewArchipelago.GameModifications.MultiplayerVision
             }
 
             var layerDepth = (double)FarmerRenderer.GetLayerDepth(0.0f, FarmerRenderer.FarmerSpriteLayers.MAX);
-            var origin = new Vector2(XOffset, (float)(((double)YOffset + 128.0 - (Appearance.BoundingBoxHeight / 2)) / 4.0 + 4.0));
+            var origin = new Vector2(XOffset, (float)(((double)YOffset + 128.0 - (Farmer.GetBoundingBox().Height / 2)) / 4.0 + 4.0));
             var tile = Game1.currentLocation.Map.RequireLayer("Buildings").PickTile(new Location((int)Farmer.Position.X, (int)Farmer.Position.Y), Game1.viewport.Size);
             var num1 = (float)(layerDepth * 1.0);
             var num2 = (float)(layerDepth * 2.0);
@@ -111,16 +133,17 @@ namespace StardewArchipelago.GameModifications.MultiplayerVision
                 }
             }
             var nullable = tile?.TileIndexProperties.ContainsKey("Shadow");
+            var mask = new Color(255, 255, 255, 255);
             if ((!nullable.HasValue ? 0 : (nullable.GetValueOrDefault() ? 1 : 0)) == 0)
             {
                 if (IsSitting || !Game1.shouldTimePass() || !Farmer.temporarilyInvincible || !Farmer.flashDuringThisTemporaryInvincibility || Farmer.temporaryInvincibilityTimer % 100 < 50)
                 {
-                    Farmer.FarmerRenderer.draw(b, Farmer.FarmerSprite, Farmer.FarmerSprite.SourceRect, Farmer.getLocalPosition(Game1.viewport) + Farmer.jitter + new Vector2(0.0f, (float)Farmer.yJumpOffset), origin, drawLayer, Color.White, Rotation, Farmer);
+                    Farmer.FarmerRenderer.draw(b, Farmer.FarmerSprite, Farmer.FarmerSprite.SourceRect, Farmer.getLocalPosition(Game1.viewport) + Farmer.jitter + new Vector2(0.0f, (float)Farmer.yJumpOffset), origin, drawLayer, mask, Rotation, Farmer);
                 }
             }
             else
             {
-                Farmer.FarmerRenderer.draw(b, Farmer.FarmerSprite, Farmer.FarmerSprite.SourceRect, Farmer.getLocalPosition(Game1.viewport), origin, drawLayer, Color.White, Rotation, Farmer);
+                Farmer.FarmerRenderer.draw(b, Farmer.FarmerSprite, Farmer.FarmerSprite.SourceRect, Farmer.getLocalPosition(Game1.viewport), origin, drawLayer, mask, Rotation, Farmer);
                 Farmer.FarmerRenderer.draw(b, Farmer.FarmerSprite, Farmer.FarmerSprite.SourceRect, Farmer.getLocalPosition(Game1.viewport), origin, drawLayer + num2, Color.Black * 0.25f, Rotation, Farmer);
             }
 
@@ -162,7 +185,22 @@ namespace StardewArchipelago.GameModifications.MultiplayerVision
             }
 
             // For Debug
-            Position = new Vector2(Position.X - 128, Position.Y);
+            //if (Velocity.X > 0)
+            //{
+            //    Position = new Vector2(Position.X - 128, Position.Y);
+            //}
+            //else if (Velocity.X < 0)
+            //{
+            //    Position = new Vector2(Position.X + 128, Position.Y);
+            //}
+            //if (Velocity.Y > 0)
+            //{
+            //    Position = new Vector2(Position.X, Position.Y - 128);
+            //}
+            //else if (Velocity.Y < 0)
+            //{
+            //    Position = new Vector2(Position.X, Position.Y + 128);
+            //}
             //Appearance.Hair = 52; // Bald Hair
             //Appearance.Skin = 3;
             //Appearance.CurrentEyes = 3;
@@ -171,14 +209,14 @@ namespace StardewArchipelago.GameModifications.MultiplayerVision
             //Appearance.HatId = 3;
 
             Farmer = Game1.player.CreateFakeEventFarmer();
-            Farmer.FarmerSprite.CurrentAnimation = Game1.player.FarmerSprite.CurrentAnimation.Select(x => x.DeepClone()).ToList();
+            // Farmer.FarmerSprite.CurrentAnimation = Game1.player.FarmerSprite.CurrentAnimation.Select(x => x.DeepClone()).ToList();
             Farmer.Gender = Appearance.IsMale ? Gender.Male : Gender.Female;
 
             Farmer.changeSkinColor(Appearance.Skin);
             Farmer.changeHairStyle(Appearance.Hair);
             var hairColor = new Color(Appearance.HairColorRed, Appearance.HairColorGreen, Appearance.HairColorBlue);
             Farmer.changeHairColor(hairColor);
-            Farmer.currentEyes = Appearance.CurrentEyes;
+            Farmer.currentEyes = 0;
             var eyeColor = new Color(Appearance.EyeColorRed, Appearance.EyeColorGreen, Appearance.EyeColorBlue);
             Farmer.changeEyeColor(eyeColor);
             Farmer.changeAccessory(Appearance.Accessory);
@@ -192,10 +230,19 @@ namespace StardewArchipelago.GameModifications.MultiplayerVision
                 Farmer.Equip(ItemRegistry.Create<Hat>("(H)" + Appearance.HatId), Farmer.hat);
             }
             Farmer.changeShirt(Appearance.ShirtId);
-            Farmer.changePantStyle(Appearance.PantsId);
-            Farmer.changeShoeColor(Appearance.ShoesId);
 
-            Farmer.Position = Position;
+            if (string.IsNullOrWhiteSpace(Appearance.PantsId))
+            {
+                Farmer.Equip(null, Farmer.pantsItem);
+            }
+            else
+            {
+                Farmer.Equip(ItemRegistry.Create<Clothing>("(P)" + Appearance.PantsId), Farmer.pantsItem);
+            }
+            Farmer.changePantStyle(Appearance.PantsId);
+            var pantsColor = new Color(Appearance.PantsColorRed, Appearance.PantsColorGreen, Appearance.PantsColorBlue);
+            Farmer.changePantsColor(pantsColor);
+            Farmer.changeShoeColor(Appearance.ShoesId);
         }
     }
 }

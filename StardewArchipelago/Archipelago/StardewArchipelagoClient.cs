@@ -84,6 +84,10 @@ namespace StardewArchipelago.Archipelago
 
         public override ConnectionResult ConnectToMultiworld(ArchipelagoConnectionInfo connectionInfo)
         {
+            if (ModEntry.Instance.Config.MultiplayerVision)
+            {
+                connectionInfo.ConnectionTags.Add(MULTIPLAYER_VISION_TAG);
+            }
             var baseResult = base.ConnectToMultiworld(connectionInfo);
             if (!baseResult.Success)
             {
@@ -495,8 +499,6 @@ namespace StardewArchipelago.Archipelago
             };
             var dataInt = new Dictionary<string, int>()
             {
-                {"flip", visiblePlayer.Flip ? 1 : 0},
-                {"currentAnimationIndex", visiblePlayer.CurrentAnimationIndex},
                 {"facingDirection", visiblePlayer.FacingDirection},
                 {"isGlowing", visiblePlayer.IsGlowing ? 1 : 0},
                 {"isSitting", visiblePlayer.IsSitting ? 1 : 0},
@@ -524,10 +526,8 @@ namespace StardewArchipelago.Archipelago
                 dataString.Add("shoesId", appearance.ShoesId);
 
                 dataInt.Add("isMale", appearance.IsMale ? 1 : 0);
-                dataInt.Add("boundingBoxHeight", appearance.BoundingBoxHeight);
                 dataInt.Add("skin", appearance.Skin);
                 dataInt.Add("hair", appearance.Hair);
-                dataInt.Add("eyes", appearance.CurrentEyes);
                 dataInt.Add("accessory", appearance.Accessory);
 
                 dataInt.Add("hairColorRed", appearance.HairColorRed);
@@ -537,7 +537,10 @@ namespace StardewArchipelago.Archipelago
                 dataInt.Add("eyeColorRed", appearance.EyeColorRed);
                 dataInt.Add("eyeColorGreen", appearance.EyeColorGreen);
                 dataInt.Add("eyeColorBlue", appearance.EyeColorBlue);
-                dataFloat.Add("drawLayer", appearance.DrawLayer);
+
+                dataInt.Add("pantsColorRed", appearance.PantsColorRed);
+                dataInt.Add("pantsColorGreen", appearance.PantsColorGreen);
+                dataInt.Add("pantsColorBlue", appearance.PantsColorBlue);
             }
 
             SendBouncePacket(tags, dataString, dataInt, dataFloat);

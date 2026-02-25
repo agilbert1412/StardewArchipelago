@@ -63,25 +63,25 @@
       },
       "KaitoKid.ArchipelagoUtilities.AssetDownloader": {
         "type": "Transitive",
-        "resolved": "3.1.10",
-        "contentHash": "s9zIS/Qtuq4C2hvTqMm0cVATr2z+qQokyHbnm8YKXA9VXLg5TNCIDSINOgXYVQrmh5ZcSwH2mbXeYWW/tkPU5Q==",
+        "resolved": "3.1.11",
+        "contentHash": "9f1EbbdpzCAwpT5VBfxuQ4+DME0AwKKRzeG8KtusyTMEkfE0gumTRnoQKrcIp+nhI2AZHbIsGf6KNEspkoTR6g==",
         "dependencies": {
-          "KaitoKid.Utilities.Interfaces": "3.1.10"
+          "KaitoKid.Utilities.Interfaces": "3.1.11"
         }
       },
       "KaitoKid.ArchipelagoUtilities.Net": {
         "type": "Transitive",
-        "resolved": "3.1.10",
-        "contentHash": "krN1RwEwnhPMA2T8Vbx3TkLHrMJ4jX+4DmRI83N/mTJqENFLAUaWkkhfH9+zFJV72E2XUxGtrcOPZKhtb91nqg==",
+        "resolved": "3.1.11",
+        "contentHash": "riD9/u5fYc6N/l5OAIzpmr8VAA43gIsFSBBfPvMyAioazM2MIa5MjxzTUQDdQM4+WzGVASRpch/b6rEvkTiYpQ==",
         "dependencies": {
           "Archipelago.MultiClient.Net": "6.6.0",
-          "KaitoKid.Utilities.Interfaces": "3.1.10"
+          "KaitoKid.Utilities.Interfaces": "3.1.11"
         }
       },
       "KaitoKid.Utilities.Interfaces": {
         "type": "Transitive",
-        "resolved": "3.1.10",
-        "contentHash": "14GvLUhMK8CvD6I8fxBZqmvcqoioZhKA/u3KtJpuV8eWabzyFCurN420sSfShYoQ9Dbm/q1rBWNp9pDRlVZZQA=="
+        "resolved": "3.1.11",
+        "contentHash": "QNqC5yQX7fIJUx2n5VtPLghNQ6v+cVbGXKZX5b6qQBeqwcqUBn94nsskITQcCMUxrpkHG+ASNz4Zqp3H7EQ8SA=="
       },
       "Microsoft.CodeCoverage": {
         "type": "Transitive",
@@ -596,8 +596,8 @@
         "dependencies": {
           "Archipelago.Gifting.Net": "[0.4.4, )",
           "Archipelago.MultiClient.Net": "[6.7.0, )",
-          "KaitoKid.ArchipelagoUtilities.AssetDownloader": "[3.1.10, )",
-          "KaitoKid.ArchipelagoUtilities.Net": "[3.1.10, )",
+          "KaitoKid.ArchipelagoUtilities.AssetDownloader": "[3.1.11, )",
+          "KaitoKid.ArchipelagoUtilities.Net": "[3.1.11, )",
           "Pathoschild.Stardew.ModBuildConfig": "[4.4.0, )"
         }
       }
