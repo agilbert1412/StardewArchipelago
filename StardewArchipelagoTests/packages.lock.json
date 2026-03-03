@@ -63,25 +63,25 @@
       },
       "KaitoKid.ArchipelagoUtilities.AssetDownloader": {
         "type": "Transitive",
-        "resolved": "3.1.9",
-        "contentHash": "qOCE/qpsUVRhYbo4jNV/X/ezT/38QLcPTdEo8EZBFanKj+ldaKaZlXAEmcYieMh4WspI9jFkNPXObko3wy9SHg==",
+        "resolved": "3.1.11",
+        "contentHash": "9f1EbbdpzCAwpT5VBfxuQ4+DME0AwKKRzeG8KtusyTMEkfE0gumTRnoQKrcIp+nhI2AZHbIsGf6KNEspkoTR6g==",
         "dependencies": {
-          "KaitoKid.Utilities.Interfaces": "3.1.9"
+          "KaitoKid.Utilities.Interfaces": "3.1.11"
         }
       },
       "KaitoKid.ArchipelagoUtilities.Net": {
         "type": "Transitive",
-        "resolved": "3.1.9",
-        "contentHash": "kYcEIOjetv6xqSeCXkWc2iN1twyK2kLcJhUPCB1/5CRePVfYPbL+gBQH9Xcz8lyKUi+X/+sMGLbb5o85fn0a1Q==",
+        "resolved": "3.1.11",
+        "contentHash": "riD9/u5fYc6N/l5OAIzpmr8VAA43gIsFSBBfPvMyAioazM2MIa5MjxzTUQDdQM4+WzGVASRpch/b6rEvkTiYpQ==",
         "dependencies": {
           "Archipelago.MultiClient.Net": "6.6.0",
-          "KaitoKid.Utilities.Interfaces": "3.1.9"
+          "KaitoKid.Utilities.Interfaces": "3.1.11"
         }
       },
       "KaitoKid.Utilities.Interfaces": {
         "type": "Transitive",
-        "resolved": "3.1.9",
-        "contentHash": "v3JJeBuSPABi4luhusTbCbDa9FTKvHkRFw1qFCXfehQGzgYNCODFaIwWXDb1WcEri7yO6IYfW6Be34HsbmnjCA=="
+        "resolved": "3.1.11",
+        "contentHash": "QNqC5yQX7fIJUx2n5VtPLghNQ6v+cVbGXKZX5b6qQBeqwcqUBn94nsskITQcCMUxrpkHG+ASNz4Zqp3H7EQ8SA=="
       },
       "Microsoft.CodeCoverage": {
         "type": "Transitive",
@@ -596,8 +596,8 @@
         "dependencies": {
           "Archipelago.Gifting.Net": "[0.4.4, )",
           "Archipelago.MultiClient.Net": "[6.7.0, )",
-          "KaitoKid.ArchipelagoUtilities.AssetDownloader": "[3.1.9, )",
-          "KaitoKid.ArchipelagoUtilities.Net": "[3.1.9, )",
+          "KaitoKid.ArchipelagoUtilities.AssetDownloader": "[3.1.11, )",
+          "KaitoKid.ArchipelagoUtilities.Net": "[3.1.11, )",
           "Pathoschild.Stardew.ModBuildConfig": "[4.4.0, )"
         }
       }

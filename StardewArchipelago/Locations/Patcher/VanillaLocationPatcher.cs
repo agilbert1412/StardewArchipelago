@@ -805,8 +805,23 @@ namespace StardewArchipelago.Locations.Patcher
             }
 
             _harmony.Patch(
+                original: AccessTools.Method(typeof(GameLocation), nameof(GameLocation.showPrairieKingMenu)),
+                prefix: new HarmonyMethod(typeof(JotPKInjections), nameof(JotPKInjections.ShowPrairieKingMenu_AlwaysShowMenu_Prefix))
+            );
+
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(GameLocation), nameof(GameLocation.answerDialogueAction)),
+                prefix: new HarmonyMethod(typeof(JotPKInjections), nameof(JotPKInjections.AnswerDialogueAction_JotPKStartFromLevels_Prefix))
+            );
+
+            _harmony.Patch(
                 original: AccessTools.Method(typeof(AbigailGame), nameof(AbigailGame.usePowerup)),
                 prefix: new HarmonyMethod(typeof(JotPKInjections), nameof(JotPKInjections.UsePowerup_PrairieKingBossBeaten_Prefix))
+            );
+
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(AbigailGame), nameof(AbigailGame.tick)),
+                postfix: new HarmonyMethod(typeof(JotPKInjections), nameof(JotPKInjections.Tick_Shopping_PostFix))
             );
 
             if (_archipelago.SlotData.ArcadeMachineLocations == ArcadeLocations.Victories)
@@ -833,11 +848,6 @@ namespace StardewArchipelago.Locations.Patcher
             _harmony.Patch(
                 original: AccessTools.Method(typeof(AbigailGame), nameof(AbigailGame.startShoppingLevel)),
                 postfix: new HarmonyMethod(typeof(JotPKInjections), nameof(JotPKInjections.StartShoppingLevel_ShopBasedOnSentChecks_PostFix))
-            );
-
-            _harmony.Patch(
-                original: AccessTools.Method(typeof(AbigailGame), nameof(AbigailGame.tick)),
-                postfix: new HarmonyMethod(typeof(JotPKInjections), nameof(JotPKInjections.Tick_Shopping_PostFix))
             );
         }
 

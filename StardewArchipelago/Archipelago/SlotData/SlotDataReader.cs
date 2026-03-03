@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using KaitoKid.Utilities.Interfaces;
+using StardewValley;
 
 namespace StardewArchipelago.Archipelago.SlotData
 {
@@ -89,9 +90,15 @@ namespace StardewArchipelago.Archipelago.SlotData
             return defaultValue;
         }
 
-        public StartWithout GetSlotStartWithoutSetting()
+        public StartWithout GetSlotStartWithoutSetting(ToolProgression toolOption)
         {
-            return GetSlotOptionSetSetting<StartWithout>(SlotDataKeys.START_WITHOUT);
+            var startWithout = GetSlotOptionSetSetting<StartWithout>(SlotDataKeys.START_WITHOUT);
+            if (!toolOption.HasFlag(ToolProgression.Progressive))
+            {
+                var mask = ~StartWithout.Tools;
+                startWithout &= mask;
+            }
+            return startWithout;
         }
 
         public Chefsanity GetSlotChefsanitySetting()

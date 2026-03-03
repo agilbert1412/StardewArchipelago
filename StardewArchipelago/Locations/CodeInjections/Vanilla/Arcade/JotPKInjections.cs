@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using KaitoKid.ArchipelagoUtilities.Net;
 using KaitoKid.ArchipelagoUtilities.Net.Constants;
 using Microsoft.Xna.Framework;
@@ -6,8 +7,10 @@ using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Minigames;
 using KaitoKid.Utilities.Interfaces;
+using Netcode;
 using StardewArchipelago.Archipelago;
 using StardewArchipelago.Archipelago.SlotData.SlotEnums;
+using StardewArchipelago.Serialization;
 
 namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Arcade
 {
@@ -54,6 +57,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Arcade
         private static IModHelper _helper;
         private static StardewArchipelagoClient _archipelago;
         private static LocationChecker _locationChecker;
+        private static ArchipelagoStateDto _state;
         private static int _bootsLevel;
         private static int _gunLevel;
         private static int _ammoLevel;
@@ -61,12 +65,216 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Arcade
         private static int _gunItemOffered = -1;
         private static int _ammoItemOffered = -1;
 
-        public static void Initialize(ILogger logger, IModHelper helper, StardewArchipelagoClient archipelago, LocationChecker locationChecker)
+        public static void Initialize(ILogger logger, IModHelper helper, StardewArchipelagoClient archipelago, LocationChecker locationChecker, ArchipelagoStateDto state)
         {
             _logger = logger;
             _helper = helper;
             _archipelago = archipelago;
             _locationChecker = locationChecker;
+            _state = state;
+        }
+
+        // public void showPrairieKingMenu()
+        public static bool ShowPrairieKingMenu_AlwaysShowMenu_Prefix(GameLocation __instance)
+        {
+            try
+            {
+                var shouldOfferContinue = Game1.player.jotpkProgress.Value != null;
+                var canStartAhead = _state.MaxJotPKLevelBeaten >= 5;
+                if (!shouldOfferContinue && !canStartAhead)
+                {
+                    Game1.currentMinigame = new AbigailGame();
+                    return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
+                }
+
+                var answerChoices = new List<Response>();
+
+                if (shouldOfferContinue)
+                {
+                    answerChoices.Add(new Response("Continue", Game1.content.LoadString("Strings\\Locations:Saloon_Arcade_Cowboy_Continue")));
+                }
+
+                answerChoices.Add(new Response("NewGame", Game1.content.LoadString("Strings\\Locations:Saloon_Arcade_Cowboy_NewGame")));
+                answerChoices.Add(new Response("Exit", Game1.content.LoadString("Strings\\Locations:Saloon_Arcade_Minecart_Exit")));
+
+                __instance.createQuestionDialogue(Game1.content.LoadString("Strings\\Locations:Saloon_Arcade_Cowboy_Menu"), answerChoices.ToArray(), "CowboyGame");
+                return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Failed in {nameof(ShowPrairieKingMenu_AlwaysShowMenu_Prefix)}:\n{ex}");
+                return MethodPrefix.RUN_ORIGINAL_METHOD;
+            }
+        }
+
+        // public virtual bool answerDialogueAction(string questionAndAnswer, string[] questionParams)
+        public static bool AnswerDialogueAction_JotPKStartFromLevels_Prefix(GameLocation __instance, string questionAndAnswer, string[] questionParams, ref bool __result)
+        {
+            try
+            {
+                if (questionAndAnswer == null)
+                {
+                    return MethodPrefix.RUN_ORIGINAL_METHOD;
+                }
+
+                if (questionAndAnswer == "CowboyGame_NewGame")
+                {
+                    PlayerPressedNewGame();
+                    __result = true;
+                    return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
+                }
+
+                if (questionAndAnswer.StartsWith("CowboyGame_Stage"))
+                {
+                    PlayerPressedNewGameSpecificStage(int.Parse(questionAndAnswer.Substring("CowboyGame_Stage".Length)));
+                    __result = true;
+                    return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
+                }
+
+                return MethodPrefix.RUN_ORIGINAL_METHOD;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Failed in {nameof(AnswerDialogueAction_JotPKStartFromLevels_Prefix)}:\n{ex}");
+                return MethodPrefix.RUN_ORIGINAL_METHOD;
+            }
+        }
+
+        private static void PlayerPressedNewGame()
+        {
+            var canStartAhead = _state.MaxJotPKLevelBeaten >= 5;
+            if (!canStartAhead)
+            {
+                Game1.player.jotpkProgress.Value = null;
+                Game1.currentMinigame = new AbigailGame();
+                return;
+            }
+
+            var answerChoices = new List<Response>();
+
+            answerChoices.Add(new Response("Stage1", "Stage 1 - Prairie"));
+            if (_state.MaxJotPKLevelBeaten >= 5)
+            {
+                answerChoices.Add(new Response("Stage2", "Stage 2 - Forest"));
+            }
+            if (_state.MaxJotPKLevelBeaten >= 9)
+            {
+                answerChoices.Add(new Response("Stage3", "Stage 3 - Graveyard"));
+            }
+
+            Game1.player.currentLocation.createQuestionDialogue("Start From?", answerChoices.ToArray(), "CowboyGame");
+        }
+
+        private static void PlayerPressedNewGameSpecificStage(int stage)
+        {
+            if (stage <= 1)
+            {
+                Game1.player.jotpkProgress.Value = null;
+            }
+            else if (stage == 2)
+            {
+                var progress = new AbigailGame.JOTPKProgress();
+                progress.world.Set(2);
+                progress.whichRound.Set(0);
+                progress.whichWave.Set(5);
+                progress.waveTimer.Set(80000);
+                progress.monsterChances.Set(GetMonsterChances(progress.whichRound.Value, progress.whichWave.Value));
+                Game1.player.jotpkProgress.Value = progress;
+            }
+            else
+            {
+                var progress = new AbigailGame.JOTPKProgress();
+                progress.world.Set(1);
+                progress.whichRound.Set(0);
+                progress.whichWave.Set(9);
+                progress.waveTimer.Set(80000);
+                progress.monsterChances.Set(GetMonsterChances(progress.whichRound.Value, progress.whichWave.Value));
+                Game1.player.jotpkProgress.Value = progress;
+            }
+
+            Game1.currentMinigame = new AbigailGame();
+        }
+
+        private static List<Vector2> GetMonsterChances(int whichRound, int whichWave)
+        {
+            var monsterChances = new List<Vector2>()
+            {
+                new(0.014f, 0.4f),
+                Vector2.Zero,
+                Vector2.Zero,
+                Vector2.Zero,
+                Vector2.Zero,
+                Vector2.Zero,
+                Vector2.Zero
+            };
+            switch (whichWave)
+            {
+                case 1:
+                case 2:
+                case 3:
+                    monsterChances[0] = new Vector2(monsterChances[0].X + 1f / 1000f, monsterChances[0].Y + 0.02f);
+                    if (whichWave > 1)
+                    {
+                        monsterChances[2] = new Vector2(monsterChances[2].X + 1f / 1000f, monsterChances[2].Y + 0.01f);
+                    }
+                    monsterChances[6] = new Vector2(monsterChances[6].X + 1f / 1000f, monsterChances[6].Y + 0.01f);
+                    if (whichRound > 0)
+                    {
+                        monsterChances[4] = new Vector2(1f / 500f, 0.1f);
+                    }
+                    break;
+                case 4:
+                case 5:
+                case 6:
+                case 7:
+                    if (monsterChances[5].Equals(Vector2.Zero))
+                    {
+                        monsterChances[5] = new Vector2(0.01f, 0.15f);
+                        if (whichRound > 0)
+                        {
+                            monsterChances[5] = new Vector2((float)(0.0099999997764825821 + whichRound * 0.0040000001899898052), (float)(0.15000000596046448 + whichRound * 0.039999999105930328));
+                        }
+                    }
+                    monsterChances[0] = Vector2.Zero;
+                    monsterChances[6] = Vector2.Zero;
+                    monsterChances[2] = new Vector2(monsterChances[2].X + 1f / 500f, monsterChances[2].Y + 0.02f);
+                    monsterChances[5] = new Vector2(monsterChances[5].X + 1f / 1000f, monsterChances[5].Y + 0.02f);
+                    monsterChances[1] = new Vector2(monsterChances[1].X + 0.0018f, monsterChances[1].Y + 0.08f);
+                    if (whichRound > 0)
+                    {
+                        monsterChances[4] = new Vector2(1f / 1000f, 0.1f);
+                    }
+                    break;
+                case 8:
+                case 9:
+                case 10:
+                case 11:
+                    monsterChances[5] = Vector2.Zero;
+                    monsterChances[1] = Vector2.Zero;
+                    monsterChances[2] = Vector2.Zero;
+                    if (monsterChances[3].Equals(Vector2.Zero))
+                    {
+                        monsterChances[3] = new Vector2(0.012f, 0.4f);
+                        if (whichRound > 0)
+                        {
+                            monsterChances[3] = new Vector2((float)(0.012000000104308128 + whichRound * 0.004999999888241291), (float)(0.40000000596046448 + whichRound * 0.075000002980232239));
+                        }
+                    }
+                    if (monsterChances[4].Equals(Vector2.Zero))
+                    {
+                        monsterChances[4] = new Vector2(3f / 1000f, 0.1f);
+                    }
+                    monsterChances[3] = new Vector2(monsterChances[3].X + 1f / 500f, monsterChances[3].Y + 0.05f);
+                    monsterChances[4] = new Vector2(monsterChances[4].X + 0.0015f, monsterChances[4].Y + 0.04f);
+                    if (whichWave == 11)
+                    {
+                        monsterChances[4] = new Vector2(monsterChances[4].X + 0.01f, monsterChances[4].Y + 0.04f);
+                        monsterChances[3] = new Vector2(monsterChances[3].X - 0.01f, monsterChances[3].Y + 0.04f);
+                    }
+                    break;
+            }
+
+            return monsterChances;
         }
 
         public static bool GetLootDrop_ExtraLoot_Prefix(AbigailGame.CowboyMonster __instance, ref int __result)
@@ -148,7 +356,17 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Arcade
                     return MethodPrefix.RUN_ORIGINAL_METHOD;
                 }
 
-                var whichCowboyWasBeaten = which == -1 ? JOTPK_COWBOY_1 : JOTPK_COWBOY_2;
+                string whichCowboyWasBeaten;
+                if (which == -1)
+                {
+                    whichCowboyWasBeaten = JOTPK_COWBOY_1;
+                    _state.MaxJotPKLevelBeaten = Math.Max(_state.MaxJotPKLevelBeaten, 5);
+                }
+                else
+                {
+                    whichCowboyWasBeaten = JOTPK_COWBOY_2;
+                    _state.MaxJotPKLevelBeaten = Math.Max(_state.MaxJotPKLevelBeaten, 9);
+                }
                 _locationChecker.AddCheckedLocation(whichCowboyWasBeaten);
                 return MethodPrefix.RUN_ORIGINAL_METHOD;
             }
@@ -171,12 +389,10 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Arcade
                 __instance.storeItems.Add(new Rectangle(7 * AbigailGame.TileSize + 12, 8 * AbigailGame.TileSize - AbigailGame.TileSize * 2, AbigailGame.TileSize, AbigailGame.TileSize), _bootsItemOffered);
                 __instance.storeItems.Add(new Rectangle(8 * AbigailGame.TileSize + 24, 8 * AbigailGame.TileSize - AbigailGame.TileSize * 2, AbigailGame.TileSize, AbigailGame.TileSize), _gunItemOffered);
                 __instance.storeItems.Add(new Rectangle(9 * AbigailGame.TileSize + 36, 8 * AbigailGame.TileSize - AbigailGame.TileSize * 2, AbigailGame.TileSize, AbigailGame.TileSize), _ammoItemOffered);
-                return;
             }
             catch (Exception ex)
             {
                 _logger.LogError($"Failed in {nameof(StartShoppingLevel_ShopBasedOnSentChecks_PostFix)}:\n{ex}");
-                return;
             }
         }
 
@@ -186,6 +402,19 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Arcade
         {
             try
             {
+                if (time.TotalGameTime.Ticks % 300 == 0)
+                {
+                    _logger.LogWarning($"Playing JotPK. World: {AbigailGame.world}, Round: {__instance.whichRound}, Wave: {AbigailGame.whichWave}");
+                    var level = AbigailGame.whichWave;
+                    _state.MaxJotPKLevelBeaten = Math.Max(_state.MaxJotPKLevelBeaten, level);
+                }
+
+
+                if (_archipelago.SlotData.ArcadeMachineLocations != ArcadeLocations.FullShuffling)
+                {
+                    return;
+                }
+
                 if (CheckBootsPurchaseLocation(__instance))
                 {
                     return;
@@ -196,15 +425,12 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Arcade
                 }
                 if (CheckAmmoPurchaseLocation(__instance))
                 {
-                    return;
                 }
 
-                return;
             }
             catch (Exception ex)
             {
                 _logger.LogError($"Failed in {nameof(Tick_Shopping_PostFix)}:\n{ex}");
-                return;
             }
             finally
             {
@@ -296,23 +522,21 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Arcade
         {
             try
             {
+                AssignStartingEquipment(__instance);
+
                 if (Game1.player.jotpkProgress.Value != null)
                 {
                     return;
                 }
 
-                AssignStartingEquipment(__instance);
-
                 var easyMode = _archipelago.SlotData.ArcadeMachineLocations == ArcadeLocations.VictoriesEasy;
                 var extraLives = easyMode ? 2 : _archipelago.GetReceivedItemCount(JOTPK_EXTRA_LIFE);
                 extraLives = Math.Max(0, Math.Min(2, extraLives));
                 __instance.lives += extraLives;
-                return;
             }
             catch (Exception ex)
             {
                 _logger.LogError($"Failed in {nameof(AbigailGameCtor_Equipments_Postfix)}:\n{ex}");
-                return;
             }
         }
 

@@ -194,6 +194,14 @@ namespace StardewArchipelago.Integrations.GenericModConfigMenu
 
             configMenu.AddBoolOption(
                 mod: ModManifest,
+                name: () => "Multiplayer Vision",
+                tooltip: () => "Allow Stardew Players in the same multiworld to see each other in game",
+                getValue: () => Config.MultiplayerVision,
+                setValue: (value) => Config.MultiplayerVision = value
+            );
+
+            configMenu.AddBoolOption(
+                mod: ModManifest,
                 name: () => "Anonymize names in chat",
                 tooltip: () => "Replace every player name with a random animal, in chat and menus, for privacy reasons",
                 getValue: () => Config.AnonymizeNamesInChat,
