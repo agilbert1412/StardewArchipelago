@@ -62,6 +62,7 @@ namespace StardewArchipelago.GameModifications.CodeInjections
                 tileX = replacedWarp.TileX;
                 tileY = replacedWarp.TileY;
                 facingDirectionAfterWarp = (int)replacedWarp.FacingDirectionAfterWarp;
+                Game1.player.forceCanMove();
 
                 SetCorrectSwimsuitState(locationRequest, tileX, tileY);
 
