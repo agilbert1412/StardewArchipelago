@@ -398,6 +398,11 @@ namespace StardewArchipelago.GameModifications
                 original: AccessTools.Method(typeof(Object), "totemWarpForReal"),
                 prefix: new HarmonyMethod(typeof(EntranceInjections), nameof(EntranceInjections.TotemWarpForReal_WarpTotemRandomizer_Prefix))
             );
+
+            //_harmony.Patch(
+            //    original: AccessTools.Method(typeof(Building), "obeliskWarpForReal"),
+            //    prefix: new HarmonyMethod(typeof(EntranceInjections), nameof(EntranceInjections.ObeliskWarpForReal_ObeliskRandomizer_Prefix))
+            //);
         }
 
         private void PatchSeasons()

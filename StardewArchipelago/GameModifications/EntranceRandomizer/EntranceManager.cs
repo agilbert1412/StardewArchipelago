@@ -338,9 +338,10 @@ namespace StardewArchipelago.GameModifications.EntranceRandomizer
 
         private string TurnAliased(string key)
         {
-            if (key.Contains(TRANSITIONAL_STRING))
+            var entranceKeyAliased = TurnAliased(key, _entranceAliases, false);
+            if (entranceKeyAliased.Contains(TRANSITIONAL_STRING))
             {
-                var parts = key.Split(TRANSITIONAL_STRING);
+                var parts = entranceKeyAliased.Split(TRANSITIONAL_STRING);
                 var aliased1 = TurnAliased(parts[0]);
                 var aliased2 = TurnAliased(parts[1]);
                 var newEntrance = $"{aliased1}{TRANSITIONAL_STRING}{aliased2}";
@@ -348,7 +349,7 @@ namespace StardewArchipelago.GameModifications.EntranceRandomizer
                 return newEntranceAliased;
             }
 
-            var modifiedString = TurnAliased(TurnAliased(key, _locationAliases, false), _locationsSingleWordAliases, true);
+            var modifiedString = TurnAliased(TurnAliased(entranceKeyAliased, _locationAliases, false), _locationsSingleWordAliases, true);
             return modifiedString;
         }
 
@@ -385,6 +386,11 @@ namespace StardewArchipelago.GameModifications.EntranceRandomizer
         {
             { "SebastianRoom to ScienceHouse|6|24", "SebastianRoom to ScienceHouse" }, // LockedDoorWarp 6 24 ScienceHouse 900 2000S–
             { "ScienceHouse|6|24 to SebastianRoom", "ScienceHouse to SebastianRoom" }, // LockedDoorWarp 6 24 ScienceHouse 900 2000S–
+            { "Use Water Obelisk", "Farm to Beach" },
+            { "Use Earth Obelisk", "Farm to Mountain" },
+            { "Use Desert Obelisk", "Farm to Desert" },
+            { "Use Island Obelisk", "Farm to IslandSouth" },
+            { "Use Farm Obelisk", "IslandWest to Farm" },
         };
 
         private readonly Dictionary<string, string> _locationAliases = new()
@@ -451,11 +457,6 @@ namespace StardewArchipelago.GameModifications.EntranceRandomizer
             { "Parrot Express Dig Site", "IslandNorth|5|48" },
             { "Parrot Express Jungle", "IslandEast|28|28" },
             { "Parrot Express Farm", "IslandWest|74|9" },
-            { "Use Water Obelisk", "Farm to Beach" },
-            { "Use Earth Obelisk", "Farm to Mountain" },
-            { "Use Desert Obelisk", "Farm to Desert" },
-            { "Use Island Obelisk", "Farm to IslandSouth" },
-            { "Use Farm Obelisk", "IslandWest to Farm" },
         };
 
         private readonly Dictionary<string, string> _locationsSingleWordAliases = new()
