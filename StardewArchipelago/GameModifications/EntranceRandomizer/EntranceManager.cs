@@ -150,23 +150,47 @@ namespace StardewArchipelago.GameModifications.EntranceRandomizer
 
         public bool TryGetEntranceReplacement(string currentLocationName, string locationRequestName, Point targetPosition, out WarpRequest warpRequest)
         {
-            warpRequest = null;
             if (ModEntry.Instance.State.EntranceRandomizerOverride)
             {
+                warpRequest = null;
                 return false;
             }
 
             var defaultCurrentLocationName = _equivalentAreas.GetDefaultEquivalentEntrance(currentLocationName);
             var defaultLocationRequestName = _equivalentAreas.GetDefaultEquivalentEntrance(locationRequestName);
             targetPosition = targetPosition.CheckSpecialVolcanoEdgeCaseWarp(defaultLocationRequestName);
-            var key = GetKeys(defaultCurrentLocationName, defaultLocationRequestName, targetPosition);
+            var entranceKeys = GetKeys(defaultCurrentLocationName, defaultLocationRequestName, targetPosition);
+            return TryGetEntranceReplacement(currentLocationName, entranceKeys, out warpRequest);
+        }
+
+        private bool TryGetEntranceReplacement(string currentLocationName, List<string> entranceKeys, out WarpRequest warpRequest)
+        {
+            warpRequest = null;
             // return false;
-            if (!TryGetModifiedWarpName(key, out var desiredWarpName))
+            if (!TryGetModifiedWarpName(entranceKeys, out var desiredWarpName))
             {
                 _logger.LogDebug($"Tried to find warp from {currentLocationName} but found none.  Giving default warp.");
                 return false;
             }
 
+            return TryGetEntranceWarp(desiredWarpName, out warpRequest);
+        }
+
+        public bool TryGetEntranceReplacement(string entranceKey, out WarpRequest warpRequest)
+        {
+            warpRequest = null;
+            // return false;
+            if (!TryGetModifiedWarpName(entranceKey, out var desiredWarpName))
+            {
+                _logger.LogDebug($"Tried to find warp for {entranceKey} but found none.  Giving default warp.");
+                return false;
+            }
+
+            return TryGetEntranceWarp(desiredWarpName, out warpRequest);
+        }
+
+        private bool TryGetEntranceWarp(string desiredWarpName, out WarpRequest warpRequest)
+        {
             var correctDesiredWarpName = _equivalentAreas.GetCorrectEquivalentEntrance(desiredWarpName);
 
             if (_checkedEntrancesToday.Contains(correctDesiredWarpName))
@@ -177,6 +201,7 @@ namespace StardewArchipelago.GameModifications.EntranceRandomizer
                     return true;
                 }
                 _logger.LogDebug($"Desired warp {correctDesiredWarpName} was checked, but not generated.");
+                warpRequest = null;
                 return false;
             }
 
@@ -187,15 +212,26 @@ namespace StardewArchipelago.GameModifications.EntranceRandomizer
         {
             foreach (var key in keys.OrderByDescending(x => x.Length))
             {
-                if (ModifiedEntrances.ContainsKey(key))
+                if (TryGetModifiedWarpName(key, out desiredWarpName))
                 {
-                    desiredWarpName = ModifiedEntrances[key];
-                    if (!_state.EntrancesTraversed.Contains(key))
-                    {
-                        _state.EntrancesTraversed.Add(key);
-                    }
                     return true;
                 }
+            }
+
+            desiredWarpName = "";
+            return false;
+        }
+
+        private bool TryGetModifiedWarpName(string key, out string desiredWarpName)
+        {
+            if (ModifiedEntrances.ContainsKey(key))
+            {
+                desiredWarpName = ModifiedEntrances[key];
+                if (!_state.EntrancesTraversed.Contains(key))
+                {
+                    _state.EntrancesTraversed.Add(key);
+                }
+                return true;
             }
 
             desiredWarpName = "";

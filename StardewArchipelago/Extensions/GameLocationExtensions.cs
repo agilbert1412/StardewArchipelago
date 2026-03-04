@@ -1,10 +1,11 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
+using KaitoKid.ArchipelagoUtilities.Net.Constants;
 using Microsoft.Xna.Framework;
 using StardewArchipelago.GameModifications.EntranceRandomizer;
 using StardewValley;
 using StardewValley.Locations;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using xTile.ObjectModel;
 
 namespace StardewArchipelago.Extensions
@@ -23,6 +24,16 @@ namespace StardewArchipelago.Extensions
             { "IslandNorth|5|48", new WarpRequest("IslandNorth", 5, 49, FacingDirection.Down) }, // "Parrot Express Dig Site"
             { "IslandEast|28|28", new WarpRequest("IslandEast", 28, 29, FacingDirection.Down) }, // "Parrot Express Jungle"
             { "IslandWest|74|9", new WarpRequest("IslandWest", 74, 10, FacingDirection.Down) }, // "Parrot Express Farm"
+            
+            { "UseEarthObeliskExit", new WarpRequest("Mountain", 31, 20, FacingDirection.Down) }, // "Island Obelisk"
+            { "UseWaterObeliskExit", new WarpRequest("Beach", 10, 4, FacingDirection.Down) }, // "Island Obelisk"
+            { "UseDesertObeliskExit", new WarpRequest("Desert", 35, 43, FacingDirection.Down) }, // "Island Obelisk"
+            { "UseIslandObeliskExit", new WarpRequest("IslandSouth", 11, 11, FacingDirection.Down) }, // "Island Obelisk"
+            
+            { "UseMountainTotemExit", new WarpRequest("Mountain", 31, 20, FacingDirection.Down) }, // "Island Obelisk"
+            { "UseBeachTotemExit", new WarpRequest("Beach", 20, 4, FacingDirection.Down) }, // "Island Obelisk"
+            { "UseDesertTotemExit", new WarpRequest("Desert", 35, 43, FacingDirection.Down) }, // "Island Obelisk"
+            { "UseIslandTotemExit", new WarpRequest("IslandSouth", 11, 11, FacingDirection.Down) }, // "Island Obelisk"
         };
 
         private static readonly Dictionary<WarpRequest, WarpRequest> ExtraWarps = new()
@@ -566,6 +577,39 @@ namespace StardewArchipelago.Extensions
 
         public static bool TryGetForcedWarp(this string warpKey, out WarpRequest warpRequest)
         {
+            warpRequest = null;
+            switch (warpKey)
+            {
+                case "UseReturnScepterExit":
+                    var homeOfFarmer = Utility.getHomeOfFarmer(Game1.player);
+                    if (homeOfFarmer == null)
+                    {
+                        return false;
+                    }
+                    var frontDoorSpot = homeOfFarmer.getFrontDoorSpot();
+                    warpRequest = new WarpRequest("Farm", frontDoorSpot.X, frontDoorSpot.Y, FacingDirection.Down);
+                    return true;
+                case "UseFarmObeliskExit":
+                case "UseFarmTotemExit":
+                    if (!Game1.getFarm().TryGetMapPropertyAs("WarpTotemEntry", out Point parsed))
+                    {
+                        switch (Game1.whichFarm)
+                        {
+                            case 5:
+                                parsed = new Point(48, 39);
+                                break;
+                            case 6:
+                                parsed = new Point(82, 29);
+                                break;
+                            default:
+                                parsed = new Point(48, 7);
+                                break;
+                        }
+                    }
+                    warpRequest = new WarpRequest("Farm", parsed.X, parsed.Y, FacingDirection.Down);
+                    return true;
+            }
+
             return ForcedWarps.TryGetValue(warpKey, out warpRequest);
         }
     }

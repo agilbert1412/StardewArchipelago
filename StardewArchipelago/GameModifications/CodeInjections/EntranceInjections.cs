@@ -1,14 +1,18 @@
-﻿using KaitoKid.ArchipelagoUtilities.Net.Client;
+﻿using System;
+using KaitoKid.ArchipelagoUtilities.Net.Client;
 using KaitoKid.ArchipelagoUtilities.Net.Constants;
+using KaitoKid.Utilities.Interfaces;
 using Microsoft.Xna.Framework;
+using StardewArchipelago.Archipelago;
+using StardewArchipelago.Constants;
 using StardewArchipelago.GameModifications.EntranceRandomizer;
 using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Locations;
-using System;
-using KaitoKid.Utilities.Interfaces;
-using StardewArchipelago.Constants;
+using StardewValley.Tools;
+using HarmonyLib;
 using xTile.Dimensions;
+using Object = StardewValley.Object;
 
 namespace StardewArchipelago.GameModifications.CodeInjections
 {
@@ -16,10 +20,12 @@ namespace StardewArchipelago.GameModifications.CodeInjections
     {
         private static ILogger _logger;
         private static IModHelper _helper;
-        private static ArchipelagoClient _archipelago;
+        private static StardewArchipelagoClient _archipelago;
         private static EntranceManager _entranceManager;
 
-        public static void Initialize(ILogger logger, IModHelper helper, ArchipelagoClient archipelago, EntranceManager entranceManager)
+        private static bool _skipER = false;
+
+        public static void Initialize(ILogger logger, IModHelper helper, StardewArchipelagoClient archipelago, EntranceManager entranceManager)
         {
             _logger = logger;
             _helper = helper;
@@ -32,7 +38,7 @@ namespace StardewArchipelago.GameModifications.CodeInjections
         {
             try
             {
-                if (Game1.player.passedOut || Game1.player.FarmerSprite.isPassingOut() || Game1.player.isInBed.Value)
+                if (_skipER || Game1.player.passedOut || Game1.player.FarmerSprite.isPassingOut() || Game1.player.isInBed.Value)
                 {
                     return MethodPrefix.RUN_ORIGINAL_METHOD;
                 }
@@ -92,6 +98,216 @@ namespace StardewArchipelago.GameModifications.CodeInjections
                 _logger.LogError($"Failed in {nameof(PlacementAction_DontGlowShortsMaze_Postfix)}\t{ex}");
                 return;
             }
+        }
+
+        // private void wandWarpForReal()
+        public static bool WandWarpForReal_ReturnScepterBehaviorChanges_Prefix(Wand __instance)
+        {
+            try
+            {
+                const string returnScepterEntranceName = "UseReturnScepter";
+                var entranceIsReplaced = _entranceManager.TryGetEntranceReplacement(returnScepterEntranceName, out var replacedWarp);
+                if (!entranceIsReplaced)
+                {
+                    ReturnScepterQoLWarp(__instance);
+                    return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
+                }
+
+                var homeOfFarmer = Utility.getHomeOfFarmer(Game1.player);
+                if (homeOfFarmer == null)
+                {
+                    return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
+                }
+
+                var locationRequest = replacedWarp.LocationRequest;
+                locationRequest.Name = replacedWarp.LocationRequest.Name;
+
+                foreach (var activePassiveFestival in Game1.netWorldState.Value.ActivePassiveFestivals)
+                {
+                    if (Utility.TryGetPassiveFestivalData(activePassiveFestival, out var data) &&
+                        Game1.dayOfMonth >= data.StartDay && Game1.dayOfMonth <= data.EndDay && data.Season == Game1.season &&
+                        data.MapReplacements != null && data.MapReplacements.TryGetValue(locationRequest.Name, out var name))
+                    {
+                        locationRequest.Name = name;
+                    }
+                }
+
+                locationRequest.Location = replacedWarp.LocationRequest.Location;
+                locationRequest.IsStructure = replacedWarp.LocationRequest.IsStructure;
+                var tileX = replacedWarp.TileX;
+                var tileY = replacedWarp.TileY;
+                var facingDirectionAfterWarp = (int)replacedWarp.FacingDirectionAfterWarp;
+                Game1.player.forceCanMove();
+
+                SetCorrectSwimsuitState(locationRequest, tileX, tileY);
+
+                _skipER = true;
+                Game1.warpFarmer(locationRequest, tileX, tileY, facingDirectionAfterWarp);
+                Game1.fadeToBlackAlpha = 0.99f;
+                Game1.screenGlow = false;
+                __instance.lastUser.temporarilyInvincible = false;
+                __instance.lastUser.temporaryInvincibilityTimer = 0;
+                Game1.displayFarmer = true;
+                __instance.lastUser.CanMove = true;
+                _skipER = false;
+
+                return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Failed in {nameof(WandWarpForReal_ReturnScepterBehaviorChanges_Prefix)}:{Environment.NewLine}\t{ex}");
+                return MethodPrefix.RUN_ORIGINAL_METHOD;
+            }
+        }
+
+        private static void ReturnScepterQoLWarp(Wand returnScepter)
+        {
+            var homeOfFarmer = Utility.getHomeOfFarmer(Game1.player);
+            if (homeOfFarmer == null)
+            {
+                return;
+            }
+
+            _skipER = true;
+            if (Game1.player.currentLocation is Farm farm)
+            {
+                var insideHouseSpot = homeOfFarmer.GetPlayerBedSpot();
+                Game1.warpFarmer(homeOfFarmer.Name, insideHouseSpot.X, insideHouseSpot.Y, false);
+            }
+            else
+            {
+                var frontDoorSpot = homeOfFarmer.getFrontDoorSpot();
+                Game1.warpFarmer("Farm", frontDoorSpot.X, frontDoorSpot.Y, false);
+            }
+            Game1.fadeToBlackAlpha = 0.99f;
+            Game1.screenGlow = false;
+            returnScepter.lastUser.temporarilyInvincible = false;
+            returnScepter.lastUser.temporaryInvincibilityTimer = 0;
+            Game1.displayFarmer = true;
+            returnScepter.lastUser.CanMove = true;
+            _skipER = false;
+        }
+
+        // private void totemWarpForReal()
+        public static bool TotemWarpForReal_WarpTotemRandomizer_Prefix(Object __instance)
+        {
+            try
+            {
+                var warpName = "";
+                switch (__instance.QualifiedItemId)
+                {
+                    case "(O)688":
+                        const string farmTotemEntranceName = "UseFarmTotem";
+                        warpName = farmTotemEntranceName;
+                        break;
+                    case "(O)689":
+                        const string mountainTotemEntranceName = "UseMountainTotem";
+                        warpName = mountainTotemEntranceName;
+                        break;
+                    case "(O)690":
+                        const string beachTotemEntranceName = "UseBeachTotem";
+                        warpName = beachTotemEntranceName;
+                        break;
+                    case "(O)261":
+                        const string desertTotemEntranceName = "UseDesertTotem";
+                        warpName = desertTotemEntranceName;
+                        break;
+                    case "(O)886":
+                        const string islandTotemEntranceName = "UseIslandTotem";
+                        warpName = islandTotemEntranceName;
+                        break;
+                }
+
+                var entranceIsReplaced = _entranceManager.TryGetEntranceReplacement(warpName, out var replacedWarp);
+                if (!entranceIsReplaced)
+                {
+                    TotemWarpForReal(__instance);
+                    return MethodPrefix.RUN_ORIGINAL_METHOD;
+                }
+
+                var locationRequest = replacedWarp.LocationRequest;
+                locationRequest.Name = replacedWarp.LocationRequest.Name;
+
+                foreach (var activePassiveFestival in Game1.netWorldState.Value.ActivePassiveFestivals)
+                {
+                    if (Utility.TryGetPassiveFestivalData(activePassiveFestival, out var data) &&
+                        Game1.dayOfMonth >= data.StartDay && Game1.dayOfMonth <= data.EndDay && data.Season == Game1.season &&
+                        data.MapReplacements != null && data.MapReplacements.TryGetValue(locationRequest.Name, out var name))
+                    {
+                        locationRequest.Name = name;
+                    }
+                }
+
+                locationRequest.Location = replacedWarp.LocationRequest.Location;
+                locationRequest.IsStructure = replacedWarp.LocationRequest.IsStructure;
+                var tileX = replacedWarp.TileX;
+                var tileY = replacedWarp.TileY;
+                var facingDirectionAfterWarp = (int)replacedWarp.FacingDirectionAfterWarp;
+                Game1.player.forceCanMove();
+
+                SetCorrectSwimsuitState(locationRequest, tileX, tileY);
+
+                _skipER = true;
+                Game1.warpFarmer(locationRequest, tileX, tileY, facingDirectionAfterWarp);
+                Game1.fadeToBlackAlpha = 0.99f;
+                Game1.screenGlow = false;
+                Game1.player.temporarilyInvincible = false;
+                Game1.player.temporaryInvincibilityTimer = 0;
+                Game1.displayFarmer = true;
+                _skipER = false;
+
+                return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Failed in {nameof(TotemWarpForReal_WarpTotemRandomizer_Prefix)}:{Environment.NewLine}\t{ex}");
+                return MethodPrefix.RUN_ORIGINAL_METHOD;
+            }
+        }
+
+        private static void TotemWarpForReal(Object totem)
+        {
+            _skipER = true;
+            switch (totem.QualifiedItemId)
+            {
+                case "(O)688":
+                    Point parsed;
+                    if (!Game1.getFarm().TryGetMapPropertyAs("WarpTotemEntry", out parsed))
+                    {
+                        switch (Game1.whichFarm)
+                        {
+                            case 5:
+                                parsed = new Point(48, 39);
+                                break;
+                            case 6:
+                                parsed = new Point(82, 29);
+                                break;
+                            default:
+                                parsed = new Point(48, 7);
+                                break;
+                        }
+                    }
+                    Game1.warpFarmer("Farm", parsed.X, parsed.Y, false);
+                    break;
+                case "(O)689":
+                    Game1.warpFarmer("Mountain", 31, 20, false);
+                    break;
+                case "(O)690":
+                    Game1.warpFarmer("Beach", 20, 4, false);
+                    break;
+                case "(O)261":
+                    Game1.warpFarmer("Desert", 35, 43, false);
+                    break;
+                case "(O)886":
+                    Game1.warpFarmer("IslandSouth", 11, 11, false);
+                    break;
+            }
+            Game1.fadeToBlackAlpha = 0.99f;
+            Game1.screenGlow = false;
+            Game1.player.temporarilyInvincible = false;
+            Game1.player.temporaryInvincibilityTimer = 0;
+            Game1.displayFarmer = true;
+            _skipER = false;
         }
 
         private static void SetCorrectSwimsuitState(LocationRequest locationRequest, int tileX, int tileY)
