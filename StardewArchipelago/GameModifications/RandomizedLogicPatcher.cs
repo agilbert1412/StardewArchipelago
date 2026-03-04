@@ -36,6 +36,7 @@ using StardewArchipelago.Locations.Festival;
 using StardewArchipelago.Locations.InGameLocations;
 using StardewArchipelago.GameModifications.CodeInjections.Powers;
 using StardewArchipelago.GameModifications.MultiplayerVision;
+using StardewValley.Tools;
 using xTile.Dimensions;
 
 namespace StardewArchipelago.GameModifications
@@ -368,6 +369,11 @@ namespace StardewArchipelago.GameModifications
                 prefix: new HarmonyMethod(typeof(EntranceInjections), nameof(EntranceInjections.PerformAction_LockerRoomKeys_Prefix))
             );
 
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(Wand), "wandWarpForReal"),
+                prefix: new HarmonyMethod(typeof(EntranceInjections), nameof(EntranceInjections.WandWarpForReal_ReturnScepterBehaviorChanges_Prefix))
+            );
+
             if (_archipelago.SlotData.EntranceRandomization == EntranceRandomization.Disabled)
             {
                 return;
@@ -386,6 +392,11 @@ namespace StardewArchipelago.GameModifications
             _harmony.Patch(
                 original: AccessTools.Method(typeof(Object), nameof(Object.placementAction)),
                 postfix: new HarmonyMethod(typeof(EntranceInjections), nameof(EntranceInjections.PlacementAction_DontGlowShortsMaze_Postfix))
+            );
+
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(Object), "totemWarpForReal"),
+                prefix: new HarmonyMethod(typeof(EntranceInjections), nameof(EntranceInjections.TotemWarpForReal_WarpTotemRandomizer_Prefix))
             );
         }
 
