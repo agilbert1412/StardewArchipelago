@@ -50,27 +50,7 @@ namespace StardewArchipelago.GameModifications.CodeInjections
                     return MethodPrefix.RUN_ORIGINAL_METHOD;
                 }
 
-                locationRequest.Name = replacedWarp.LocationRequest.Name;
-
-
-                foreach (var activePassiveFestival in Game1.netWorldState.Value.ActivePassiveFestivals)
-                {
-                    if (Utility.TryGetPassiveFestivalData(activePassiveFestival, out var data) &&
-                        Game1.dayOfMonth >= data.StartDay && Game1.dayOfMonth <= data.EndDay && data.Season == Game1.season &&
-                        data.MapReplacements != null && data.MapReplacements.TryGetValue(locationRequest.Name, out var name))
-                    {
-                        locationRequest.Name = name;
-                    }
-                }
-
-                locationRequest.Location = replacedWarp.LocationRequest.Location;
-                locationRequest.IsStructure = replacedWarp.LocationRequest.IsStructure;
-                tileX = replacedWarp.TileX;
-                tileY = replacedWarp.TileY;
-                facingDirectionAfterWarp = (int)replacedWarp.FacingDirectionAfterWarp;
-                Game1.player.forceCanMove();
-
-                SetCorrectSwimsuitState(locationRequest, tileX, tileY);
+                locationRequest = GetRandomizedLocationRequest(locationRequest, replacedWarp, out tileX, out tileY, out facingDirectionAfterWarp);
 
                 return MethodPrefix.RUN_ORIGINAL_METHOD;
             }
@@ -79,6 +59,30 @@ namespace StardewArchipelago.GameModifications.CodeInjections
                 _logger.LogError($"Failed in {nameof(PerformWarpFarmer_EntranceRandomization_Prefix)} going from {Game1.currentLocation.Name} to {locationRequest.Name}:{Environment.NewLine}\t{ex}");
                 return MethodPrefix.RUN_ORIGINAL_METHOD;
             }
+        }
+        private static LocationRequest GetRandomizedLocationRequest(LocationRequest locationRequest, WarpRequest replacedWarp, out int tileX, out int tileY, out int facingDirectionAfterWarp)
+        {
+            locationRequest.Name = replacedWarp.LocationRequest.Name;
+
+            foreach (var activePassiveFestival in Game1.netWorldState.Value.ActivePassiveFestivals)
+            {
+                if (Utility.TryGetPassiveFestivalData(activePassiveFestival, out var data) &&
+                    Game1.dayOfMonth >= data.StartDay && Game1.dayOfMonth <= data.EndDay && data.Season == Game1.season &&
+                    data.MapReplacements != null && data.MapReplacements.TryGetValue(locationRequest.Name, out var name))
+                {
+                    locationRequest.Name = name;
+                }
+            }
+
+            locationRequest.Location = replacedWarp.LocationRequest.Location;
+            locationRequest.IsStructure = replacedWarp.LocationRequest.IsStructure;
+            tileX = replacedWarp.TileX;
+            tileY = replacedWarp.TileY;
+            facingDirectionAfterWarp = (int)replacedWarp.FacingDirectionAfterWarp;
+            Game1.player.forceCanMove();
+
+            SetCorrectSwimsuitState(locationRequest, tileX, tileY);
+            return locationRequest;
         }
 
         // public virtual bool placementAction(GameLocation location, int x, int y, Farmer who = null)
@@ -119,27 +123,7 @@ namespace StardewArchipelago.GameModifications.CodeInjections
                     return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
                 }
 
-                var locationRequest = replacedWarp.LocationRequest;
-                locationRequest.Name = replacedWarp.LocationRequest.Name;
-
-                foreach (var activePassiveFestival in Game1.netWorldState.Value.ActivePassiveFestivals)
-                {
-                    if (Utility.TryGetPassiveFestivalData(activePassiveFestival, out var data) &&
-                        Game1.dayOfMonth >= data.StartDay && Game1.dayOfMonth <= data.EndDay && data.Season == Game1.season &&
-                        data.MapReplacements != null && data.MapReplacements.TryGetValue(locationRequest.Name, out var name))
-                    {
-                        locationRequest.Name = name;
-                    }
-                }
-
-                locationRequest.Location = replacedWarp.LocationRequest.Location;
-                locationRequest.IsStructure = replacedWarp.LocationRequest.IsStructure;
-                var tileX = replacedWarp.TileX;
-                var tileY = replacedWarp.TileY;
-                var facingDirectionAfterWarp = (int)replacedWarp.FacingDirectionAfterWarp;
-                Game1.player.forceCanMove();
-
-                SetCorrectSwimsuitState(locationRequest, tileX, tileY);
+                var locationRequest = GetRandomizedLocationRequest(replacedWarp.LocationRequest, replacedWarp, out var tileX, out var tileY, out var facingDirectionAfterWarp);
 
                 _skipER = true;
                 Game1.warpFarmer(locationRequest, tileX, tileY, facingDirectionAfterWarp);
@@ -225,27 +209,7 @@ namespace StardewArchipelago.GameModifications.CodeInjections
                     return MethodPrefix.RUN_ORIGINAL_METHOD;
                 }
 
-                var locationRequest = replacedWarp.LocationRequest;
-                locationRequest.Name = replacedWarp.LocationRequest.Name;
-
-                foreach (var activePassiveFestival in Game1.netWorldState.Value.ActivePassiveFestivals)
-                {
-                    if (Utility.TryGetPassiveFestivalData(activePassiveFestival, out var data) &&
-                        Game1.dayOfMonth >= data.StartDay && Game1.dayOfMonth <= data.EndDay && data.Season == Game1.season &&
-                        data.MapReplacements != null && data.MapReplacements.TryGetValue(locationRequest.Name, out var name))
-                    {
-                        locationRequest.Name = name;
-                    }
-                }
-
-                locationRequest.Location = replacedWarp.LocationRequest.Location;
-                locationRequest.IsStructure = replacedWarp.LocationRequest.IsStructure;
-                var tileX = replacedWarp.TileX;
-                var tileY = replacedWarp.TileY;
-                var facingDirectionAfterWarp = (int)replacedWarp.FacingDirectionAfterWarp;
-                Game1.player.forceCanMove();
-
-                SetCorrectSwimsuitState(locationRequest, tileX, tileY);
+                var locationRequest = GetRandomizedLocationRequest(replacedWarp.LocationRequest, replacedWarp, out var tileX, out var tileY, out var facingDirectionAfterWarp);
 
                 _skipER = true;
                 Game1.warpFarmer(locationRequest, tileX, tileY, facingDirectionAfterWarp);
@@ -309,6 +273,69 @@ namespace StardewArchipelago.GameModifications.CodeInjections
             Game1.displayFarmer = true;
             _skipER = false;
         }
+
+        // private static void obeliskWarpForReal(string destination, int warp_x, int warp_y, Farmer who)
+        //public static bool ObeliskWarpForReal_ObeliskRandomizer_Prefix(string destination, int warp_x, int warp_y, Farmer who)
+        //{
+        //    try
+        //    {
+        //        var warpName = "";
+        //        switch (destination)
+        //        {
+        //            case "Mountain":
+        //                const string mountainTotemEntranceName = "UseEarthObelisk";
+        //                warpName = mountainTotemEntranceName;
+        //                break;
+        //            case "Beach":
+        //                const string beachTotemEntranceName = "UseWaterObelisk";
+        //                warpName = beachTotemEntranceName;
+        //                break;
+        //            case "Desert":
+        //                const string desertTotemEntranceName = "UseDesertObelisk";
+        //                warpName = desertTotemEntranceName;
+        //                break;
+        //            case "IslandSouth":
+        //                const string islandTotemEntranceName = "UseIslandObelisk";
+        //                warpName = islandTotemEntranceName;
+        //                break;
+        //        }
+
+        //        var entranceIsReplaced = _entranceManager.TryGetEntranceReplacement(warpName, out var replacedWarp);
+        //        if (!entranceIsReplaced)
+        //        {
+        //            ObeliskWarpForReal(destination, warp_x, warp_y, who);
+        //            return MethodPrefix.RUN_ORIGINAL_METHOD;
+        //        }
+
+        //        var locationRequest = GetRandomizedLocationRequest(replacedWarp.LocationRequest, replacedWarp, out var tileX, out var tileY, out var facingDirectionAfterWarp);
+
+        //        _skipER = true;
+        //        Game1.warpFarmer(locationRequest, tileX, tileY, facingDirectionAfterWarp);
+        //        Game1.fadeToBlackAlpha = 0.99f;
+        //        Game1.screenGlow = false;
+        //        Game1.player.temporarilyInvincible = false;
+        //        Game1.player.temporaryInvincibilityTimer = 0;
+        //        Game1.displayFarmer = true;
+        //        _skipER = false;
+
+        //        return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        _logger.LogError($"Failed in {nameof(ObeliskWarpForReal_ObeliskRandomizer_Prefix)}:{Environment.NewLine}\t{ex}");
+        //        return MethodPrefix.RUN_ORIGINAL_METHOD;
+        //    }
+        //}
+
+        //private static void ObeliskWarpForReal(string destination, int warpX, int warpY, Farmer who)
+        //{
+        //    Game1.warpFarmer(destination, warpX, warpY, false);
+        //    Game1.fadeToBlackAlpha = 0.99f;
+        //    Game1.screenGlow = false;
+        //    Game1.player.temporarilyInvincible = false;
+        //    Game1.player.temporaryInvincibilityTimer = 0;
+        //    Game1.displayFarmer = true;
+        //}
 
         private static void SetCorrectSwimsuitState(LocationRequest locationRequest, int tileX, int tileY)
         {
