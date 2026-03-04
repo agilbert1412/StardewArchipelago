@@ -52,6 +52,9 @@ namespace StardewArchipelago.Extensions
             { new WarpRequest("IslandWest", 20, 23, FacingDirection.Down), new WarpRequest("QiNutRoom", 7, 8, FacingDirection.Up) },
             { new WarpRequest("WizardHouse", 4, 5, FacingDirection.Down), new WarpRequest("WizardHouseBasement", 4, 4, FacingDirection.Down) },
             { new WarpRequest("IslandWest", 77, 40, FacingDirection.Down), new WarpRequest("IslandFarmhouse", 14, 17, FacingDirection.Down) },
+            { new WarpRequest("ManorHouse", 22, 9, FacingDirection.Left), new WarpRequest("LewisBasement", 4, 4, FacingDirection.Down) },
+            { new WarpRequest("BoatTunnel", 6, 9, FacingDirection.Down), new WarpRequest("IslandSouth", 21, 43, FacingDirection.Right) },
+
             { new WarpRequest("DeepWoods", 20, 6, FacingDirection.Up), new WarpRequest("DeepWoodsMaxHouse", 19, 24, FacingDirection.Up) },
             { new WarpRequest("Custom_SpriteSpring2", 31, 11, FacingDirection.Up), new WarpRequest("Custom_SpriteSpringCave", 10, 14, FacingDirection.Up) },
             { new WarpRequest("Custom_GrandpasShedRuins", 15, 16, FacingDirection.Down), new WarpRequest("Custom_GrandpasShedOutside", 22, 17, FacingDirection.Down) },
@@ -65,7 +68,6 @@ namespace StardewArchipelago.Extensions
             { new WarpRequest("Custom_EnchantedGrove", 20, 10, FacingDirection.Up), new WarpRequest("Custom_SpriteSpring2", 52, 20, FacingDirection.Down) },
             { new WarpRequest("Custom_EnchantedGrove", 43, 25, FacingDirection.Up), new WarpRequest("Custom_AdventurerSummit", 8, 24, FacingDirection.Down) },
             { new WarpRequest("Forest", 19, 110, FacingDirection.Down), new WarpRequest("Custom_JunimoWoods", 37, 2, FacingDirection.Down) },
-            { new WarpRequest("ManorHouse", 22, 9, FacingDirection.Left), new WarpRequest("LewisBasement", 4, 4, FacingDirection.Down) },
             //{ new WarpRequest("BusStop", 14, 4, FacingDirection.Up), new WarpRequest("Mine", 13, 9, FacingDirection.Down) },
             //{ new WarpRequest("BusStop", 14, 4, FacingDirection.Up), new WarpRequest("Town", 105, 80, FacingDirection.Down) },
             //{ new WarpRequest("BusStop", 14, 4, FacingDirection.Up), new WarpRequest("Mountain", 124, 12, FacingDirection.Down) },
