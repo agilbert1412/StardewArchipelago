@@ -51,6 +51,10 @@ namespace StardewArchipelago.GameModifications.CodeInjections
                 }
 
                 locationRequest = GetRandomizedLocationRequest(locationRequest, replacedWarp, out tileX, out tileY, out facingDirectionAfterWarp);
+                if (locationRequest.Name == "Farmhouse" && replacedWarp.TileX == 19 && replacedWarp.TileY == 34)
+                {
+                    Game1.currentLocation = Game1.getLocationFromName(locationRequest.Name);
+                }
 
                 return MethodPrefix.RUN_ORIGINAL_METHOD;
             }
