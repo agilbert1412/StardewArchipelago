@@ -54,6 +54,7 @@ namespace StardewArchipelago.Extensions
             { new WarpRequest("IslandWest", 77, 40, FacingDirection.Down), new WarpRequest("IslandFarmhouse", 14, 17, FacingDirection.Down) },
             { new WarpRequest("ManorHouse", 22, 9, FacingDirection.Left), new WarpRequest("LewisBasement", 4, 4, FacingDirection.Down) },
             { new WarpRequest("BoatTunnel", 6, 9, FacingDirection.Down), new WarpRequest("IslandSouth", 21, 43, FacingDirection.Right) },
+            { new WarpRequest("FarmHouse", 19, 34, FacingDirection.Up), new WarpRequest("Cellar", 3, 2, FacingDirection.Down) },
 
             { new WarpRequest("DeepWoods", 20, 6, FacingDirection.Up), new WarpRequest("DeepWoodsMaxHouse", 19, 24, FacingDirection.Up) },
             { new WarpRequest("Custom_SpriteSpring2", 31, 11, FacingDirection.Up), new WarpRequest("Custom_SpriteSpringCave", 10, 14, FacingDirection.Up) },
