@@ -51,10 +51,7 @@ namespace StardewArchipelago.GameModifications.CodeInjections
                 }
 
                 locationRequest = GetRandomizedLocationRequest(locationRequest, replacedWarp, out tileX, out tileY, out facingDirectionAfterWarp);
-                if (locationRequest.Name == "Farmhouse" && replacedWarp.TileX == 19 && replacedWarp.TileY == 34)
-                {
-                    Game1.currentLocation = Game1.getLocationFromName(locationRequest.Name);
-                }
+                PrepareForWarpsWithUndesiredBehaviors(locationRequest, replacedWarp);
 
                 return MethodPrefix.RUN_ORIGINAL_METHOD;
             }
@@ -62,6 +59,33 @@ namespace StardewArchipelago.GameModifications.CodeInjections
             {
                 _logger.LogError($"Failed in {nameof(PerformWarpFarmer_EntranceRandomization_Prefix)} going from {Game1.currentLocation.Name} to {locationRequest.Name}:{Environment.NewLine}\t{ex}");
                 return MethodPrefix.RUN_ORIGINAL_METHOD;
+            }
+        }
+
+        // Some warps have some hard-coded behaviors in vanilla that we want to try to avoid.
+        // We therefore cheat a little bit by pre-warping the player to somewhere that won't cause trigger these undesired behaviors.
+        private static void PrepareForWarpsWithUndesiredBehaviors(LocationRequest locationRequest, WarpRequest replacedWarp)
+        {
+            // When entering the farmhouse from anywhere but the Cellar, the game force-places you at the door.
+            if (locationRequest.Name == "Farmhouse" && replacedWarp.TileX == 19 && replacedWarp.TileY == 34)
+            {
+                // If trying to simulate entry from the Cellar, we pre-warp the player
+                Game1.currentLocation = Game1.getLocationFromName(locationRequest.Name);
+                return;
+            }
+
+            // When entering the Bus stop from anywhere with a different LocationContext, the bus animation plays
+            if (locationRequest.Name == "BusStop" && (replacedWarp.TileX != 22 || replacedWarp.TileY != 10))
+            {
+                var targetLocation = Game1.getLocationFromName(locationRequest.Name);
+                var currentLocation = Game1.currentLocation;
+                var differentContext = targetLocation.GetLocationContext() != currentLocation.GetLocationContext();
+                // If we came from a different context, place us immediately at the bus stop so that it becomes the same context
+                if (differentContext)
+                {
+                    Game1.player.currentLocation = Game1.getLocationFromName("Town");
+                }
+                return;
             }
         }
         private static LocationRequest GetRandomizedLocationRequest(LocationRequest locationRequest, WarpRequest replacedWarp, out int tileX, out int tileY, out int facingDirectionAfterWarp)
