@@ -70,22 +70,6 @@ namespace StardewArchipelago.Extensions
             { new WarpRequest("Custom_EnchantedGrove", 20, 10, FacingDirection.Up), new WarpRequest("Custom_SpriteSpring2", 52, 20, FacingDirection.Down) },
             { new WarpRequest("Custom_EnchantedGrove", 43, 25, FacingDirection.Up), new WarpRequest("Custom_AdventurerSummit", 8, 24, FacingDirection.Down) },
             { new WarpRequest("Forest", 19, 110, FacingDirection.Down), new WarpRequest("Custom_JunimoWoods", 37, 2, FacingDirection.Down) },
-            //{ new WarpRequest("BusStop", 14, 4, FacingDirection.Up), new WarpRequest("Mine", 13, 9, FacingDirection.Down) },
-            //{ new WarpRequest("BusStop", 14, 4, FacingDirection.Up), new WarpRequest("Town", 105, 80, FacingDirection.Down) },
-            //{ new WarpRequest("BusStop", 14, 4, FacingDirection.Up), new WarpRequest("Mountain", 124, 12, FacingDirection.Down) },
-            //{ new WarpRequest("Mine", 13, 9, FacingDirection.Up), new WarpRequest("Town", 105, 80, FacingDirection.Down) },
-            //{ new WarpRequest("Mine", 13, 9, FacingDirection.Up), new WarpRequest("Mountain", 124, 12, FacingDirection.Down) },
-            //{ new WarpRequest("Mountain", 124, 12, FacingDirection.Up), new WarpRequest("Town", 105, 80, FacingDirection.Down) },
-            //{ new WarpRequest("IslandSouth", 27, 1, FacingDirection.Up), new WarpRequest("IslandEast", 28, 29, FacingDirection.Down) },
-            //{ new WarpRequest("IslandSouth", 27, 1, FacingDirection.Up), new WarpRequest("IslandNorth", 60, 17, FacingDirection.Down) },
-            //{ new WarpRequest("IslandSouth", 27, 1, FacingDirection.Up), new WarpRequest("IslandNorth", 46, 48, FacingDirection.Down) },
-            //{ new WarpRequest("IslandSouth", 27, 1, FacingDirection.Up), new WarpRequest("IslandWest", 74, 10, FacingDirection.Down) },
-            //{ new WarpRequest("IslandEast", 28, 29, FacingDirection.Up), new WarpRequest("IslandNorth", 60, 17, FacingDirection.Down) },
-            //{ new WarpRequest("IslandEast", 28, 29, FacingDirection.Up), new WarpRequest("IslandNorth", 46, 48, FacingDirection.Down) },
-            //{ new WarpRequest("IslandEast", 28, 29, FacingDirection.Up), new WarpRequest("IslandWest", 74, 10, FacingDirection.Down) },
-            //{ new WarpRequest("IslandNorth", 60, 17, FacingDirection.Up), new WarpRequest("IslandNorth", 46, 48, FacingDirection.Down) },
-            //{ new WarpRequest("IslandNorth", 60, 17, FacingDirection.Up), new WarpRequest("IslandWest", 74, 10, FacingDirection.Down) },
-            //{ new WarpRequest("IslandNorth", 46, 48, FacingDirection.Up), new WarpRequest("IslandWest", 74, 10, FacingDirection.Down) },
         };
 
         private static readonly Dictionary<WarpRequest, WarpRequest> ExtraWarpsBothWays = ExtraWarps.Union(ExtraWarps.ToDictionary(x => x.Value, x => x.Key)).ToDictionary(x => x.Key, x => x.Value);
