@@ -13,6 +13,8 @@ using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Objects;
 using Object = StardewValley.Object;
+using StardewArchipelago.Constants.Locations;
+using System.Collections.Generic;
 
 namespace StardewArchipelago.GameModifications.Tooltips
 {
@@ -81,11 +83,14 @@ namespace StardewArchipelago.GameModifications.Tooltips
             }
 
             var simplifiedName = _nameSimplifier.GetSimplifiedName(item);
-            var allUncheckedLocations = _locationChecker.GetAllLocationsNotCheckedContainingWord(simplifiedName);
+            var allUncheckedLocationsFilteredByName = _locationChecker.GetAllLocationsNotCheckedContainingWord(simplifiedName);
+            var extraLocationsThatNeedItem = NameMatching.ItemNeededForLocations.GetValueOrDefault(simplifiedName);
+            var extraUncheckedLocationsThatNeedItem = _locationChecker.GetAllLocationsNotCheckedThatOverlap(extraLocationsThatNeedItem);
 
-            allUncheckedLocations = FilterLocationsBasedOnConfig(allUncheckedLocations);
+            var allUncheckedLocationsUsingItem = allUncheckedLocationsFilteredByName.Union(extraUncheckedLocationsThatNeedItem).ToArray();
+            allUncheckedLocationsUsingItem = FilterLocationsBasedOnConfig(allUncheckedLocationsUsingItem);
 
-            if (!allUncheckedLocations.Any())
+            if (!allUncheckedLocationsUsingItem.Any())
             {
                 return true;
             }
@@ -112,11 +117,14 @@ namespace StardewArchipelago.GameModifications.Tooltips
                 }
 
                 var simplifiedName = _nameSimplifier.GetSimplifiedName(__instance);
-                var allUncheckedLocations = _locationChecker.GetAllLocationsNotCheckedContainingWord(simplifiedName);
+                var allUncheckedLocationsFilteredByName = _locationChecker.GetAllLocationsNotCheckedContainingWord(simplifiedName);
+                var extraLocationsThatNeedItem = NameMatching.ItemNeededForLocations.GetValueOrDefault(simplifiedName);
+                var extraUncheckedLocationsThatNeedItem = _locationChecker.GetAllLocationsNotCheckedThatOverlap(extraLocationsThatNeedItem);
 
-                allUncheckedLocations = FilterLocationsBasedOnConfig(allUncheckedLocations);
+                var allUncheckedLocationsUsingItem = allUncheckedLocationsFilteredByName.Union(extraUncheckedLocationsThatNeedItem).ToArray();
+                allUncheckedLocationsUsingItem = FilterLocationsBasedOnConfig(allUncheckedLocationsUsingItem);
 
-                foreach (var uncheckedLocation in allUncheckedLocations)
+                foreach (var uncheckedLocation in allUncheckedLocationsUsingItem)
                 {
                     __result += $"{Environment.NewLine}{uncheckedLocation}";
                 }
