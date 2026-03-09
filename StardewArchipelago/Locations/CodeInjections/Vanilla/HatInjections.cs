@@ -44,7 +44,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
         {
             try
             {
-                if (__instance is not Hat hat)
+                if (__instance is not Hat hat || who.isFakeEventActor)
                 {
                     return;
                 }

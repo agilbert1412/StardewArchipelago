@@ -1,34 +1,23 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-using Netcode;
-using Newtonsoft.Json.Linq;
-using StardewModdingAPI.Events;
 using StardewValley;
 using StardewValley.Companions;
 using StardewValley.Extensions;
 using StardewValley.Objects;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Force.DeepCloner;
 using xTile.Dimensions;
 
 namespace StardewArchipelago.GameModifications.MultiplayerVision
 {
     public class VisiblePlayer
     {
-#if DEBUG
-        public static uint UPDATE_FREQUENCY_TICKS = 42;
-        public static uint DRAW_DURATION_TICKS = 60;
-        public static uint BROADCAST_APPEARANCE_SECONDS = 5;
-#else
-        public static uint UPDATE_FREQUENCY_TICKS = 42;
-        public static uint DRAW_DURATION_TICKS = 60;
-        public static uint BROADCAST_APPEARANCE_SECONDS = 60;
-#endif
+        public static double UPDATE_FREQUENCY_WHEN_MOVING_SECONDS = 0.2;
+        public static uint TICK_FREQUENCY_WHEN_MOVING = 15;
+        public static uint UPDATE_FREQUENCY_WHEN_IMMOBILE_SECONDS = 2;
+        public static uint UPDATE_FREQUENCY_DIFFERENT_MAP_SECONDS = 10;
+        public static uint DRAW_DURATION_TICKS = UPDATE_FREQUENCY_DIFFERENT_MAP_SECONDS * 144;
+        public static uint BROADCAST_APPEARANCE_SECONDS = 20;
 
         public string UniqueIdentifier { get; set; }
         public string MapName { get; set; }
@@ -75,7 +64,7 @@ namespace StardewArchipelago.GameModifications.MultiplayerVision
 
         private void Draw(SpriteBatch b)
         {
-            if (Appearance == null || string.IsNullOrWhiteSpace(MapName) || !MapName.Equals(Game1.currentLocation.Name))
+            if (Appearance == null || string.IsNullOrWhiteSpace(MapName) || !IsCloseEnough())
             {
                 return;
             }
@@ -177,6 +166,7 @@ namespace StardewArchipelago.GameModifications.MultiplayerVision
                 companion.Draw(b);
             }
         }
+
         private void InitializeFarmer()
         {
             if (Farmer != null)
@@ -243,6 +233,14 @@ namespace StardewArchipelago.GameModifications.MultiplayerVision
             var pantsColor = new Color(Appearance.PantsColorRed, Appearance.PantsColorGreen, Appearance.PantsColorBlue);
             Farmer.changePantsColor(pantsColor);
             Farmer.changeShoeColor(Appearance.ShoesId);
+        }
+
+        public bool IsCloseEnough()
+        {
+            const int maxVisibleDistance = 2500;
+            return MapName.Equals(Game1.currentLocation.Name) &&
+                   Math.Abs(Position.X - Game1.player.Position.X) < maxVisibleDistance &&
+                   Math.Abs(Position.Y - Game1.player.Position.Y) < maxVisibleDistance;
         }
     }
 }
