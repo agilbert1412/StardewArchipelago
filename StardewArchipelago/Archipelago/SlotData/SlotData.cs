@@ -93,7 +93,7 @@ namespace StardewArchipelago.Archipelago.SlotData
             BundlesData = slotDataReader.GetSlotSetting(SlotDataKeys.MODIFIED_BUNDLES, "");
             TrashBearRequestsData = slotDataReader.GetSlotSetting(SlotDataKeys.TRASH_BEAR_REQUESTS, "");
             EntranceRandomization = slotDataReader.GetSlotSetting(SlotDataKeys.ENTRANCE_RANDOMIZATION, EntranceRandomization.Disabled);
-            EntranceRandomizationBehaviour = slotDataReader.GetSlotSetting(SlotDataKeys.ENTRANCE_RANDOMIZATION_BEHAVIOUR, EntranceRandomizationBehaviour.None);
+            EntranceRandomizationBehaviour = slotDataReader.GetSlotEntranceRandomizationBehaviorSetting();
             SeasonRandomization = slotDataReader.GetSlotSetting(SlotDataKeys.SEASON_RANDOMIZATION, SeasonRandomization.Disabled);
             Cropsanity = slotDataReader.GetSlotSetting(SlotDataKeys.CROPSANITY, Cropsanity.Disabled);
             BackpackProgression = slotDataReader.GetSlotSetting(SlotDataKeys.BACKPACK_PROGRESSION, BackpackProgression.Progressive);
