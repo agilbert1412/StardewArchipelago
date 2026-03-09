@@ -27,6 +27,8 @@ namespace StardewArchipelago.GameModifications.MultiplayerVision
         private static Dictionary<string, PlayerAppearance> _playerAppearances;
 
         private static DateTime _timeLastBroadcast;
+        private static DateTime _timeLastBroadcastAppearance;
+        private static VisiblePlayer _lastBroadcast;
         private const float EPSILON = 0.1f;
 
         public static void Initialize(ILogger logger, StardewArchipelagoClient archipelago)
@@ -36,32 +38,15 @@ namespace StardewArchipelago.GameModifications.MultiplayerVision
             _visiblePlayers = new Dictionary<string, VisiblePlayer>();
             _playerAppearances = new Dictionary<string, PlayerAppearance>();
             _timeLastBroadcast = DateTime.MinValue;
+            _timeLastBroadcastAppearance = DateTime.MinValue;
+            _lastBroadcast = null;
         }
 
         public static void OnUpdateTicked(UpdateTickedEventArgs eventArgs)
         {
-            if (!ModEntry.Instance.Config.MultiplayerVision)
-            {
-                return;
-            }
-
-            if (eventArgs.IsMultipleOf(VisiblePlayer.UPDATE_FREQUENCY_TICKS))
+            if (eventArgs.IsMultipleOf(VisiblePlayer.TICK_FREQUENCY_WHEN_MOVING))
             {
                 SendMultiplayerVision();
-            }
-        }
-
-        // public override void draw(SpriteBatch b)
-        public static void Draw_DrawOtherPlayers_Postfix(Farmer __instance, SpriteBatch b)
-        {
-            try
-            {
-                DrawAndUpdateOtherPlayers(b, 1);
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError($"Failed in {nameof(Draw_DrawOtherPlayers_Postfix)}:\n{ex}");
-                return;
             }
         }
 
@@ -74,6 +59,14 @@ namespace StardewArchipelago.GameModifications.MultiplayerVision
                     return;
                 }
 
+                var timeSinceLastBroadcast = DateTime.Now - _timeLastBroadcast;
+                if (timeSinceLastBroadcast.TotalSeconds <= VisiblePlayer.UPDATE_FREQUENCY_WHEN_MOVING_SECONDS)
+                {
+                    return;
+                }
+
+                var currentMap = Game1.currentLocation.Name;
+
                 var farmer = Game1.player;
                 var session = _archipelago.GetSession();
                 var slotName = _archipelago.GetPlayerName();
@@ -83,10 +76,36 @@ namespace StardewArchipelago.GameModifications.MultiplayerVision
                 var xVelocity = GetXVelocity(farmer, movementSpeed);
                 var yVelocity = GetYVelocity(farmer, movementSpeed);
 
+                var anyoneOnSameMap = _visiblePlayers.Any(x => x.Value.IsCloseEnough());
+                double updateFrequency = VisiblePlayer.UPDATE_FREQUENCY_DIFFERENT_MAP_SECONDS;
+                if (anyoneOnSameMap)
+                {
+                    if (_lastBroadcast != null && PlayerPositionsAreSame(Game1.player.Position, xVelocity, yVelocity, _lastBroadcast))
+                    {
+                        updateFrequency = Math.Min(updateFrequency, VisiblePlayer.UPDATE_FREQUENCY_WHEN_IMMOBILE_SECONDS);
+                    }
+                    else
+                    {
+                        updateFrequency = Math.Min(updateFrequency, VisiblePlayer.UPDATE_FREQUENCY_WHEN_MOVING_SECONDS);
+                    }
+                }
+                if (_lastBroadcast != null && _lastBroadcast.MapName != currentMap)
+                {
+                    updateFrequency = Math.Min(updateFrequency, VisiblePlayer.UPDATE_FREQUENCY_WHEN_MOVING_SECONDS);
+                }
+
+                if (timeSinceLastBroadcast.TotalSeconds <= updateFrequency)
+                {
+                    return;
+                }
+
+                var timeSinceLastBroadcastAppearance = DateTime.Now - _timeLastBroadcastAppearance;
+                var includeAppearance = timeSinceLastBroadcastAppearance.TotalSeconds >= VisiblePlayer.BROADCAST_APPEARANCE_SECONDS;
+
                 var visiblePlayer = new VisiblePlayer()
                 {
                     UniqueIdentifier = identifier,
-                    MapName = Game1.currentLocation.Name,
+                    MapName = currentMap,
                     Position = Game1.player.Position,
                     Velocity = new Vector2(xVelocity, yVelocity),
                     FacingDirection = farmer.FacingDirection,
@@ -98,10 +117,9 @@ namespace StardewArchipelago.GameModifications.MultiplayerVision
                     Rotation = farmer.rotation,
                 };
 
-                var timeSinceLastBroadcast = DateTime.Now - _timeLastBroadcast;
-                if (timeSinceLastBroadcast.TotalSeconds >= VisiblePlayer.BROADCAST_APPEARANCE_SECONDS)
+                if (includeAppearance)
                 {
-                    _timeLastBroadcast = DateTime.Now;
+                    _timeLastBroadcastAppearance = DateTime.Now;
                     // _logger.LogWarning($"{DateTime.Now} - Broadcasting appearance...");
                     var appearance = new PlayerAppearance()
                     {
@@ -131,6 +149,9 @@ namespace StardewArchipelago.GameModifications.MultiplayerVision
                     visiblePlayer.Appearance = appearance;
                 }
 
+                _logger.LogInfo($"Performing a MultiplayerVision update (appearance: {includeAppearance})");
+                _timeLastBroadcast = DateTime.Now;
+                _lastBroadcast = visiblePlayer;
                 _archipelago.SendMultiplayerVisionPacket(visiblePlayer);
             }
             catch (Exception ex)
@@ -139,6 +160,20 @@ namespace StardewArchipelago.GameModifications.MultiplayerVision
                 return;
             }
         }
+
+        private static bool PlayerPositionsAreSame(Vector2 playerPosition, float xVelocity, float yVelocity, VisiblePlayer lastBroadcast)
+        {
+            return FloatAreSame(playerPosition.X, lastBroadcast.Position.X) &&
+                   FloatAreSame(playerPosition.Y, lastBroadcast.Position.Y) &&
+                   FloatAreSame(xVelocity, lastBroadcast.Velocity.X) &&
+                   FloatAreSame(yVelocity, lastBroadcast.Velocity.X);
+        }
+
+        private static bool FloatAreSame(float floatA, float floatB)
+        {
+            return Math.Abs(floatA - floatB) <= 0.01f;
+        }
+
         private static float GetXVelocity(Farmer farmer, float movementSpeed)
         {
             var xVelocity = 0f;
@@ -164,6 +199,20 @@ namespace StardewArchipelago.GameModifications.MultiplayerVision
                 yVelocity += movementSpeed;
             }
             return yVelocity;
+        }
+
+        // public override void draw(SpriteBatch b)
+        public static void Draw_DrawOtherPlayers_Postfix(Farmer __instance, SpriteBatch b)
+        {
+            try
+            {
+                DrawAndUpdateOtherPlayers(b, 1);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Failed in {nameof(Draw_DrawOtherPlayers_Postfix)}:\n{ex}");
+                return;
+            }
         }
 
         public static void DrawAndUpdateOtherPlayers(SpriteBatch spriteBatch, uint elapsedFrames)
