@@ -2,6 +2,7 @@
 using StardewArchipelago.Archipelago.Gifting;
 using StardewArchipelago.Bundles;
 using StardewArchipelago.GameModifications;
+using StardewArchipelago.GameModifications.Testing;
 using StardewArchipelago.Items.Traps;
 using StardewArchipelago.Locations.CodeInjections.Vanilla;
 using StardewArchipelago.Locations.CodeInjections.Vanilla.MonsterSlayer;
@@ -18,9 +19,9 @@ namespace StardewArchipelago.Locations.CodeInjections.Initializers
     {
         public static void Initialize(LogHandler logger, IModHelper modHelper, ModConfig config, StardewArchipelagoClient archipelago, ArchipelagoStateDto state,
             StardewLocationChecker locationChecker, JojaLocationChecker jojaLocationChecker, StardewItemManager itemManager, WeaponsManager weaponsManager, BundlesManager bundlesManager,
-            SeedShopStockModifier seedShopStockModifier, Friends friends, TrapManager trapManager, BankHandler bank, NameSimplifier nameSimplifier, GiftSender giftSender, NightShippingBehaviors nightShippingBehaviors)
+            SeedShopStockModifier seedShopStockModifier, Friends friends, TrapManager trapManager, BankHandler bank, NameSimplifier nameSimplifier, GiftSender giftSender, NightShippingBehaviors nightShippingBehaviors, TesterFeatures testerFeatures)
         {
-            VanillaCodeInjectionInitializer.Initialize(logger, modHelper, config, archipelago, state, locationChecker, jojaLocationChecker, itemManager, weaponsManager, bundlesManager, friends, trapManager, bank, nameSimplifier, giftSender, nightShippingBehaviors);
+            VanillaCodeInjectionInitializer.Initialize(logger, modHelper, config, archipelago, state, locationChecker, jojaLocationChecker, itemManager, weaponsManager, bundlesManager, friends, trapManager, bank, nameSimplifier, giftSender, nightShippingBehaviors, testerFeatures);
             if (archipelago.SlotData.Mods.IsModded)
             {
                 ModCodeInjectionInitializer.Initialize(logger, modHelper, archipelago, locationChecker, seedShopStockModifier);

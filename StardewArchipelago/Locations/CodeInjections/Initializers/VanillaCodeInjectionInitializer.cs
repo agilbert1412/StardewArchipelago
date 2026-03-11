@@ -5,6 +5,7 @@ using StardewArchipelago.Archipelago.Gifting;
 using StardewArchipelago.Archipelago.SlotData.SlotEnums;
 using StardewArchipelago.Bundles;
 using StardewArchipelago.GameModifications.CodeInjections.Television;
+using StardewArchipelago.GameModifications.Testing;
 using StardewArchipelago.Goals;
 using StardewArchipelago.Items.Traps;
 using StardewArchipelago.Locations.CodeInjections.Vanilla;
@@ -26,7 +27,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Initializers
 {
     public static class VanillaCodeInjectionInitializer
     {
-        public static void Initialize(LogHandler logger, IModHelper modHelper, ModConfig config, StardewArchipelagoClient archipelago, ArchipelagoStateDto state, StardewLocationChecker locationChecker, JojaLocationChecker jojaLocationChecker, StardewItemManager itemManager, WeaponsManager weaponsManager, BundlesManager bundlesManager, Friends friends, TrapManager trapManager, BankHandler bank, NameSimplifier nameSimplifier, GiftSender giftSender, NightShippingBehaviors nightShippingBehaviors)
+        public static void Initialize(LogHandler logger, IModHelper modHelper, ModConfig config, StardewArchipelagoClient archipelago, ArchipelagoStateDto state, StardewLocationChecker locationChecker, JojaLocationChecker jojaLocationChecker, StardewItemManager itemManager, WeaponsManager weaponsManager, BundlesManager bundlesManager, Friends friends, TrapManager trapManager, BankHandler bank, NameSimplifier nameSimplifier, GiftSender giftSender, NightShippingBehaviors nightShippingBehaviors, TesterFeatures testerFeatures)
         {
             TrashBearInjections.Initialize(logger, modHelper, archipelago, locationChecker, bundlesManager, itemManager, state);
             BackpackInjections.Initialize(logger, modHelper, archipelago, locationChecker);
@@ -46,7 +47,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Initializers
             WizardBookInjections.Initialize(logger, modHelper, archipelago, locationChecker);
             PhoneInjections.Initialize(logger, modHelper, archipelago, weaponsManager);
             InitializeArcadeMachines(logger, modHelper, archipelago, locationChecker, state);
-            TravelingMerchantInjections.Initialize(logger, modHelper, archipelago, locationChecker, state);
+            TravelingMerchantInjections.Initialize(logger, modHelper, archipelago, locationChecker, state, testerFeatures);
             FishingInjections.Initialize(logger, modHelper, archipelago, locationChecker, itemManager, state.Wallet);
             MuseumInjections.Initialize(logger, modHelper, archipelago, locationChecker, itemManager);
             FriendshipInjections.Initialize(logger, modHelper, archipelago, locationChecker, friends, itemManager);
