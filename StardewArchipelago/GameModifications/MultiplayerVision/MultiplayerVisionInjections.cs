@@ -149,7 +149,7 @@ namespace StardewArchipelago.GameModifications.MultiplayerVision
                     visiblePlayer.Appearance = appearance;
                 }
 
-                _logger.LogInfo($"Performing a MultiplayerVision update (appearance: {includeAppearance})");
+                // _logger.LogInfo($"Performing a MultiplayerVision update (appearance: {includeAppearance})");
                 _timeLastBroadcast = DateTime.Now;
                 _lastBroadcast = visiblePlayer;
                 _archipelago.SendMultiplayerVisionPacket(visiblePlayer);
