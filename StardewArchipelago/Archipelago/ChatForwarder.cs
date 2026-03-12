@@ -511,9 +511,14 @@ namespace StardewArchipelago.Archipelago
                 return false;
             }
 
+            SleepImmediately();
+            return true;
+        }
+
+        public static void SleepImmediately()
+        {
             SetLastBedToFarmhouse();
             Game1.player.startToPassOut();
-            return true;
         }
 
         private static void SetLastBedToFarmhouse()

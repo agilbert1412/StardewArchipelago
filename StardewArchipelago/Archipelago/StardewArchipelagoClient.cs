@@ -9,10 +9,13 @@ using HarmonyLib;
 using KaitoKid.ArchipelagoUtilities.Net.Client;
 using KaitoKid.ArchipelagoUtilities.Net.Client.ConnectionResults;
 using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
+using KaitoKid.Utilities.Interfaces;
 using StardewArchipelago.Archipelago.ConnectionResults;
 using StardewArchipelago.Bundles;
 using StardewArchipelago.Extensions;
 using StardewArchipelago.GameModifications.MoveLink;
+using StardewArchipelago.GameModifications.MultiplayerVision;
+using StardewArchipelago.GameModifications.MultiSleep;
 using StardewArchipelago.GameModifications.Testing;
 using StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles;
 using StardewModdingAPI;
@@ -24,8 +27,6 @@ using System.IO;
 using System.Linq;
 using System.Numerics;
 using System.Threading.Tasks;
-using KaitoKid.Utilities.Interfaces;
-using StardewArchipelago.GameModifications.MultiplayerVision;
 using Color = Microsoft.Xna.Framework.Color;
 
 namespace StardewArchipelago.Archipelago
@@ -49,6 +50,7 @@ namespace StardewArchipelago.Archipelago
         public IGiftingService GiftingService { get; private set; }
 
         private List<string> _messagesToIgnore;
+        private int _numberFailedReconnections = 0;
 
         public StardewArchipelagoClient(ILogger logger, IModHelper modHelper, IManifest manifest, Harmony harmony, Action itemReceivedFunction, IJsonLoader jsonLoader, TesterFeatures testerFeatures) :
             base(logger, new StardewDatapackageCache(new ArchipelagoItemLoader(jsonLoader), new StardewArchipelagoLocationLoader(jsonLoader), "stardew_valley", "IdTables"), itemReceivedFunction)
@@ -120,6 +122,7 @@ namespace StardewArchipelago.Archipelago
             base.InitializeAfterConnection();
             _bigIntegerDataStorage = new BigIntegerDataStorageWrapper(Logger, GetSession());
             GiftingService = new GiftingService(GetSession());
+            _numberFailedReconnections = 0;
         }
 
         protected override void InitializeDeathLink()
@@ -239,12 +242,19 @@ namespace StardewArchipelago.Archipelago
         {
             base.OnReconnectFailure();
             Game1.chatBox?.addMessage("Reconnection attempt failed", Color.Red);
+            _numberFailedReconnections++;
+            var allowedRetries = ModEntry.Instance.Config.ConnectionRetriesBeforeForceSleep;
+            if (allowedRetries >= 0 && _numberFailedReconnections > allowedRetries)
+            {
+                MultiSleepBehavior.SleepOnce();
+            }
         }
 
         protected override void OnReconnectSuccess()
         {
             base.OnReconnectSuccess();
             Game1.chatBox?.addMessage("Reconnection attempt successful!", Color.Green);
+            _numberFailedReconnections = 0;
             ArchipelagoJunimoNoteMenu.CompleteBundleIfExists(MemeBundleNames.RECONNECTION);
         }
 

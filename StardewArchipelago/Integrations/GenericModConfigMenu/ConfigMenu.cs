@@ -456,6 +456,18 @@ namespace StardewArchipelago.Integrations.GenericModConfigMenu
                 setValue: (value) => Config.JojapocalypseMinimumCompletionPercentToGoal = value,
                 formatValue: (value) => $"{value}%"
             );
+
+            configMenu.AddNumberOption(
+                mod: ModManifest,
+                name: () => "Number of times to retry connections before auto-sleeping",
+                tooltip: () => "After X reconnections failed, the character will automatically go to sleep to save the game, in case of crashing. Set to -1 to continue retrying unlimited times",
+                min: 0,
+                max: 20,
+                interval: 1,
+                getValue: () => Config.ConnectionRetriesBeforeForceSleep,
+                setValue: (value) => Config.ConnectionRetriesBeforeForceSleep = value,
+                formatValue: (value) => $"{value}"
+            );
         }
     }
 }
