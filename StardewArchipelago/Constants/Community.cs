@@ -47,6 +47,7 @@ namespace StardewArchipelago.Constants
             "Fly Sniper",
             "Fore772",
             "Frazzleduck",
+            "Fresh Funk Produce",
             "Goyster",
             "Heinermann",
             "Honeywell",
