@@ -194,7 +194,7 @@ namespace StardewArchipelago.Locations.Jojapocalypse
                     continue;
                 }
 
-                if (!locationName.Contains(name))
+                if (!locationName.StartsWith(name) && locationName.EndsWith(" <3"))
                 {
                     continue;
                 }
