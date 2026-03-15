@@ -54,8 +54,6 @@ The Vault is excluded, and is remixed instead, due to technical limitations.
 
 ### Meme
 
-#### This setting is not released yet, and is only present in the 7.x.x development branch.
-
 This setting completely replaces the entirety of the community center with a brand new set of over 90 entirely-custom bundles.
 
 All of these bundles are some sort of joke, troll, or reference to a different media. They are not balanced around a specific difficulty, but instead written to maximize humor (in my opinion).

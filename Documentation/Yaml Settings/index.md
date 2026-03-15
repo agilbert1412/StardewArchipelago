@@ -10,7 +10,7 @@ This document is a work in progress. Nodes that are ~~struck through~~ do not ex
 
 ## General Settings
 
-These settings decide what your playthrough will be. They do not directly add or remove shuffled locations or items, but instead indirectly decide what your playthrough will be.
+These settings decide what your playthrough will be. They do not directly add or remove shuffled locations or items, but instead shape the playthrough in other ways.
 
 - [Goal](./goal.md)
 - [Farm Type](./farm_type.md)
@@ -28,8 +28,8 @@ These settings are critical customization of items and locations. They are the b
 - [Backpack Progression](./backpack_progression.md)
 - [Tool Progression](./tool_progression.md)
 - [Elevator Progression](./elevator_progression.md)
-- ~~[Skill Progression](./skill_progression.md)~~
-- ~~[Building Progression](./building_progression.md)~~
+- [Skill Progression](./skill_progression.md)
+- [Building Progression](./building_progression.md)
 
 ## Extra Shuffling
 

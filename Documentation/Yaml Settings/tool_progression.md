@@ -53,7 +53,7 @@ For each tool item in your pool, there is an equivalent location to check in the
 - Bamboo Pole Cutscene (for the bamboo pole)
 - Copper Pan Cutscene (for the copper pan)
 
-The two tools that come from masteries are not shuffled if you didn't shuffle Masteries as part of ~~[Skill Progression](./skill_progression.md)~~. If they are, they do not have equivalent locations.
+The two tools that come from masteries are not shuffled if you didn't shuffle Masteries as part of [Skill Progression](./skill_progression.md). If they are, they do not have equivalent locations.
 
 #### Price
 
@@ -71,7 +71,7 @@ It does not affect obtentions that aren't a purchase, like a Grim Reaper Statue 
 
 If tools are shuffled, the discount applies to the Location, not the Item.
 
-## 7.x.x Content
+## Interaction With Other Settings
 
 ### Start Without Tools
 
