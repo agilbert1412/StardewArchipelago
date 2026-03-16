@@ -167,9 +167,9 @@ Hard also introduces more location checks, so it is also more time consuming to 
 | Lupini: Red Eagle              | Sold by Lupini on Winter 15 every month                           | Sold by Lupini on Winter 15 every 3 months starting on the first one                           |
 | Lupini: Portrait Of A Mermaid  | Sold by Lupini on Winter 16 every month                           | Sold by Lupini on Winter 16 every 3 months starting on the first one                           |
 | Lupini: Solar Kingdom          | Sold by Lupini on Winter 17 every month                           | Sold by Lupini on Winter 17 every 3 months starting on the first one                           |
-| Lupini: Clouds                 | $${\color{red}Excluded}$$                                            | Sold by Lupini on Winter 15 every 3 months starting on the second one                          |
-| Lupini: 1000 Years From Now    | Excluded                                                          | Sold by Lupini on Winter 16 every 3 months starting on the second one                          |
-| Lupini: Three Trees            | Excluded                                                          | Sold by Lupini on Winter 17 every 3 months starting on the second one                          |
+| Lupini: Clouds                 | $${\color{red}Excluded}$$                                         | Sold by Lupini on Winter 15 every 3 months starting on the second one                          |
+| Lupini: 1000 Years From Now    | $${\colorbox{red}Excluded}$$                                      | Sold by Lupini on Winter 16 every 3 months starting on the second one                          |
+| Lupini: Three Trees            | $${\textcolor{red}Excluded}$$                                     | Sold by Lupini on Winter 17 every 3 months starting on the second one                          |
 | Lupini: The Serpent            | Excluded                                                          | Sold by Lupini on Winter 15 every 3 months starting on the third one                           |
 | Lupini: 'Tropical Fish #173'   | Excluded                                                          | Sold by Lupini on Winter 16 every 3 months starting on the third one                           |
 | Lupini: Land Of Clay           | Excluded                                                          | Sold by Lupini on Winter 17 every 3 months starting on the third one                           |
