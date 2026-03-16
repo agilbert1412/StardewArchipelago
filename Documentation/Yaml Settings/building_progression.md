@@ -27,8 +27,11 @@ There are many different [Carpenter buildings](https://stardewvalleywiki.com/Car
 
 Each building costs money and materials. The costs are visible in-game or on the wiki.
 These buildings can be constructed at the Carpenter shop, and take 3 days to build.
-You can construct multiple copies of a building if you wish
+
+You can construct multiple copies of a building if you wish.
+
 The starting buildings automatically appear on your farm, but you can still go ask Robin to construct duplicates.
+
 Buildings that require another buildings will not appear in the shop until the required building is constructed on your farm. This is because they are an upgrade to it, not a new building entirely.
 
 ### Option Values
