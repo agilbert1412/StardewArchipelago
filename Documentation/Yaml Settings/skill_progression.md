@@ -53,6 +53,12 @@ While you can use any level 10 skill to earn mastery XP and go claim any mastery
 
 ## Interaction With Other Settings
 
+### [Tool Progression](./tool_progression.md)
+
+The Farming and Fishing Masteries provide a tool in vanilla.
+
+If you shuffled the masteries and the tools as part of [Tool Progression](./tool_progression.md), the masteries will not provide the tool upgrades, but instead, makes it so you have an extra copy of the Progressive Tool in your item pool.
+
 ### Modded Content
 
 Some of the [Supported Mods](./../Supported%20Mods.md) introduce new skills to the game.

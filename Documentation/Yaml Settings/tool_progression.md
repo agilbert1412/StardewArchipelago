@@ -53,8 +53,6 @@ For each tool item in your pool, there is an equivalent location to check in the
 - Bamboo Pole Cutscene (for the bamboo pole)
 - Copper Pan Cutscene (for the copper pan)
 
-The two tools that come from masteries are not shuffled if you didn't shuffle Masteries as part of [Skill Progression](./skill_progression.md). If they are, they do not have equivalent locations.
-
 #### Price
 
 3 Prices are available
@@ -73,6 +71,12 @@ If tools are shuffled, the discount applies to the Location, not the Item.
 
 ## Interaction With Other Settings
 
+### [Skill Progression](./skill_progression.md)
+
+The two tools that come from masteries are not shuffled if you didn't shuffle Masteries as part of [Skill Progression](./skill_progression.md). If they are, they do not have equivalent locations.
+
+If you did shuffle masteries, these tools exist as an extra copy of their respective Progressive Tool items in the item pool.
+
 ### Start Without Tools
 
 Within the setting ~~[Start Without](./start_without.md)~~, is an option to "Start Without: Tools".
@@ -86,5 +90,7 @@ This will allow the player to start without the following tools:
 
 These now behave the same as the Fishing Rod and Pan do, which means that they have an extra item in the pool that gives you your basic version of the tool.
 There is no equivalent location for these starting tools.
+
+You cannot Start Without Tools if you didn't shuffle your tools, as the base tools would lack a valid obtention method.
 
 ## [Return to Index](./index.md)

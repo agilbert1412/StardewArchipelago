@@ -8,22 +8,24 @@ This setting allows you to randomize the carpenter buildings.
 
 There are many different [Carpenter buildings](https://stardewvalleywiki.com/Carpenter%27s_Shop#Farm_Buildings). Some are progression, and some are mostly pointless. Some of them also have special traits
 
-- Barn
-- Big Barn (Requires a Barn)
-- Deluxe Barn (Requires a Big Barn)
-- Coop
-- Big Coop (Requires a Coop)
-- Deluxe Coop (Requires a Big Coop)
-- Fish Pond
-- Mill
-- Shed
-- Big Shed (Requires a Shed)
-- Silo
-- Slime Hutch
-- Stable
-- Well
-- Shipping Bin (Starting Building)
-- Pet Bowl (Starting Building)
+| Building     | Requirement | Starting Building? |
+|--------------|-------------|--------------------|
+| Barn         |             |                    |
+| Big Barn     | Barn        |                    |
+| Deluxe Barn  | Big Barn    |                    |
+| Coop         |             |                    |
+| Big Coop     | Coop)       |                    |
+| Deluxe Coop  | Big Coop    |                    |
+| Fish Pond    |             |                    |
+| Mill         |             |                    |
+| Shed         |             |                    |
+| Big Shed     | Shed        |                    |
+| Silo         |             |                    |
+| Slime Hutch  |             |                    |
+| Stable       |             |                    |
+| Well         |             |                    |
+| Shipping Bin |             |         X          |
+| Pet Bowl     |             |         X          |
 
 Each building costs money and materials. The costs are visible in-game or on the wiki.
 These buildings can be constructed at the Carpenter shop, and take 3 days to build.
@@ -54,7 +56,7 @@ The buildings are not shuffled at all. They are all immediately unlocked, and yo
 
 You will get the starting buildings from the start (Shipping Bin and Pet Bowl) (Except if you decided to start without them in ~~[Start Without](./start_without.md)~~)
 
-All other buildings need to be received as items before they can be constructed. For buildings that have multiple tiers of upgrade, the name will use the format `Progressive Coop`, and you can receive up to 3 copies.
+All other buildings need to be received as items before they can be constructed. For buildings that have multiple tiers of upgrade, the name will use the format `Progressive X`. For example, There are 3 `Progressive Coop` and 2 `Progressive Shed` items.
 
 The first copy of each building that you construct will be entirely free. Subsequent duplicates will have the normal cost.
 
