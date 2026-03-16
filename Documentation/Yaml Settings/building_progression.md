@@ -24,8 +24,8 @@ There are many different [Carpenter buildings](https://stardewvalleywiki.com/Car
 | Slime Hutch  |             |                    |
 | Stable       |             |                    |
 | Well         |             |                    |
-| Shipping Bin |             |         X          |
-| Pet Bowl     |             |         X          |
+| Shipping Bin |             | Yes                |
+| Pet Bowl     |             | Yes                |
 
 Each building costs money and materials. The costs are visible in-game or on the wiki.
 These buildings can be constructed at the Carpenter shop, and take 3 days to build.
