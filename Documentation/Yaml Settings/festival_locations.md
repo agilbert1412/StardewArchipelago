@@ -61,8 +61,8 @@ Hard also introduces more location checks, so it is also more time consuming to 
 
 | Location                       | Easy                                                              | Hard                                                                                           |
 |--------------------------------|-------------------------------------------------------------------|------------------------------------------------------------------------------------------------|
-| Egg Hunt Victory               | Win the egg hunt                                                  | $${\color{blue}{Same as easy}}$$                                                               |
-| Egg Festival: Strawberry Seeds | Available in the shop                                             | $${\color{blue}{Same as easy}}$$                                                               |
+| Egg Hunt Victory               | Win the egg hunt                                                  | $${\color{blue}{Same \space as \space easy}}$$                                                 |
+| Egg Festival: Strawberry Seeds | Available in the shop                                             | $${\color{blue}{Same \space as \space easy}}$$                                                 |
 
 #### [Desert Festival](https://stardewvalleywiki.com/Desert_Festival)
 
@@ -87,9 +87,9 @@ Hard also introduces more location checks, so it is also more time consuming to 
 
 | Location                       | Easy                                                              | Hard                                                                                           |
 |--------------------------------|-------------------------------------------------------------------|------------------------------------------------------------------------------------------------|
-| Dance with someone             | Dance with someone                                                | $${\color{blue}{Same as easy}}$$                                                               |
-| Tub o' Flowers Recipe          | Available in the shop                                             | $${\color{blue}{Same as easy}}$$                                                               |
-| Rarecrow #5 (Woman)            | Available in the shop                                             | $${\color{blue}{Same as easy}}$$                                                               |
+| Dance with someone             | Dance with someone                                                | $${\color{blue}{Same \space as \space easy}}$$                                                 |
+| Tub o' Flowers Recipe          | Available in the shop                                             | $${\color{blue}{Same \space as \space easy}}$$                                                 |
+| Rarecrow #5 (Woman)            | Available in the shop                                             | $${\color{blue}{Same \space as \space easy}}$$                                                 |
 
 ### Summer
 
@@ -103,16 +103,16 @@ Hard also introduces more location checks, so it is also more time consuming to 
 
 | Location                       | Easy                                                              | Hard                                                                                           |
 |--------------------------------|-------------------------------------------------------------------|------------------------------------------------------------------------------------------------|
-| Trout Derby Reward [1 to 3]    | Turn in up to 3 Golden Tags at the Trout Derby                    | $${\color{blue}{Same as easy}}$$                                                               |
+| Trout Derby Reward [1 to 3]    | Turn in up to 3 Golden Tags at the Trout Derby                    | $${\color{blue}{Same \space as \space easy}}$$                                                 |
 | Trout Derby Reward [4 to 10]   | $${\color{red}Excluded}$$                                         | Turn in up to 10 Golden Tags at the Trout Derby                                                |
 
 #### [Dance of the Moonlight Jellies](https://stardewvalleywiki.com/Dance_of_the_Moonlight_Jellies)
 
 | Location                       | Easy                                                              | Hard                                                                                           |
 |--------------------------------|-------------------------------------------------------------------|------------------------------------------------------------------------------------------------|
-| Dance of the Moonlight Jellies | Watch the dance of the moonlight jellies                          | $${\color{blue}{Same as easy}}$$                                                               |
-| Moonlight Jellies Banner       | Available in the shop                                             | $${\color{blue}{Same as easy}}$$                                                               |
-| Starport Decal                 | Available in the shop                                             | $${\color{blue}{Same as easy}}$$                                                               |
+| Dance of the Moonlight Jellies | Watch the dance of the moonlight jellies                          | $${\color{blue}{Same \space as \space easy}}$$                                                 |
+| Moonlight Jellies Banner       | Available in the shop                                             | $${\color{blue}{Same \space as \space easy}}$$                                                 |
+| Starport Decal                 | Available in the shop                                             | $${\color{blue}{Same \space as \space easy}}$$                                                 |
 
 ### Fall
 
@@ -122,16 +122,16 @@ Hard also introduces more location checks, so it is also more time consuming to 
 |--------------------------------|-------------------------------------------------------------------|------------------------------------------------------------------------------------------------|
 | Smashing Stone                 | Get either the strongest, or weakest rating at the Smashing Stone | Get the strongest rating at the Smashing Stone                                                 |
 | Grange Display                 | Get a score of at least 60, or bribe Lewis                        | Get a score of at least 90                                                                     |
-| Rarecrow #1 (Turnip Head)      | Available in the star tokens shop                                 | $${\color{blue}{Same as easy}}$$                                                               |
-| Fair Stardrop                  | Available in the star tokens shop                                 | $${\color{blue}{Same as easy}}$$                                                               |
+| Rarecrow #1 (Turnip Head)      | Available in the star tokens shop                                 | $${\color{blue}{Same \space as \space easy}}$$                                                 |
+| Fair Stardrop                  | Available in the star tokens shop                                 | $${\color{blue}{Same \space as \space easy}}$$                                                 |
 
 #### [Spirit's Eve](https://stardewvalleywiki.com/Spirit%27s_Eve)
 
 | Location                       | Easy                                                              | Hard                                                                                           |
 |--------------------------------|-------------------------------------------------------------------|------------------------------------------------------------------------------------------------|
-| Spirit's Eve Maze              | Solve the maze and find the treasure                              | $${\color{blue}{Same as easy}}$$                                                               |
-| Rarecrow #2 (Witch)            | Available in the shop                                             | $${\color{blue}{Same as easy}}$$                                                               |
-| Jack-O-Lantern Recipe          | Available in the shop                                             | $${\color{blue}{Same as easy}}$$                                                               |
+| Spirit's Eve Maze              | Solve the maze and find the treasure                              | $${\color{blue}{Same \space as \space easy}}$$                                                 |
+| Rarecrow #2 (Witch)            | Available in the shop                                             | $${\color{blue}{Same \space as \space easy}}$$                                                 |
+| Jack-O-Lantern Recipe          | Available in the shop                                             | $${\color{blue}{Same \space as \space easy}}$$                                                 |
 
 ### Winter
 
@@ -139,19 +139,19 @@ Hard also introduces more location checks, so it is also more time consuming to 
 
 | Location                       | Easy                                                              | Hard                                                                                           |
 |--------------------------------|-------------------------------------------------------------------|------------------------------------------------------------------------------------------------|
-| Win Fishing Competition        | Win the fishing competition                                       | $${\color{blue}{Same as easy}}$$                                                               |
-| Rarecrow #4 (Snowman)          | Available in the shop                                             | $${\color{blue}{Same as easy}}$$                                                               |
+| Win Fishing Competition        | Win the fishing competition                                       | $${\color{blue}{Same \space as \space easy}}$$                                                 |
+| Rarecrow #4 (Snowman)          | Available in the shop                                             | $${\color{blue}{Same \space as \space easy}}$$                                                 |
 
 #### [SquidFest](https://stardewvalleywiki.com/SquidFest)
 
 | Location                       | Easy                                                              | Hard                                                                                           |
 |--------------------------------|-------------------------------------------------------------------|------------------------------------------------------------------------------------------------|
-| SquidFest Day 1 Copper         | Catch 1 Squid on the 12th and claim the rewards                   | $${\color{blue}{Same as easy}}$$                                                               |
-| SquidFest Day 1 Iron           | Catch 3 Squids on the 12th and claim the rewards                  | $${\color{blue}{Same as easy}}$$                                                               |
+| SquidFest Day 1 Copper         | Catch 1 Squid on the 12th and claim the rewards                   | $${\color{blue}{Same \space as \space easy}}$$                                                 |
+| SquidFest Day 1 Iron           | Catch 3 Squids on the 12th and claim the rewards                  | $${\color{blue}{Same \space as \space easy}}$$                                                 |
 | SquidFest Day 1 Gold           | $${\color{red}Excluded}$$                                         | Catch 5 Squids on the 12th and claim the rewards                                               |
 | SquidFest Day 1 Iridium        | $${\color{red}Excluded}$$                                         | Catch 8 Squids on the 12th and claim the rewards                                               |
-| SquidFest Day 2 Copper         | Catch 2 Squid on the 13th and claim the rewards                   | $${\color{blue}{Same as easy}}$$                                                               |
-| SquidFest Day 2 Iron           | Catch 5 Squids on the 13th and claim the rewards                  | $${\color{blue}{Same as easy}}$$                                                               |
+| SquidFest Day 2 Copper         | Catch 2 Squid on the 13th and claim the rewards                   | $${\color{blue}{Same \space as \space easy}}$$                                                 |
+| SquidFest Day 2 Iron           | Catch 5 Squids on the 13th and claim the rewards                  | $${\color{blue}{Same \space as \space easy}}$$                                                 |
 | SquidFest Day 2 Gold           | $${\color{red}Excluded}$$                                         | Catch 7 Squids on the 13th and claim the rewards                                               |
 | SquidFest Day 2 Iridium        | $${\color{red}Excluded}$$                                         | Catch 10 Squids on the 13th and claim the rewards                                              |
 
@@ -159,11 +159,11 @@ Hard also introduces more location checks, so it is also more time consuming to 
 
 | Location                       | Easy                                                              | Hard                                                                                           |
 |--------------------------------|-------------------------------------------------------------------|------------------------------------------------------------------------------------------------|
-| Mermaid Show                   | Watch the mermaid show                                            | $${\color{blue}{Same as easy}}$$                                                               |
+| Mermaid Show                   | Watch the mermaid show                                            | $${\color{blue}{Same \space as \space easy}}$$                                                 |
 | Cone Hat                       | $${\color{red}Excluded}$$                                         | Available in the [Magic Shop Boat](https://stardewvalleywiki.com/Night_Market#Magic_Shop_Boat) |
 | Iridium Fireplace              | $${\color{red}Excluded}$$                                         | Available in the [Magic Shop Boat](https://stardewvalleywiki.com/Night_Market#Magic_Shop_Boat) |
-| Rarecrow #7 (Tanuki)           | Available in the shop after donating 20 artifacts to the museum   | $${\color{blue}{Same as easy}}$$                                                               |
-| Rarecrow #8 (Tribal Mask)      | Available in the shop after donating 40 items to the museum       | $${\color{blue}{Same as easy}}$$                                                               |
+| Rarecrow #7 (Tanuki)           | Available in the shop after donating 20 artifacts to the museum   | $${\color{blue}{Same \space as \space easy}}$$                                                 |
+| Rarecrow #8 (Tribal Mask)      | Available in the shop after donating 40 items to the museum       | $${\color{blue}{Same \space as \space easy}}$$                                                 |
 | Lupini: Red Eagle              | Sold by Lupini on Winter 15 every month                           | Sold by Lupini on Winter 15 every 3 months starting on the first one                           |
 | Lupini: Portrait Of A Mermaid  | Sold by Lupini on Winter 16 every month                           | Sold by Lupini on Winter 16 every 3 months starting on the first one                           |
 | Lupini: Solar Kingdom          | Sold by Lupini on Winter 17 every month                           | Sold by Lupini on Winter 17 every 3 months starting on the first one                           |
@@ -179,7 +179,7 @@ Hard also introduces more location checks, so it is also more time consuming to 
 | Location                       | Easy                                                              | Hard                                                                                           |
 |--------------------------------|-------------------------------------------------------------------|------------------------------------------------------------------------------------------------|
 | Secret Santa                   | Give a gift to your secret santa recipient                        | Give a loved gift to your secret santa recipient                                               |
-| The Legend of the Winter Star  | Hear the Legend of the Winter Star from Willy                     | $${\color{blue}{Same as easy}}$$                                                               |
+| The Legend of the Winter Star  | Hear the Legend of the Winter Star from Willy                     | $${\color{blue}{Same \space as \space easy}}$$                                                 |
 
 #### Uncategorized
 
@@ -187,7 +187,7 @@ There are a few location checks that are vaguely associated with festivals, and 
 
 | Location                       | Easy                                                              | Hard                                                                                           |
 |--------------------------------|-------------------------------------------------------------------|------------------------------------------------------------------------------------------------|
-| Rarecrow #3 (Alien)            | Available in the casino coins shop                                | $${\color{blue}{Same as easy}}$$                                                               |
-| Collect All Rarecrows          | Collect all 8 Rarecrows                                           | $${\color{blue}{Same as easy}}$$                                                               |
+| Rarecrow #3 (Alien)            | Available in the casino coins shop                                | $${\color{blue}{Same \space as \space easy}}$$                                                 |
+| Collect All Rarecrows          | Collect all 8 Rarecrows                                           | $${\color{blue}{Same \space as \space easy}}$$                                                 |
 
 ## [Return to Index](./index.md)
