@@ -28,11 +28,11 @@ This option works in two parts. First, what is shuffled, and second, what price 
 
 Here are the 6 possible values
 - `vanilla`
-- `progresssive` **This is the default value, and it is the recommended experience.**
+- `progressive` **This is the default value, and it is the recommended experience.**
 - `vanilla_cheap`
-- `progresssive_cheap`
+- `progressive_cheap`
 - `vanilla_very_cheap`
-- `progresssive_very_cheap`
+- `progressive_very_cheap`
 
 #### Vanilla
 

@@ -34,7 +34,7 @@ You can construct multiple copies of a building if you wish.
 
 The starting buildings automatically appear on your farm, but you can still go ask Robin to construct duplicates.
 
-Buildings that require another buildings will not appear in the shop until the required building is constructed on your farm. This is because they are an upgrade to it, not a new building entirely.
+Buildings that require another building will not appear in the shop until the required building is constructed on your farm. This is because they are an upgrade to it, not a new building entirely.
 
 ### Option Values
 
@@ -42,11 +42,11 @@ This option works in two parts. First, what is shuffled, and second, what price 
 
 Here are the 6 possible values
 - `vanilla`
-- `progresssive`
+- `progressive`
 - `vanilla_cheap`
-- `progresssive_cheap` **This is the default value, and it is the recommended experience.**
+- `progressive_cheap` **This is the default value, and it is the recommended experience.**
 - `vanilla_very_cheap`
-- `progresssive_very_cheap`
+- `progressive_very_cheap`
 
 #### Vanilla
 

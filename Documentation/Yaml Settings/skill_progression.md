@@ -26,7 +26,7 @@ This option decides whether the skills are shuffled in the multiworld, and optio
 
 Here are the 3 possible values
 - `vanilla`
-- `progresssive` **This is the default value**
+- `progressive` **This is the default value**
 - `progressive_with_masteries`
 
 #### Vanilla
