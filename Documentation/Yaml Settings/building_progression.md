@@ -89,7 +89,7 @@ Once received, both of these buildings will try to auto-construct themselves on 
 
 ### Modded Content
 
-Some of the [Supported Mods](/../Supported Mods.md) introduce new buildings to the game.
+Some of the [Supported Mods](./../Supported%20Mods.md) introduce new buildings to the game.
 
 Specifically, the following mods:
 - [Tractor Mod](https://www.nexusmods.com/stardewvalley/mods/1401) (Tractor Garage)
