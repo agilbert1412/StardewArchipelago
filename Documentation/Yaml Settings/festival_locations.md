@@ -121,7 +121,7 @@ Hard also introduces more location checks, so it is also more time consuming to 
 | Location                       | Easy                                                              | Hard                                                                                           |
 |--------------------------------|-------------------------------------------------------------------|------------------------------------------------------------------------------------------------|
 | Smashing Stone                 | Get either the strongest, or weakest rating at the Smashing Stone | Get the strongest rating at the Smashing Stone                                                 |
-| Grange Display                 | Get a score of at least 60, or bribe Lewis                        | Get a score of at least 90                                                                     |
+| Grange Display                 | Get a score of at least 60, or blackmail Lewis                    | Get a score of at least 90                                                                     |
 | Rarecrow #1 (Turnip Head)      | Available in the star tokens shop                                 | $${\color{green}{Same \space as \space easy}}$$                                                |
 | Fair Stardrop                  | Available in the star tokens shop                                 | $${\color{green}{Same \space as \space easy}}$$                                                |
 
