@@ -178,7 +178,7 @@ You must earn a total of 10 000 000g. This does not include your ~~[Starting Gol
 You must find all 7 stardrops spread out across the multiworld. If shuffled, you must **receive** the stardrop, and if some are kept vanilla, they must be obtained locally.
 
 The stardrops are:
-- At the Stardew Valley Fair. Is shuffled with ~~[Festival Locations](./festival_locations.md)~~
+- At the Stardew Valley Fair. Is shuffled with [Festival Locations](./festival_locations.md)
 - On floor 100 in the mines. Is always shuffled.
 - From the spouse or roommate upon reaching 12.5 hearts. Is shuffled if ~~[Friendsanity](./friendsanity.md)~~ is enabled to any degree.
 - Sold by Krobus in the Sewers. Is always shuffled.

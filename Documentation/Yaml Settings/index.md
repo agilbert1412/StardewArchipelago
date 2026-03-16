@@ -36,7 +36,7 @@ These settings are critical customization of items and locations. They are the b
 These settings will shuffle an extra game mechanic, that is not critical to the playthrough but can help fit a specific theme, or add replayability to something that is otherwise always the same.
 They generally focus on one very specific mechanic, and you decide whether to shuffle it or not.
 
-- ~~[Festival Locations](./festival_locations.md)~~
+- [Festival Locations](./festival_locations.md)
 - ~~[Arcade Machine Locations](./arcade_machine_locations.md)~~
 - ~~[Special Order Locations](./special_order_locations.md)~~
 - ~~[Quest Locations](./quest_locations.md)~~
