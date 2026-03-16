@@ -55,7 +55,7 @@ While you can use any level 10 skill to earn mastery XP and go claim any mastery
 
 ### Modded Content
 
-Some of the [Supported Mods](./../Supported Mods.md) introduce new skills to the game.
+Some of the [Supported Mods](./../Supported%20Mods.md) introduce new skills to the game.
 
 Specifically, the following mods:
 - [Spacecore Luck Skill](https://www.nexusmods.com/stardewvalley/mods/28103)
