@@ -37,7 +37,7 @@ These settings will shuffle an extra game mechanic, that is not critical to the 
 They generally focus on one very specific mechanic, and you decide whether to shuffle it or not.
 
 - [Festival Locations](./festival_locations.md)
-- ~~[Arcade Machine Locations](./arcade_machine_locations.md)~~
+- [Arcade Machine Locations](./arcade_machine_locations.md)
 - ~~[Special Order Locations](./special_order_locations.md)~~
 - ~~[Quest Locations](./quest_locations.md)~~
 - ~~[Fishsanity](./fishsanity.md)~~
