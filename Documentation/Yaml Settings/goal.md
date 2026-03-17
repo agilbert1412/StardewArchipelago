@@ -124,7 +124,7 @@ If this goal is picked, but [Exclude Ginger Island](./exclude_ginger_island.md) 
 
 You must complete all the Monster Slayer goals visible on the board at the Adventurer's guild. This goal pairs well with ~~[Monstersanity](./monstersanity.md)~~.
 
-- This goal is *Adaptable*. The monster eradication goals vary depending on if you [Exclude Ginger Island](./exclude_ginger_island.md), if you included the Qi Board ~~[Special Order Locations](./special_order_locations.md)~~ and your ~~[Monstersanity](./monstersanity.md)~~ setting. The goal is to complete all the enabled monstersanity checks.
+- This goal is *Adaptable*. The monster eradication goals vary depending on if you [Exclude Ginger Island](./exclude_ginger_island.md), if you included the Qi Board [Special Order Locations](./special_order_locations.md) and your ~~[Monstersanity](./monstersanity.md)~~ setting. The goal is to complete all the enabled monstersanity checks.
 - This goal is *Focused*. You will be mostly navigating the various mines and slaying monsters.
 - This goal is *Coopable*. If using ~~[Monstersanity](./monstersanity.md)~~, the goal is to complete all the monstersanity checks, which can be done by several players.
 

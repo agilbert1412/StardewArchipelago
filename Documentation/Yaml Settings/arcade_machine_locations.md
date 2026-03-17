@@ -57,8 +57,8 @@ Both Arcade Machines can be released using the commands `!!arcade_release jotpk`
 
 ## Interaction With Other Settings
 
-### ~~[Special Order Locations](./special_order_locations.md)~~
+### [Special Order Locations](./special_order_locations.md)
 
-If ~~[Special Order Locations](./special_order_locations.md)~~ are enabled up to the Qi Board, but the Arcade Machines are disabled, the Special Order `Let's Play A Game`, which requires the player to get a certain score in Endless Junimo Kart, will be excluded from the Qi Board.
+If [Special Order Locations](./special_order_locations.md) are enabled up to the Qi Board, but the Arcade Machines are disabled, the Special Order `Let's Play A Game`, which requires the player to get a certain score in Endless Junimo Kart, will be excluded from the Qi Board.
 
 ## [Return to Index](./index.md)
