@@ -16,7 +16,7 @@ This means that you might need to complete some, or many, vanilla special orders
 
 As a result, turning off this setting does **not** exclude Special Orders from your slot. It simply makes them behave like vanilla. Whether that it desirable or not depends on your other settings and preferences.
 
-The Board Special Orders always give [Prize Tickets](https://stardewvalleywiki.com/Prize_Ticket) in addition to their usualy reward, shuffled or not.
+The Board Special Orders always give [Prize Tickets](https://stardewvalleywiki.com/Prize_Ticket) in addition to their usual reward, shuffled or not.
 
 ### Option Values
 
