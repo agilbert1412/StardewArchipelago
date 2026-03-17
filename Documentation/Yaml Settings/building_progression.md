@@ -14,7 +14,7 @@ There are many different [Carpenter buildings](https://stardewvalleywiki.com/Car
 | Big Barn     | Barn        |                    |
 | Deluxe Barn  | Big Barn    |                    |
 | Coop         |             |                    |
-| Big Coop     | Coop       |                    |
+| Big Coop     | Coop        |                    |
 | Deluxe Coop  | Big Coop    |                    |
 | Fish Pond    |             |                    |
 | Mill         |             |                    |
