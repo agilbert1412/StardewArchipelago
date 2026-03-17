@@ -123,7 +123,7 @@ namespace StardewArchipelago
             _testerFeatures = new TesterFeatures(_logger, _helper);
 
             _archipelago = new StardewArchipelagoClient(_logger, _helper, ModManifest, _harmony, OnItemReceived, new SmapiJsonLoader(_helper), _testerFeatures);
-            
+
             _helper.Events.GameLoop.GameLaunched += OnGameLaunched;
             _helper.Events.GameLoop.SaveCreating += OnSaveCreating;
             _helper.Events.GameLoop.SaveCreated += OnSaveCreated;
@@ -135,6 +135,7 @@ namespace StardewArchipelago
             _helper.Events.GameLoop.DayStarted += OnDayStarted;
             _helper.Events.GameLoop.DayEnding += OnDayEnding;
             _helper.Events.GameLoop.ReturnedToTitle += OnReturnedToTitle;
+            _helper.Events.Input.ButtonsChanged += this.OnButtonChanged;
 
             _registry.RegisterOnModEntry();
 
@@ -379,6 +380,31 @@ namespace StardewArchipelago
             }
 
             return result;
+        }
+
+        private void OnButtonChanged(object sender, ButtonsChangedEventArgs e){
+            if (!Context.IsWorldReady) return;
+
+            try {
+                if (Context.IsPlayerFree && this.Config.OpenMail.JustPressed()) {
+
+                    var mailAmount = Game1.mailbox.Count;
+                    _logger.LogMessage($"Trying to open next mail, there is {mailAmount}");
+                    if (mailAmount <= 0)
+                    {
+                        Game1.chatBox?.addMessage($"Mailbox is empty", Color.Gold);
+                    }
+
+                    var farm = Game1.RequireLocation<Farm>("Farm");
+                    farm.mailbox();
+
+                    mailAmount = Game1.mailbox.Count;
+                    Game1.chatBox?.addMessage($"Mail Remaining: {mailAmount}", Color.Gold);
+                }
+            }
+            catch (Exception ex) {
+                _logger.LogError($"Error handling input, {ex.Message}");
+            }
         }
 
         private void ShowErrorAndExit(string errorMessage)
