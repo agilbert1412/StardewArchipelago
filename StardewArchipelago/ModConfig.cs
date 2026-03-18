@@ -1,4 +1,6 @@
 ﻿using StardewArchipelago.Archipelago;
+using StardewModdingAPI;
+using StardewModdingAPI.Utilities;
 
 namespace StardewArchipelago
 {
@@ -203,6 +205,12 @@ namespace StardewArchipelago
         /// Number of times to attempt reconnection, and fail, before forcefully sleeping in an attempt to at least save the game.
         /// </summary>
         public int ConnectionRetriesBeforeForceSleep { get; set; } = -1;
+
+
+        /// <summary>
+        /// Keybinds used by the mod
+        /// </summary>
+        public ModConfigKeys Controls {get; set;} = new();
     }
 
     public enum ItemIndicatorPreference
