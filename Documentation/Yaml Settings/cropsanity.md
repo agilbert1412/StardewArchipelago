@@ -70,7 +70,7 @@ This overhaul can be turned off from the mod config, at any time, if the player 
 
 This overhaul has been done for several purposes. The main one, is to subtly nudge players, especially beginners, into a playstyle that fits Archipelago better. Vanilla tends to encourage doing a lot of farming, of just one very-profitable crop, as a source of money and experience.
 In Archipelago, we instead want to encourage players to grow a little bit of everything, for the purpose of checking cropsanity locations, and also having a supply of most crops, as they will often be needed for other settings, as well as cropsanity.
-Examples include ~~[Quest Locations](./quest_locations.md)~~, ~~[Shipsanity](./shipsanity.md)~~ and ~~[Cooksanity](./cooksanity.md)~~.
+Examples include [Quest Locations](./quest_locations.md), ~~[Shipsanity](./shipsanity.md)~~ and ~~[Cooksanity](./cooksanity.md)~~.
 While making a lot of money is always helpful, it is not the best use of your time, in the early game of a Stardew Valley slot. It is generally better to do a little bit of everything, rather than focus one setting and clear it out entirely. For example, it will be better for the multiworld progression if you send the first 2 level up locations for each 5 skill, rather than maxing out farming to level 10 right away.
 
 This overhaul makes any given type of seed limited in amount, and encourages the player to buy many types, instead of one. Even then, they will be unable to fill out large patches of farmland, like they would do in vanilla. This will also encourage them to not waste a massive amount of time watering every morning, and instead they will tend to use their energy on other tasks, again progressing in a more efficient way.

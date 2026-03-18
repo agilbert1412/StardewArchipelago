@@ -39,7 +39,7 @@ They generally focus on one very specific mechanic, and you decide whether to sh
 - [Festival Locations](./festival_locations.md)
 - [Arcade Machine Locations](./arcade_machine_locations.md)
 - [Special Order Locations](./special_order_locations.md)
-- ~~[Quest Locations](./quest_locations.md)~~
+- [Quest Locations](./quest_locations.md)
 - ~~[Fishsanity](./fishsanity.md)~~
 - ~~[Museumsanity](./museumsanity.md)~~
 - ~~[Friendsanity](./friendsanity.md)~~
