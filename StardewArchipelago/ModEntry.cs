@@ -51,6 +51,7 @@ namespace StardewArchipelago
     {
         public static ModEntry Instance;
         public ModConfig Config;
+        private ModConfigKeys Keys => this.Config.Controls;
 
         private const string AP_DATA_KEY = "ArchipelagoData";
         private const string AP_EXPERIENCE_KEY = "ArchipelagoSkillsExperience";
@@ -386,7 +387,7 @@ namespace StardewArchipelago
             if (!Context.IsWorldReady) return;
 
             try {
-                if (Context.IsPlayerFree && this.Config.OpenMail.JustPressed()) {
+                if (Context.IsPlayerFree && this.Config.Controls.OpenMail.JustPressed()) {
 
                     var mailAmount = Game1.mailbox.Count;
                     _logger.LogMessage($"Trying to open next mail, there is {mailAmount}");

@@ -206,10 +206,11 @@ namespace StardewArchipelago
         /// </summary>
         public int ConnectionRetriesBeforeForceSleep { get; set; } = -1;
 
+
         /// <summary>
-        /// Hotkey to open mail from any location
+        /// Keybinds used by the mod
         /// </summary>
-        public KeybindList OpenMail {get; set;} = new(SButton.N);
+        public ModConfigKeys Controls {get; set;} = new();
     }
 
     public enum ItemIndicatorPreference
