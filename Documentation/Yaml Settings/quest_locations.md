@@ -10,7 +10,7 @@ For the Story Quests, this means that every story quest now gives a location che
 
 If you don't randomize Story Quests, you might need to complete some of them for their vanilla reward. For example, `The Mysterious Qi` for the `Club Card`.
 
-For the Help Wanted Quests, they are usually an infinite number of them, so when shuffled, you pick a certain number of them to be location checks. Once you are past the shuffled quests, the subsequent ones revert to their vanilla behavior.
+For the Help Wanted Quests, there are usually an infinite number of them, so when shuffled, you pick a certain number of them to be location checks. Once you are past the shuffled quests, the subsequent ones revert to their vanilla behavior.
 
 Since there are 4 types of Help Wanted Quests (This setting was created before the introduction of a 5th type), you can enable them in groups of 7, with a ratio of 4 Deliveries to 1 Gathering, 1 Fishing and 1 Slaying. This is very close to the ratio in vanilla, so it made sense to mimic it.
 
