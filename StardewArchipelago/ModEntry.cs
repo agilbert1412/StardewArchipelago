@@ -387,20 +387,8 @@ namespace StardewArchipelago
             if (!Context.IsWorldReady) return;
 
             try {
-                if (Context.IsPlayerFree && this.Config.Controls.OpenMail.JustPressed()) {
-
-                    var mailAmount = Game1.mailbox.Count;
-                    _logger.LogMessage($"Trying to open next mail, there is {mailAmount}");
-                    if (mailAmount <= 0)
-                    {
-                        Game1.chatBox?.addMessage($"Mailbox is empty", Color.Gold);
-                    }
-
-                    var farm = Game1.RequireLocation<Farm>("Farm");
-                    farm.mailbox();
-
-                    mailAmount = Game1.mailbox.Count;
-                    Game1.chatBox?.addMessage($"Mail Remaining: {mailAmount}", Color.Gold);
+                if (Context.IsPlayerFree && Config.Controls.OpenMail.JustPressed()) {
+                    MailboxHelper.TryGetNextMail();
                 }
             }
             catch (Exception ex) {
