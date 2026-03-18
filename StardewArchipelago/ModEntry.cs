@@ -51,6 +51,7 @@ namespace StardewArchipelago
     {
         public static ModEntry Instance;
         public ModConfig Config;
+        private ModConfigKeys Keys => this.Config.Controls;
 
         private const string AP_DATA_KEY = "ArchipelagoData";
         private const string AP_EXPERIENCE_KEY = "ArchipelagoSkillsExperience";
@@ -123,7 +124,7 @@ namespace StardewArchipelago
             _testerFeatures = new TesterFeatures(_logger, _helper);
 
             _archipelago = new StardewArchipelagoClient(_logger, _helper, ModManifest, _harmony, OnItemReceived, new SmapiJsonLoader(_helper), _testerFeatures);
-            
+
             _helper.Events.GameLoop.GameLaunched += OnGameLaunched;
             _helper.Events.GameLoop.SaveCreating += OnSaveCreating;
             _helper.Events.GameLoop.SaveCreated += OnSaveCreated;
@@ -135,6 +136,7 @@ namespace StardewArchipelago
             _helper.Events.GameLoop.DayStarted += OnDayStarted;
             _helper.Events.GameLoop.DayEnding += OnDayEnding;
             _helper.Events.GameLoop.ReturnedToTitle += OnReturnedToTitle;
+            _helper.Events.Input.ButtonsChanged += this.OnButtonChanged;
 
             _registry.RegisterOnModEntry();
 
@@ -321,7 +323,7 @@ namespace StardewArchipelago
             _mailPatcher = new MailPatcher(_logger, _harmony, _archipelago, _locationChecker, State, new LetterActions(_logger, _helper, _mail, _archipelago, _weaponsManager, _itemManager.TrapManager, trapExecutor.BabyBirther, _stardewItemManager));
             _bundlesManager = new BundlesManager(_logger, _helper, _archipelago, _stardewItemManager);
             _shippingBehaviors = new NightShippingBehaviors(_logger, _archipelago, _locationChecker, nameSimplifier);
-            _locationsPatcher = new LocationPatcher(_logger, _helper, Config, _harmony, _archipelago, State, _locationChecker, _jojaLocationChecker, _stardewItemManager, _weaponsManager, _bundlesManager, seedShopStockModifier, friends, _itemManager.TrapManager, bank, nameSimplifier, _giftHandler.Sender, _shippingBehaviors);
+            _locationsPatcher = new LocationPatcher(_logger, _helper, Config, _harmony, _archipelago, State, _locationChecker, _jojaLocationChecker, _stardewItemManager, _weaponsManager, _bundlesManager, seedShopStockModifier, friends, _itemManager.TrapManager, bank, nameSimplifier, _giftHandler.Sender, _shippingBehaviors, _testerFeatures);
             _chatForwarder.ListenToChatMessages();
             _logicPatcher.PatchAllGameLogic();
             _jojapocalypseManager.PatchAllJojaLogic();
@@ -379,6 +381,19 @@ namespace StardewArchipelago
             }
 
             return result;
+        }
+
+        private void OnButtonChanged(object sender, ButtonsChangedEventArgs e){
+            if (!Context.IsWorldReady) return;
+
+            try {
+                if (Context.IsPlayerFree && Config.Controls.OpenMail.JustPressed()) {
+                    MailboxHelper.TryGetNextMail();
+                }
+            }
+            catch (Exception ex) {
+                _logger.LogError($"Error handling input, {ex.Message}");
+            }
         }
 
         private void ShowErrorAndExit(string errorMessage)

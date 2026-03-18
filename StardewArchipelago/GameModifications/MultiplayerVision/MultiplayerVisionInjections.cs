@@ -1,18 +1,11 @@
 ﻿using Archipelago.MultiClient.Net.Packets;
-using KaitoKid.ArchipelagoUtilities.Net.Client;
-using KaitoKid.ArchipelagoUtilities.Net.Constants;
 using KaitoKid.Utilities.Interfaces;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Newtonsoft.Json.Linq;
 using StardewArchipelago.Archipelago;
-using StardewArchipelago.Constants.Vanilla;
-using StardewArchipelago.GameModifications.CodeInjections;
-using StardewArchipelago.GameModifications.EntranceRandomizer;
-using StardewArchipelago.GameModifications.MoveLink;
 using StardewModdingAPI.Events;
 using StardewValley;
-using StardewValley.Objects;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -68,9 +61,6 @@ namespace StardewArchipelago.GameModifications.MultiplayerVision
                 var currentMap = Game1.currentLocation.Name;
 
                 var farmer = Game1.player;
-                var session = _archipelago.GetSession();
-                var slotName = _archipelago.GetPlayerName();
-                var identifier = $"{session.ConnectionInfo.Slot}-{ModEntry.Instance.UniqueIdentifier}";
 
                 var movementSpeed = farmer.getMovementSpeed();
                 var xVelocity = GetXVelocity(farmer, movementSpeed);
@@ -98,6 +88,10 @@ namespace StardewArchipelago.GameModifications.MultiplayerVision
                 {
                     return;
                 }
+
+                var session = _archipelago.GetSession();
+                var slotName = _archipelago.GetPlayerName();
+                var identifier = $"{session.ConnectionInfo.Slot}-{ModEntry.Instance.UniqueIdentifier}";
 
                 var timeSinceLastBroadcastAppearance = DateTime.Now - _timeLastBroadcastAppearance;
                 var includeAppearance = timeSinceLastBroadcastAppearance.TotalSeconds >= VisiblePlayer.BROADCAST_APPEARANCE_SECONDS;
@@ -149,7 +143,7 @@ namespace StardewArchipelago.GameModifications.MultiplayerVision
                     visiblePlayer.Appearance = appearance;
                 }
 
-                _logger.LogInfo($"Performing a MultiplayerVision update (appearance: {includeAppearance})");
+                // _logger.LogInfo($"Performing a MultiplayerVision update (appearance: {includeAppearance})");
                 _timeLastBroadcast = DateTime.Now;
                 _lastBroadcast = visiblePlayer;
                 _archipelago.SendMultiplayerVisionPacket(visiblePlayer);

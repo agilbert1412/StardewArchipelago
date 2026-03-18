@@ -16,6 +16,7 @@ using StardewValley.Menus;
 using xTile.Dimensions;
 using Object = StardewValley.Object;
 using StardewArchipelago.Archipelago;
+using StardewArchipelago.GameModifications.Testing;
 using StardewArchipelago.Locations.Jojapocalypse.Consequences;
 using StardewArchipelago.Logging;
 using Rectangle = xTile.Dimensions.Rectangle;
@@ -28,6 +29,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
         private const double STOCK_AMOUNT_PER_UPGRADE_FOR_RANDOM_ITEMS = 1;
         private const double STOCK_AMOUNT_PER_ONE_PERCENT_CHECKS_FOR_RANDOM_ITEMS = 0.1;
         private const double STOCK_AMOUNT_REDUCTION_PER_PURCHASE = 1;
+        private const double MAX_STOCK = 10;
 
         // 0.1 + (6 * 0.1) + (100 * 0.05)
         // 10% + 60% + 100% = 6
@@ -43,16 +45,18 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
         private static StardewArchipelagoClient _archipelago;
         private static StardewLocationChecker _locationChecker;
         private static ArchipelagoStateDto _archipelagoState;
+        private static TesterFeatures _testerFeatures;
 
         private static Dictionary<ISalable, string> _flairOverride;
 
-        public static void Initialize(LogHandler logger, IModHelper modHelper, StardewArchipelagoClient archipelago, StardewLocationChecker locationChecker, ArchipelagoStateDto archipelagoState)
+        public static void Initialize(LogHandler logger, IModHelper modHelper, StardewArchipelagoClient archipelago, StardewLocationChecker locationChecker, ArchipelagoStateDto archipelagoState, TesterFeatures testerFeatures)
         {
             _logger = logger;
             _modHelper = modHelper;
             _archipelago = archipelago;
             _locationChecker = locationChecker;
             _archipelagoState = archipelagoState;
+            _testerFeatures = testerFeatures;
             _flairOverride = new Dictionary<ISalable, string>();
         }
 
@@ -262,6 +266,11 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
 
         private static double GetRandomItemStockSize(int stockUpgrades)
         {
+            if (_testerFeatures.UnlimitedTravelingCart.Value >= 1)
+            {
+                return MAX_STOCK;
+            }
+
             double checksCompleted = _archipelago.GetSession().Locations.AllLocationsChecked.Count;
             double totalChecks = _archipelago.GetSession().Locations.AllLocations.Count;
             var checksPercentComplete = (checksCompleted / totalChecks) * 100;

@@ -10,6 +10,7 @@ namespace StardewArchipelago.GameModifications.Testing
     public class TesterFeatures
     {
         private const string TESTER_FEATURES_FILE = "tester.json";
+        public readonly TesterFeature UnlimitedTravelingCart = new(TesterFeatureNames.UNLIMITED_TRAVELING_CART, 0);
         public readonly TesterFeature Multiplayer = new(TesterFeatureNames.MULTIPLAYER, 0);
         public readonly TesterFeature UnstableMods = new(TesterFeatureNames.UNSTABLE_MODS, VerifyMods.MODS_AND_VERSIONS);
         public readonly TesterFeature MoveLink = new(TesterFeatureNames.MOVE_LINK, 0);
@@ -17,6 +18,7 @@ namespace StardewArchipelago.GameModifications.Testing
 
         public TesterFeatures(ILogger logger, IModHelper modHelper)
         {
+            _featuresByName.Add(UnlimitedTravelingCart.Name, UnlimitedTravelingCart);
             _featuresByName.Add(Multiplayer.Name, Multiplayer);
             _featuresByName.Add(UnstableMods.Name, UnstableMods);
             _featuresByName.Add(MoveLink.Name, MoveLink);

@@ -10,6 +10,7 @@ namespace StardewArchipelago.Constants.Locations
         {
             { "Anchor", new[] { "Boat Anchor" } },
             { "Bait", new[] { "Magic Bait", "Wild Bait", "Challenge Bait", "Targeted Bait", "Specific Bait", "Deluxe Bait", "Bait Maker" } },
+            { "Blackberry", new[] { "Blackberry Basket" } },
             { "Blueberry", new[] { "Blueberry Tart" } },
             { "Bomb", new[] { "Cherry Bomb", "Mega Bomb" } },
             { "Carp", new[] { "Midnight Carp", "Scorpion Carp", "Mutant Carp", "Carp Surprise" } },
@@ -23,10 +24,13 @@ namespace StardewArchipelago.Constants.Locations
             { "Geode", new[] { "Geode Crusher" } },
             { "Hardwood", new[] { "Hardwood Display", "Hardwood Fence" } },
             { "Jasper", new[] { "by M. Jasper" } },
+            { "Jelly", new[] { "Prismatic Jelly" } },
+            { "Juice", new[] { "Pam Needs Juice" } },
             { "Large Egg", new[] { "Large Egg (Brown)" } },
             { "Legend", new[] { "The Legend of the Winter Star" } },
             { "Milk", new[] { "Large Milk", "Goat Milk", "Snake Milk" } },
             { "Opal", new[] { "Fire Opal" } },
+            { "Pearl", new[] { "Mermaid Pearl" } },
             { "Pizza", new[] { "Calico Pizza" } },
             { "Salad", new[] { "Sour Salad" } },
             { "Salmon", new[] { "Void Salmon", "King Salmon" } },
@@ -38,9 +42,9 @@ namespace StardewArchipelago.Constants.Locations
             { "Stone Chest", new[] { "Big Stone Chest" } },
             { "Stone", new[] { FestivalLocationNames.STRENGTH_GAME, "Lemon Stone", "Ocean Stone", "Fairy Stone", "Swirl Stone", "Stone Junimo", "Stone Chest", "Stone Walkway", "Stone Brazier", "Stone Sign" } },
             { "Strawberry", new[] { "Egg Festival: Strawberry Seeds" } },
-            { "Trash", new[] { "Trash Can Upgrade", "Trash Bear", "Trash Catalogue" } },
+            { "Trash", new[] { "Trash Can Upgrade", "Trash Bear", "Trash Catalogue", "Trash Bundle" } },
             { "Turnip", new[] { "Rarecrow #1 (Turnip Head)" } },
-            { "Wood", new[] { "Wood Fence", "Wood Floor", "Wood Path", "Wood Lamp", "Wood Sign" } }
+            { "Wood", new[] { "Wood Fence", "Wood Floor", "Wood Path", "Wood Lamp", "Wood Sign" } },
         };
     }
 }

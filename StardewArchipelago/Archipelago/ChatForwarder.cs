@@ -320,18 +320,7 @@ namespace StardewArchipelago.Archipelago
                 return false;
             }
 
-            var mailAmount = Game1.mailbox.Count;
-            if (mailAmount <= 0)
-            {
-                Game1.chatBox?.addMessage($"Mailbox is empty", Color.Gold);
-                return true;
-            }
-
-            var farm = Game1.RequireLocation<Farm>("Farm");
-            farm.mailbox();
-
-            mailAmount = Game1.mailbox.Count;
-            Game1.chatBox?.addMessage($"Mail Remaining: {mailAmount}", Color.Gold);
+            MailboxHelper.TryGetNextMail();
             return true;
         }
 
@@ -511,9 +500,14 @@ namespace StardewArchipelago.Archipelago
                 return false;
             }
 
+            SleepImmediately();
+            return true;
+        }
+
+        public static void SleepImmediately()
+        {
             SetLastBedToFarmhouse();
             Game1.player.startToPassOut();
-            return true;
         }
 
         private static void SetLastBedToFarmhouse()

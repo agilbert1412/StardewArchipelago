@@ -52,6 +52,7 @@ namespace StardewArchipelagoTests
         [TestCase("Diamond", new[] { "Read The Diamond Hunter", "Starfish Diamond", "Diamond Of Indents", "Diamond Of Pebbles" }, TestName = "Diamond")]
         [TestCase("Opal", new[] { "Fire Opal" }, TestName = "Opals")]
         [TestCase("Chest", new[] { "Craft Stone Chest", "Craft Big Chest", "Craft Big Stone Chest", "Volcano Common Chest Walnut", "Volcano Rare Chest Walnut", "Deep Woods Treasure Chest" }, TestName = "Chest")]
+        [TestCase("Juice", new[] { "Pam Needs Juice" }, TestName = "Pam Juice")]
         public void GetAllLocationsContainingWordFalsePositivesTest(string itemName, string[] locationsNotMatching)
         {
             // Arrange
@@ -64,7 +65,7 @@ namespace StardewArchipelagoTests
             matches.Should().BeEmpty();
         }
 
-        [TestCase("Juice", new[] { "Pam Needs Juice" }, TestName = "Pam Juice")]
+        [TestCase("Squid", new[] { "Catch A Squid" }, TestName = "Catch A Squid")]
         [TestCase("Tomato", new[] { "Shipsanity: Tomato Seeds" }, TestName = "Tomato Seeds")]
         [TestCase("Wizard", new[] { "Meet The Wizard" }, TestName = "Meet the Wizard")]
         public void GetAllLocationsContainingWordThematicallyRelatedItemsTest(string itemName, string[] locationsMatching)

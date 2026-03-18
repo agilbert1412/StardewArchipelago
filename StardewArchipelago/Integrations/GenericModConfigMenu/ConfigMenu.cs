@@ -2,6 +2,7 @@
 using System.Linq;
 using StardewArchipelago.Archipelago;
 using StardewModdingAPI;
+using StardewModdingAPI.Utilities;
 
 namespace StardewArchipelago.Integrations.GenericModConfigMenu
 {
@@ -67,6 +68,15 @@ namespace StardewArchipelago.Integrations.GenericModConfigMenu
         /// <param name="fieldId">The unique field ID for use with <see cref="OnFieldChanged"/>, or <c>null</c> to auto-generate a randomized ID.</param>
         void AddNumberOption(IManifest mod, Func<int> getValue, Action<int> setValue, Func<string> name, Func<string> tooltip = null, int? min = null, int? max = null, int? interval = null, Func<int, string> formatValue = null, string fieldId = null);
 
+        /// <summary>Add a keybind list at the current position in the form.</summary>
+        /// <param name="mod">The mod's manifest.</param>
+        /// <param name="getValue">Get the current value from the mod config.</param>
+        /// <param name="setValue">Set a new value in the mod config.</param>
+        /// <param name="name">The label text to show in the form.</param>
+        /// <param name="tooltip">The tooltip text shown when the cursor hovers on the field, or <c>null</c> to disable the tooltip.</param>
+        /// <param name="fieldId">The unique field ID for use with <see cref="OnFieldChanged"/>, or <c>null</c> to auto-generate a randomized ID.</param>
+        void AddKeybindList(IManifest mod, Func<KeybindList> getValue, Action<KeybindList> setValue, Func<string> name, Func<string> tooltip = null, string fieldId = null);
+
         /// <summary>Set whether the options registered after this point can only be edited from the title screen.</summary>
         /// <param name="mod">The mod's manifest.</param>
         /// <param name="titleScreenOnly">Whether the options can only be edited from the title screen.</param>
@@ -112,6 +122,14 @@ namespace StardewArchipelago.Integrations.GenericModConfigMenu
                 mod: ModManifest,
                 reset: () => Config = new ModConfig(),
                 save: () => Helper.WriteConfig(Config)
+            );
+
+            configMenu.AddKeybindList(
+                mod: ModManifest,
+                name: () => "Open mail",
+                tooltip: () => "Hotkey that can be pressed to open the next piece of mail when no other interface is opened.",
+                getValue: () => Config.Controls.OpenMail,
+                setValue: (value) => Config.Controls.OpenMail = value
             );
 
             configMenu.SetTitleScreenOnlyForNextOptions(ModManifest, true);
@@ -455,6 +473,18 @@ namespace StardewArchipelago.Integrations.GenericModConfigMenu
                 getValue: () => Config.JojapocalypseMinimumCompletionPercentToGoal,
                 setValue: (value) => Config.JojapocalypseMinimumCompletionPercentToGoal = value,
                 formatValue: (value) => $"{value}%"
+            );
+
+            configMenu.AddNumberOption(
+                mod: ModManifest,
+                name: () => "Number of times to retry connections before auto-sleeping",
+                tooltip: () => "After X reconnections failed, the character will automatically go to sleep to save the game, in case of crashing. Set to -1 to continue retrying unlimited times",
+                min: 0,
+                max: 20,
+                interval: 1,
+                getValue: () => Config.ConnectionRetriesBeforeForceSleep,
+                setValue: (value) => Config.ConnectionRetriesBeforeForceSleep = value,
+                formatValue: (value) => $"{value}"
             );
         }
     }

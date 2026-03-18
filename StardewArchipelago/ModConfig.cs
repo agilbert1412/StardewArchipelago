@@ -1,4 +1,6 @@
 ﻿using StardewArchipelago.Archipelago;
+using StardewModdingAPI;
+using StardewModdingAPI.Utilities;
 
 namespace StardewArchipelago
 {
@@ -61,7 +63,7 @@ namespace StardewArchipelago
         /// <summary>
         /// Enable the feature to see other Stardew Players from the multiworld in your own game
         /// </summary>
-        public bool MultiplayerVision { get; set; } = false;
+        public bool MultiplayerVision { get; set; } = true;
 
         /// <summary>
         /// Whether to Anonymize Player names in the chatbox
@@ -198,6 +200,17 @@ namespace StardewArchipelago
         /// Prevent sending goal as a Joja member until this percent of locations are checked.
         /// </summary>
         public int JojapocalypseMinimumCompletionPercentToGoal { get; set; } = 50;
+
+        /// <summary>
+        /// Number of times to attempt reconnection, and fail, before forcefully sleeping in an attempt to at least save the game.
+        /// </summary>
+        public int ConnectionRetriesBeforeForceSleep { get; set; } = -1;
+
+
+        /// <summary>
+        /// Keybinds used by the mod
+        /// </summary>
+        public ModConfigKeys Controls {get; set;} = new();
     }
 
     public enum ItemIndicatorPreference

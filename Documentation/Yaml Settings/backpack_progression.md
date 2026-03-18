@@ -30,7 +30,7 @@ The definition of "Early" is handled by Archipelago core, and out of our hands.
 
 **This is the default value, and it is the recommended experience.**
 
-## 7.x.x Content
+## Interaction With Other Settings
 
 ### Backpack Size
 
