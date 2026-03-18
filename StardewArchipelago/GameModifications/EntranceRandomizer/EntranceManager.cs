@@ -195,10 +195,10 @@ namespace StardewArchipelago.GameModifications.EntranceRandomizer
                     {
                         return new List<string>() { entranceKey };
                     }
-                    if (key2.TryGetForcedWarp(out _))
-                    {
-                        return new List<string>() { entranceKey };
-                    }
+                    //if (key2.TryGetForcedWarp(out _))
+                    //{
+                    //    return new List<string>() { entranceKey };
+                    //}
                 }
             }
 
