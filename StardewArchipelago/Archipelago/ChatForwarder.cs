@@ -320,7 +320,8 @@ namespace StardewArchipelago.Archipelago
                 return false;
             }
 
-            return MailboxHelper.TryGetNextMail();
+            MailboxHelper.TryGetNextMail();
+            return true;
         }
 
         private static bool HandleSyncCommand(string message)

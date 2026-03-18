@@ -4,12 +4,12 @@ using StardewValley;
 namespace StardewArchipelago.Archipelago
 {
 	public static class MailboxHelper {
-		public static bool TryGetNextMail() {
+		public static void TryGetNextMail() {
 			var mailAmount = Game1.mailbox.Count;
 			if (mailAmount <= 0)
 			{
 				Game1.chatBox?.addMessage($"Mailbox is empty", Color.Gold);
-				return true;
+				return;
 			}
 
 			var farm = Game1.RequireLocation<Farm>("Farm");
@@ -17,7 +17,7 @@ namespace StardewArchipelago.Archipelago
 
 			mailAmount = Game1.mailbox.Count;
 			Game1.chatBox?.addMessage($"Mail Remaining: {mailAmount}", Color.Gold);
-			return true;
+			return;
 		}
 	}
 }
