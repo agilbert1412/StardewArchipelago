@@ -166,6 +166,9 @@ namespace StardewArchipelago.GameModifications.EntranceRandomizer
         private bool TryGetEntranceReplacement(string currentLocationName, List<string> entranceKeys, out WarpRequest warpRequest)
         {
             warpRequest = null;
+
+            entranceKeys = FilterKeysForForcedWarps(entranceKeys);
+
             // return false;
             if (!TryGetModifiedWarpName(entranceKeys, out var desiredWarpName))
             {
@@ -174,6 +177,32 @@ namespace StardewArchipelago.GameModifications.EntranceRandomizer
             }
 
             return TryGetEntranceWarp(desiredWarpName, out warpRequest);
+        }
+
+        private static List<string> FilterKeysForForcedWarps(List<string> entranceKeys)
+        {
+            foreach (var entranceKey in entranceKeys)
+            {
+                if (entranceKey.TryGetForcedWarp(out _))
+                {
+                    return new List<string>(){ entranceKey };
+                }
+
+                if (entranceKey.Contains(TRANSITIONAL_STRING))
+                {
+                    var (key1, key2) = GetLocationNames(entranceKey);
+                    if (key1.TryGetForcedWarp(out _))
+                    {
+                        return new List<string>() { entranceKey };
+                    }
+                    if (key2.TryGetForcedWarp(out _))
+                    {
+                        return new List<string>() { entranceKey };
+                    }
+                }
+            }
+
+            return entranceKeys;
         }
 
         public bool TryGetEntranceReplacement(string entranceKey, out WarpRequest warpRequest)
