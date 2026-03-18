@@ -168,7 +168,7 @@ namespace StardewArchipelago.GameModifications.MultiplayerVision
             return Math.Abs(floatA - floatB) <= 0.01f;
         }
 
-        private static float GetXVelocity(Farmer farmer, float movementSpeed)
+        public static float GetXVelocity(Farmer farmer, float movementSpeed)
         {
             var xVelocity = 0f;
             if (farmer.movementDirections.Contains(1))
@@ -181,7 +181,8 @@ namespace StardewArchipelago.GameModifications.MultiplayerVision
             }
             return xVelocity;
         }
-        private static float GetYVelocity(Farmer farmer, float movementSpeed)
+
+        public static float GetYVelocity(Farmer farmer, float movementSpeed)
         {
             var yVelocity = 0f;
             if (farmer.movementDirections.Contains(0))
@@ -211,7 +212,7 @@ namespace StardewArchipelago.GameModifications.MultiplayerVision
 
         public static void DrawAndUpdateOtherPlayers(SpriteBatch spriteBatch, uint elapsedFrames)
         {
-            if (!ModEntry.Instance.Config.MultiplayerVision || !_visiblePlayers.Any())
+            if (!_visiblePlayers.Any())
             {
                 return;
             }

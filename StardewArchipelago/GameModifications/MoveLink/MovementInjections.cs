@@ -32,7 +32,7 @@ namespace StardewArchipelago.GameModifications.MoveLink
 
         public static void AddMoveLinkMovement(float time, float x, float y)
         {
-            if (!FoolManager.ShouldPrank() || time <= 0 || (Math.Abs(x) < EPSILON && Math.Abs(y) < EPSILON))
+            if (!FoolManager.ShouldDoMoveLinkPrank() || time <= 0 || (Math.Abs(x) < EPSILON && Math.Abs(y) < EPSILON))
             {
                 return;
             }
@@ -42,7 +42,7 @@ namespace StardewArchipelago.GameModifications.MoveLink
 
         public static void UpdateMove(UpdateTickedEventArgs eventArgs)
         {
-            if (!FoolManager.ShouldPrank())
+            if (!FoolManager.ShouldDoMoveLinkPrank())
             {
                 return;
             }
@@ -63,7 +63,7 @@ namespace StardewArchipelago.GameModifications.MoveLink
         {
             try
             {
-                if (_logger == null || _archipelago == null || !FoolManager.ShouldPrank())
+                if (_logger == null || _archipelago == null || !FoolManager.ShouldDoMoveLinkPrank())
                 {
                     return;
                 }
@@ -125,7 +125,7 @@ namespace StardewArchipelago.GameModifications.MoveLink
 
         public static void ApplyMoveLink(uint elapsedFrames)
         {
-            if (!FoolManager.ShouldPrank() || !_queuedMovements.Any() || (Game1.eventUp && Game1.CurrentEvent?.isFestival == false))
+            if (!FoolManager.ShouldDoMoveLinkPrank() || !_queuedMovements.Any() || (Game1.eventUp && Game1.CurrentEvent?.isFestival == false))
             {
                 return;
             }
@@ -223,7 +223,7 @@ namespace StardewArchipelago.GameModifications.MoveLink
 
         public static void HandleBouncePacket(BouncePacket bouncePacket)
         {
-            if (!FoolManager.ShouldPrank())
+            if (!FoolManager.ShouldDoMoveLinkPrank())
             {
                 return;
             }
