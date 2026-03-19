@@ -90,6 +90,11 @@ namespace StardewArchipelago.Archipelago.SlotData
             return defaultValue;
         }
 
+        public EntranceRandomizationBehaviour GetSlotEntranceRandomizationBehaviorSetting()
+        {
+            return GetSlotOptionSetSetting<EntranceRandomizationBehaviour>(SlotDataKeys.ENTRANCE_RANDOMIZATION_BEHAVIOUR);
+        }
+
         public StartWithout GetSlotStartWithoutSetting(ToolProgression toolOption)
         {
             var startWithout = GetSlotOptionSetSetting<StartWithout>(SlotDataKeys.START_WITHOUT);

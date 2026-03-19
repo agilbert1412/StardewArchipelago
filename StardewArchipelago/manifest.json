@@ -1,10 +1,13 @@
 ﻿{
   "Name": "StardewArchipelago",
   "Author": "Kaito Kid",
-  "Version": "7.4.4",
+  "Version": "8.0.7-expanded-er",
   "Description": "Stardew Valley Randomizer for Archipelago",
   "UniqueID": "KaitoKid.StardewArchipelago",
   "EntryDll": "StardewArchipelago.dll",
   "MinimumApiVersion": "3.0.0",
-  "UpdateKeys": [ "GitHub:agilbert1412/StardewArchipelago", "Nexus:16087" ]
+  "UpdateKeys": [
+    "GitHub:agilbert1412/StardewArchipelago",
+    "Nexus:16087"
+  ]
 }

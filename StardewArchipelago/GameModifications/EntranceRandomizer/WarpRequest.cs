@@ -9,6 +9,10 @@ namespace StardewArchipelago.GameModifications.EntranceRandomizer
         public int TileY { get; set; }
         public FacingDirection FacingDirectionAfterWarp { get; set; }
 
+        public WarpRequest(string mapName, int tileX, int tileY, FacingDirection facingDirectionAfterWarp) : this(Game1.getLocationRequest(mapName), tileX, tileY, facingDirectionAfterWarp)
+        {
+        }
+
         public WarpRequest(LocationRequest locationRequest, int tileX, int tileY, FacingDirection facingDirectionAfterWarp)
         {
             LocationRequest = locationRequest;
