@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Microsoft.Xna.Framework;
 using StardewArchipelago.GameModifications.CodeInjections;
 using StardewModdingAPI.Events;
@@ -72,6 +73,11 @@ namespace StardewArchipelago.GameModifications.MultiplayerVision.FoolVision
                 if (CurrentRecordingPath.DataPoints.Count >= 4)
                 {
                     FoolPlayerPaths.Add(CurrentRecordingPath);
+                    if (FoolPlayerPaths.Count > 10000)
+                    {
+                        // Can't grow forever, I think?
+                        FoolPlayerPaths.RemoveAt(_random.Next(0, FoolPlayerPaths.Count));
+                    }
                 }
                 CurrentRecordingPath = null;
             }
@@ -86,7 +92,7 @@ namespace StardewArchipelago.GameModifications.MultiplayerVision.FoolVision
                 return;
             }
 
-            var defaultRatePerMinute = 10d; //0.1;
+            var defaultRatePerMinute = 0.2d; //0.1;
             var numberRecordings = FoolPlayerPaths.Count;
             var ratePerMinute = defaultRatePerMinute * numberRecordings;
             var ratePerSecond = ratePerMinute / 60;
@@ -130,6 +136,8 @@ namespace StardewArchipelago.GameModifications.MultiplayerVision.FoolVision
                     continue;
                 }
                 var visiblePlayer = activeFoolPlayer.CreateVisiblePlayer();
+                var existingVisiblePlayer = MultiplayerVisionInjections.GetVisiblePlayer(activeFoolPlayer.UniqueId);
+                visiblePlayer.Farmer = existingVisiblePlayer?.Farmer;
                 MultiplayerVisionInjections.AddVisiblePlayer(activeFoolPlayer.UniqueId, visiblePlayer);
             }
         }

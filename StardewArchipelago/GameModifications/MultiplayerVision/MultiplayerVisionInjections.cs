@@ -317,6 +317,16 @@ namespace StardewArchipelago.GameModifications.MultiplayerVision
             }
         }
 
+        public static VisiblePlayer GetVisiblePlayer(string identifier)
+        {
+            if (_visiblePlayers.ContainsKey(identifier))
+            {
+                return _visiblePlayers[identifier];
+            }
+
+            return null;
+        }
+
         private static PlayerAppearance TryGetAppearance(Dictionary<string, JToken> bouncePacketData)
         {
             PlayerAppearance appearance = null;
