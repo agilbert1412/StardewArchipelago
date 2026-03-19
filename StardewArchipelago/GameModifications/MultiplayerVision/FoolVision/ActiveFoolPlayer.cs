@@ -1,10 +1,14 @@
-﻿using System;
+﻿using StardewArchipelago.GameModifications.EntranceRandomizer;
+using StardewValley;
 using StardewValley.Extensions;
+using System;
+using System.Linq;
 
 namespace StardewArchipelago.GameModifications.MultiplayerVision.FoolVision
 {
     public class ActiveFoolPlayer
     {
+        public string UniqueId { get; set; }
         private Random _random;
         public FoolPlayerPath CurrentPath { get; set; }
         public int CurrentPathIndex { get; set; }
@@ -12,6 +16,7 @@ namespace StardewArchipelago.GameModifications.MultiplayerVision.FoolVision
 
         public ActiveFoolPlayer(FoolPlayerPath path, Random random)
         {
+            UniqueId = Guid.NewGuid().ToString();
             CurrentPath = path;
             CurrentPathIndex = 0;
             _random = random;
@@ -20,25 +25,17 @@ namespace StardewArchipelago.GameModifications.MultiplayerVision.FoolVision
 
         private PlayerAppearance GenerateRandomAppearance()
         {
-            var accessory = bouncePacketData.TryGetValue("accessory", out var accessoryValue) ? accessoryValue.ToObject<int>() : 0;
+            var allHatIds = DataLoader.Hats(Game1.content).Keys.ToArray();
+            var chosenHatId = allHatIds[_random.Next(allHatIds.Length)];
 
-            var hair = bouncePacketData.TryGetValue("hair", out var hairValue) ? hairValue.ToObject<int>() : 0;
-            var hairColorRed = bouncePacketData.TryGetValue("hairColorRed", out var hairColorRedValue) ? hairColorRedValue.ToObject<int>() : 0;
-            var hairColorGreen = bouncePacketData.TryGetValue("hairColorGreen", out var hairColorGreenValue) ? hairColorGreenValue.ToObject<int>() : 0;
-            var hairColorBlue = bouncePacketData.TryGetValue("hairColorBlue", out var hairColorBlueValue) ? hairColorBlueValue.ToObject<int>() : 0;
+            var allShirtIds = DataLoader.Shirts(Game1.content).Keys.ToArray();
+            var chosenShirtId = allShirtIds[_random.Next(allShirtIds.Length)];
 
-            var eyeColorRed = bouncePacketData.TryGetValue("eyeColorRed", out var eyeColorRedValue) ? eyeColorRedValue.ToObject<int>() : 0;
-            var eyeColorGreen = bouncePacketData.TryGetValue("eyeColorGreen", out var eyeColorGreenValue) ? eyeColorGreenValue.ToObject<int>() : 0;
-            var eyeColorBlue = bouncePacketData.TryGetValue("eyeColorBlue", out var eyeColorBlueValue) ? eyeColorBlueValue.ToObject<int>() : 0;
+            var allPantIds = DataLoader.Pants(Game1.content).Keys.ToArray();
+            var chosenPantId = allPantIds[_random.Next(allPantIds.Length)];
 
-            var hatId = bouncePacketData.TryGetValue("hatId", out var hatIdValue) ? hatIdValue.ToObject<string>() : "";
-            var shirtId = bouncePacketData.TryGetValue("shirtId", out var shirtIdValue) ? shirtIdValue.ToObject<string>() : "";
-            var pantsId = bouncePacketData.TryGetValue("pantsId", out var pantsIdValue) ? pantsIdValue.ToObject<string>() : "";
-            var shoesId = bouncePacketData.TryGetValue("shoesId", out var shoesIdValue) ? shoesIdValue.ToObject<string>() : "";
-
-            var pantsColorRed = bouncePacketData.TryGetValue("pantsColorRed", out var pantsColorRedValue) ? pantsColorRedValue.ToObject<int>() : 0;
-            var pantsColorGreen = bouncePacketData.TryGetValue("pantsColorGreen", out var pantsColorGreenValue) ? pantsColorGreenValue.ToObject<int>() : 0;
-            var pantsColorBlue = bouncePacketData.TryGetValue("pantsColorBlue", out var pantsColorBlueValue) ? pantsColorBlueValue.ToObject<int>() : 0;
+            var allShoesIds = DataLoader.Boots(Game1.content).Keys.ToArray();
+            var chosenShoesId = allShoesIds[_random.Next(allShoesIds.Length)];
 
             var appearance = new PlayerAppearance()
             {
@@ -47,26 +44,49 @@ namespace StardewArchipelago.GameModifications.MultiplayerVision.FoolVision
                 Skin = _random.Next(0, 24),
                 Accessory = _random.Next(-1, 30),
 
-                Hair = hair,
-                HairColorRed = hairColorRed,
-                HairColorGreen = hairColorGreen,
-                HairColorBlue = hairColorBlue,
+                Hair = _random.Next(0, Farmer.GetLastHairStyle()),
+                HairColorRed = _random.Next(0, 256),
+                HairColorGreen = _random.Next(0, 256),
+                HairColorBlue = _random.Next(0, 256),
 
-                EyeColorRed = eyeColorRed,
-                EyeColorGreen = eyeColorGreen,
-                EyeColorBlue = eyeColorBlue,
+                EyeColorRed = _random.Next(0, 256),
+                EyeColorGreen = _random.Next(0, 256),
+                EyeColorBlue = _random.Next(0, 256),
 
-                PantsColorRed = pantsColorRed,
-                PantsColorGreen = pantsColorGreen,
-                PantsColorBlue = pantsColorBlue,
+                PantsColorRed = _random.Next(0, 256),
+                PantsColorGreen = _random.Next(0, 256),
+                PantsColorBlue = _random.Next(0, 256),
 
-                HatId = hatId,
-                ShirtId = shirtId,
-                PantsId = pantsId,
-                ShoesId = shoesId,
+                HatId = chosenHatId,
+                ShirtId = chosenShirtId,
+                PantsId = chosenPantId,
+                ShoesId = chosenShoesId,
             };
 
             return appearance;
+        }
+
+        public VisiblePlayer CreateVisiblePlayer()
+        {
+            var currentPathPoint = CurrentPath.DataPoints[CurrentPathIndex];
+            var visiblePlayer = new VisiblePlayer()
+            {
+                UniqueIdentifier = UniqueId,
+                MapName = CurrentPath.MapName,
+                Position = currentPathPoint.Position,
+                Velocity = currentPathPoint.Velocity,
+                FacingDirection = currentPathPoint.FacingDirection,
+                IsGlowing = false,
+                XOffset = 0,
+                YOffset = 0,
+                IsSitting = false,
+                IsRidingHorse = false,
+                Rotation = 0,
+            };
+
+            visiblePlayer.Appearance = Appearance;
+
+            return visiblePlayer;
         }
     }
 }

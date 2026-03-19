@@ -33,7 +33,7 @@ namespace StardewArchipelago.GameModifications.CodeInjections
 
         internal static bool ShouldPrank()
         {
-            // return true;
+            return true;
             return IsPrankDay() ? _shouldPrankOnFishDay : _shouldPrankOnOtherDays;
         }
 

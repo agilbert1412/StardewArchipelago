@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using Microsoft.Xna.Framework;
+using StardewArchipelago.GameModifications.EntranceRandomizer;
 
 namespace StardewArchipelago.GameModifications.MultiplayerVision.FoolVision
 {
@@ -11,14 +12,16 @@ namespace StardewArchipelago.GameModifications.MultiplayerVision.FoolVision
         public FoolPlayerPath(string mapName)
         {
             MapName = mapName;
+            DataPoints = new List<FoolPlayerDataPoint>();
         }
 
-        public void AddDataPoint(Vector2 position, Vector2 velocity)
+        public void AddDataPoint(Vector2 position, Vector2 velocity, int facingDirection)
         {
             var dataPoint = new FoolPlayerDataPoint()
             {
                 Position = position,
                 Velocity = velocity,
+                FacingDirection = facingDirection,
             };
             AddDataPoint(dataPoint);
         }
