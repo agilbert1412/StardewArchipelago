@@ -86,10 +86,6 @@ Strict Logic is a mod config that disables some obtention methods for some items
 
 It defaults to **On**, because it helps streamline players into their intended progression path, instead of straying far out of logic by accident, and potentially negatively impacting their experience or that of others.
 
-## Interaction With Other Settings
-
-### Cropsanity
-
 All the following interactions do not apply, if Cropsanity is turned off, as all seeds and crops immediately qualify as "unlocked".
 
 - Seed spots will only yield their intended seed, if the seed is unlocked. Else, they will yield mixed seeds

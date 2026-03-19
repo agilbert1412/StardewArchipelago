@@ -48,7 +48,7 @@ This randomizes the same doors as "Buildings", but it reshuffles them every day.
 
 This setting is extremely unforgiving and frustrating, and your own skill will dictate very little of what you can do.
 
-## The future
+## The Future
 
 Originally, we built ER as our own thing, as many games did. In late 2024, a new core feature has been introduced to Archipelago, called "Generic Entrance Randomizer", or GER.
 This allows worlds to rely on its smart and complex algorithm to do entrance randomization for them. This massively simplifies the work for worlds, and increases the potential for features related to it.
