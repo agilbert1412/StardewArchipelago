@@ -345,10 +345,7 @@ namespace StardewArchipelago.Archipelago
                 message != $"{COMMAND_PREFIX}fool" &&
                 message != $"{COMMAND_PREFIX}fools" &&
                 message != $"{COMMAND_PREFIX}aprilfool" &&
-                message != $"{COMMAND_PREFIX}aprilsfool" &&
-                message != $"{COMMAND_PREFIX}movelink" &&
-                message != $"{COMMAND_PREFIX}move" &&
-                message != $"{COMMAND_PREFIX}link")
+                message != $"{COMMAND_PREFIX}aprilsfool")
             {
                 return false;
             }

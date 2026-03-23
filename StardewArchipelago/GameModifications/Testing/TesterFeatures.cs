@@ -50,9 +50,9 @@ namespace StardewArchipelago.GameModifications.Testing
                 logger.LogError($"Failed at reading the TesterFeatures file. The file is probably corrupted and should be deleted to start fresh, or fixed manually. Exception: {ex}");
             }
 
-            if (MoveLink.Value > 0 && !FoolManager.ShouldPrank())
+            if (MoveLink.Value > 0 && !FoolManager.ShouldDoMoveLinkPrank())
             {
-                FoolManager.TogglePrank(true);
+                FoolManager.ToggleMoveLink();
             }
         }
     }
