@@ -44,7 +44,6 @@ namespace StardewArchipelago.GameModifications.MultiplayerVision.FoolVision
             }
             if (Game1.player.Name.StartsWith("Tester", StringComparison.InvariantCultureIgnoreCase))
             {
-                // Streamers need the content™
                 _defaultRatePerMinute = 10.0d;
             }
         }
