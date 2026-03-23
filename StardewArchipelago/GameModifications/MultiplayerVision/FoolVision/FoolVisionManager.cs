@@ -92,9 +92,9 @@ namespace StardewArchipelago.GameModifications.MultiplayerVision.FoolVision
                 return;
             }
 
-            var defaultRatePerMinute = 0.2d; //0.1;
+            var defaultRatePerMinute = 0.4d; //0.1;
             var numberRecordings = FoolPlayerPaths.Count;
-            var ratePerMinute = defaultRatePerMinute * numberRecordings;
+            var ratePerMinute = Math.Pow(defaultRatePerMinute * numberRecordings, 1.1);
             var ratePerSecond = ratePerMinute / 60;
             var ticksBetweenSpawns = 60 / ratePerSecond;
             var ticksBetweenSpawnsCapped = (uint)Math.Round(Math.Max(1, ticksBetweenSpawns));
