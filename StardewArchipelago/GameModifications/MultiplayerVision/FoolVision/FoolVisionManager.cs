@@ -31,7 +31,7 @@ namespace StardewArchipelago.GameModifications.MultiplayerVision.FoolVision
         {
             if (!FoolManager.ShouldPrank())
             {
-                //return;
+                return;
             }
             UpdateRecording(updateTickedEventArgs);
             SpawnFoolPlayer(updateTickedEventArgs);
