@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework;
+using StardewArchipelago.Constants;
 using StardewArchipelago.GameModifications.CodeInjections;
 using StardewModdingAPI.Events;
 using StardewValley;
@@ -92,9 +93,14 @@ namespace StardewArchipelago.GameModifications.MultiplayerVision.FoolVision
                 return;
             }
 
-            var defaultRatePerMinute = 0.4d; //0.1;
+            var defaultRatePerMinute = 0.3d; //0.1;
+            if (Community.AllNames.Any(x => x.StartsWith(Game1.player.Name, StringComparison.InvariantCultureIgnoreCase) || Game1.player.Name.StartsWith(x, StringComparison.InvariantCultureIgnoreCase)) || Game1.player.Name.StartsWith("Cap", StringComparison.InvariantCultureIgnoreCase))
+            {
+                // Streamers need the content™
+                defaultRatePerMinute = 0.5d;
+            }
             var numberRecordings = FoolPlayerPaths.Count;
-            var ratePerMinute = Math.Pow(defaultRatePerMinute * numberRecordings, 1.1);
+            var ratePerMinute = Math.Pow(defaultRatePerMinute * numberRecordings, 1.15);
             var ratePerSecond = ratePerMinute / 60;
             var ticksBetweenSpawns = 60 / ratePerSecond;
             var ticksBetweenSpawnsCapped = (uint)Math.Round(Math.Max(1, ticksBetweenSpawns));
