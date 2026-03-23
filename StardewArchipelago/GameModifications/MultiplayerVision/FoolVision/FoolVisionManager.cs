@@ -12,6 +12,7 @@ namespace StardewArchipelago.GameModifications.MultiplayerVision.FoolVision
     public class FoolVisionManager
     {
         public const uint UPDATE_RATE_TICKS = 5;
+        private double _defaultRatePerMinute;
 
         public static FoolVisionManager Instance = new FoolVisionManager();
         public List<FoolPlayerPath> FoolPlayerPaths { get; set; }
@@ -25,16 +26,36 @@ namespace StardewArchipelago.GameModifications.MultiplayerVision.FoolVision
             FoolPlayerPaths = new List<FoolPlayerPath>();
             CurrentRecordingPath = null;
             ActiveFoolPlayers = new List<ActiveFoolPlayer>();
+            _defaultRatePerMinute = 0;
+        }
+
+        private void SetSpawnRate()
+        {
+            if (_defaultRatePerMinute != 0)
+            {
+                return;
+            }
+
+            _defaultRatePerMinute = 0.3d;
+            if (Community.AllNames.Any(x => x.StartsWith(Game1.player.Name, StringComparison.InvariantCultureIgnoreCase) || Game1.player.Name.StartsWith(x, StringComparison.InvariantCultureIgnoreCase)) || Game1.player.Name.StartsWith("Cap", StringComparison.InvariantCultureIgnoreCase))
+            {
+                // Streamers need the content™
+                _defaultRatePerMinute = 0.5d;
+            }
+            if (Game1.player.Name.StartsWith("Tester", StringComparison.InvariantCultureIgnoreCase))
+            {
+                // Streamers need the content™
+                _defaultRatePerMinute = 10.0d;
+            }
         }
 
         public void Update(UpdateTickedEventArgs updateTickedEventArgs)
         {
-            if (!FoolManager.ShouldPrank())
+            if (FoolManager.ShouldPrank())
             {
-                return;
+                UpdateRecording(updateTickedEventArgs);
+                SpawnFoolPlayer(updateTickedEventArgs);
             }
-            UpdateRecording(updateTickedEventArgs);
-            SpawnFoolPlayer(updateTickedEventArgs);
             UpdateFoolPlayers(updateTickedEventArgs);
         }
 
@@ -86,6 +107,8 @@ namespace StardewArchipelago.GameModifications.MultiplayerVision.FoolVision
             CurrentRecordingPath = new FoolPlayerPath(Game1.player.currentLocation.Name);
         }
 
+        private static double _lastRatePerSecond = 0;
+
         private void SpawnFoolPlayer(UpdateTickedEventArgs updateTickedEventArgs)
         {
             if (FoolPlayerPaths.Count < 2)
@@ -93,15 +116,17 @@ namespace StardewArchipelago.GameModifications.MultiplayerVision.FoolVision
                 return;
             }
 
-            var defaultRatePerMinute = 0.3d; //0.1;
-            if (Community.AllNames.Any(x => x.StartsWith(Game1.player.Name, StringComparison.InvariantCultureIgnoreCase) || Game1.player.Name.StartsWith(x, StringComparison.InvariantCultureIgnoreCase)) || Game1.player.Name.StartsWith("Cap", StringComparison.InvariantCultureIgnoreCase))
-            {
-                // Streamers need the content™
-                defaultRatePerMinute = 0.5d;
-            }
+            SetSpawnRate();
             var numberRecordings = FoolPlayerPaths.Count;
-            var ratePerMinute = Math.Pow(defaultRatePerMinute * numberRecordings, 1.15);
+            var ratePerMinute = Math.Pow(_defaultRatePerMinute * numberRecordings, 1.15);
             var ratePerSecond = ratePerMinute / 60;
+
+            if (ratePerSecond >= 2 && ratePerSecond > _lastRatePerSecond * 2)
+            {
+                Game1.chatBox.addMessage("April's Fool! use !!fool to disable", Color.Gold);
+                _lastRatePerSecond = ratePerSecond;
+            }
+
             var ticksBetweenSpawns = 60 / ratePerSecond;
             var ticksBetweenSpawnsCapped = (uint)Math.Round(Math.Max(1, ticksBetweenSpawns));
 
