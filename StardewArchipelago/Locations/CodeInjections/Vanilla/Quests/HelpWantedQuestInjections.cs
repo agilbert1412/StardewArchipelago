@@ -1,18 +1,20 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using Archipelago.MultiClient.Net.Models;
+﻿using Archipelago.MultiClient.Net.Models;
+using KaitoKid.ArchipelagoUtilities.Net;
+using KaitoKid.ArchipelagoUtilities.Net.Constants;
+using KaitoKid.Utilities.Interfaces;
+using Microsoft.Xna.Framework.Content;
+using StardewArchipelago.Archipelago;
+using StardewArchipelago.Archipelago.SlotData.SlotEnums;
 using StardewArchipelago.Constants.Vanilla;
 using StardewArchipelago.Items.Unlocks.Vanilla;
 using StardewModdingAPI;
 using StardewValley;
+using StardewValley.Menus;
 using StardewValley.Quests;
-using KaitoKid.ArchipelagoUtilities.Net;
-using Microsoft.Xna.Framework.Content;
-using StardewArchipelago.Archipelago;
-using KaitoKid.ArchipelagoUtilities.Net.Constants;
-using KaitoKid.Utilities.Interfaces;
-using StardewArchipelago.Archipelago.SlotData.SlotEnums;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using Microsoft.Xna.Framework;
 using Object = StardewValley.Object;
 
 namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Quests
@@ -24,6 +26,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Quests
         private static StardewArchipelagoClient _archipelago;
         private static LocationChecker _locationChecker;
         private static ContentManager _englishContentManager;
+        private static uint _rerollCount = 0;
 
         public static void Initialize(ILogger logger, IModHelper helper, StardewArchipelagoClient archipelago, LocationChecker locationChecker)
         {
@@ -32,7 +35,9 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Quests
             _archipelago = archipelago;
             _locationChecker = locationChecker;
             _englishContentManager = new ContentManager(Game1.game1.Content.ServiceProvider, Game1.game1.Content.RootDirectory);
+            _rerollCount = Game1.stats.DaysPlayed;
         }
+
         public static bool TryHandleQuestComplete(Quest quest, out bool runOriginal)
         {
             if (!quest.dailyQuest.Value)
@@ -146,7 +151,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Quests
                     return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
                 }
 
-                var todayRandom = new Random((int)Game1.uniqueIDForThisGame + (int)Game1.stats.DaysPlayed);
+                var todayRandom = CreateRerolledRandom();
                 var weightedLocations = CreateWeightedMissingLocations();
                 if (!weightedLocations.Any())
                 {
@@ -186,7 +191,10 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Quests
         {
             var hints = _archipelago.GetMyActiveDesiredHints();
             var numberOfSteps = GetNumberOfHelpWantedGroups();
-            var remainingHelpWantedQuests = new List<string>();
+            var remainingHelpWantedQuests = new List<string>()
+            {
+                DailyQuest.ITEM_DELIVERY, DailyQuest.FISHING, DailyQuest.SLAY_MONSTERS, DailyQuest.GATHERING,
+            };
             for (var groupNumber = 1; groupNumber <= numberOfSteps; groupNumber++)
             {
                 AddWeightedItemDeliveries(groupNumber, hints, remainingHelpWantedQuests);
@@ -268,6 +276,31 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Quests
                 _logger.LogError($"Failed in {nameof(GetRandomItemFromSeason_RemoveFishIfCantCatchThem_Postfix)}:\n{ex}");
                 return;
             }
+        }
+
+        public static void IncrementRerollCount()
+        {
+            _rerollCount++;
+        }
+
+        // protected Random CreateInitializationRandom()
+        public static bool CreateInitializationRandom_ConsiderRerolls_Prefix(Quest __instance, ref Random __result)
+        {
+            try
+            {
+                __result = CreateRerolledRandom();
+                return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Failed in {nameof(CreateInitializationRandom_ConsiderRerolls_Prefix)}:\n{ex}");
+                return MethodPrefix.RUN_ORIGINAL_METHOD;
+            }
+        }
+
+        private static Random CreateRerolledRandom()
+        {
+            return Utility.CreateRandom((double)Game1.uniqueIDForThisGame, (double)Game1.stats.DaysPlayed * 1.3, _rerollCount);
         }
     }
 }

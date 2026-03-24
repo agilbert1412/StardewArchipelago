@@ -15,9 +15,11 @@ using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Menus;
 using StardewValley.Quests;
+using StardewValley.SpecialOrders;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using StardewArchipelago.Locations.CodeInjections.Vanilla.Quests;
 
 namespace StardewArchipelago.GameModifications.Tooltips
 {
@@ -32,6 +34,8 @@ namespace StardewArchipelago.GameModifications.Tooltips
         private static Texture2D _bigArchipelagoIcon;
         private static Texture2D _miniArchipelagoIcon;
         private static Texture2D _travelingMerchantIcon;
+        public static ClickableComponent _rerollButton;
+        private const string REROLL_TEXT = "Reroll";
 
         public static void Initialize(LogHandler logger, IModHelper modHelper, ModConfig config, ArchipelagoClient archipelago, StardewLocationChecker locationChecker, Friends friends)
         {
@@ -48,8 +52,45 @@ namespace StardewArchipelago.GameModifications.Tooltips
             _travelingMerchantIcon = TexturesLoader.GetTexture("traveling_merchant.png");
         }
 
+        // public Billboard(bool dailyQuest = false)
+        public static void BillboardConstructor_InitializeReroll_Postfix(ref Billboard __instance, bool dailyQuest)
+        {
+            try
+            {
+                if (!dailyQuest)
+                {
+                    return;
+                }
+
+                var buttonWidth = (int)Game1.dialogueFont.MeasureString(REROLL_TEXT).X + 24;
+                var buttonHeight = (int)Game1.dialogueFont.MeasureString(REROLL_TEXT).Y + 24;
+                var buttonX = __instance.xPositionOnScreen + __instance.width * 2 / 4 - (buttonWidth / 2);
+                var buttonY = __instance.yPositionOnScreen + (__instance.height / 16) - 24;
+                var bounds = new Rectangle(buttonX, buttonY, buttonWidth, buttonHeight);
+                _rerollButton = new ClickableComponent(bounds, "")
+                {
+                    myID = 111,
+                    leftNeighborID = -99998,
+                    rightNeighborID = -99998,
+                    upNeighborID = -99998,
+                    downNeighborID = -99998
+                };
+                UpdateRerollButtonVisibility();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Failed in {nameof(BillboardConstructor_InitializeReroll_Postfix)}:\n{ex}");
+                return;
+            }
+        }
+
+        private static void UpdateRerollButtonVisibility()
+        {
+            _rerollButton.visible = Game1.CanAcceptDailyQuest();
+        }
+
         // public override void draw(SpriteBatch b)
-        public static void Draw_AddArchipelagoIndicators_Postfix(Billboard __instance, SpriteBatch b)
+        public static void Draw_AddArchipelagoIndicatorsAndReroll_Postfix(Billboard __instance, SpriteBatch b)
         {
             try
             {
@@ -57,6 +98,7 @@ namespace StardewArchipelago.GameModifications.Tooltips
                 var dailyQuestBoard = _modHelper.Reflection.GetField<bool>(__instance, "dailyQuestBoard").GetValue();
                 if (dailyQuestBoard)
                 {
+                    DrawRerollButton(__instance, b);
                     DrawDailyQuestIndicator(__instance, b);
                 }
                 else
@@ -78,8 +120,17 @@ namespace StardewArchipelago.GameModifications.Tooltips
             }
             catch (Exception ex)
             {
-                _logger.LogError($"Failed in {nameof(Draw_AddArchipelagoIndicators_Postfix)}:\n{ex}");
+                _logger.LogError($"Failed in {nameof(Draw_AddArchipelagoIndicatorsAndReroll_Postfix)}:\n{ex}");
                 return;
+            }
+        }
+
+        private static void DrawRerollButton(Billboard billboard, SpriteBatch spriteBatch)
+        {
+            if (_rerollButton.visible)
+            {
+                IClickableMenu.drawTextureBox(spriteBatch, Game1.mouseCursors, new Rectangle(403, 373, 9, 9), _rerollButton.bounds.X, _rerollButton.bounds.Y, _rerollButton.bounds.Width, _rerollButton.bounds.Height, _rerollButton.scale > 1.0 ? Color.LightPink : Color.White, 4f * _rerollButton.scale);
+                Utility.drawTextWithShadow(spriteBatch, REROLL_TEXT, Game1.dialogueFont, new Vector2(_rerollButton.bounds.X + 12, _rerollButton.bounds.Y + (LocalizedContentManager.CurrentLanguageLatin ? 16 : 12)), Game1.textColor);
             }
         }
 
@@ -169,71 +220,94 @@ namespace StardewArchipelago.GameModifications.Tooltips
         }
 
         // public override void performHoverAction(int x, int y)
-        public static void PerformHoverAction_AddArchipelagoChecksToTooltips_Postfix(Billboard __instance, int x, int y)
+        public static void PerformHoverAction_RerollButtonAndTooltips_Postfix(Billboard __instance, int x, int y)
         {
             try
             {
                 // private bool dailyQuestBoard;
                 if (_modHelper.Reflection.GetField<bool>(__instance, "dailyQuestBoard").GetValue())
                 {
-                    return;
+                    PerformHoverActionRerollButton(__instance, x, y);
                 }
-
-                if (!_config.ShowCalendarIndicators)
+                else
                 {
-                    return;
+                    PerformHoverActionCalendarTooltips(__instance, x, y);
                 }
-
-                // private string hoverText = "";
-                var hoverTextField = _modHelper.Reflection.GetField<string>(__instance, "hoverText");
-                var hoverText = hoverTextField.GetValue();
-
-                var birthdays = __instance.GetBirthdays();
-
-                for (var i = 0; i < __instance.calendarDays.Count; i++)
-                {
-                    var day = i + 1;
-                    if (!__instance.calendarDays[i].bounds.Contains(x, y))
-                    {
-                        continue;
-                    }
-
-                    var birthdaysToday = birthdays.GetValueOrDefault(day) ?? new List<NPC>();
-
-                    var missingFestivalChecks = GetMissingFestivalChecks(day);
-                    var missingNpcChecks = GetMissingNpcChecks(birthdaysToday);
-                    var missingCartChecks = GetMissingTravelingCartChecks(day);
-                    var missingSecretsChecks = GetMissingSecretsChecks(day);
-
-                    foreach (var location in missingFestivalChecks)
-                    {
-                        hoverText += $"{Environment.NewLine}- {location}";
-                    }
-
-                    foreach (var location in missingNpcChecks)
-                    {
-                        hoverText += $"{Environment.NewLine}- {location.TurnHeartsIntoStardewHearts()}";
-                    }
-
-                    foreach (var location in missingCartChecks)
-                    {
-                        hoverText += $"{Environment.NewLine}- {location}";
-                    }
-
-                    foreach (var location in missingSecretsChecks)
-                    {
-                        hoverText += $"{Environment.NewLine}- {location}";
-                    }
-                }
-
-                hoverTextField.SetValue(hoverText.Trim());
-                return;
             }
             catch (Exception ex)
             {
-                _logger.LogError($"Failed in {nameof(PerformHoverAction_AddArchipelagoChecksToTooltips_Postfix)}:\n{ex}");
+                _logger.LogError($"Failed in {nameof(PerformHoverAction_RerollButtonAndTooltips_Postfix)}:\n{ex}");
                 return;
             }
+        }
+
+        private static bool PerformHoverActionCalendarTooltips(Billboard __instance, int x, int y)
+        {
+            if (!_config.ShowCalendarIndicators)
+            {
+                return true;
+            }
+
+            // private string hoverText = "";
+            var hoverTextField = _modHelper.Reflection.GetField<string>(__instance, "hoverText");
+            var hoverText = hoverTextField.GetValue();
+
+            var birthdays = __instance.GetBirthdays();
+
+            for (var i = 0; i < __instance.calendarDays.Count; i++)
+            {
+                var day = i + 1;
+                if (!__instance.calendarDays[i].bounds.Contains(x, y))
+                {
+                    continue;
+                }
+
+                var birthdaysToday = birthdays.GetValueOrDefault(day) ?? new List<NPC>();
+
+                var missingFestivalChecks = GetMissingFestivalChecks(day);
+                var missingNpcChecks = GetMissingNpcChecks(birthdaysToday);
+                var missingCartChecks = GetMissingTravelingCartChecks(day);
+                var missingSecretsChecks = GetMissingSecretsChecks(day);
+
+                foreach (var location in missingFestivalChecks)
+                {
+                    hoverText += $"{Environment.NewLine}- {location}";
+                }
+
+                foreach (var location in missingNpcChecks)
+                {
+                    hoverText += $"{Environment.NewLine}- {location.TurnHeartsIntoStardewHearts()}";
+                }
+
+                foreach (var location in missingCartChecks)
+                {
+                    hoverText += $"{Environment.NewLine}- {location}";
+                }
+
+                foreach (var location in missingSecretsChecks)
+                {
+                    hoverText += $"{Environment.NewLine}- {location}";
+                }
+            }
+
+            hoverTextField.SetValue(hoverText.Trim());
+            return false;
+        }
+
+        // public override void performHoverAction(int x, int y)
+        public static void PerformHoverActionRerollButton(Billboard billboard, int x, int y)
+        {
+            if (!_rerollButton.visible)
+            {
+                return;
+            }
+            var scale1 = _rerollButton.scale;
+            _rerollButton.scale = _rerollButton.bounds.Contains(x, y) ? 1.5f : 1f;
+            if (_rerollButton.scale > (double)scale1)
+            {
+                Game1.playSound("Cowboy_gunshot");
+            }
+            return;
         }
 
         private static IEnumerable<string> GetMissingFestivalChecks(int day)
@@ -305,6 +379,29 @@ namespace StardewArchipelago.GameModifications.Tooltips
                 {
                     yield return secretName;
                 }
+            }
+        }
+
+        // public override void receiveLeftClick(int x, int y, bool playSound = true)
+        public static void ReceiveLeftClick_ClickRerollButton_Postfix(Billboard __instance, int x, int y, bool playSound)
+        {
+            try
+            {
+                if (_rerollButton.visible && _rerollButton.containsPoint(x, y))
+                {
+                    Game1.playSound("newArtifact");
+                    HelpWantedQuestInjections.IncrementRerollCount();
+                    Game1.RefreshQuestOfTheDay();
+                    __instance.UpdateDailyQuestButton();
+                }
+
+                UpdateRerollButtonVisibility();
+                return;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Failed in {nameof(ReceiveLeftClick_ClickRerollButton_Postfix)}:\n{ex}");
+                return;
             }
         }
     }
