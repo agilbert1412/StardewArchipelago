@@ -11,6 +11,9 @@ namespace StardewArchipelago.GameModifications
     public class CharacterCustomizationArchipelago : CharacterCustomization
     {
         private const int ARCHIPELAGO_Y_OFFSET = 488;
+        private const int ARCHIPELAGO_FIELDS_WIDTH = 264;
+        private const int EXTRA_HEIGHT = 48;
+        private const int OK_BUTTON_OFFSET = 20;
 
         public TextBox IpAddressTextBox;
         public TextBox SlotNameTextBox;
@@ -25,7 +28,7 @@ namespace StardewArchipelago.GameModifications
         public CharacterCustomizationArchipelago(CharacterCustomization parent, IModHelper modHelper)
             : base(parent.source)
         {
-            height += 48;
+            height += 48 + EXTRA_HEIGHT;
             CreateArchipelagoFields();
             SetupArchipelagoFieldsPositions();
             var bounds = Game1.graphics.GraphicsDevice.Viewport.Bounds;
@@ -37,6 +40,7 @@ namespace StardewArchipelago.GameModifications
         {
             base.gameWindowSizeChanged(oldBounds, newBounds);
             SetupArchipelagoFieldsPositions();
+            this.okButton.bounds.Y += OK_BUTTON_OFFSET;
         }
 
         public override void draw(SpriteBatch b)
@@ -214,9 +218,10 @@ namespace StardewArchipelago.GameModifications
             var yPosition = yOffset - 16;
             IpAddressTextBox.X = xPosition;
             IpAddressTextBox.Y = yPosition;
+            IpAddressTextBox.Width = ARCHIPELAGO_FIELDS_WIDTH;
             IpAddressTextBox.limitWidth = false;
 
-            var ipAddressRectangle = new Rectangle(xPosition, yPosition, 192, 48);
+            var ipAddressRectangle = new Rectangle(xPosition, yPosition, ARCHIPELAGO_FIELDS_WIDTH, 48);
             ipAddressCC.bounds = ipAddressRectangle;
 
             var languageOffset = LocalizedContentManager.CurrentLanguageCode is LocalizedContentManager.LanguageCode.ru or LocalizedContentManager.LanguageCode.es or LocalizedContentManager.LanguageCode.pt ? -4 : 0;
@@ -232,9 +237,10 @@ namespace StardewArchipelago.GameModifications
             var yPosition = yOffset - 16;
             SlotNameTextBox.X = xPosition;
             SlotNameTextBox.Y = yPosition;
+            SlotNameTextBox.Width = ARCHIPELAGO_FIELDS_WIDTH;
             SlotNameTextBox.limitWidth = false;
 
-            var slotNameRectangle = new Rectangle(xPosition, yPosition, 192, 48);
+            var slotNameRectangle = new Rectangle(xPosition, yPosition, ARCHIPELAGO_FIELDS_WIDTH, 48);
             slotNameCC.bounds = slotNameRectangle;
 
             var languageOffset = LocalizedContentManager.CurrentLanguageCode is LocalizedContentManager.LanguageCode.ru or LocalizedContentManager.LanguageCode.es or LocalizedContentManager.LanguageCode.pt ? -4 : 0;
@@ -250,9 +256,10 @@ namespace StardewArchipelago.GameModifications
             var yPosition = yOffset - 16;
             PasswordTextBox.X = xPosition;
             PasswordTextBox.Y = yPosition;
+            PasswordTextBox.Width = ARCHIPELAGO_FIELDS_WIDTH;
             PasswordTextBox.limitWidth = false;
 
-            var ipAddressRectangle = new Rectangle(xPosition, yPosition, 192, 48);
+            var ipAddressRectangle = new Rectangle(xPosition, yPosition, ARCHIPELAGO_FIELDS_WIDTH, 48);
             passwordCC.bounds = ipAddressRectangle;
 
             var languageOffset = LocalizedContentManager.CurrentLanguageCode is LocalizedContentManager.LanguageCode.ru or LocalizedContentManager.LanguageCode.es or LocalizedContentManager.LanguageCode.pt ? -4 : 0;
