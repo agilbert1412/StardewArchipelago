@@ -60,7 +60,6 @@ namespace StardewArchipelago.Bundles
             if (NameWithoutBundle == MemeBundleNames.DR_SEUSS)
             {
                 SortDrSeussItems();
-                return;
             }
         }
 
