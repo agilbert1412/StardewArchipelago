@@ -29,13 +29,13 @@
 
 	<ItemGroup>
 		<PackageReference Include="Archipelago.Gifting.Net" Version="0.4.4" />
-		<PackageReference Include="Archipelago.MultiClient.Net" Version="6.7.0" />
-		<PackageReference Include="Archipelago.MultiClient.Net.Analyzers" Version="2.0.1">
+		<PackageReference Include="Archipelago.MultiClient.Net" Version="6.7.1" />
+		<PackageReference Include="Archipelago.MultiClient.Net.Analyzers" Version="2.0.3">
 			<PrivateAssets>all</PrivateAssets>
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>
-		<PackageReference Include="KaitoKid.ArchipelagoUtilities.AssetDownloader" Version="3.1.11" />
-		<PackageReference Include="KaitoKid.ArchipelagoUtilities.Net" Version="3.1.11" />
+		<PackageReference Include="KaitoKid.ArchipelagoUtilities.AssetDownloader" Version="3.1.13" />
+		<PackageReference Include="KaitoKid.ArchipelagoUtilities.Net" Version="3.1.13" />
 		<PackageReference Include="Pathoschild.Stardew.ModBuildConfig" Version="4.4.0" />
 	</ItemGroup>
 

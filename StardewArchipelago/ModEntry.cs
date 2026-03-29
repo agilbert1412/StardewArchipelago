@@ -437,10 +437,6 @@ namespace StardewArchipelago
                 State = state;
                 _archipelago.ScoutedLocations = State.LocationsScouted;
                 _archipelago.ScoutHintedLocations = State.LocationsScoutHinted.ToHashSet();
-                if (State.APConnectionInfo != null)
-                {
-                    State.APConnectionInfo.ConnectionTags = State.APConnectionInfo.ConnectionTags.ToHashSet().ToList();
-                }
             }
 
             var apExperience = _helper.Data.ReadSaveData<Dictionary<int, int>>(AP_EXPERIENCE_KEY);
