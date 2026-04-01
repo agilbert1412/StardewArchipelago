@@ -3,6 +3,7 @@ using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
 using KaitoKid.Utilities.Interfaces;
 using Newtonsoft.Json;
 using StardewArchipelago.Archipelago.SlotData.SlotEnums;
+using StardewArchipelago.Archipelago.SlotData.SlotEnums.SlotDataRandomization;
 using StardewArchipelago.GameModifications.Testing;
 using StardewArchipelago.Locations.Jojapocalypse.Consequences;
 using StardewModdingAPI;
@@ -55,6 +56,7 @@ namespace StardewArchipelago.Archipelago.SlotData
         public bool IncludeEndgameLocations { get; set; }
         public bool ExcludeGingerIsland { get; private set; }
         public TrapItemsDifficulty TrapItemsDifficulty { get; set; }
+        public DataRandomization DataRandomization { get; set; }
         public bool EnableMultiSleep { get; private set; }
         public int MultiSleepCostPerDay { get; private set; }
         public double ExperienceMultiplier { get; private set; }
@@ -125,6 +127,10 @@ namespace StardewArchipelago.Archipelago.SlotData
             IncludeEndgameLocations = slotDataReader.GetSlotSetting(SlotDataKeys.INCLUDE_ENDGAME_LOCATIONS, false);
             ExcludeGingerIsland = slotDataReader.GetSlotSetting(SlotDataKeys.EXCLUDE_GINGER_ISLAND, true);
             TrapItemsDifficulty = slotDataReader.GetSlotSetting(SlotDataKeys.TRAP_DIFFICULTY, TrapItemsDifficulty.Medium, SlotDataKeys.TRAP_ITEMS);
+            //var dataRandomizationBehavior = slotDataReader.GetSlotSetting(SlotDataKeys.DATA_RANDOMIZATION_BEHAVIOR, "");
+            //var dataRandomization = slotDataReader.GetSlotSetting(SlotDataKeys.DATA_RANDOMIZATION, "");
+            var randomizedData = slotDataReader.GetSlotSetting(SlotDataKeys.RANDOMIZED_DATA, "");
+            DataRandomization = new DataRandomization(randomizedData);
             EnableMultiSleep = slotDataReader.GetSlotSetting(SlotDataKeys.MULTI_SLEEP_ENABLED, true);
             MultiSleepCostPerDay = slotDataReader.GetSlotSetting(SlotDataKeys.MULTI_SLEEP_COST, 0);
             ExperienceMultiplier = slotDataReader.GetSlotSetting(SlotDataKeys.EXPERIENCE_MULTIPLIER, 100) / 100.0;

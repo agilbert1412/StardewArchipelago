@@ -37,6 +37,7 @@ using StardewArchipelago.Locations.InGameLocations;
 using StardewArchipelago.GameModifications.CodeInjections.Powers;
 using StardewArchipelago.GameModifications.MultiplayerVision;
 using StardewValley.Tools;
+using StardewArchipelago.GameModifications.RandomizedData;
 using xTile.Dimensions;
 
 namespace StardewArchipelago.GameModifications
@@ -47,6 +48,7 @@ namespace StardewArchipelago.GameModifications
         private readonly IModHelper _helper;
         private readonly StardewArchipelagoClient _archipelago;
         private readonly StardewItemManager _stardewItemManager;
+        private readonly RandomizedDataPatcher _dataPatcher;
         private readonly StartingResources _startingResources;
         private readonly SeedShopStockModifier _seedShopStockModifier;
         private readonly RecipeDataRemover _recipeDataRemover;
@@ -58,6 +60,7 @@ namespace StardewArchipelago.GameModifications
             _helper = modHelper;
             _archipelago = archipelago;
             _stardewItemManager = stardewItemManager;
+            _dataPatcher = new RandomizedDataPatcher(logger, modHelper, harmony, archipelago, stardewItemManager);
             _startingResources = new StartingResources(_archipelago, locationChecker, _stardewItemManager);
             _seedShopStockModifier = seedShopStockModifier;
             _recipeDataRemover = new RecipeDataRemover(logger, modHelper, archipelago);
@@ -150,6 +153,7 @@ namespace StardewArchipelago.GameModifications
             PatchEmptyHandBreak();
             PatchTouchingItems();
 
+            _dataPatcher.PatchAllRandomizedData();
             _startingResources.GivePlayerStartingResources();
             PatchMultiplayerVision();
 
@@ -163,6 +167,7 @@ namespace StardewArchipelago.GameModifications
             UnpatchJodiFishQuest();
             UnPatchRecipes();
             CleanPowersEvents();
+            _dataPatcher.CleanRandomizedDataEvents();
         }
 
         private void PatchPickUpLocation()
