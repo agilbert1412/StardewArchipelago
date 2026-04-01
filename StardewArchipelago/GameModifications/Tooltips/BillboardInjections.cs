@@ -59,6 +59,7 @@ namespace StardewArchipelago.GameModifications.Tooltips
             {
                 if (!dailyQuest)
                 {
+                    _rerollButton = null;
                     return;
                 }
 
@@ -127,7 +128,7 @@ namespace StardewArchipelago.GameModifications.Tooltips
 
         private static void DrawRerollButton(Billboard billboard, SpriteBatch spriteBatch)
         {
-            if (_rerollButton.visible)
+            if (_rerollButton != null && _rerollButton.visible)
             {
                 IClickableMenu.drawTextureBox(spriteBatch, Game1.mouseCursors, new Rectangle(403, 373, 9, 9), _rerollButton.bounds.X, _rerollButton.bounds.Y, _rerollButton.bounds.Width, _rerollButton.bounds.Height, _rerollButton.scale > 1.0 ? Color.LightPink : Color.White, 4f * _rerollButton.scale);
                 Utility.drawTextWithShadow(spriteBatch, REROLL_TEXT, Game1.dialogueFont, new Vector2(_rerollButton.bounds.X + 12, _rerollButton.bounds.Y + (LocalizedContentManager.CurrentLanguageLatin ? 16 : 12)), Game1.textColor);
@@ -297,7 +298,7 @@ namespace StardewArchipelago.GameModifications.Tooltips
         // public override void performHoverAction(int x, int y)
         public static void PerformHoverActionRerollButton(Billboard billboard, int x, int y)
         {
-            if (!_rerollButton.visible)
+            if (_rerollButton == null || !_rerollButton.visible)
             {
                 return;
             }
@@ -387,6 +388,11 @@ namespace StardewArchipelago.GameModifications.Tooltips
         {
             try
             {
+                if (_rerollButton == null)
+                {
+                    return;
+                }
+
                 if (_rerollButton.visible && _rerollButton.containsPoint(x, y))
                 {
                     Game1.playSound("newArtifact");
