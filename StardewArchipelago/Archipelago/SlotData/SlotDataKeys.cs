@@ -40,6 +40,11 @@
         public const string EXCLUDE_GINGER_ISLAND = "exclude_ginger_island";
         public const string TRAP_ITEMS = "trap_items";
         public const string TRAP_DIFFICULTY = "trap_difficulty";
+
+        public const string DATA_RANDOMIZATION_BEHAVIOR = "data_randomization_behavior";
+        public const string DATA_RANDOMIZATION = "data_randomization";
+        public const string RANDOMIZED_DATA = "randomized_data";
+
         public const string MULTI_SLEEP_ENABLED = "multiple_day_sleep_enabled";
         public const string MULTI_SLEEP_COST = "multiple_day_sleep_cost";
         public const string EXPERIENCE_MULTIPLIER = "experience_multiplier";
