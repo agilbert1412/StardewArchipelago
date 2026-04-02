@@ -559,6 +559,11 @@ namespace StardewArchipelago.Locations.Patcher
             );
 
             _harmony.Patch(
+                original: AccessTools.Method(typeof(Quest), "CreateInitializationRandom"),
+                prefix: new HarmonyMethod(typeof(HelpWantedQuestInjections), nameof(HelpWantedQuestInjections.CreateInitializationRandom_ConsiderRerolls_Prefix))
+            );
+
+            _harmony.Patch(
                 original: AccessTools.Method(typeof(Bush), "shake"),
                 prefix: new HarmonyMethod(typeof(StoryQuestInjections), nameof(StoryQuestInjections.Shake_WinterMysteryBush_Prefix))
             );

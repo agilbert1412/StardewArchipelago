@@ -1,15 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using StardewArchipelago.Constants.Vanilla;
 using StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles;
 using StardewArchipelago.Stardew;
 using StardewValley;
+using System;
+using System.Collections.Generic;
+using System.Data.SqlTypes;
+using System.Linq;
 
 namespace StardewArchipelago.Bundles
 {
     public class ItemBundle : Bundle
     {
         public int NumberRequired { get; set; }
-        public List<BundleItem> Items { get; }
+        public List<BundleItem> Items { get; private set; }
 
         public ItemBundle(StardewItemManager itemManager, string roomName, string bundleName, Dictionary<string, string> bundleContent) : base(roomName, bundleName)
         {
@@ -25,6 +28,7 @@ namespace StardewArchipelago.Bundles
                 InitializeIKEAItems(itemManager, bundleContent);
                 return;
             }
+
             foreach (var (key, itemDetails) in bundleContent)
             {
                 if (key == NUMBER_REQUIRED_KEY)
@@ -52,6 +56,32 @@ namespace StardewArchipelago.Bundles
                     Items.Add(bundleItem);
                 }
             }
+
+            if (NameWithoutBundle == MemeBundleNames.DR_SEUSS)
+            {
+                SortDrSeussItems();
+            }
+        }
+
+        public override string GetItemsString()
+        {
+            var itemsString = "";
+            foreach (var item in Items)
+            {
+                itemsString += $" {item.StardewItem.Id} {item.Amount} {item.Quality}";
+            }
+
+            return itemsString.Trim();
+        }
+
+        public override string GetNumberRequiredItems()
+        {
+            if (NumberRequired == Items.Count)
+            {
+                return "";
+            }
+
+            return $"{NumberRequired}";
         }
 
         private void InitializeIKEAItems(StardewItemManager itemManager, Dictionary<string, string> bundleContent)
@@ -82,25 +112,31 @@ namespace StardewArchipelago.Bundles
             }
         }
 
-        public override string GetItemsString()
+        private void SortDrSeussItems()
         {
-            var itemsString = "";
-            foreach (var item in Items)
-            {
-                itemsString += $" {item.StardewItem.Id} {item.Amount} {item.Quality}";
-            }
-
-            return itemsString.Trim();
+            Items = Items.OrderBy(DrSeussSorter).ToList();
         }
 
-        public override string GetNumberRequiredItems()
+        private int DrSeussSorter(BundleItem bundleItem)
         {
-            if (NumberRequired == Items.Count)
+            if (bundleItem.Amount == 2)
             {
-                return "";
+                return 1;
             }
 
-            return $"{NumberRequired}";
+            var redQualifiers = new[] { "Red", "Lava", "Crimson" };
+            if (redQualifiers.Any(x => bundleItem.StardewItem.Name.Contains(x, StringComparison.InvariantCultureIgnoreCase)))
+            {
+                return 2;
+            }
+
+            var blueQualifiers = new[] { "Anchovy", "Tuna", "Sardine", "Bream", "Squid", "Ice", "Albacore", "Blue", "Midnight", "Spook", "Glacier" };
+            if (blueQualifiers.Any(x => bundleItem.StardewItem.Name.Contains(x, StringComparison.InvariantCultureIgnoreCase)))
+            {
+                return 3;
+            }
+
+            return 0;
         }
     }
 }

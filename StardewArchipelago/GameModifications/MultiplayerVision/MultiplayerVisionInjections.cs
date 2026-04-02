@@ -168,7 +168,7 @@ namespace StardewArchipelago.GameModifications.MultiplayerVision
             return Math.Abs(floatA - floatB) <= 0.01f;
         }
 
-        private static float GetXVelocity(Farmer farmer, float movementSpeed)
+        public static float GetXVelocity(Farmer farmer, float movementSpeed)
         {
             var xVelocity = 0f;
             if (farmer.movementDirections.Contains(1))
@@ -181,7 +181,8 @@ namespace StardewArchipelago.GameModifications.MultiplayerVision
             }
             return xVelocity;
         }
-        private static float GetYVelocity(Farmer farmer, float movementSpeed)
+
+        public static float GetYVelocity(Farmer farmer, float movementSpeed)
         {
             var yVelocity = 0f;
             if (farmer.movementDirections.Contains(0))
@@ -211,7 +212,7 @@ namespace StardewArchipelago.GameModifications.MultiplayerVision
 
         public static void DrawAndUpdateOtherPlayers(SpriteBatch spriteBatch, uint elapsedFrames)
         {
-            if (!ModEntry.Instance.Config.MultiplayerVision || !_visiblePlayers.Any())
+            if (!_visiblePlayers.Any())
             {
                 return;
             }
@@ -283,6 +284,17 @@ namespace StardewArchipelago.GameModifications.MultiplayerVision
                 visiblePlayer.Appearance = _playerAppearances[identifier];
             }
 
+            AddVisiblePlayer(identifier, visiblePlayer);
+
+            //_logger.LogInfo($"Received {ArchipelagoClient.MULTIPLAYER_VISION_TAG} packet{Environment.NewLine}" +
+            //               $"  identifier: {identifier}{Environment.NewLine}" +
+            //               $"  mapName: {mapName}{Environment.NewLine}" +
+            //               $"  positionX: {positionX}{Environment.NewLine}" +
+            //               $"  positionY: {positionY}");
+        }
+
+        public static void AddVisiblePlayer(string identifier, VisiblePlayer visiblePlayer)
+        {
             if (_visiblePlayers.ContainsKey(identifier))
             {
                 //if (appearance == null)
@@ -295,12 +307,24 @@ namespace StardewArchipelago.GameModifications.MultiplayerVision
             {
                 _visiblePlayers.Add(identifier, visiblePlayer);
             }
+        }
 
-            //_logger.LogInfo($"Received {ArchipelagoClient.MULTIPLAYER_VISION_TAG} packet{Environment.NewLine}" +
-            //               $"  identifier: {identifier}{Environment.NewLine}" +
-            //               $"  mapName: {mapName}{Environment.NewLine}" +
-            //               $"  positionX: {positionX}{Environment.NewLine}" +
-            //               $"  positionY: {positionY}");
+        public static void RemoveVisiblePlayer(string identifier)
+        {
+            if (_visiblePlayers.ContainsKey(identifier))
+            {
+                _visiblePlayers.Remove(identifier);
+            }
+        }
+
+        public static VisiblePlayer GetVisiblePlayer(string identifier)
+        {
+            if (_visiblePlayers.ContainsKey(identifier))
+            {
+                return _visiblePlayers[identifier];
+            }
+
+            return null;
         }
 
         private static PlayerAppearance TryGetAppearance(Dictionary<string, JToken> bouncePacketData)

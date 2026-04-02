@@ -8,6 +8,7 @@ namespace StardewArchipelago.GameModifications.CodeInjections
     {
         private static bool _shouldPrankOnFishDay = true;
         private static bool _shouldPrankOnOtherDays = false;
+        private static bool _shouldMoveLinkPrank = false;
 
         public static bool IsPrankMonth()
         {
@@ -25,9 +26,13 @@ namespace StardewArchipelago.GameModifications.CodeInjections
             // return ShouldPrank();
         }
 
+        public static bool ShouldDoMoveLinkPrank()
+        {
+            return _shouldMoveLinkPrank;
+        }
+
         internal static bool ShouldPrank()
         {
-            // return true;
             return IsPrankDay() ? _shouldPrankOnFishDay : _shouldPrankOnOtherDays;
         }
 
@@ -63,6 +68,11 @@ namespace StardewArchipelago.GameModifications.CodeInjections
                 }
                 _shouldPrankOnOtherDays = !_shouldPrankOnOtherDays;
             }
+        }
+
+        internal static void ToggleMoveLink()
+        {
+            _shouldMoveLinkPrank = !_shouldMoveLinkPrank;
         }
     }
 }

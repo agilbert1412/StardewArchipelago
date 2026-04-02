@@ -18,6 +18,7 @@ using StardewArchipelago.GameModifications.EntranceRandomizer;
 using StardewArchipelago.GameModifications.Modded;
 using StardewArchipelago.GameModifications.MoveLink;
 using StardewArchipelago.GameModifications.MultiplayerVision;
+using StardewArchipelago.GameModifications.MultiplayerVision.FoolVision;
 using StardewArchipelago.GameModifications.MultiSleep;
 using StardewArchipelago.GameModifications.Seasons;
 using StardewArchipelago.GameModifications.Testing;
@@ -526,6 +527,7 @@ namespace StardewArchipelago
             MovementInjections.UpdateMove(e);
             MultiplayerVisionInjections.OnUpdateTicked(e);
             _jojapocalypseManager?.OnUpdateTicked(e);
+            FoolVisionManager.Instance.Update(e);
         }
 
         private void OnReturnedToTitle(object sender, ReturnedToTitleEventArgs e)

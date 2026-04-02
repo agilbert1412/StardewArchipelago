@@ -13,33 +13,33 @@
       },
       "Archipelago.MultiClient.Net": {
         "type": "Direct",
-        "requested": "[6.7.0, )",
-        "resolved": "6.7.0",
-        "contentHash": "fsK7kx3dC4EwvEA7kMTUwbP+kYeanYVWHyTXOjYKxl6zj4elHMj42YCjvOYqHee+V2NrRm0f0pljhWEY+BI72g=="
+        "requested": "[6.7.1, )",
+        "resolved": "6.7.1",
+        "contentHash": "wheDMl5C0e175RvuY+E3oDY13myaa7f2pRRjOg9PgcbOJApVu3QT62mQ46jYJ0sn/X7Fu4bdVVxZ2bx0vwncBQ=="
       },
       "Archipelago.MultiClient.Net.Analyzers": {
         "type": "Direct",
-        "requested": "[2.0.1, )",
-        "resolved": "2.0.1",
-        "contentHash": "a/YdkF1higP34UtDKUOfd7fSheWyV1tAFg449zYWxDvwGLUQ6JKHh6U2ozjpwHDUGbwmin16Rb1sN01moxqsDg=="
+        "requested": "[2.0.3, )",
+        "resolved": "2.0.3",
+        "contentHash": "rC45ABdEF2tW9YAcGqCXV2OeIDqRrWnNSBs3xtRhIqjzxldtJkroWZGMXLfsSq//LMMB4YdGoKIMui/prACXpQ=="
       },
       "KaitoKid.ArchipelagoUtilities.AssetDownloader": {
         "type": "Direct",
-        "requested": "[3.1.11, )",
-        "resolved": "3.1.11",
-        "contentHash": "9f1EbbdpzCAwpT5VBfxuQ4+DME0AwKKRzeG8KtusyTMEkfE0gumTRnoQKrcIp+nhI2AZHbIsGf6KNEspkoTR6g==",
+        "requested": "[3.1.13, )",
+        "resolved": "3.1.13",
+        "contentHash": "WShiAoB0Fwezg0BqtCVIRvmfvViZ/qJmVXJhln8uCKKlB+SCSsdASNd8/VBNokcJrpqf95IiI3w2KkdKSaXUNA==",
         "dependencies": {
-          "KaitoKid.Utilities.Interfaces": "3.1.11"
+          "KaitoKid.Utilities.Interfaces": "3.1.13"
         }
       },
       "KaitoKid.ArchipelagoUtilities.Net": {
         "type": "Direct",
-        "requested": "[3.1.11, )",
-        "resolved": "3.1.11",
-        "contentHash": "riD9/u5fYc6N/l5OAIzpmr8VAA43gIsFSBBfPvMyAioazM2MIa5MjxzTUQDdQM4+WzGVASRpch/b6rEvkTiYpQ==",
+        "requested": "[3.1.13, )",
+        "resolved": "3.1.13",
+        "contentHash": "PO1dVwQybji1ONj9/0q240e5QoI5a67Df/kXmnUREc1jZBUk5bWndDQsyOk4KzOXHt6ysfNVQ0Oec+s4Dy0mng==",
         "dependencies": {
           "Archipelago.MultiClient.Net": "6.6.0",
-          "KaitoKid.Utilities.Interfaces": "3.1.11"
+          "KaitoKid.Utilities.Interfaces": "3.1.13"
         }
       },
       "Pathoschild.Stardew.ModBuildConfig": {
@@ -50,8 +50,8 @@
       },
       "KaitoKid.Utilities.Interfaces": {
         "type": "Transitive",
-        "resolved": "3.1.11",
-        "contentHash": "QNqC5yQX7fIJUx2n5VtPLghNQ6v+cVbGXKZX5b6qQBeqwcqUBn94nsskITQcCMUxrpkHG+ASNz4Zqp3H7EQ8SA=="
+        "resolved": "3.1.13",
+        "contentHash": "Emo7zqtpQmqff04mZ6jDYBaBWTIsR8N1tE06JYyNR6ubuO1ofdQ8R2KtYps6eqKGQ/qL2TEN98f/do/L9H5ZwQ=="
       }
     }
   }

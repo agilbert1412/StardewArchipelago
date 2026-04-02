@@ -68,9 +68,10 @@ namespace StardewArchipelago.GameModifications.MultiplayerVision
             {
                 return;
             }
-
+            
             InitializeFarmer();
 
+            Farmer.movementDirections.Clear();
             if (Velocity.X > 0)
             {
                 Farmer.movementDirections.Add(1);
@@ -123,6 +124,7 @@ namespace StardewArchipelago.GameModifications.MultiplayerVision
             }
             var nullable = tile?.TileIndexProperties.ContainsKey("Shadow");
             var mask = new Color(255, 255, 255, 255);
+
             if ((!nullable.HasValue ? 0 : (nullable.GetValueOrDefault() ? 1 : 0)) == 0)
             {
                 if (IsSitting || !Game1.shouldTimePass() || !Farmer.temporarilyInvincible || !Farmer.flashDuringThisTemporaryInvincibility || Farmer.temporaryInvincibilityTimer % 100 < 50)

@@ -59,5 +59,6 @@
         public const string COLORED_CRYSTALS = "Colored Crystals";
         public const string HINT = "Hint";
         public const string RECONNECTION = "Reconnection";
+        public const string DR_SEUSS = "Dr Seuss";
     }
 }

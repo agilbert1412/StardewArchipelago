@@ -86,7 +86,7 @@ namespace StardewArchipelago.Archipelago
 
         public override ConnectionResult ConnectToMultiworld(ArchipelagoConnectionInfo connectionInfo)
         {
-            if (ModEntry.Instance.Config.MultiplayerVision)
+            if (ModEntry.Instance.Config.MultiplayerVision && !connectionInfo.ConnectionTags.Contains(MULTIPLAYER_VISION_TAG))
             {
                 connectionInfo.ConnectionTags.Add(MULTIPLAYER_VISION_TAG);
             }

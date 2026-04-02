@@ -805,20 +805,36 @@ namespace StardewArchipelago.GameModifications
                 postfix: new HarmonyMethod(typeof(ItemTooltipInjections), nameof(ItemTooltipInjections.GetDescription_AddMissingChecks_Postfix))
             );
 
+            PatchHelpWantedBoard();
+
+            var boardDrawParameters = new[] { typeof(SpriteBatch) };
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(SpecialOrdersBoard), nameof(SpecialOrdersBoard.draw), boardDrawParameters),
+                postfix: new HarmonyMethod(typeof(SpecialOrderBoardInjections), nameof(SpecialOrderBoardInjections.Draw_AddArchipelagoAdditions_Postfix))
+            );
+        }
+
+        private void PatchHelpWantedBoard()
+        {
+            _harmony.Patch(
+                original: AccessTools.Constructor(typeof(Billboard), new []{typeof(bool)}),
+                postfix: new HarmonyMethod(typeof(BillboardInjections), nameof(BillboardInjections.BillboardConstructor_InitializeReroll_Postfix))
+            );
+
             var boardDrawParameters = new[] { typeof(SpriteBatch) };
             _harmony.Patch(
                 original: AccessTools.Method(typeof(Billboard), nameof(Billboard.draw), boardDrawParameters),
-                postfix: new HarmonyMethod(typeof(BillboardInjections), nameof(BillboardInjections.Draw_AddArchipelagoIndicators_Postfix))
+                postfix: new HarmonyMethod(typeof(BillboardInjections), nameof(BillboardInjections.Draw_AddArchipelagoIndicatorsAndReroll_Postfix))
             );
 
             _harmony.Patch(
                 original: AccessTools.Method(typeof(Billboard), nameof(Billboard.performHoverAction)),
-                postfix: new HarmonyMethod(typeof(BillboardInjections), nameof(BillboardInjections.PerformHoverAction_AddArchipelagoChecksToTooltips_Postfix))
+                postfix: new HarmonyMethod(typeof(BillboardInjections), nameof(BillboardInjections.PerformHoverAction_RerollButtonAndTooltips_Postfix))
             );
 
             _harmony.Patch(
-                original: AccessTools.Method(typeof(SpecialOrdersBoard), nameof(SpecialOrdersBoard.draw), boardDrawParameters),
-                postfix: new HarmonyMethod(typeof(SpecialOrderBoardInjections), nameof(SpecialOrderBoardInjections.Draw_AddArchipelagoAdditions_Postfix))
+                original: AccessTools.Method(typeof(Billboard), nameof(Billboard.receiveLeftClick)),
+                postfix: new HarmonyMethod(typeof(BillboardInjections), nameof(BillboardInjections.ReceiveLeftClick_ClickRerollButton_Postfix))
             );
         }
 
