@@ -79,7 +79,7 @@ If you did shuffle masteries, these tools exist as an extra copy of their respec
 
 ### Start Without Tools
 
-Within the setting ~~[Start Without](./start_without.md)~~, is an option to "Start Without: Tools".
+Within the setting [Start Without](./start_without.md), is an option to "Start Without: Tools".
 
 This will allow the player to start without the following tools:
 - Pickaxe

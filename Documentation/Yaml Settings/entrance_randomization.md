@@ -16,19 +16,19 @@ No Entrance Randomization, all doors are normal.
 
 ### Pelican Town
 
-This is baby's first ER. This shuffles only the doors that are on the main Pelican Town map, with each other. This does not include the only locked door on that map, the sewers.
+This is baby's first ER. This shuffles only the doors that are on the main Pelican Town map, with each other. This does not include the locked doors on that map (the sewers and Community Center).
 
 This does not result in any logic or progression changes. This only has an impact on opening hours, and the psychological impact of making the player re-learn the map.
 
 ### Non Progression
 
-This setting randomizes every door in the world that does not start out locked. For the purpose of this setting, "lock" means a door that you require some Archipelago Items to reach, for example the sewer needs a rusty Key. The Oasis requires a bus. Etc.
+This setting randomizes every door in the world that does not start out locked. For the purpose of this setting, "lock" means a door that you require some Archipelago Items to reach, for example the sewer needs a Rusty Key. The Oasis requires a bus. Etc.
 
-A door that starts locked, but is unlocked naturally without receiving any items, is considered unlocked. For example, the Community Center and the Mines that open naturally on day 5.
+A door that starts locked, but is unlocked naturally without receiving any items, is considered unlocked. For example, Willy's shop that opens naturally on day 2.
 
-This includes doors like the wizard tower, the adventure guild, the Community Center. This does **not** include doors like Leah's Cottage (hearts), the Bathhouse (Boulder), or the sewers (Rusty Key).
+Note that this does **not** include doors like Leah's Cottage (hearts), the Bathhouse (Boulder), or the sewers (Rusty Key).
 
-This setting also does not include the farmhouse, even though it technically qualifies, because it is intended as an **easy** setting, and the farmhouse being randomized makes the game much more difficult.
+Finally, this setting also does not include the farmhouse, even though it technically qualifies, because it is intended as an **easy** setting, and the farmhouse being randomized makes the game much more difficult.
 
 ### Buildings Without House
 
@@ -63,5 +63,12 @@ This is no longer a requirement, so we intend some changes in the future, althou
 2: `Entrance Randomizer: Everything` - This setting would randomize every map transition, and also every method of transportation that is not a conventional transition. This would include randomizing Obelisk and Warp Totem destinations, Minecarts and Parrot Express travel, etc.
 3: `Entrance Randomizer: Decoupled` - This would be a flag that you could set on top of any of the existing ER settings. It would decouple all the randomized doors, so that crossing it one way would not be the same as crossing it the opposite way. So you could, for example, enter the saloon, end up in the Blacksmith, but then try to exit the blacksmith, and land at the Community Center. The non-Euclidian space would make for a brand new, mind-melting challenge!
 4: Turn `Entrance Randomizer: Chaos` into a flag - Similar to how `Decoupled` was described, we could have chaos be a flag, instead of its own setting, that could be applied on top of one of the existing settings. It could lead to an actually playable version of Chaos, if you did `Pelican Town + Chaos` for example.
+
+## Interaction With Other Settings
+
+### [Start Without](./start_without.md)
+
+Within the setting [Start Without](./start_without.md), are options to "Start Without: Community Center" and "Start Without: Landslide". These change the conditions necessary to enter the Community Center, Wizard's Tower, Mines, and Adventurer's Guild. For example, if you start without the Community Center, you now need the `Community Center Key` to enter the entrance; however, if you start with the Community Center, the entrance will open up after a couple of days, like normal.
+This may seem to imply that whether they count as `Non-Progression` buildings could change dynamically with this setting; however, due to the way Start Without is handled, you will always receive these "key" items, even if you start with them. (Better explanation needed) Because of that, these entrances are always considered to be locked behind an Archipelago Item, and will thus never count as `Non-Progression`.
 
 ## [Return to Index](./index.md)

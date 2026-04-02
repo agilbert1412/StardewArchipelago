@@ -81,7 +81,7 @@ The price multiplier affects both the price and the materials for every building
 
 ### Start Without Buildings
 
-Within the setting ~~[Start Without](./start_without.md)~~, is an option to "Start Without: Buildings".
+Within the setting [Start Without](./start_without.md), is an option to "Start Without: Buildings".
 
 This will allow the player to start without the following buildings on their farm:
 - Shipping Bin
