@@ -237,7 +237,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
                 SetDurationOfSpecialOrders(Game1.player.team.availableSpecialOrders);
 
                 // Let the game pick festival orders, they aren't checks anyway, right?
-                if (orderType.Equals("DesertFestivalMarlon", StringComparison.InvariantCultureIgnoreCase) || (!_archipelago.SlotData.SpecialOrderLocations.HasFlag(SpecialOrderLocations.Board) && !_archipelago.SlotData.SpecialOrderLocations.HasFlag(SpecialOrderLocations.Qi)))
+                if (orderType.Equals("DesertFestivalMarlon", StringComparison.InvariantCultureIgnoreCase))
                 {
                     return MethodPrefix.RUN_ORIGINAL_METHOD;
                 }
