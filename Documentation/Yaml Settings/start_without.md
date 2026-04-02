@@ -79,7 +79,7 @@ When this is disabled, the Pickaxe, Axe, Watering Can, Hoe, and Scythe will be i
 When this is enabled, these items will not be in your inventory from the beginning; instead, they will behave like the Fishing Rod and Pan do, which means that they have an extra item in the pool that gives you your basic version of the tool.
 There is no equivalent location for these starting tools.
 
-Note that logic doesn't account for random debris spawning on your farm. It is recommended to set the "AllowHandBreaking" setting in the config file located in \Stardew Valley\mods\StardewArchipelago to `true` so that you can break rocks/twigs/small trees as they block your path.
+Note that logic doesn't account for random debris spawning on your farm. It is recommended to set the "AllowHandBreaking" setting in the config file located in `\Stardew Valley\mods\StardewArchipelago` to `true` so that you can break rocks/twigs/small trees as they block your path.
 
 ## Interaction With Other Settings
 
