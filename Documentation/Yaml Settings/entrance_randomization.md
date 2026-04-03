@@ -68,7 +68,8 @@ This is no longer a requirement, so we intend some changes in the future, althou
 
 ### [Start Without](./start_without.md)
 
-Within the setting [Start Without](./start_without.md), are options to "Start Without: Community Center" and "Start Without: Landslide". These change the conditions necessary to enter the Community Center, Wizard's Tower, Mines, and Adventurer's Guild. For example, if you start without the Community Center, you now need the `Community Center Key` to enter the entrance; however, if you start with the Community Center, the entrance will open up after a couple of days, like normal.
-This may seem to imply that whether they count as `Non-Progression` buildings could change dynamically with this setting; however, due to the way Start Without is handled, you will always receive these "key" items, even if you start with them. (Better explanation needed) Because of that, these entrances are always considered to be locked behind an Archipelago Item, and will thus never count as `Non-Progression`.
+Within the setting [Start Without](./start_without.md), are options to "Start Without: Community Center" and "Start Without: Landslide". These change the conditions necessary to enter the Community Center, Wizard's Tower, Mines, and Adventurer's Guild. For example, if you start without the Community Center, you now need the `Community Center Key` to enter the entrance; however, if you start with the Community Center, the entrance will be open immediately.
+
+This may seem to imply that whether they count as `Non-Progression` entrances could change dynamically with this setting; however, due to the way Start Without is handled, you will be given these items in the mail on the first day when their corresponding settings are disabled. Because of that, these entrances are always considered to be locked behind an Archipelago Item, and will thus never count as `Non-Progression`.
 
 ## [Return to Index](./index.md)
