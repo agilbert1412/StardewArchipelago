@@ -366,7 +366,7 @@ namespace StardewArchipelago.GameModifications.EntranceRandomizer
             return (split[0], split[1]);
         }
 
-        private string TurnAliased(string key)
+        public static string TurnAliased(string key)
         {
             var entranceKeyAliased = TurnAliased(key, _entranceAliases, false);
             if (entranceKeyAliased.Contains(TRANSITIONAL_STRING))
@@ -383,7 +383,7 @@ namespace StardewArchipelago.GameModifications.EntranceRandomizer
             return modifiedString;
         }
 
-        private string TurnAliased(string key, Dictionary<string, string> aliases, bool singleWord)
+        private static string TurnAliased(string key, Dictionary<string, string> aliases, bool singleWord)
         {
             var modifiedString = key;
             foreach (var oldString in aliases.Keys.OrderByDescending(x => x.Length))
@@ -423,7 +423,7 @@ namespace StardewArchipelago.GameModifications.EntranceRandomizer
             { "Use Farm Obelisk", "IslandWest to Farm" },
         };
 
-        private readonly Dictionary<string, string> _locationAliases = new()
+        private static readonly Dictionary<string, string> _locationAliases = new()
         {
             { "Mayor's Manor", "ManorHouse" },
             { "Pierre's General Store", "SeedShop" },
@@ -489,7 +489,7 @@ namespace StardewArchipelago.GameModifications.EntranceRandomizer
             { "Parrot Express Farm", "IslandWest|74|9" },
         };
 
-        private readonly Dictionary<string, string> _locationsSingleWordAliases = new()
+        private static readonly Dictionary<string, string> _locationsSingleWordAliases = new()
         {
             { "'s", "" },
             { " ", "" },
