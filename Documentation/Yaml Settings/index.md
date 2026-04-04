@@ -83,7 +83,6 @@ These have direct effects on in-game behaviors, not tied to the Archipelago rand
 These settings cannot be picked from the website, and require filling out your yaml manually. They are intended for very experienced players.
 
 - ~~[Mods](./mods.md)~~
-- ~~[Bundle Plando](./bundle_plando.md)~~
 
 ## 7.x.x Settings
 
@@ -91,7 +90,7 @@ These settings are only available in the 7.x.x Pre-release version of the mod
 
 - ~~[Bundles Per Room](./bundle_per_room.md)~~
 - ~~[Backpack Size](./backpack_size.md)~~
-- ~~[Start Without](./start_without.md)~~
+- [Start Without](./start_without.md)
 - ~~[Eatsanity](./eatsanity.md)~~
 - ~~[Moviesanity](./moviesanity.md)~~
 - ~~[Secretsanity](./secretsanity.md)~~

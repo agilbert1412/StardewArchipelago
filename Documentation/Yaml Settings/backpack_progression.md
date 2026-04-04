@@ -48,7 +48,7 @@ This is generally considered undesirable, so if you rely on this keybind a lot, 
 
 ### Start Without Backpack
 
-Within the setting ~~[Start Without](./start_without.md)~~, is an option to "Start Without: Backpack".
+Within the setting [Start Without](./start_without.md), is an option to "Start Without: Backpack".
 
 For logic reasons, the player will still start with at least 4 backpack slots (6 if they start with tools), which is the bare minimum to be able to complete every location check in the game without having to write convoluted inventory logic.
 It is possible that, in the future, we eventually write the convoluted inventory logic, and allow the player to start with a true zero-slot backpack.
