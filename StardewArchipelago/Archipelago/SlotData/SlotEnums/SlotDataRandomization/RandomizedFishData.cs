@@ -25,9 +25,9 @@ namespace StardewArchipelago.Archipelago.SlotData.SlotEnums.SlotDataRandomizatio
 
         }
 
-        public Dictionary<string, SpawnFishData> GetSpawnFishDatas(StardewItemManager itemManager)
+        public Dictionary<string, List<SpawnFishData>> GetSpawnFishDatas(StardewItemManager itemManager)
         {
-            var spawnDatas = new Dictionary<string, SpawnFishData>();
+            var spawnDatas = new Dictionary<string, List<SpawnFishData>>();
             if (Method == CATCH_METHOD_CRAB_POT)
             {
                 return spawnDatas;
@@ -67,7 +67,9 @@ namespace StardewArchipelago.Archipelago.SlotData.SlotEnums.SlotDataRandomizatio
                 else if (regionName == "Night Market")
                 {
                     mapName = "Submarine";
-                    spawnDatas.Add("Beach", CreateNightMarketFishSpawnDataOnBeach(fishQualifiedId));
+                    spawnDatas.TryAdd("Beach", new List<SpawnFishData>());
+                    var beachSpawn = CreateNightMarketFishSpawnDataOnBeach(fishQualifiedId);
+                    spawnDatas["Beach"].Add(beachSpawn);
                 }
 
                 var spawnData = new SpawnFishData()
@@ -81,7 +83,8 @@ namespace StardewArchipelago.Archipelago.SlotData.SlotEnums.SlotDataRandomizatio
                     ItemId = fishQualifiedId,
                 };
 
-                spawnDatas.Add(mapName, spawnData);
+                spawnDatas.TryAdd(mapName, new List<SpawnFishData>());
+                spawnDatas[mapName].Add(spawnData);
             }
 
             return spawnDatas;

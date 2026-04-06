@@ -245,11 +245,11 @@ namespace StardewArchipelago.GameModifications.RandomizedData
             var modifiedFishEntries = new Dictionary<string, List<SpawnFishData>>();
             foreach (var (fishName, randomizedFishData) in _dataRandomization.FishData)
             {
-                var entries = randomizedFishData.GetSpawnFishDatas(_itemManager);
-                foreach (var (locationName, entry) in entries)
+                var entriesByLocation = randomizedFishData.GetSpawnFishDatas(_itemManager);
+                foreach (var (locationName, entries) in entriesByLocation)
                 {
                     modifiedFishEntries.TryAdd(locationName, new List<SpawnFishData>());
-                    modifiedFishEntries[locationName].Add(entry);
+                    modifiedFishEntries[locationName].AddRange(entries);
                 }
             }
 
@@ -259,12 +259,46 @@ namespace StardewArchipelago.GameModifications.RandomizedData
         private void ModifyFishLocationsData(IDictionary<string, LocationData> allLocationData, string locationId, Dictionary<string, List<SpawnFishData>> originalFishEntries, Dictionary<string, List<SpawnFishData>> modifiedFishEntries)
         {
             var locationData = allLocationData[locationId];
+
+            if (!modifiedFishEntries.ContainsKey(locationId))
+            {
+                return;
+            }
+
             var modifiedEntriesForLocation = modifiedFishEntries[locationId];
 
             foreach (var spawnFishData in modifiedEntriesForLocation)
             {
-                
+                var fishItem = _itemManager.GetItemByQualifiedId(spawnFishData.ItemId);
+                var fishName = fishItem.Name;
+                var originalEntriesForThisFish = originalFishEntries[fishName];
+
+                var newSpawnFishData = originalEntriesForThisFish[0];
+                newSpawnFishData = MergeSpawnFishData(newSpawnFishData, originalEntriesForThisFish);
+                newSpawnFishData = MergeSpawnFishData(newSpawnFishData, spawnFishData);
+                locationData.Fish.Add(newSpawnFishData);
             }
+        }
+
+        private SpawnFishData MergeSpawnFishData(SpawnFishData spawnFishData, List<SpawnFishData> ModifiedSpawnFishDatas)
+        {
+            foreach (var modifiedSpawnFishData in ModifiedSpawnFishDatas)
+            {
+                spawnFishData = MergeSpawnFishData(spawnFishData, modifiedSpawnFishData);
+            }
+
+            return spawnFishData;
+        }
+
+        private SpawnFishData MergeSpawnFishData(SpawnFishData spawnFishData, SpawnFishData modifiedSpawnFishData)
+        {
+            spawnFishData.FishAreaId = modifiedSpawnFishData.FishAreaId;
+            spawnFishData.PlayerPosition = modifiedSpawnFishData.PlayerPosition;
+            spawnFishData.BobberPosition = modifiedSpawnFishData.BobberPosition;
+            spawnFishData.Condition = modifiedSpawnFishData.Condition;
+            spawnFishData.RequireMagicBait = spawnFishData.RequireMagicBait;
+
+            return spawnFishData;
         }
     }
 }
