@@ -25,17 +25,21 @@ namespace StardewArchipelago.GameModifications.RandomizedData
             _archipelago = archipelago;
             _dataRandomization = _archipelago.SlotData.DataRandomization;
             _stardewItemManager = stardewItemManager;
-            _fishDataModifier = new FishDataModifier(_logger, _helper, _archipelago, _dataRandomization);
+            _fishDataModifier = new FishDataModifier(_logger, _helper, _archipelago, _stardewItemManager, _dataRandomization);
         }
 
         public void PatchAllRandomizedData()
         {
             _helper.Events.Content.AssetRequested += _fishDataModifier.OnFishDataRequested;
+            //_helper.Events.Content.AssetRequested += _fishDataModifier.OnLocationsDataRequested;
+            _helper.GameContent.InvalidateCache("Data/Fish");
+            //_helper.GameContent.InvalidateCache("Data/Locations");
         }
 
         public void CleanRandomizedDataEvents()
         {
             _helper.Events.Content.AssetRequested -= _fishDataModifier.OnFishDataRequested;
+            //_helper.Events.Content.AssetRequested -= _fishDataModifier.OnLocationsDataRequested;
         }
     }
 
