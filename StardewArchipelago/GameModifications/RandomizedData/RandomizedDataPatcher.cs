@@ -31,15 +31,15 @@ namespace StardewArchipelago.GameModifications.RandomizedData
         public void PatchAllRandomizedData()
         {
             _helper.Events.Content.AssetRequested += _fishDataModifier.OnFishDataRequested;
-            //_helper.Events.Content.AssetRequested += _fishDataModifier.OnLocationsDataRequested;
+            _helper.Events.Content.AssetRequested += _fishDataModifier.OnLocationsDataRequested;
             _helper.GameContent.InvalidateCache("Data/Fish");
-            //_helper.GameContent.InvalidateCache("Data/Locations");
+            _helper.GameContent.InvalidateCache("Data/Locations");
         }
 
         public void CleanRandomizedDataEvents()
         {
             _helper.Events.Content.AssetRequested -= _fishDataModifier.OnFishDataRequested;
-            //_helper.Events.Content.AssetRequested -= _fishDataModifier.OnLocationsDataRequested;
+            _helper.Events.Content.AssetRequested -= _fishDataModifier.OnLocationsDataRequested;
         }
     }
 
