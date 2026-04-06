@@ -156,6 +156,22 @@ namespace StardewArchipelago.GameModifications.RandomizedData
                 fishDataFields[weatherIndex] = ConvertWeatherName(randomizedData.Weather);
             }
 
+            const int maxDepthIndex = 9;
+            const int depthMultiplierIndex = 11;
+            var maxDepth = int.Parse(fishDataFields[maxDepthIndex]);
+            var depthMultiplier = double.Parse(fishDataFields[depthMultiplierIndex]);
+            if (maxDepth > 2)
+            {
+                maxDepth = 2;
+                fishDataFields[maxDepthIndex] = maxDepth.ToString();
+            }
+            if (maxDepth > 1 && depthMultiplier < 0.25)
+            {
+                depthMultiplier = 0.25;
+                fishDataFields[depthMultiplierIndex] = ".25";
+            }
+            
+
             return fishDataFields;
         }
 
@@ -309,6 +325,7 @@ namespace StardewArchipelago.GameModifications.RandomizedData
             newSpawnFishData.ItemId = modifiedSpawnFishData.ItemId;
             newSpawnFishData.Id = modifiedSpawnFishData.Id;
             newSpawnFishData.RandomItemId = modifiedSpawnFishData.RandomItemId;
+            newSpawnFishData.MinDistanceFromShore = Math.Min(newSpawnFishData.MinDistanceFromShore, 2);
 
             return newSpawnFishData;
         }

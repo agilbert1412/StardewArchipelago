@@ -487,6 +487,7 @@ namespace StardewArchipelago.GameModifications.EntranceRandomizer
             { "Parrot Express Dig Site", "IslandNorth|5|48" },
             { "Parrot Express Jungle", "IslandEast|28|28" },
             { "Parrot Express Farm", "IslandWest|74|9" },
+            { "Volcano - Floor 10", "Caldera" },
         };
 
         private static readonly Dictionary<string, string> _locationsSingleWordAliases = new()
