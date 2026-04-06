@@ -10,10 +10,9 @@ namespace StardewArchipelago.GameModifications
 {
     public class CharacterCustomizationArchipelago : CharacterCustomization
     {
-        private const int ARCHIPELAGO_Y_OFFSET = 488;
-        private const int ARCHIPELAGO_FIELDS_WIDTH = 264;
-        private const int EXTRA_HEIGHT = 48;
-        private const int OK_BUTTON_OFFSET = 20;
+        private const int ARCHIPELAGO_Y_OFFSET = 480;
+        private const int ARCHIPELAGO_LONG_FIELDS_WIDTH = 264;
+        private const int ARCHIPELAGO_SHORT_FIELDS_WIDTH = ARCHIPELAGO_LONG_FIELDS_WIDTH - 48;
 
         public TextBox IpAddressTextBox;
         public TextBox SlotNameTextBox;
@@ -28,7 +27,7 @@ namespace StardewArchipelago.GameModifications
         public CharacterCustomizationArchipelago(CharacterCustomization parent, IModHelper modHelper)
             : base(parent.source)
         {
-            height += 48 + EXTRA_HEIGHT;
+            height += 32;
             CreateArchipelagoFields();
             SetupArchipelagoFieldsPositions();
             var bounds = Game1.graphics.GraphicsDevice.Viewport.Bounds;
@@ -40,7 +39,8 @@ namespace StardewArchipelago.GameModifications
         {
             base.gameWindowSizeChanged(oldBounds, newBounds);
             SetupArchipelagoFieldsPositions();
-            this.okButton.bounds.Y += OK_BUTTON_OFFSET;
+            this.okButton.bounds.X += 20;
+            this.okButton.bounds.Y -= 8;
         }
 
         public override void draw(SpriteBatch b)
@@ -162,10 +162,11 @@ namespace StardewArchipelago.GameModifications
         {
             var xOffset = xPositionOnScreen + spaceToClearSideBorder + borderWidth;
             var yOffset = yPositionOnScreen + spaceToClearTopBorder + borderWidth + ARCHIPELAGO_Y_OFFSET;
+            const int spaceBetweenFields = 56;
 
             SetupIpFieldPosition(xOffset, yOffset);
-            SetupSlotNameFieldPosition(xOffset, yOffset + 64);
-            SetupPasswordFieldPosition(xOffset, yOffset + 128);
+            SetupSlotNameFieldPosition(xOffset, yOffset + spaceBetweenFields);
+            SetupPasswordFieldPosition(xOffset, yOffset + (spaceBetweenFields*2));
 
             skipIntroButton.setPosition(skipIntroButton.bounds.X - 240, skipIntroButton.bounds.Y + 136);
         }
@@ -218,10 +219,10 @@ namespace StardewArchipelago.GameModifications
             var yPosition = yOffset - 16;
             IpAddressTextBox.X = xPosition;
             IpAddressTextBox.Y = yPosition;
-            IpAddressTextBox.Width = ARCHIPELAGO_FIELDS_WIDTH;
+            IpAddressTextBox.Width = ARCHIPELAGO_LONG_FIELDS_WIDTH;
             IpAddressTextBox.limitWidth = false;
 
-            var ipAddressRectangle = new Rectangle(xPosition, yPosition, ARCHIPELAGO_FIELDS_WIDTH, 48);
+            var ipAddressRectangle = new Rectangle(xPosition, yPosition, ARCHIPELAGO_LONG_FIELDS_WIDTH, 48);
             ipAddressCC.bounds = ipAddressRectangle;
 
             var languageOffset = LocalizedContentManager.CurrentLanguageCode is LocalizedContentManager.LanguageCode.ru or LocalizedContentManager.LanguageCode.es or LocalizedContentManager.LanguageCode.pt ? -4 : 0;
@@ -237,10 +238,10 @@ namespace StardewArchipelago.GameModifications
             var yPosition = yOffset - 16;
             SlotNameTextBox.X = xPosition;
             SlotNameTextBox.Y = yPosition;
-            SlotNameTextBox.Width = ARCHIPELAGO_FIELDS_WIDTH;
+            SlotNameTextBox.Width = ARCHIPELAGO_SHORT_FIELDS_WIDTH;
             SlotNameTextBox.limitWidth = false;
 
-            var slotNameRectangle = new Rectangle(xPosition, yPosition, ARCHIPELAGO_FIELDS_WIDTH, 48);
+            var slotNameRectangle = new Rectangle(xPosition, yPosition, ARCHIPELAGO_SHORT_FIELDS_WIDTH, 48);
             slotNameCC.bounds = slotNameRectangle;
 
             var languageOffset = LocalizedContentManager.CurrentLanguageCode is LocalizedContentManager.LanguageCode.ru or LocalizedContentManager.LanguageCode.es or LocalizedContentManager.LanguageCode.pt ? -4 : 0;
@@ -256,10 +257,10 @@ namespace StardewArchipelago.GameModifications
             var yPosition = yOffset - 16;
             PasswordTextBox.X = xPosition;
             PasswordTextBox.Y = yPosition;
-            PasswordTextBox.Width = ARCHIPELAGO_FIELDS_WIDTH;
+            PasswordTextBox.Width = ARCHIPELAGO_SHORT_FIELDS_WIDTH;
             PasswordTextBox.limitWidth = false;
 
-            var ipAddressRectangle = new Rectangle(xPosition, yPosition, ARCHIPELAGO_FIELDS_WIDTH, 48);
+            var ipAddressRectangle = new Rectangle(xPosition, yPosition, ARCHIPELAGO_SHORT_FIELDS_WIDTH, 48);
             passwordCC.bounds = ipAddressRectangle;
 
             var languageOffset = LocalizedContentManager.CurrentLanguageCode is LocalizedContentManager.LanguageCode.ru or LocalizedContentManager.LanguageCode.es or LocalizedContentManager.LanguageCode.pt ? -4 : 0;
