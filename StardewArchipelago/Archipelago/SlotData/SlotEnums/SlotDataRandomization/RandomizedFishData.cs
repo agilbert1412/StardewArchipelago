@@ -56,13 +56,18 @@ namespace StardewArchipelago.Archipelago.SlotData.SlotEnums.SlotDataRandomizatio
                 }
                 else if (regionName == "Island West Ocean")
                 {
-                    mapName = "Island West";
+                    mapName = "IslandWest";
                     fishAreaId = "Ocean";
                 }
                 else if (regionName == "Island West River")
                 {
-                    mapName = "Island West";
+                    mapName = "IslandWest";
                     fishAreaId = "Freshwater";
+                }
+                else if (regionName == "Tide Pools")
+                {
+                    mapName = "Beach";
+                    playerPosition = new Rectangle(82, 0, 100, 100);
                 }
                 else if (regionName == "Night Market")
                 {
@@ -70,6 +75,10 @@ namespace StardewArchipelago.Archipelago.SlotData.SlotEnums.SlotDataRandomizatio
                     spawnDatas.TryAdd("Beach", new List<SpawnFishData>());
                     var beachSpawn = CreateNightMarketFishSpawnDataOnBeach(fishQualifiedId);
                     spawnDatas["Beach"].Add(beachSpawn);
+                }
+                else if (regionName.StartsWith("The Mines"))
+                {
+                    mapName = "UndergroundMine";
                 }
 
                 var spawnData = new SpawnFishData()

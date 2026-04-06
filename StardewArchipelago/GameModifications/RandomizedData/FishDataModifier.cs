@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Force.DeepCloner;
 using KaitoKid.Utilities.Interfaces;
 using StardewArchipelago.Archipelago;
 using StardewArchipelago.Archipelago.SlotData.SlotEnums.SlotDataRandomization;
@@ -127,7 +128,7 @@ namespace StardewArchipelago.GameModifications.RandomizedData
             {
                 const int minSizeIndex = 3;
                 const int maxSizeIndex = 4;
-                fishDataFields = new[] { fishName, "trap", ".25", "684 .45", waterType, fishDataFields[minSizeIndex], fishDataFields[maxSizeIndex], "false" };
+                fishDataFields = new[] { fishName, "trap", ".15", "684 .45", waterType, fishDataFields[minSizeIndex], fishDataFields[maxSizeIndex], "false" };
             }
             return fishDataFields;
         }
@@ -271,34 +272,45 @@ namespace StardewArchipelago.GameModifications.RandomizedData
             {
                 var fishItem = _itemManager.GetItemByQualifiedId(spawnFishData.ItemId);
                 var fishName = fishItem.Name;
-                var originalEntriesForThisFish = originalFishEntries[fishName];
-
-                var newSpawnFishData = originalEntriesForThisFish[0];
-                newSpawnFishData = MergeSpawnFishData(newSpawnFishData, originalEntriesForThisFish);
-                newSpawnFishData = MergeSpawnFishData(newSpawnFishData, spawnFishData);
-                locationData.Fish.Add(newSpawnFishData);
+                if (originalFishEntries.ContainsKey(fishName))
+                {
+                    var originalEntriesForThisFish = originalFishEntries[fishName];
+                    var newSpawnFishData = originalEntriesForThisFish[0];
+                    newSpawnFishData = MergeSpawnFishData(newSpawnFishData, originalEntriesForThisFish);
+                    newSpawnFishData = MergeSpawnFishData(newSpawnFishData, spawnFishData);
+                    locationData.Fish.Add(newSpawnFishData);
+                }
+                else
+                {
+                    locationData.Fish.Add(spawnFishData);
+                }
             }
         }
 
         private SpawnFishData MergeSpawnFishData(SpawnFishData spawnFishData, List<SpawnFishData> ModifiedSpawnFishDatas)
         {
+            var newSpawnFishData = spawnFishData.DeepClone();
             foreach (var modifiedSpawnFishData in ModifiedSpawnFishDatas)
             {
-                spawnFishData = MergeSpawnFishData(spawnFishData, modifiedSpawnFishData);
+                newSpawnFishData = MergeSpawnFishData(spawnFishData, modifiedSpawnFishData);
             }
 
-            return spawnFishData;
+            return newSpawnFishData;
         }
 
         private SpawnFishData MergeSpawnFishData(SpawnFishData spawnFishData, SpawnFishData modifiedSpawnFishData)
         {
-            spawnFishData.FishAreaId = modifiedSpawnFishData.FishAreaId;
-            spawnFishData.PlayerPosition = modifiedSpawnFishData.PlayerPosition;
-            spawnFishData.BobberPosition = modifiedSpawnFishData.BobberPosition;
-            spawnFishData.Condition = modifiedSpawnFishData.Condition;
-            spawnFishData.RequireMagicBait = spawnFishData.RequireMagicBait;
+            var newSpawnFishData = spawnFishData.DeepClone();
+            newSpawnFishData.FishAreaId = modifiedSpawnFishData.FishAreaId;
+            newSpawnFishData.PlayerPosition = modifiedSpawnFishData.PlayerPosition;
+            newSpawnFishData.BobberPosition = modifiedSpawnFishData.BobberPosition;
+            newSpawnFishData.Condition = modifiedSpawnFishData.Condition;
+            newSpawnFishData.RequireMagicBait = modifiedSpawnFishData.RequireMagicBait;
+            newSpawnFishData.ItemId = modifiedSpawnFishData.ItemId;
+            newSpawnFishData.Id = modifiedSpawnFishData.Id;
+            newSpawnFishData.RandomItemId = modifiedSpawnFishData.RandomItemId;
 
-            return spawnFishData;
+            return newSpawnFishData;
         }
     }
 }
