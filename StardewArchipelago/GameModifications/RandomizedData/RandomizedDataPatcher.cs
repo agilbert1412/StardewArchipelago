@@ -1,9 +1,12 @@
 ﻿using HarmonyLib;
 using StardewArchipelago.Archipelago;
+using StardewArchipelago.Archipelago.SlotData.SlotEnums.SlotDataRandomization;
+using StardewArchipelago.Locations.InGameLocations;
 using StardewArchipelago.Logging;
 using StardewArchipelago.Stardew;
 using StardewModdingAPI;
-using StardewArchipelago.Archipelago.SlotData.SlotEnums.SlotDataRandomization;
+using StardewValley;
+using StardewValley.Locations;
 
 namespace StardewArchipelago.GameModifications.RandomizedData
 {
@@ -26,6 +29,7 @@ namespace StardewArchipelago.GameModifications.RandomizedData
             _dataRandomization = _archipelago.SlotData.DataRandomization;
             _stardewItemManager = stardewItemManager;
             _fishDataModifier = new FishDataModifier(_logger, _helper, _archipelago, _stardewItemManager, _dataRandomization);
+            RandomizedFishDataInjections.Initialize(_logger, _helper, _archipelago, _stardewItemManager, _dataRandomization);
         }
 
         public void PatchAllRandomizedData()
@@ -34,6 +38,11 @@ namespace StardewArchipelago.GameModifications.RandomizedData
             _helper.Events.Content.AssetRequested += _fishDataModifier.OnLocationsDataRequested;
             _helper.GameContent.InvalidateCache("Data/Fish");
             _helper.GameContent.InvalidateCache("Data/Locations");
+
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(MineShaft), nameof(MineShaft.getFish)),
+                postfix: new HarmonyMethod(typeof(RandomizedFishDataInjections), nameof(RandomizedFishDataInjections.GetFish_CorrectMinesFish_Postfix))
+            );
         }
 
         public void CleanRandomizedDataEvents()
