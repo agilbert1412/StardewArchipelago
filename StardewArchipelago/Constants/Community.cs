@@ -44,6 +44,7 @@ namespace StardewArchipelago.Constants
             "Exempt-Medic",
             "Farrak Kilhn",
             "Figment",
+            "FluffyPrower",
             "Fly Sniper",
             "Fore772",
             "Frazzleduck",
