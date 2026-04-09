@@ -17,7 +17,7 @@ Enabling any of these will mean you will start without them when you generate a 
 
 When this is enabled, you will start without any inventory slots. You will need to check the mailbox in order to gain access to some inventory slots; the backpacks will always be in the first couple of messages. 
 
-The number of inventory slots you receive will depend on your ~~[Backpack Size](./backpack_size.md)~~ setting - generally, though, you will be given enough backpacks to have at least 6 inventory slots (4 if you start without tools). These amounts have been deemed to be the bare minimum to be able to complete every location check in the game without having to write convoluted inventory logic.
+The number of inventory slots you receive will depend on your [Backpack Size](./backpack_size.md) setting - generally, though, you will be given enough backpacks to have at least 6 inventory slots (4 if you start without tools). These amounts have been deemed to be the bare minimum to be able to complete every location check in the game without having to write convoluted inventory logic.
 It is possible that, in the future, we eventually write the convoluted inventory logic, and allow the player to start with a true zero-slot backpack.
 
 Here is what you will start with given a specific backpack size:
