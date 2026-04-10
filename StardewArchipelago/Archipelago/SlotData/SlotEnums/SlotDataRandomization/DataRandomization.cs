@@ -7,6 +7,7 @@ namespace StardewArchipelago.Archipelago.SlotData.SlotEnums.SlotDataRandomizatio
     {
         private RandomizedData _randomizedData;
 
+        public Dictionary<string, RandomizedCropData> CropData => _randomizedData.Crops;
         public Dictionary<string, RandomizedFishData> FishData => _randomizedData.Fish;
 
         public DataRandomization(string randomizedDataJson)

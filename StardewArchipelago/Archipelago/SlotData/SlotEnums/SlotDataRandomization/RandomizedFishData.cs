@@ -23,6 +23,7 @@ namespace StardewArchipelago.Archipelago.SlotData.SlotEnums.SlotDataRandomizatio
         public string[] Season { get; set; }
         public string[] Location { get; set; }
         public string[] Weather { get; set; }
+        public int? SellPrice { get; set; }
 
         public RandomizedFishData()
         {

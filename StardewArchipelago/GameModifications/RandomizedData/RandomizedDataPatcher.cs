@@ -19,6 +19,7 @@ namespace StardewArchipelago.GameModifications.RandomizedData
         private readonly DataRandomization _dataRandomization;
         private readonly StardewItemManager _stardewItemManager;
         private readonly FishDataModifier _fishDataModifier;
+        private readonly ObjectDataModifier _objectDataModifier;
 
         public RandomizedDataPatcher(LogHandler logger, IModHelper modHelper, Harmony harmony, StardewArchipelagoClient archipelago, StardewItemManager stardewItemManager)
         {
@@ -29,6 +30,7 @@ namespace StardewArchipelago.GameModifications.RandomizedData
             _dataRandomization = _archipelago.SlotData.DataRandomization;
             _stardewItemManager = stardewItemManager;
             _fishDataModifier = new FishDataModifier(_logger, _helper, _archipelago, _stardewItemManager, _dataRandomization);
+            _objectDataModifier = new ObjectDataModifier(_logger, _helper, _archipelago, _stardewItemManager, _dataRandomization);
             RandomizedFishDataInjections.Initialize(_logger, _helper, _archipelago, _stardewItemManager, _dataRandomization);
         }
 
@@ -36,8 +38,10 @@ namespace StardewArchipelago.GameModifications.RandomizedData
         {
             _helper.Events.Content.AssetRequested += _fishDataModifier.OnFishDataRequested;
             _helper.Events.Content.AssetRequested += _fishDataModifier.OnLocationsDataRequested;
+            _helper.Events.Content.AssetRequested += _objectDataModifier.OnObjectDataRequested;
             _helper.GameContent.InvalidateCache("Data/Fish");
             _helper.GameContent.InvalidateCache("Data/Locations");
+            _helper.GameContent.InvalidateCache("Data/Objects");
 
             _harmony.Patch(
                 original: AccessTools.Method(typeof(MineShaft), nameof(MineShaft.getFish)),
@@ -49,6 +53,7 @@ namespace StardewArchipelago.GameModifications.RandomizedData
         {
             _helper.Events.Content.AssetRequested -= _fishDataModifier.OnFishDataRequested;
             _helper.Events.Content.AssetRequested -= _fishDataModifier.OnLocationsDataRequested;
+            _helper.Events.Content.AssetRequested -= _objectDataModifier.OnObjectDataRequested;
         }
     }
 

@@ -13,8 +13,10 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using KaitoKid.ArchipelagoUtilities.Net.Constants;
+using StardewArchipelago.Archipelago;
+using StardewArchipelago.Archipelago.SlotData.SlotEnums.SlotDataRandomization;
 
-namespace StardewArchipelago.Archipelago.SlotData.SlotEnums.SlotDataRandomization
+namespace StardewArchipelago.GameModifications.RandomizedData
 {
     public class RandomizedFishDataInjections
     {
@@ -67,7 +69,7 @@ namespace StardewArchipelago.Archipelago.SlotData.SlotEnums.SlotDataRandomizatio
 
                 if (!validFish.Any())
                 {
-                    __result = Game1.random.NextDouble() < 0.05 + (double)who.LuckLevel * 0.05 ? ItemRegistry.Create("(O)CaveJelly") : CreateRandomTrash();
+                    __result = Game1.random.NextDouble() < 0.05 + who.LuckLevel * 0.05 ? ItemRegistry.Create("(O)CaveJelly") : CreateRandomTrash();
                     return;
                 }
 
@@ -75,11 +77,11 @@ namespace StardewArchipelago.Archipelago.SlotData.SlotEnums.SlotDataRandomizatio
                 var fishObject = _itemManager.GetObjectByName(chosenFish.Name);
                 var fishId = fishObject.GetQualifiedId();
                 var quality = 0;
-                if (Game1.random.NextDouble() < (double)who.FishingLevel / 10.0)
+                if (Game1.random.NextDouble() < who.FishingLevel / 10.0)
                 {
                     quality = 1;
                 }
-                if (Game1.random.NextDouble() < (double)who.FishingLevel / 50.0 + (double)who.LuckLevel / 100.0)
+                if (Game1.random.NextDouble() < who.FishingLevel / 50.0 + who.LuckLevel / 100.0)
                 {
                     quality = 2;
                 }
