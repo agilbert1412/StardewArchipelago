@@ -40,18 +40,18 @@ When [Backpack Progression](./backpack_progression.md) is set to `Early Progress
 
 ### Start Without
 
-Within the setting [Start Without](./start_without.md), is a setting to "Start Without: Backpack". When this is enabled and the backpack size is set to anything other than 12, some `Small Pack` locations will be added to Pierre's General Store to purchase at the start, whose prices will add up to 500g. Additionally, the number of `Progressive Backpack` items in the pool will be adjusted so that you will still end up with 36 inventory slots after receiving all of them. Starting without tools also affects how many inventory slots you start with, thus further adjusting the amount of backpacks in the pool.
+Within the setting [Start Without](./start_without.md), is a setting to "Start Without: Backpack". When this is enabled and the backpack size is set to anything other than 12, some `Small Pack` locations will be added to Pierre's General Store to purchase at the start, whose prices will add up to 500g. Additionally, the number of `Progressive Backpack` items in the pool will be adjusted so that you will still end up with 36 inventory slots after receiving all of them. Starting without tools also affects how many inventory slots you start with, thus further adjusting the amount of backpacks in the item pool.
 
-Here is a summary of how `Start Without` interacts with each backpack size:
+Here is a summary of how many `Progressive Backpack ` items you start with and are in the pool for each combination of `Start Without` and backpack size:
 
-| Backpack Size | Backpacks in Pool (Without Starting Backpack) | Backpacks in Pool (Without Starting Backpack or Tools) |
-|---------------|-----------------------------------------------|--------------------------------------------------------|
-| 1             | 30                                            | 32                                                     |
-| 2             | 15                                            | 16                                                     |
-| 3             | 10                                            | 10                                                     |
-| 4             | 7                                             | 8                                                      |
-| 6             | 5                                             | 5                                                      |
-| 12            | 2                                             | 2                                                      |
+| Backpack Size | Without Starting Backpack | Without Starting Backpack or Tools |
+|---------------|---------------------------|------------------------------------|
+| 1             | 6 starting, 30 in pool    | 4 starting, 32 in pool             |
+| 2             | 3 starting, 15 in pool    | 2 starting, 16 in pool             |
+| 3             | 2 starting, 10 in pool    | 2 starting, 10 in pool             |
+| 4             | 2 starting, 7 in pool     | 1 starting, 8 in pool              |
+| 6             | 1 starting, 5 in pool     | 1 starting, 5 in pool              |
+| 12            | 1 starting, 2 in pool     | 1 starting, 2 in pool              |
 
 Note that starting without tools but with the backpack will not affect the number of `Progressive Backpack` items in the pool.
 
