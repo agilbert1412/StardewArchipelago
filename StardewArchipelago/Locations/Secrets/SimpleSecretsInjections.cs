@@ -306,6 +306,11 @@ namespace StardewArchipelago.Locations.Secrets
                     return MethodPrefix.RUN_ORIGINAL_METHOD;
                 }
 
+                if (Game1.activeClickableMenu != null && Game1.activeClickableMenu is LetterViewerMenu)
+                {
+                    return MethodPrefix.RUN_ORIGINAL_METHOD;
+                }
+
                 _locationChecker.AddCheckedLocation(SecretsLocationNames.SUMMON_BONE_SERPENT);
                 if (_archipelago.HasReceivedItem("Far Away Stone"))
                 {
