@@ -119,46 +119,46 @@ In this guide, we will be separating bundles into 3 distinct categories, and pro
 
 
 <details>
-	<summary><h3>ANIMAL WELL Bundle</h3></summary>
+<summary><h3>ANIMAL WELL Bundle</h3></summary>
 
-	<details>
-		<summary><h4>Hint #1</h4></summary>
+<details>
+<summary><h4>Hint #1</h4></summary>
 
-		You can donate most of these items normally
+You can donate most of these items normally
 
-	</details>
+</details>
 
-	<details>
-		<summary><h4>Hint #2</h4></summary>
+<details>
+<summary><h4>Hint #2</h4></summary>
 
-		The Advanced TV Remote is the only special item here
+The Advanced TV Remote is the only special item here
 
-	</details>
+</details>
 
-	<details>
-		<summary><h4>Hint #2</h4></summary>
+<details>
+<summary><h4>Hint #2</h4></summary>
 
-		The Advanced TV Remote is the only special item here
+The Advanced TV Remote is the only special item here
 
-	</details>
+</details>
 
-	<details>
-		<summary><h4>Hint #3</h4></summary>
+<details>
+<summary><h4>Hint #3</h4></summary>
 
-		If you included Ginger Island, you will get a remote from a quest. You should complete the quest before the bundle
-		
-		If you excluded Ginger Island, someone in Pelican Town will give you the remote
+If you included Ginger Island, you will get a remote from a quest. You should complete the quest before the bundle
 
-	</details>
+If you excluded Ginger Island, someone in Pelican Town will give you the remote
 
-	<details>
-		<summary><h4>Solution</h4></summary>
+</details>
 
-		If you included Ginger Island, after completing "The Pirate's Wife", talk to George. He ends up not liking the complicated remote, and donates it to the Community Center for you.
-		
-		If you excluded Ginger Island, talk to George, he will give you a remote to donate on your own.
+<details>
+<summary><h4>Solution</h4></summary>
 
-	</details>
+If you included Ginger Island, after completing "The Pirate's Wife", talk to George. He ends up not liking the complicated remote, and donates it to the Community Center for you.
+
+If you excluded Ginger Island, talk to George, he will give you a remote to donate on your own.
+
+</details>
 
 </details>
 
