@@ -212,7 +212,7 @@ Each item represents a big commitment that you must perform.
 <summary><h4>Solution</h4></summary>
 
 - Bouquet: You need to be dating someone
-- Mermaid Pendant: You need to be married to someone
+- Mermaid Pendant: You need to be married to someone. You can get a 2nd pendant during the engagement period, which you can then donate to the bundle after the marriage.
 - Wilted Bouquet: You need to have divorced someone
 - Ancient Dolls: You need to be the parent of two children
 
