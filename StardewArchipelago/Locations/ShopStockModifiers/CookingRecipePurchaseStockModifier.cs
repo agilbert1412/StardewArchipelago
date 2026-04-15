@@ -60,7 +60,7 @@ namespace StardewArchipelago.Locations.ShopStockModifiers
 
                 var simplifiedName = _nameSimplifier.GetSimplifiedName(stardewItem.Name, stardewItem.GetQualifiedId());
                 var location = $"{simplifiedName}{Suffix.CHEFSANITY}";
-                if (!CraftingRecipe.cookingRecipes.ContainsKey(stardewItem.Name) || !_archipelago.LocationExists(location))
+                if (!CraftingRecipe.cookingRecipes.ContainsKey(simplifiedName) || !_archipelago.LocationExists(location))
                 {
                     continue;
                 }
