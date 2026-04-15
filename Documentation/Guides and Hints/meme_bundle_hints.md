@@ -180,9 +180,146 @@ When facing a body of water, you can click with a fish in your hands to "Release
 </ul>
 </details>
 
-- **Commitment Bundle**
-- **Cooperation Bundle**
-- **Crowdfunding Bundle**
+<details>
+<summary><h3>Commitment Bundle</h3></summary>
+<ul>
+
+<details>
+<summary><h4>Hint #1</h4></summary>
+
+You must truly commit before you can donate the items to the bundle
+
+</details>
+
+<details>
+<summary><h4>Hint #2</h4></summary>
+
+Each item represents a big commitment that you must perform.
+
+</details>
+
+<details>
+<summary><h4>Hint #3</h4></summary>
+
+- Bouquets are used to start a relationship
+- Mermaid Pendants are used to marry
+- Wilted Bouquets are used to end a relationship
+- Ancient Dolls are often used to symbolize children
+
+</details>
+
+<details>
+<summary><h4>Solution</h4></summary>
+
+- Bouquet: You need to be dating someone
+- Mermaid Pendant: You need to be married to someone
+- Wilted Bouquet: You need to have divorced someone
+- Ancient Dolls: You need to be the parent of two children
+
+</details>
+</ul>
+</details>
+
+<details>
+<summary><h3>Cooperation Bundle</h3></summary>
+<ul>
+
+<details>
+<summary><h4>Hint #1</h4></summary>
+
+You can complete this bundle by cooperating with someone.
+
+If you are playing solo, the following hints will still apply, but you will need the *Alternate Solution* instead of the *Main Solution*.
+
+</details>
+
+<details>
+<summary><h4>Hint #2</h4></summary>
+
+There exists a game mechanic allowing two Stardew players in the same multiworld to cooperate
+
+</details>
+
+<details>
+<summary><h4>Hint #3</h4></summary>
+
+There is an indication in the `!!help` as to how to use this game mechanic
+
+</details>
+
+<details>
+<summary><h4>Hint #4</h4></summary>
+
+The bundle is related to the *Gifting* mechanism. *Gifting* is a cross-game system allowing archipelago players to send items to each other to cooperate.
+
+</details>
+
+<details>
+<summary><h4>Main Solution</h4></summary>
+
+Someone must *Gift* you the items for the bundle, and they will land in the bundle instead of in your mail.
+
+It is possible to gift them the items you need and they gift them back.
+
+</details>
+
+<details>
+<summary><h4>Alternate Solution</h4></summary>
+
+If you are in a single player world, or if there are no other Stardew players willing or able to help you, you can gift the items directly to the bundle.
+
+It works the same as gifting to a player, except you would say "Bundle" or "Cooperation Bundle" as the player name.
+
+`!!gift Bundle`
+
+This solution is intended as a safeguard against softlocks, and not the main intended route.
+
+</details>
+</ul>
+</details>
+
+<details>
+<summary><h3>Crowdfunding Bundle</h3></summary>
+<ul>
+
+<details>
+<summary><h4>Hint #1</h4></summary>
+
+You can complete this bundle alone, but it is intended that a group works together to do it.
+
+The price of the bundle increases linearly with the number of players in the multiworld, since it is intended as a group effort.
+
+</details>
+
+<details>
+<summary><h4>Hint #2</h4></summary>
+
+There exists a game mechanic allowing players across many games in the multiworld to pool together their currencies.
+
+</details>
+
+<details>
+<summary><h4>Hint #3</h4></summary>
+
+There is an indication in the `!!help` as to how to use this game mechanic
+
+</details>
+
+<details>
+<summary><h4>Solution</h4></summary>
+
+This bundle is purchased using money in the *Bank*.
+
+The *Bank* is Stardew's interface with *EnergyLink*, which is a cross-game mechanism where games can donate or withdraw currency or electricity from a shared pool.
+
+You can interact with the bank using the `!!bank` command. Other games interface with it in various ways.
+
+Notable games with EnergyLink support include Factorio, Stardew Valley, Satisfactory, Pokemon games, etc.
+
+</details>
+</ul>
+</details>
+
 - **Death Bundle**
 - **Distracted Bundle**
 - **Doctor Bundle**
