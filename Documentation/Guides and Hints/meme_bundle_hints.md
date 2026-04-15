@@ -10,9 +10,13 @@ In this guide, we will be separating bundles into 3 distinct categories, and pro
 
 ### This guide will be filled with spoilers. The intended experience is to not use this guide, but it is there to help players who are stuck.
 
+<br/>
+
 <details>
 
 <summary>Bundles Without A Special Gimmick</summary>
+
+<br/>
 
 - 'Fruit' Bundle
 - AAAA Bundle
@@ -61,8 +65,14 @@ In this guide, we will be separating bundles into 3 distinct categories, and pro
 - What The Rock Is Cooking Bundle
 
 </details>
- 
-## Bundles With An Obvious Gimmick
+
+<br/>
+
+<details>
+
+<summary>Bundles With An Obvious Gimmick</summary>
+
+<br/>
  
 - ASMR Bundle
 - Archipela-Go! Bundle
@@ -94,7 +104,15 @@ In this guide, we will be separating bundles into 3 distinct categories, and pro
 - Vampire Bundle
 - Very Sticky Bundle
 
-## Bundles With A Puzzle-y Gimmick
+</details>
+
+<br/>
+
+<details>
+
+<summary>Bundles With A Puzzle-y Gimmick</summary>
+
+<br/>
 
 - ANIMAL WELL Bundle
 - Catch And Release Bundle
@@ -127,5 +145,9 @@ In this guide, we will be separating bundles into 3 distinct categories, and pro
 - Square Hole Bundle
 - The Floor Is Lava Bundle
 - TheAlGoreRhythm Bundle
+
+</details>
+
+<br/>
 
 ## [Return to Index](./index.md)
