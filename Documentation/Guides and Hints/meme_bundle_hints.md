@@ -119,12 +119,12 @@ In this guide, we will be separating bundles into 3 distinct categories, and pro
 
 
 <details>
-<summary><h3>ANIMAL WELL Bundle</h3></summary>
+<summary><h3>    ANIMAL WELL Bundle</h3></summary>
 
 <details>
-<summary><h4>Hint #1</h4></summary>
+<summary><h4>        Hint #1</h4></summary>
 
-You can donate most of these items normally
+            You can donate most of these items normally
 
 </details>
 
