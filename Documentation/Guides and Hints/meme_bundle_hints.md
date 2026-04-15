@@ -115,17 +115,17 @@ In this guide, we will be separating bundles into 3 distinct categories, and pro
 
 <summary><h1>Bundles With A Puzzle-y Gimmick</h1></summary>
 
-<br/>
+<ul>
+
+<details>
+<summary><h3>ANIMAL WELL Bundle</h3></summary>
 
 <ul>
 
 <details>
-<summary><h3>    ANIMAL WELL Bundle</h3></summary>
+<summary><h4>Hint #1</h4></summary>
 
-<details>
-<summary><h4>        Hint #1</h4></summary>
-
-            You can donate most of these items normally
+You can donate most of these items normally
 
 </details>
 
@@ -160,6 +160,8 @@ If you included Ginger Island, after completing "The Pirate's Wife", talk to Geo
 If you excluded Ginger Island, talk to George, he will give you a remote to donate on your own.
 
 </details>
+
+</ul>
 
 </details>
 
@@ -197,7 +199,5 @@ If you excluded Ginger Island, talk to George, he will give you a remote to dona
 </details>
 
 </ul>
-
-<br/>
 
 ## [Return to Index](./index.md)
