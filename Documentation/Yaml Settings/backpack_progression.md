@@ -34,7 +34,7 @@ The definition of "Early" is handled by Archipelago core, and out of our hands.
 
 ### Backpack Size
 
-Through the setting ~~[Backpack Size](./backpack_size.md)~~, the player can customize the size of each backpack upgrade. The default value is 12, like in vanilla.
+Through the setting [Backpack Size](./backpack_size.md), the player can customize the size of each backpack upgrade. The default value is 12, like in vanilla.
 
 This means that, instead of having 2 backpack upgrades of 12 slots each, you can have 6 upgrades of 4 slots each, or at the most, 24 upgrades of 1 slot each.
 

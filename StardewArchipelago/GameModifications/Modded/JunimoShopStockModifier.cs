@@ -1,5 +1,3 @@
-using System.Collections.Generic;
-using System.Linq;
 using KaitoKid.Utilities.Interfaces;
 using StardewArchipelago.Archipelago;
 using StardewArchipelago.Archipelago.SlotData.SlotEnums;
@@ -7,10 +5,13 @@ using StardewArchipelago.Constants;
 using StardewArchipelago.Constants.Vanilla;
 using StardewArchipelago.Locations.ShopStockModifiers;
 using StardewArchipelago.Stardew;
+using StardewArchipelago.Stardew.NameMapping;
 using StardewModdingAPI;
 using StardewModdingAPI.Events;
 using StardewValley;
 using StardewValley.GameData.Shops;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace StardewArchipelago.GameModifications.Modded
 {
@@ -34,7 +35,7 @@ namespace StardewArchipelago.GameModifications.Modded
             { "Purple", "Rare thing?  Purple thing!  Yay!" },
         };
 
-        public JunimoShopStockModifier(ILogger logger, IModHelper helper, StardewArchipelagoClient archipelago, StardewItemManager stardewItemManager) : base(logger, helper, archipelago, stardewItemManager)
+        public JunimoShopStockModifier(ILogger logger, IModHelper helper, StardewArchipelagoClient archipelago, StardewItemManager stardewItemManager, NameSimplifier nameSimplifier) : base(logger, helper, archipelago, stardewItemManager, nameSimplifier)
         {
         }
 

@@ -1,24 +1,25 @@
-﻿using System;
-using System.Linq;
+﻿using KaitoKid.Utilities.Interfaces;
+using StardewArchipelago.Archipelago;
+using StardewArchipelago.Archipelago.SlotData.SlotEnums;
 using StardewArchipelago.Constants.Locations;
 using StardewArchipelago.Constants.Vanilla;
 using StardewArchipelago.Locations.Festival;
 using StardewArchipelago.Stardew;
+using StardewArchipelago.Stardew.NameMapping;
 using StardewModdingAPI;
 using StardewModdingAPI.Events;
 using StardewValley;
 using StardewValley.GameData.BigCraftables;
 using StardewValley.GameData.Shops;
+using System;
+using System.Linq;
 using Category = StardewArchipelago.Constants.Vanilla.Category;
-using KaitoKid.Utilities.Interfaces;
-using StardewArchipelago.Archipelago;
-using StardewArchipelago.Archipelago.SlotData.SlotEnums;
 
 namespace StardewArchipelago.Locations.ShopStockModifiers
 {
     public class FestivalShopStockModifier : ShopStockModifier
     {
-        public FestivalShopStockModifier(ILogger logger, IModHelper modHelper, StardewArchipelagoClient archipelago, StardewItemManager stardewItemManager) : base(logger, modHelper, archipelago, stardewItemManager)
+        public FestivalShopStockModifier(ILogger logger, IModHelper modHelper, StardewArchipelagoClient archipelago, StardewItemManager stardewItemManager, NameSimplifier nameSimplifier) : base(logger, modHelper, archipelago, stardewItemManager, nameSimplifier)
         {
         }
 

@@ -1,20 +1,21 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using Force.DeepCloner;
+﻿using Force.DeepCloner;
+using KaitoKid.Utilities.Interfaces;
+using StardewArchipelago.Archipelago;
+using StardewArchipelago.Archipelago.SlotData.SlotEnums;
 using StardewArchipelago.Constants;
 using StardewArchipelago.Constants.Locations;
 using StardewArchipelago.Constants.Vanilla;
 using StardewArchipelago.Stardew;
+using StardewArchipelago.Stardew.NameMapping;
 using StardewModdingAPI;
 using StardewModdingAPI.Events;
 using StardewValley;
-using StardewValley.GameData.Shops;
-using KaitoKid.Utilities.Interfaces;
-using StardewArchipelago.Archipelago;
-using StardewArchipelago.Archipelago.SlotData.SlotEnums;
 using StardewValley.Extensions;
+using StardewValley.GameData.Shops;
 using StardewValley.Internal;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace StardewArchipelago.Locations.ShopStockModifiers
 {
@@ -22,7 +23,7 @@ namespace StardewArchipelago.Locations.ShopStockModifiers
     {
         private static StardewArchipelagoClient _staticArchipelago;
 
-        public ToolShopStockModifier(ILogger logger, IModHelper modHelper, StardewArchipelagoClient archipelago, StardewItemManager stardewItemManager) : base(logger, modHelper, archipelago, stardewItemManager)
+        public ToolShopStockModifier(ILogger logger, IModHelper modHelper, StardewArchipelagoClient archipelago, StardewItemManager stardewItemManager, NameSimplifier nameSimplifier) : base(logger, modHelper, archipelago, stardewItemManager, nameSimplifier)
         {
             _staticArchipelago = archipelago;
         }

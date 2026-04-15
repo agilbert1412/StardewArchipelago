@@ -89,7 +89,7 @@ These settings cannot be picked from the website, and require filling out your y
 These settings are only available in the 7.x.x Pre-release version of the mod
 
 - ~~[Bundles Per Room](./bundle_per_room.md)~~
-- ~~[Backpack Size](./backpack_size.md)~~
+- [Backpack Size](./backpack_size.md)
 - [Start Without](./start_without.md)
 - ~~[Eatsanity](./eatsanity.md)~~
 - ~~[Moviesanity](./moviesanity.md)~~

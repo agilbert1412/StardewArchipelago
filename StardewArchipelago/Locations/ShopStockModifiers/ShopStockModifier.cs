@@ -1,12 +1,13 @@
-﻿using System;
-using Force.DeepCloner;
+﻿using Force.DeepCloner;
 using KaitoKid.Utilities.Interfaces;
 using StardewArchipelago.Archipelago;
 using StardewArchipelago.Constants;
 using StardewArchipelago.Stardew;
+using StardewArchipelago.Stardew.NameMapping;
 using StardewModdingAPI;
 using StardewModdingAPI.Events;
 using StardewValley.GameData.Shops;
+using System;
 
 namespace StardewArchipelago.Locations.ShopStockModifiers
 {
@@ -16,13 +17,15 @@ namespace StardewArchipelago.Locations.ShopStockModifiers
         protected IModHelper _helper;
         protected StardewArchipelagoClient _archipelago;
         protected StardewItemManager _stardewItemManager;
+        protected NameSimplifier _nameSimplifier;
 
-        public ShopStockModifier(ILogger logger, IModHelper helper, StardewArchipelagoClient archipelago, StardewItemManager stardewItemManager)
+        public ShopStockModifier(ILogger logger, IModHelper helper, StardewArchipelagoClient archipelago, StardewItemManager stardewItemManager, NameSimplifier nameSimplifier)
         {
             _logger = logger;
             _helper = helper;
             _archipelago = archipelago;
             _stardewItemManager = stardewItemManager;
+            _nameSimplifier = nameSimplifier;
         }
 
         public abstract void OnShopStockRequested(object sender, AssetRequestedEventArgs e);

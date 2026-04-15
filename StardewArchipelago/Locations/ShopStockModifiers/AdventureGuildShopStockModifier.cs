@@ -1,17 +1,18 @@
-﻿using System;
+﻿using KaitoKid.Utilities.Interfaces;
+using StardewArchipelago.Archipelago;
 using StardewArchipelago.Constants;
 using StardewArchipelago.Stardew;
+using StardewArchipelago.Stardew.NameMapping;
 using StardewModdingAPI;
 using StardewModdingAPI.Events;
 using StardewValley.GameData.Shops;
-using KaitoKid.Utilities.Interfaces;
-using StardewArchipelago.Archipelago;
+using System;
 
 namespace StardewArchipelago.Locations.ShopStockModifiers
 {
     public class AdventureGuildShopStockModifier : ShopStockModifier
     {
-        public AdventureGuildShopStockModifier(ILogger logger, IModHelper modHelper, StardewArchipelagoClient archipelago, StardewItemManager stardewItemManager) : base(logger, modHelper, archipelago, stardewItemManager)
+        public AdventureGuildShopStockModifier(ILogger logger, IModHelper modHelper, StardewArchipelagoClient archipelago, StardewItemManager stardewItemManager, NameSimplifier nameSimplifier) : base(logger, modHelper, archipelago, stardewItemManager, nameSimplifier)
         {
         }
 

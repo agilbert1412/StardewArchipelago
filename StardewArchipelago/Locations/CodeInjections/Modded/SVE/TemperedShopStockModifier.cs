@@ -1,14 +1,15 @@
-using System;
-using System.Collections.Generic;
 using KaitoKid.ArchipelagoUtilities.Net.Client;
 using KaitoKid.Utilities.Interfaces;
 using StardewArchipelago.Archipelago;
 using StardewArchipelago.Constants.Modded;
 using StardewArchipelago.Locations.ShopStockModifiers;
 using StardewArchipelago.Stardew;
+using StardewArchipelago.Stardew.NameMapping;
 using StardewModdingAPI;
 using StardewModdingAPI.Events;
 using StardewValley.GameData.Shops;
+using System;
+using System.Collections.Generic;
 
 namespace StardewArchipelago.Locations.CodeInjections.Modded.SVE
 {
@@ -18,7 +19,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded.SVE
         private static new StardewItemManager _stardewItemManager;
         private static readonly string[] _shopsWithTemperedWeapons = { "FlashShifter.StardewValleyExpandedCP_AlesiaVendor", "FlashShifter.StardewValleyExpandedCP_IsaacVendor" };
 
-        public TemperedShopStockModifier(ILogger logger, IModHelper helper, StardewArchipelagoClient archipelago, StardewItemManager stardewItemManager) : base(logger, helper, archipelago, stardewItemManager)
+        public TemperedShopStockModifier(ILogger logger, IModHelper helper, StardewArchipelagoClient archipelago, StardewItemManager stardewItemManager, NameSimplifier nameSimplifier) : base(logger, helper, archipelago, stardewItemManager, nameSimplifier)
         {
             _logger = logger;
             _helper = helper;

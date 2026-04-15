@@ -1,9 +1,11 @@
 ﻿using Force.DeepCloner;
+using KaitoKid.Utilities.Interfaces;
 using Newtonsoft.Json;
 using StardewArchipelago.Archipelago;
 using StardewArchipelago.Constants;
 using StardewArchipelago.Constants.Vanilla;
 using StardewArchipelago.Stardew;
+using StardewArchipelago.Stardew.NameMapping;
 using StardewModdingAPI;
 using StardewModdingAPI.Events;
 using StardewValley.GameData;
@@ -12,13 +14,12 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using KaitoKid.Utilities.Interfaces;
 
 namespace StardewArchipelago.Locations.ShopStockModifiers
 {
     public class BookShopStockModifier : ShopStockModifier
     {
-        public BookShopStockModifier(ILogger logger, IModHelper helper, StardewArchipelagoClient archipelago, StardewItemManager stardewItemManager) : base(logger, helper, archipelago, stardewItemManager)
+        public BookShopStockModifier(ILogger logger, IModHelper helper, StardewArchipelagoClient archipelago, StardewItemManager stardewItemManager, NameSimplifier nameSimplifier) : base(logger, helper, archipelago, stardewItemManager, nameSimplifier)
         {
             _logger = logger;
             _helper = helper;

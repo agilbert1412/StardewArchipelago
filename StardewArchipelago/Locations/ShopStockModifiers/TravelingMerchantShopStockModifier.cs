@@ -1,21 +1,22 @@
-﻿using System.Collections.Generic;
-using Force.DeepCloner;
-using StardewArchipelago.Constants;
-using StardewArchipelago.Stardew;
-using StardewModdingAPI;
-using StardewModdingAPI.Events;
-using StardewValley.GameData.Shops;
+﻿using Force.DeepCloner;
 using KaitoKid.Utilities.Interfaces;
 using StardewArchipelago.Archipelago;
 using StardewArchipelago.Archipelago.SlotData.SlotEnums;
+using StardewArchipelago.Constants;
 using StardewArchipelago.Constants.Locations;
 using StardewArchipelago.Constants.Vanilla;
+using StardewArchipelago.Stardew;
+using StardewArchipelago.Stardew.NameMapping;
+using StardewModdingAPI;
+using StardewModdingAPI.Events;
+using StardewValley.GameData.Shops;
+using System.Collections.Generic;
 
 namespace StardewArchipelago.Locations.ShopStockModifiers
 {
     public class TravelingMerchantShopStockModifier : ShopStockModifier
     {
-        public TravelingMerchantShopStockModifier(ILogger logger, IModHelper modHelper, StardewArchipelagoClient archipelago, StardewItemManager stardewItemManager) : base(logger, modHelper, archipelago, stardewItemManager)
+        public TravelingMerchantShopStockModifier(ILogger logger, IModHelper modHelper, StardewArchipelagoClient archipelago, StardewItemManager stardewItemManager, NameSimplifier nameSimplifier) : base(logger, modHelper, archipelago, stardewItemManager, nameSimplifier)
         {
         }
 

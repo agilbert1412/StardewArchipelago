@@ -5,10 +5,13 @@ using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Input;
 using StardewArchipelago.Archipelago;
 using StardewArchipelago.Archipelago.ApworldData;
+using StardewArchipelago.Constants;
 using StardewArchipelago.Constants.Vanilla;
 using StardewArchipelago.Locations.InGameLocations;
 using StardewArchipelago.Locations.ShopStockModifiers;
 using StardewArchipelago.Logging;
+using StardewArchipelago.Stardew;
+using StardewArchipelago.Stardew.NameMapping;
 using StardewModdingAPI;
 using StardewModdingAPI.Events;
 using StardewValley;
@@ -21,8 +24,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
-using StardewArchipelago.Constants;
-using StardewArchipelago.Stardew;
 using xTile.Dimensions;
 using Object = StardewValley.Object;
 using Rectangle = xTile.Dimensions.Rectangle;
@@ -44,7 +45,7 @@ namespace StardewArchipelago.Locations.Jojapocalypse
         private static JojaPriceCalculator _jojaPriceCalculator;
         private static JojapocalypseFiltering _jojaFiltering;
 
-        public JojapocalypseShopPatcher(LogHandler logger, IModHelper modHelper, Harmony harmony, StardewArchipelagoClient archipelago, StardewLocationChecker locationChecker, JojaLocationChecker jojaLocationChecker, StardewItemManager stardewItemManager, JojapocalypseManager jojapocalypseManager, JojaPriceCalculator jojaPriceCalculator) : base(logger, modHelper, archipelago, stardewItemManager)
+        public JojapocalypseShopPatcher(LogHandler logger, IModHelper modHelper, Harmony harmony, StardewArchipelagoClient archipelago, StardewLocationChecker locationChecker, JojaLocationChecker jojaLocationChecker, StardewItemManager stardewItemManager, NameSimplifier nameSimplifier, JojapocalypseManager jojapocalypseManager, JojaPriceCalculator jojaPriceCalculator) : base(logger, modHelper, archipelago, stardewItemManager, nameSimplifier)
         {
             _logger = logger;
             _modHelper = modHelper;

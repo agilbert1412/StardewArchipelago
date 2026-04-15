@@ -28,10 +28,10 @@ namespace StardewArchipelago.Locations.Patcher
         {
             CodeInjectionInitializer.Initialize(logger, modHelper, config, archipelago, state, locationChecker, jojaLocationChecker, itemManager, weaponsManager, bundlesManager, seedShopStockModifier, friends, trapManager, bank, nameSimplifier, giftSender, nightShippingBehaviors, testerFeatures);
             _patchers = new List<ILocationPatcher>();
-            _patchers.Add(new VanillaLocationPatcher(logger, modHelper, harmony, archipelago, locationChecker, itemManager));
+            _patchers.Add(new VanillaLocationPatcher(logger, modHelper, harmony, archipelago, locationChecker, itemManager, nameSimplifier));
             if (archipelago.SlotData.Mods.IsModded)
             {
-                _patchers.Add(new ModLocationPatcher(harmony, logger, modHelper, archipelago, itemManager));
+                _patchers.Add(new ModLocationPatcher(harmony, logger, modHelper, archipelago, itemManager, nameSimplifier));
             }
         }
 
