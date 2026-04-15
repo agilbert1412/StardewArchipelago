@@ -10,7 +10,9 @@ In this guide, we will be separating bundles into 3 distinct categories, and pro
 
 ### This guide will be filled with spoilers. The intended experience is to not use this guide, but it is there to help players who are stuck.
 
-## Bundles Without A Special Gimmick
+<details>
+
+<summary>Bundles Without A Special Gimmick</summary>
 
 - 'Fruit' Bundle
 - AAAA Bundle
@@ -57,6 +59,8 @@ In this guide, we will be separating bundles into 3 distinct categories, and pro
 - Trout Bundle
 - Vocaloid Bundle
 - What The Rock Is Cooking Bundle
+
+</details>
  
 ## Bundles With An Obvious Gimmick
  
