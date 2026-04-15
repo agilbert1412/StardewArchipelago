@@ -119,31 +119,31 @@ In this guide, we will be separating bundles into 3 distinct categories, and pro
 
 
 <details>
-	<summary><h2>ANIMAL WELL Bundle</h2></summary>
+	<summary><h3>ANIMAL WELL Bundle</h3></summary>
 
 	<details>
-		<summary><h3>Hint #1</h2></summary>
+		<summary><h4>Hint #1</h4></summary>
 
 		You can donate most of these items normally
 
 	</details>
 
 	<details>
-		<summary><h3>Hint #2</h2></summary>
+		<summary><h4>Hint #2</h4></summary>
 
 		The Advanced TV Remote is the only special item here
 
 	</details>
 
 	<details>
-		<summary><h3>Hint #2</h2></summary>
+		<summary><h4>Hint #2</h4></summary>
 
 		The Advanced TV Remote is the only special item here
 
 	</details>
 
 	<details>
-		<summary><h3>Hint #3</h2></summary>
+		<summary><h4>Hint #3</h4></summary>
 
 		If you included Ginger Island, you will get a remote from a quest. You should complete the quest before the bundle
 		
@@ -152,7 +152,7 @@ In this guide, we will be separating bundles into 3 distinct categories, and pro
 	</details>
 
 	<details>
-		<summary><h3>Solution</h2></summary>
+		<summary><h4>Solution</h4></summary>
 
 		If you included Ginger Island, after completing "The Pirate's Wife", talk to George. He ends up not liking the complicated remote, and donates it to the Community Center for you.
 		
