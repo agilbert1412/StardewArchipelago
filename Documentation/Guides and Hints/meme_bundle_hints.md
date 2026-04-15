@@ -5,7 +5,9 @@ Some of the meme bundles available in the [Bundle Randomization](./../Yaml%20 Se
 In this guide, we will be separating bundles into 3 distinct categories, and providing progressive hints for the ones in need
 
 1: Bundles without a special gimmick. These bundles simply request a funny combination of items, and do not need any guide.
+
 2: Bundles with an obvious gimmick. These bundles do have a gimmick, but it does not require the player effort to "figure it out", it's immediately obvious. These gimmicks will be described.
+
 3: Bundles with a puzzle-y gimmick. Progressive hints will be provided in a collapsed format, with the final hint being the full solution.
 
 ### This guide will be filled with spoilers. The intended experience is to not use this guide, but it is there to help players who are stuck.
@@ -14,7 +16,7 @@ In this guide, we will be separating bundles into 3 distinct categories, and pro
 
 <details>
 
-<summary>Bundles Without A Special Gimmick</summary>
+<summary><h1>Bundles Without A Special Gimmick</h1></summary>
 
 <br/>
 
@@ -70,7 +72,8 @@ In this guide, we will be separating bundles into 3 distinct categories, and pro
 
 <details>
 
-<summary>Bundles With An Obvious Gimmick</summary>
+<summary><h2>Bundles With An Obvious Gimmick</h2></summary>
+
 
 <br/>
  
@@ -110,7 +113,7 @@ In this guide, we will be separating bundles into 3 distinct categories, and pro
 
 <details>
 
-<summary>Bundles With A Puzzle-y Gimmick</summary>
+<summary><h3>Bundles With A Puzzle-y Gimmick</h3></summary>
 
 <br/>
 
