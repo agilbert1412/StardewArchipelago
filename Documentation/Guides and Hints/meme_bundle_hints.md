@@ -112,14 +112,11 @@ In this guide, we will be separating bundles into 3 distinct categories, and pro
 <br/>
 
 <details open>
-
 <summary><h1>Bundles With A Puzzle-y Gimmick</h1></summary>
-
 <ul>
 
 <details>
 <summary><h3>ANIMAL WELL Bundle</h3></summary>
-
 <ul>
 
 <details>
@@ -153,14 +150,11 @@ If you included Ginger Island, after completing "The Pirate's Wife", talk to Geo
 If you excluded Ginger Island, talk to George, he will give you a remote to donate on your own.
 
 </details>
-
 </ul>
-
 </details>
 
 <details>
 <summary><h3>Catch And Release Bundle</h3></summary>
-
 <ul>
 
 <details>
@@ -181,9 +175,7 @@ When this bundle is active, all bodies of water behave similar to a Fish Pond
 When facing a body of water, you can click with a fish in your hands to "Release" this fish into it. This will count for the bundle.
 
 </details>
-
 </ul>
-
 </details>
 
 - **Commitment Bundle**
