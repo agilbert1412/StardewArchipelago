@@ -1,15 +1,16 @@
-using System;
-using System.Linq;
-using StardewArchipelago.Locations.ShopStockModifiers;
-using StardewArchipelago.Stardew;
-using StardewModdingAPI;
-using StardewModdingAPI.Events;
-using StardewValley;
-using StardewValley.GameData.Shops;
 using KaitoKid.Utilities.Interfaces;
 using StardewArchipelago.Archipelago;
 using StardewArchipelago.Archipelago.SlotData.SlotEnums;
 using StardewArchipelago.Constants.Vanilla;
+using StardewArchipelago.Locations.ShopStockModifiers;
+using StardewArchipelago.Stardew;
+using StardewArchipelago.Stardew.NameMapping;
+using StardewModdingAPI;
+using StardewModdingAPI.Events;
+using StardewValley;
+using StardewValley.GameData.Shops;
+using System;
+using System.Linq;
 
 namespace StardewArchipelago.Locations.CodeInjections.Modded.SVE
 {
@@ -19,7 +20,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded.SVE
         private const float APPLES_DISCOUNT = 0.025f;
         private const float KNOWLEDGE_DISCOUNT = 0.4f;
 
-        public BearShopStockModifier(ILogger logger, IModHelper helper, StardewArchipelagoClient archipelago, StardewItemManager stardewItemManager) : base(logger, helper, archipelago, stardewItemManager)
+        public BearShopStockModifier(ILogger logger, IModHelper helper, StardewArchipelagoClient archipelago, StardewItemManager stardewItemManager, NameSimplifier nameSimplifier) : base(logger, helper, archipelago, stardewItemManager, nameSimplifier)
         {
             _logger = logger;
             _helper = helper;

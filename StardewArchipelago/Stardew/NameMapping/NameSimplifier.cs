@@ -16,7 +16,7 @@ namespace StardewArchipelago.Stardew.NameMapping
             return GetSimplifiedName(item.Name, item.QualifiedItemId, item.ItemId, item is Object itemObject ? itemObject.preserve.Value : null);
         }
 
-        public string GetSimplifiedName(string itemName, string itemQualifiedId, string itemId, PreserveType? preserveType = null)
+        public string GetSimplifiedName(string itemName, string itemQualifiedId, string itemId = null, PreserveType? preserveType = null)
         {
             var name = itemName;
             if (_renamedObjects.ContainsKey(itemQualifiedId))
@@ -24,7 +24,7 @@ namespace StardewArchipelago.Stardew.NameMapping
                 name = _renamedObjects[itemQualifiedId];
             }
 
-            if (PowerBooks.BookIdsToNames.ContainsKey(itemId))
+            if (itemId != null && PowerBooks.BookIdsToNames.ContainsKey(itemId))
             {
                 name = PowerBooks.BookIdsToNames[itemId];
             }

@@ -3,6 +3,7 @@ using KaitoKid.Utilities.Interfaces;
 using StardewArchipelago.Archipelago;
 using StardewArchipelago.Constants.Modded;
 using StardewArchipelago.Stardew;
+using StardewArchipelago.Stardew.NameMapping;
 using StardewModdingAPI;
 
 namespace StardewArchipelago.GameModifications.Modded
@@ -15,7 +16,7 @@ namespace StardewArchipelago.GameModifications.Modded
         private readonly JunimoShopStockModifier _junimoShopStockModifier;
         private readonly IModHelper _modHelper;
 
-        public ModRandomizedLogicPatcher(ILogger logger, IModHelper modHelper, Harmony harmony, StardewArchipelagoClient archipelago, SeedShopStockModifier seedShopStockModifier, StardewItemManager stardewItemManager)
+        public ModRandomizedLogicPatcher(ILogger logger, IModHelper modHelper, Harmony harmony, StardewArchipelagoClient archipelago, SeedShopStockModifier seedShopStockModifier, StardewItemManager stardewItemManager, NameSimplifier nameSimplifier)
         {
             _harmony = harmony;
             _archipelago = archipelago;
@@ -23,7 +24,7 @@ namespace StardewArchipelago.GameModifications.Modded
             _modHelper = modHelper;
             if (_archipelago.SlotData.Mods.HasMod(ModNames.SVE))
             {
-                _junimoShopStockModifier = new JunimoShopStockModifier(logger, modHelper, archipelago, _stardewItemManager);
+                _junimoShopStockModifier = new JunimoShopStockModifier(logger, modHelper, archipelago, _stardewItemManager, nameSimplifier);
             }
         }
 

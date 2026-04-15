@@ -1,19 +1,20 @@
-﻿using StardewArchipelago.Constants.Locations;
+﻿using KaitoKid.Utilities.Interfaces;
+using StardewArchipelago.Archipelago;
+using StardewArchipelago.Archipelago.SlotData.SlotEnums;
+using StardewArchipelago.Constants.Locations;
 using StardewArchipelago.Constants.Vanilla;
 using StardewArchipelago.Stardew;
+using StardewArchipelago.Stardew.NameMapping;
 using StardewModdingAPI;
 using StardewModdingAPI.Events;
 using StardewValley;
 using StardewValley.GameData.Shops;
-using StardewArchipelago.Archipelago;
-using StardewArchipelago.Archipelago.SlotData.SlotEnums;
-using KaitoKid.Utilities.Interfaces;
 
 namespace StardewArchipelago.Locations.ShopStockModifiers
 {
     public class CraftingRecipePurchaseStockModifier : ShopStockModifier
     {
-        public CraftingRecipePurchaseStockModifier(ILogger logger, IModHelper helper, StardewArchipelagoClient archipelago, StardewItemManager stardewItemManager) : base(logger, helper, archipelago, stardewItemManager)
+        public CraftingRecipePurchaseStockModifier(ILogger logger, IModHelper helper, StardewArchipelagoClient archipelago, StardewItemManager stardewItemManager, NameSimplifier nameSimplifier) : base(logger, helper, archipelago, stardewItemManager, nameSimplifier)
         {
         }
 

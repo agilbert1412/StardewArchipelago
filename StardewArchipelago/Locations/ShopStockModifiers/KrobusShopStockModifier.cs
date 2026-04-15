@@ -1,18 +1,19 @@
-﻿using System;
+﻿using KaitoKid.Utilities.Interfaces;
+using StardewArchipelago.Archipelago;
+using StardewArchipelago.Constants;
 using StardewArchipelago.Constants.Vanilla;
 using StardewArchipelago.Stardew;
+using StardewArchipelago.Stardew.NameMapping;
 using StardewModdingAPI;
 using StardewModdingAPI.Events;
 using StardewValley.GameData.Shops;
-using KaitoKid.Utilities.Interfaces;
-using StardewArchipelago.Archipelago;
-using StardewArchipelago.Constants;
+using System;
 
 namespace StardewArchipelago.Locations.ShopStockModifiers
 {
     public class KrobusShopStockModifier : ShopStockModifier
     {
-        public KrobusShopStockModifier(ILogger logger, IModHelper helper, StardewArchipelagoClient archipelago, StardewItemManager stardewItemManager) : base(logger, helper, archipelago, stardewItemManager)
+        public KrobusShopStockModifier(ILogger logger, IModHelper helper, StardewArchipelagoClient archipelago, StardewItemManager stardewItemManager, NameSimplifier nameSimplifier) : base(logger, helper, archipelago, stardewItemManager, nameSimplifier)
         {
             _logger = logger;
             _helper = helper;

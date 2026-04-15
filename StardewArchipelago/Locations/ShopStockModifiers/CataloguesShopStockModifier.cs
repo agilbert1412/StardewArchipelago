@@ -1,13 +1,14 @@
-﻿using System.Collections.Generic;
+﻿using KaitoKid.Utilities.Interfaces;
+using StardewArchipelago.Archipelago;
+using StardewArchipelago.Constants;
 using StardewArchipelago.Constants.Locations;
 using StardewArchipelago.Constants.Vanilla;
 using StardewArchipelago.Stardew;
+using StardewArchipelago.Stardew.NameMapping;
 using StardewModdingAPI;
 using StardewModdingAPI.Events;
 using StardewValley.GameData.Shops;
-using KaitoKid.Utilities.Interfaces;
-using StardewArchipelago.Archipelago;
-using StardewArchipelago.Constants;
+using System.Collections.Generic;
 
 namespace StardewArchipelago.Locations.ShopStockModifiers
 {
@@ -24,7 +25,7 @@ namespace StardewArchipelago.Locations.ShopStockModifiers
             {QualifiedItemIds.WIZARD_CATALOGUE, "Wizard Catalogue"},
         };
 
-        public CataloguesShopStockModifier(ILogger logger, IModHelper helper, StardewArchipelagoClient archipelago, StardewItemManager stardewItemManager) : base(logger, helper, archipelago, stardewItemManager)
+        public CataloguesShopStockModifier(ILogger logger, IModHelper helper, StardewArchipelagoClient archipelago, StardewItemManager stardewItemManager, NameSimplifier nameSimplifier) : base(logger, helper, archipelago, stardewItemManager, nameSimplifier)
         {
         }
 

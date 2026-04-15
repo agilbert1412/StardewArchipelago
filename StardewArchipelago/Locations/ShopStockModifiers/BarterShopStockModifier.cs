@@ -1,19 +1,20 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using KaitoKid.Utilities.Interfaces;
 using StardewArchipelago.Archipelago;
 using StardewArchipelago.Constants;
 using StardewArchipelago.Stardew;
+using StardewArchipelago.Stardew.NameMapping;
 using StardewModdingAPI;
 using StardewValley;
 using StardewValley.GameData.Shops;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace StardewArchipelago.Locations.ShopStockModifiers
 {
     public abstract class BarterShopStockModifier : ShopStockModifier
     {
-        public BarterShopStockModifier(ILogger logger, IModHelper helper, StardewArchipelagoClient archipelago, StardewItemManager stardewItemManager) : base(logger, helper, archipelago, stardewItemManager)
+        public BarterShopStockModifier(ILogger logger, IModHelper helper, StardewArchipelagoClient archipelago, StardewItemManager stardewItemManager, NameSimplifier nameSimplifier) : base(logger, helper, archipelago, stardewItemManager, nameSimplifier)
         {
         }
 

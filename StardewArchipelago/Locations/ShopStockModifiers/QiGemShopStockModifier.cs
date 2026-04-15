@@ -1,13 +1,14 @@
-﻿using System.Collections.Generic;
-using StardewArchipelago.Constants.Vanilla;
-using StardewArchipelago.Stardew;
-using StardewModdingAPI;
-using StardewModdingAPI.Events;
-using StardewValley.GameData.Shops;
-using KaitoKid.Utilities.Interfaces;
+﻿using KaitoKid.Utilities.Interfaces;
 using StardewArchipelago.Archipelago;
 using StardewArchipelago.Constants;
 using StardewArchipelago.Constants.Locations;
+using StardewArchipelago.Constants.Vanilla;
+using StardewArchipelago.Stardew;
+using StardewArchipelago.Stardew.NameMapping;
+using StardewModdingAPI;
+using StardewModdingAPI.Events;
+using StardewValley.GameData.Shops;
+using System.Collections.Generic;
 
 namespace StardewArchipelago.Locations.ShopStockModifiers
 {
@@ -19,7 +20,7 @@ namespace StardewArchipelago.Locations.ShopStockModifiers
         private const string ExoticDoubleBedName = "Exotic Double Bed";
         private const string GoldenEggName = "Golden Egg";
 
-        public QiGemShopStockModifier(ILogger logger, IModHelper helper, StardewArchipelagoClient archipelago, StardewItemManager stardewItemManager) : base(logger, helper, archipelago, stardewItemManager)
+        public QiGemShopStockModifier(ILogger logger, IModHelper helper, StardewArchipelagoClient archipelago, StardewItemManager stardewItemManager, NameSimplifier nameSimplifier) : base(logger, helper, archipelago, stardewItemManager, nameSimplifier)
         {
             _logger = logger;
             _helper = helper;

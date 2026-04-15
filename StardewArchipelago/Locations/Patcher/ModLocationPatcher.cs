@@ -1,5 +1,4 @@
-﻿using System;
-using HarmonyLib;
+﻿using HarmonyLib;
 using KaitoKid.Utilities.Interfaces;
 using StardewArchipelago.Archipelago;
 using StardewArchipelago.Archipelago.SlotData.SlotEnums;
@@ -9,10 +8,12 @@ using StardewArchipelago.Locations.CodeInjections.Modded;
 using StardewArchipelago.Locations.CodeInjections.Modded.SVE;
 using StardewArchipelago.Locations.CodeInjections.Vanilla;
 using StardewArchipelago.Stardew;
+using StardewArchipelago.Stardew.NameMapping;
 using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Menus;
 using StardewValley.Objects;
+using System;
 
 namespace StardewArchipelago.Locations.Patcher
 {
@@ -26,15 +27,15 @@ namespace StardewArchipelago.Locations.Patcher
         private readonly TemperedShopStockModifier _temperedShopStockModifier;
         private readonly BearShopStockModifier _bearShopStockModifier;
 
-        public ModLocationPatcher(Harmony harmony, ILogger logger, IModHelper modHelper, StardewArchipelagoClient archipelago, StardewItemManager stardewItemManager)
+        public ModLocationPatcher(Harmony harmony, ILogger logger, IModHelper modHelper, StardewArchipelagoClient archipelago, StardewItemManager stardewItemManager, NameSimplifier nameSimplifier)
         {
             _archipelago = archipelago;
             _harmony = harmony;
             _logger = logger;
             _modHelper = modHelper;
             _modsManager = archipelago.SlotData.Mods;
-            _temperedShopStockModifier = new TemperedShopStockModifier(logger, modHelper, archipelago, stardewItemManager);
-            _bearShopStockModifier = new BearShopStockModifier(logger, modHelper, archipelago, stardewItemManager);
+            _temperedShopStockModifier = new TemperedShopStockModifier(logger, modHelper, archipelago, stardewItemManager, nameSimplifier);
+            _bearShopStockModifier = new BearShopStockModifier(logger, modHelper, archipelago, stardewItemManager, nameSimplifier);
 
         }
 

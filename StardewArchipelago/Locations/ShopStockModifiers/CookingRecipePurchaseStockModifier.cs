@@ -1,20 +1,21 @@
-﻿using StardewArchipelago.Constants.Locations;
+﻿using KaitoKid.Utilities.Interfaces;
+using StardewArchipelago.Archipelago;
+using StardewArchipelago.Archipelago.ApworldData;
+using StardewArchipelago.Archipelago.SlotData.SlotEnums;
+using StardewArchipelago.Constants.Locations;
 using StardewArchipelago.Constants.Vanilla;
 using StardewArchipelago.Stardew;
+using StardewArchipelago.Stardew.NameMapping;
 using StardewModdingAPI;
 using StardewModdingAPI.Events;
 using StardewValley;
 using StardewValley.GameData.Shops;
-using KaitoKid.Utilities.Interfaces;
-using StardewArchipelago.Archipelago;
-using StardewArchipelago.Archipelago.SlotData.SlotEnums;
-using StardewArchipelago.Archipelago.ApworldData;
 
 namespace StardewArchipelago.Locations.ShopStockModifiers
 {
     public class CookingRecipePurchaseStockModifier : ShopStockModifier
     {
-        public CookingRecipePurchaseStockModifier(ILogger logger, IModHelper helper, StardewArchipelagoClient archipelago, StardewItemManager stardewItemManager) : base(logger, helper, archipelago, stardewItemManager)
+        public CookingRecipePurchaseStockModifier(ILogger logger, IModHelper helper, StardewArchipelagoClient archipelago, StardewItemManager stardewItemManager, NameSimplifier nameSimplifier) : base(logger, helper, archipelago, stardewItemManager, nameSimplifier)
         {
         }
 
@@ -56,7 +57,9 @@ namespace StardewArchipelago.Locations.ShopStockModifiers
                 }
 
                 var stardewItem = _stardewItemManager.GetItemByQualifiedId(item.ItemId) ?? _stardewItemManager.GetItemByQualifiedId(QualifiedItemIds.QualifiedObjectId(item.ItemId));
-                var location = $"{stardewItem.Name}{Suffix.CHEFSANITY}";
+
+                var simplifiedName = _nameSimplifier.GetSimplifiedName(stardewItem.Name, stardewItem.GetQualifiedId());
+                var location = $"{simplifiedName}{Suffix.CHEFSANITY}";
                 if (!CraftingRecipe.cookingRecipes.ContainsKey(stardewItem.Name) || !_archipelago.LocationExists(location))
                 {
                     continue;

@@ -302,7 +302,7 @@ namespace StardewArchipelago
             var friends = new Friends();
             ArchipelagoLocationDataDefinition.Initialize(_logger, _helper, _archipelago, _locationChecker);
             _logicPatcher = new RandomizedLogicPatcher(_logger, _helper, Config, _harmony, _archipelago, _locationChecker, _stardewItemManager, _entranceManager, seedShopStockModifier, nameSimplifier, friends, State, new BundleReader());
-            _jojapocalypseManager = new JojapocalypseManager(_logger, _helper, Config, _harmony, _archipelago, _locationChecker, _jojaLocationChecker, _stardewItemManager);
+            _jojapocalypseManager = new JojapocalypseManager(_logger, _helper, Config, _harmony, _archipelago, _locationChecker, _jojaLocationChecker, _stardewItemManager, nameSimplifier);
             _seasonsRandomizer = new SeasonsRandomizer(_logger, _helper, _archipelago, State);
             _appearanceRandomizer = new AppearanceRandomizer(_logger, _helper, _archipelago, _harmony);
 
@@ -328,7 +328,7 @@ namespace StardewArchipelago
             _chatForwarder.ListenToChatMessages();
             _logicPatcher.PatchAllGameLogic();
             _jojapocalypseManager.PatchAllJojaLogic();
-            _modLogicPatcher = new ModRandomizedLogicPatcher(_logger, _helper, _harmony, _archipelago, seedShopStockModifier, _stardewItemManager);
+            _modLogicPatcher = new ModRandomizedLogicPatcher(_logger, _helper, _harmony, _archipelago, seedShopStockModifier, _stardewItemManager, nameSimplifier);
             _modLogicPatcher.PatchAllGameLogic();
             _mailPatcher.PatchMailBoxForApItems();
             _entranceManager.SetEntranceRandomizerSettings(_archipelago.SlotData);
