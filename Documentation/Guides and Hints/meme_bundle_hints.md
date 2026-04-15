@@ -169,6 +169,8 @@ You must catch and release the fish
 
 When this bundle is active, all bodies of water behave similar to a Fish Pond
 
+</details>
+
 <details>
 <summary><h4>Solution</h4></summary>
 
