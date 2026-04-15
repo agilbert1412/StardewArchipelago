@@ -117,6 +117,7 @@ In this guide, we will be separating bundles into 3 distinct categories, and pro
 
 <br/>
 
+<ul>
 
 <details>
 <summary><h3>    ANIMAL WELL Bundle</h3></summary>
@@ -194,6 +195,8 @@ If you excluded Ginger Island, talk to George, he will give you a remote to dona
 - **TheAlGoreRhythm Bundle**
 
 </details>
+
+</ul>
 
 <br/>
 
