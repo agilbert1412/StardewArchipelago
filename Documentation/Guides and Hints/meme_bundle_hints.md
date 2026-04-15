@@ -43,6 +43,7 @@ In this guide, we will be separating bundles into 3 distinct categories, and pro
 - Dr Seuss Bundle
 - Eg Bundle
 - Emmalution Bundle
+- Frazzleduck Bundle
 - Hats Off To You Bundle
 - Hurricane Tortilla Bundle
 - Kent C. Bundle
@@ -72,48 +73,47 @@ In this guide, we will be separating bundles into 3 distinct categories, and pro
 
 <details>
 
-<summary><h2>Bundles With An Obvious Gimmick</h2></summary>
+<summary><h1>Bundles With An Obvious Gimmick</h1></summary>
 
 
 <br/>
  
-- ASMR Bundle
-- Archipela-Go! Bundle
-- Bad Farmer Bundle
-- Bad Fisherman Bundle
-- Bundle Bundle
-- Clickbait Bundle
-- Clique Bundle
-- Communism Bundle
-- Connection Bundle
-- Cookie Clicker Bundle
-- DeathLink Bundle
-- Exhaustion Bundle
-- Firstborn Bundle
-- Frazzleduck Bundle
-- Hairy Bundle
-- Honorable Bundle
-- Humble Bundle
-- Investment Bundle | Scam Bundle
-- Joetg Bundle
-- Journalist's Bundle
-- Ministry of Madness Bundle
-- Off Your Back Bundle
-- Puzzle Bundle
-- Reverse Bundle
-- Stanley Bundle
-- Tick Tock Bundle
-- Trap Bundle
-- Vampire Bundle
-- Very Sticky Bundle
+- ASMR Bundle: Completes after listening to the ASMR
+- Archipela-Go! Bundle: Costs steps
+- Bad Farmer Bundle: Costs dead crops. The crops must have died at any point in the past, but do not need to still be on the farm.
+- Bad Fisherman Bundle: Costs missed fish. Any fish that triggers the minigame, then escapes, is counted
+- Bundle Bundle: Normal items, organised in recursive bundles
+- Clickbait Bundle: Promises a good item, delivers a useless one
+- Clique Bundle: Click the button
+- Communism Bundle: Costs all your money
+- Connection Bundle: Requires connecting to the game
+- Cookie Clicker Bundle: Play a rudimentary version of Cookie Clicker
+- DeathLink Bundle: Costs deathlinks. Any deathlink that occurs while you are online, whether sent or received, is counted.
+- Exhaustion Bundle: Costs stamina
+- Firstborn Bundle: Costs one child
+- Hairy Bundle: Costs your hair
+- Honorable Bundle: Costs either one stone or one prismatic shard. If you choose the easy way out, Mr Qi gives you one curse. Curses make you susceptible to getting hit by lightning.
+- Humble Bundle: Pay what you want. Some of the money is deposited into EnergyLink, at a higher rate if you paid more.
+- Investment Bundle: Promises big profits, does not deliver. Turns into the Scam Bundle afterwards.
+- Joetg Bundle: Costs dead pumpkins. The pumpkins must have died at any point in the past, but do not need to still be on the farm.
+- Journalist's Bundle: Costs whatever item you have on you.
+- Ministry of Madness Bundle: Costs a lot of trash, but the Ministry will periodically send you stacks of trash in the mail to help.
+- Off Your Back Bundle: Costs the clothes you are currently wearing
+- Puzzle Bundle: Solve the sliding puzzle
+- Reverse Bundle: Gives you items. Take them all to complete the bundle.
+- Stanley Bundle: Explicitly tell you to not look at the bundle for 5 in-game years.
+- Tick Tock Bundle: Costs time
+- Trap Bundle: Gives you traps. Trigger all the traps to complete it.
+- Vampire Bundle: Costs Health
+- Very Sticky Bundle: Costs sap normally, but touching the sap will make you sticky. Close the bundle page to clean your hands.
 
-</details>
+</details open>
 
 <br/>
 
 <details>
 
-<summary><h3>Bundles With A Puzzle-y Gimmick</h3></summary>
+<summary><h1>Bundles With A Puzzle-y Gimmick</h1></summary>
 
 <br/>
 
