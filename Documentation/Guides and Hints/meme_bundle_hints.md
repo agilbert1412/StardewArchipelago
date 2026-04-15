@@ -137,13 +137,6 @@ The Advanced TV Remote is the only special item here
 </details>
 
 <details>
-<summary><h4>Hint #2</h4></summary>
-
-The Advanced TV Remote is the only special item here
-
-</details>
-
-<details>
 <summary><h4>Hint #3</h4></summary>
 
 If you included Ginger Island, you will get a remote from a quest. You should complete the quest before the bundle
@@ -165,7 +158,34 @@ If you excluded Ginger Island, talk to George, he will give you a remote to dona
 
 </details>
 
-- **Catch And Release Bundle**
+<details>
+<summary><h3>Catch And Release Bundle</h3></summary>
+
+<ul>
+
+<details>
+<summary><h4>Hint #1</h4></summary>
+
+You must catch and release the fish
+
+</details>
+
+<details>
+<summary><h4>Hint #2</h4></summary>
+
+When this bundle is active, all bodies of water behave similar to a Fish Pond
+
+<details>
+<summary><h4>Solution</h4></summary>
+
+When facing a body of water, you can click with a fish in your hands to "Release" this fish into it. This will count for the bundle.
+
+</details>
+
+</ul>
+
+</details>
+
 - **Commitment Bundle**
 - **Cooperation Bundle**
 - **Crowdfunding Bundle**
