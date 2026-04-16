@@ -24,7 +24,7 @@ namespace StardewArchipelago.Archipelago.SlotData.SlotEnums.SlotDataRandomizatio
         {
             foreach (var (name, data) in Crops)
             {
-                data.Name = name;
+                data.Crop = name;
             }
         }
 

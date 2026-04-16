@@ -14,7 +14,9 @@ namespace StardewArchipelago.Archipelago.SlotData.SlotEnums.SlotDataRandomizatio
 {
     public class RandomizedCropData
     {
-        public string Name { get; set; }
+        public string Crop { get; set; }
+        public int? GrowthTime { get; set; }
+        public string[] Season { get; set; }
         public int? SellPrice { get; set; }
 
         public RandomizedCropData()
