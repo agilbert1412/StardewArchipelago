@@ -30,6 +30,11 @@ namespace StardewArchipelago.Archipelago.SlotData.SlotEnums.SlotDataRandomizatio
 
         }
 
+        public void AssignName(string name)
+        {
+            Name = name;
+        }
+
         public Dictionary<string, List<SpawnFishData>> GetSpawnFishDatas(StardewItemManager itemManager)
         {
             var spawnDatas = new Dictionary<string, List<SpawnFishData>>();

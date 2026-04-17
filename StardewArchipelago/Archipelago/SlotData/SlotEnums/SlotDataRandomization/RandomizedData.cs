@@ -24,7 +24,7 @@ namespace StardewArchipelago.Archipelago.SlotData.SlotEnums.SlotDataRandomizatio
         {
             foreach (var (name, data) in Crops)
             {
-                data.Crop = name;
+                data.AssignName(name);
             }
         }
 
@@ -32,7 +32,7 @@ namespace StardewArchipelago.Archipelago.SlotData.SlotEnums.SlotDataRandomizatio
         {
             foreach (var (name, data) in Fish)
             {
-                data.Name = name;
+                data.AssignName(name);
             }
         }
     }

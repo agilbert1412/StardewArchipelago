@@ -6,6 +6,7 @@ namespace StardewArchipelago.Constants.Vanilla
     {
         public static List<List<string>> ItemNameAliasGroups = new()
         {
+            new List<string> { "Coffee Bean", "Coffee Bean (Starter)" },
             new List<string> { "L. Goat Milk", "Large Goat Milk", "Goat Milk (Large)" },
             new List<string> { "L. Milk", "Large Milk", "Milk (Large)" },
             new List<string> { "Egg (Brown)", "Brown Egg" },
