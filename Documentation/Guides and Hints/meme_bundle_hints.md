@@ -1,6 +1,6 @@
 # Meme Bundle Hints
 
-Some of the meme bundles available in the [Bundle Randomization](./../Yaml%20 Settings/bundle_randomization.md) have special gimmicks, some of which akin to a small puzzle. In some cases, you must figure out the joke, to complete the bundle.
+Some of the meme bundles available in the [Bundle Randomization](./../Yaml%20Settings/bundle_randomization.md) have special gimmicks, some of which akin to a small puzzle. In some cases, you must figure out the joke, to complete the bundle.
 
 In this guide, we will be separating bundles into 3 distinct categories, and providing progressive hints for the ones in need
 
@@ -320,11 +320,221 @@ Notable games with EnergyLink support include Factorio, Stardew Valley, Satisfac
 </ul>
 </details>
 
-- **Death Bundle**
-- **Distracted Bundle**
-- **Doctor Bundle**
-- **Fast Bundle**
-- **Flashbang Bundle**
+<details>
+<summary><h3>Death Bundle</h3></summary>
+<ul>
+
+<details>
+<summary><h4>Hint #1</h4></summary>
+
+The skull Button allows you to spawn monsters in the Community Center.
+
+</details>
+
+<details>
+<summary><h4>Hint #2</h4></summary>
+
+The Bundle requires a death.
+
+</details>
+
+<details>
+<summary><h4>Solution</h4></summary>
+
+The bundle will complete after you die in the Community Center once. You can die in many ways, but the monsters that spawn when you press the button are probably the easiest method.
+
+</details>
+</ul>
+</details>
+
+<details>
+<summary><h3>Distracted Bundle</h3></summary>
+<ul>
+
+<details>
+<summary><h4>Hint #1</h4></summary>
+
+Every item in this bundle can be donated normally.
+
+</details>
+
+<details>
+<summary><h4>Hint #2</h4></summary>
+
+You might get distracted when trying to complete this bundle.
+
+</details>
+
+<details>
+<summary><h4>Hint #3</h4></summary>
+
+A distracted player might forget some items at their home when trying to bring them to the bundle.
+
+</details>
+
+<details>
+<summary><h4>Hint #4</h4></summary>
+
+If you try to bring more than one item at once for this bundle, you will "forget" some of them home.
+
+</details>
+
+<details>
+<summary><h4>Solution</h4></summary>
+
+Whenever you interact with this bundle, if you are carrying more than one donation for it, all but one will be immediately teleported home in one of your chests.
+
+It will try to stack with similar items if possible, for realism.
+
+This simulates you having "forgotten" some of the donation items home and forces you to make an extra trip.
+
+</details>
+</ul>
+</details>
+
+<details>
+<summary><h3>Doctor Bundle</h3></summary>
+<ul>
+
+<details>
+<summary><h4>Hint #1</h4></summary>
+
+The apples in this bundle can be donated normally.
+
+</details>
+
+<details>
+<summary><h4>Hint #2</h4></summary>
+
+The requirements from this bundle will change over time. You need to donate everything in one shot.
+
+</details>
+
+<details>
+<summary><h4>Hint #3</h4></summary>
+
+The requirements from this bundle will increase over time. You need to donate everything in one shot.
+
+</details>
+
+<details>
+<summary><h4>Hint #4</h4></summary>
+
+"An apple a day, keeps the doctor away"
+
+</details>
+
+<details>
+<summary><h4>Solution</h4></summary>
+
+This bundle requires one apple per total days you have played on your save. So if you are on day 55, it requests 55 apples.
+
+Once you unlock apple trees, you should immediately plant at least 2, so your own number of owned apples starts growing faster than the bundle. You can plant more to grow even faster.
+
+Once you have enough, you can simply donate them in a single stack.
+
+If you reach day 999, the bundle will stop growing due to the technical limitations of the max stack size of apples.
+
+</details>
+</ul>
+</details>
+
+<details>
+<summary><h3>Fast Bundle</h3></summary>
+<ul>
+
+<details>
+<summary><h4>Hint #1</h4></summary>
+
+This bundle is free.
+
+</details>
+
+<details>
+<summary><h4>Hint #2</h4></summary>
+
+Gotta go fast!
+
+</details>
+
+<details>
+<summary><h4>Hint #3</h4></summary>
+
+This bundle should be the first thing you do in the day.
+
+</details>
+
+<details>
+<summary><h4>Hint #4</h4></summary>
+
+Drinking coffee or riding a horse might help you.
+
+</details>
+
+<details>
+<summary><h4>Solution</h4></summary>
+
+This bundle has a purchase button that disappears after the time limit has passed. The timer starts when you wake up, and can be very tight.
+
+This bundle cannot appear if you use [Entrance Randomization](./../Yaml%20Settings/entrance_randomization.md), because the community center might be too far away to reach it in time.
+
+Depending on your [Bundle Price](./../Yaml%20Settings/bundle_price.md), your time limit will vary
+
+Minimum: 84 seconds (very generous)
+Very Cheap: 59 seconds
+Cheap: 50 seconds
+Normal: 42 seconds (approximately the time to reach it by walking)
+Expensive: 39 seconds (approximately the time to reach it by drinking coffee)
+Very Expensive: 36 seconds (approximately the time to reach it by horse)
+Maximum: 34 seconds (approximately the time to reach it using both coffee and horse)
+
+</details>
+</ul>
+</details>
+
+<details>
+<summary><h3>Flashbang Bundle</h3></summary>
+<ul>
+
+<details>
+<summary><h4>Hint #1</h4></summary>
+
+This bundle is free.
+
+</details>
+
+<details>
+<summary><h4>Hint #2</h4></summary>
+
+This bundle is purchased by clicking the purchase button.
+
+</details>
+
+<details>
+<summary><h4>Hint #3</h4></summary>
+
+The purchase button is not different from any normal currency bundle.
+
+</details>
+
+<details>
+<summary><h4>Hint #4</h4></summary>
+
+The flashbang is only a visual effect
+
+</details>
+
+<details>
+<summary><h4>Solution</h4></summary>
+
+Opening this bundle triggers a flashbang, which is simply a white overlay on top of the screen. The purchase button is still active and in its normal spot, you can simply click on it.
+
+You cannot see the button, so you need to click on it blindly.
+
+</details>
+</ul>
+</details>
+
 - **Gacha Bundle**
 - **Hibernation Bundle**
 - **Hint Bundle**
