@@ -480,13 +480,13 @@ This bundle cannot appear if you use [Entrance Randomization](./../Yaml%20Settin
 
 Depending on your [Bundle Price](./../Yaml%20Settings/bundle_price.md), your time limit will vary
 
-Minimum: 84 seconds (very generous)
-Very Cheap: 59 seconds
-Cheap: 50 seconds
-Normal: 42 seconds (approximately the time to reach it by walking)
-Expensive: 39 seconds (approximately the time to reach it by drinking coffee)
-Very Expensive: 36 seconds (approximately the time to reach it by horse)
-Maximum: 34 seconds (approximately the time to reach it using both coffee and horse)
+- Minimum: 84 seconds (very generous)
+- Very Cheap: 59 seconds
+- Cheap: 50 seconds
+- Normal: 42 seconds (approximately the time to reach it by walking)
+- Expensive: 39 seconds (approximately the time to reach it by drinking coffee)
+- Very Expensive: 36 seconds (approximately the time to reach it by horse)
+- Maximum: 34 seconds (approximately the time to reach it using both coffee and horse)
 
 </details>
 </ul>
