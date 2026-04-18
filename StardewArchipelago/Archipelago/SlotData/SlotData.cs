@@ -24,7 +24,7 @@ namespace StardewArchipelago.Archipelago.SlotData
         public string TrashBearRequestsData { get; set; }
         public BundlePrice BundlePrice { get; private set; }
         public EntranceRandomization EntranceRandomization { get; private set; }
-        public EntranceRandomizationBehaviour EntranceRandomizationBehaviour { get; private set; }
+        public EntranceRandomizationBehavior EntranceRandomizationBehavior { get; private set; }
         public StartWithout StartWithout { get; private set; }
         public SeasonRandomization SeasonRandomization { get; private set; }
         public Cropsanity Cropsanity { get; private set; }
@@ -95,7 +95,7 @@ namespace StardewArchipelago.Archipelago.SlotData
             BundlesData = slotDataReader.GetSlotSetting(SlotDataKeys.MODIFIED_BUNDLES, "");
             TrashBearRequestsData = slotDataReader.GetSlotSetting(SlotDataKeys.TRASH_BEAR_REQUESTS, "");
             EntranceRandomization = slotDataReader.GetSlotSetting(SlotDataKeys.ENTRANCE_RANDOMIZATION, EntranceRandomization.Disabled);
-            EntranceRandomizationBehaviour = slotDataReader.GetSlotEntranceRandomizationBehaviorSetting();
+            EntranceRandomizationBehavior = slotDataReader.GetSlotEntranceRandomizationBehaviorSetting();
             SeasonRandomization = slotDataReader.GetSlotSetting(SlotDataKeys.SEASON_RANDOMIZATION, SeasonRandomization.Disabled);
             Cropsanity = slotDataReader.GetSlotSetting(SlotDataKeys.CROPSANITY, Cropsanity.Disabled);
             BackpackProgression = slotDataReader.GetSlotSetting(SlotDataKeys.BACKPACK_PROGRESSION, BackpackProgression.Progressive);

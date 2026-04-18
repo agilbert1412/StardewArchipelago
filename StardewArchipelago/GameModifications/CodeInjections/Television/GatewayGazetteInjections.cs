@@ -113,7 +113,7 @@ namespace StardewArchipelago.GameModifications.CodeInjections.Television
             SetGazetteEpisodeScreen(tv);
 
             var random = new Random((int)(Game1.uniqueIDForThisGame + Game1.stats.DaysPlayed));
-            if (_archipelago.SlotData.EntranceRandomizationBehaviour.HasFlag(EntranceRandomizationBehaviour.Chaos))
+            if (_archipelago.SlotData.EntranceRandomizationBehavior.HasFlag(EntranceRandomizationBehavior.Chaos))
             {
                 PlayChaosGazetteEpisode(tv, random);
                 return;
