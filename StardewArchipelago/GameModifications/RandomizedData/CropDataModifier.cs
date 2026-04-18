@@ -11,6 +11,7 @@ using StardewModdingAPI.Events;
 using StardewValley;
 using StardewValley.GameData.Crops;
 using StardewValley.GameData.Locations;
+using StardewValley.GameData.Objects;
 using StardewValley.GameData.Shops;
 
 namespace StardewArchipelago.GameModifications.RandomizedData
@@ -52,6 +53,27 @@ namespace StardewArchipelago.GameModifications.RandomizedData
             );
         }
 
+        public void OnObjectDataRequested(object sender, AssetRequestedEventArgs e)
+        {
+            if (!e.NameWithoutLocale.IsEquivalentTo("Data/Objects"))
+            {
+                return;
+            }
+
+            e.Edit(asset =>
+                {
+                    var objectsData = asset.AsDictionary<string, ObjectData>().Data;
+                    var cropsData = DataLoader.Crops(Game1.content);
+
+                    foreach (var objectId in objectsData.Keys.ToArray())
+                    {
+                        ModifySeedDescription(objectsData, objectId, cropsData);
+                    }
+                },
+                AssetEditPriority.Late + 1
+            );
+        }
+
         private void ModifyCropData(IDictionary<string, CropData> allCropData, string seedId)
         {
             var cropData = allCropData[seedId];
@@ -59,13 +81,7 @@ namespace StardewArchipelago.GameModifications.RandomizedData
             var seedItem = _itemManager.GetObjectById(seedId);
             var cropItem = _itemManager.GetObjectById(cropId);
 
-            if (_dataRandomization.CropDataBySeedName != null && _dataRandomization.CropDataBySeedName.TryGetValue(seedItem.Name, out var randomizedCropData))
-            {
-            }
-            else if (_dataRandomization.CropData != null && _dataRandomization.CropData.TryGetValue(cropItem.Name, out randomizedCropData))
-            {
-            }
-            else
+            if (!TryGetRandomizedCropData(seedItem, cropItem, out var randomizedCropData))
             {
                 return;
             }
@@ -79,6 +95,21 @@ namespace StardewArchipelago.GameModifications.RandomizedData
             }
 
             ModifyCropGrowthTime(allCropData, seedId, randomizedCropData);
+        }
+
+        private bool TryGetRandomizedCropData(StardewObject seedItem, StardewObject cropItem, out RandomizedCropData randomizedCropData)
+        {
+            if (_dataRandomization.CropDataBySeedName != null && _dataRandomization.CropDataBySeedName.TryGetValue(seedItem.Name, out randomizedCropData))
+            {
+                return true;
+            }
+            if (_dataRandomization.CropData != null && _dataRandomization.CropData.TryGetValue(cropItem.Name, out randomizedCropData))
+            {
+                return true;
+            }
+
+            randomizedCropData = null;
+            return false;
         }
 
         private static void ModifyCropGrowthTime(IDictionary<string, CropData> allCropData, string seedId, RandomizedCropData randomizedCropData)
@@ -113,6 +144,60 @@ namespace StardewArchipelago.GameModifications.RandomizedData
             }
 
             allCropData[seedId].DaysInPhase = newGrowthPhases;
+        }
+
+        private void ModifySeedDescription(IDictionary<string, ObjectData> objectsData, string objectId, Dictionary<string, CropData> cropsData)
+        {
+            if (!cropsData.TryGetValue(objectId, out var cropData))
+            {
+                return;
+            }
+
+            var cropId = cropData.HarvestItemId;
+            var seedItem = _itemManager.GetObjectById(objectId);
+            var cropItem = _itemManager.GetObjectById(cropId);
+
+            if (!TryGetRandomizedCropData(seedItem, cropItem, out var randomizedCropData))
+            {
+                return;
+            }
+
+            var season = GetSeasonsText(cropData.Seasons);
+            var days = cropData.DaysInPhase.Sum().ToString();
+            var cropName = _itemManager.GetObjectById(cropData.HarvestItemId).Name;
+
+            var newDescription = $"Plant in {season}, takes {days} days to grow into a {cropName}.";
+            if (cropData.RegrowDays > 0)
+            {
+                newDescription += $" Continues to produce every {cropData.RegrowDays} days after the first harvest.";
+            }
+
+            objectsData[objectId].Description = newDescription;
+        }
+
+        private string GetSeasonsText(List<Season> cropSeasons)
+        {
+            if (cropSeasons == null || cropSeasons.Count <= 0)
+            {
+                return "any season";
+            }
+
+            cropSeasons = cropSeasons.Distinct().ToList();
+            if (cropSeasons.Count <= 0 || cropSeasons.Count >= 4)
+            {
+                return "any season";
+            }
+
+            if (cropSeasons.Count == 1)
+            {
+                return cropSeasons[0].ToString().ToLower();
+            }
+            if (cropSeasons.Count == 2)
+            {
+                return $"{cropSeasons[0].ToString().ToLower()} or {cropSeasons[1].ToString().ToLower()}";
+            }
+
+            return $"{cropSeasons[0].ToString().ToLower()}, {cropSeasons[1].ToString().ToLower()} or {cropSeasons[2].ToString().ToLower()}";
         }
     }
 }

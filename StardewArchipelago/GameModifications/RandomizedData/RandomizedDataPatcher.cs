@@ -42,6 +42,7 @@ namespace StardewArchipelago.GameModifications.RandomizedData
             _helper.Events.Content.AssetRequested += _fishDataModifier.OnFishDataRequested;
             _helper.Events.Content.AssetRequested += _fishDataModifier.OnLocationsDataRequested;
             _helper.Events.Content.AssetRequested += _objectDataModifier.OnObjectDataRequested;
+            _helper.Events.Content.AssetRequested += _cropDataModifier.OnObjectDataRequested;
             _helper.GameContent.InvalidateCache("Data/Crops");
             _helper.GameContent.InvalidateCache("Data/Fish");
             _helper.GameContent.InvalidateCache("Data/Locations");
@@ -59,6 +60,7 @@ namespace StardewArchipelago.GameModifications.RandomizedData
             _helper.Events.Content.AssetRequested -= _fishDataModifier.OnFishDataRequested;
             _helper.Events.Content.AssetRequested -= _fishDataModifier.OnLocationsDataRequested;
             _helper.Events.Content.AssetRequested -= _objectDataModifier.OnObjectDataRequested;
+            _helper.Events.Content.AssetRequested -= _cropDataModifier.OnObjectDataRequested;
         }
     }
 
