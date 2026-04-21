@@ -806,7 +806,7 @@ The order in which you donate the items matters
 </details>
 
 <details>
-<summary><h4>Hint #3</h4></summary>
+<summary><h4>Hint #4</h4></summary>
 
 In stardew, mermaids are typically associated to a specific song that has 5 notes
 
@@ -821,7 +821,49 @@ You must donate the items in the order [1-5-4-2-3] (left to right) to play the m
 </ul>
 </details>
 
-- **NFT Bundle**
+<details>
+<summary><h3>NFT Bundle</h3></summary>
+<ul>
+
+<details>
+<summary><h4>Hint #1</h4></summary>
+
+This bundle's icon represents an NFT
+
+</details>
+
+<details>
+<summary><h4>Hint #2</h4></summary>
+
+NFTs are designed to be "owned" and cannot be stolen. They have a whole market of sell/buy based on speculation
+
+</details>
+
+<details>
+<summary><h4>Hint #3</h4></summary>
+
+The internet quickly came up with a meme related to NFTs, notably an easy way for random people to "steal" them.
+
+</details>
+
+<details>
+<summary><h4>Hint #4</h4></summary>
+
+You must steal the NFT to complete the bundle
+
+</details>
+
+<details>
+<summary><h4>Solution</h4></summary>
+
+You can complete the bundle by taking a screenshot of the bundle, successfully "stealing" the image.
+
+There are multiple ways to take screenshots, that vary depending on your device. But the most common ones are the `F12` key (from Steam), and the `Prt Scrn` key (from Windows).
+
+</details>
+</ul>
+</details>
+
 - **Permit A38 Bundle**
 - **Pollution Bundle**
 - **Pomnut Bundle**
