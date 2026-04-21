@@ -712,9 +712,115 @@ Honeywell also provided the voice line.
 </ul>
 </details>
 
-- **IKEA Bundle**
-- **Loser Club Bundle**
-- **Mermaid Bundle**
+<details>
+<summary><h3>IKEA Bundle</h3></summary>
+<ul>
+
+<details>
+<summary><h4>Hint #1</h4></summary>
+
+IKEA is a store that sells furniture
+
+</details>
+
+<details>
+<summary><h4>Hint #2</h4></summary>
+
+IKEA is known for selling the furniture in pieces and the user must then build it on their own.
+
+</details>
+
+<details>
+<summary><h4>Hint #3</h4></summary>
+
+The item that the bundle requests can be crafted
+
+</details>
+
+<details>
+<summary><h4>Solution</h4></summary>
+
+You must donate the ingredients to craft the item that shows up in the bundle, rather than the item itself.
+
+</details>
+</ul>
+</details>
+
+<details>
+<summary><h3>Loser Club Bundle</h3></summary>
+<ul>
+
+<details>
+<summary><h4>Hint #1</h4></summary>
+
+This bundle is based on a memeable moment during a stream of [atwentysomethingloser](https://www.twitch.tv/atwentysomethingloser) where she said out loud that she needed to find a Tuna in the trash to save the day, then immediately opened a trash can and found one. She then yelled out loud "A TUNA?!?" leading to many memes.
+
+</details>
+
+<details>
+<summary><h4>Hint #2</h4></summary>
+
+The bundle is actually more flexible than you'd think based on the name
+
+</details>
+
+<details>
+<summary><h4>Hint #3</h4></summary>
+
+You don't need a tuna specifically, any fish will do
+
+</details>
+
+<details>
+<summary><h4>Solution</h4></summary>
+
+You must donate any fish that you found in a trash can specifically.
+
+</details>
+</ul>
+</details>
+
+<details>
+<summary><h3>Mermaid Bundle</h3></summary>
+<ul>
+
+<details>
+<summary><h4>Hint #1</h4></summary>
+
+The items are not the only mermaid-themed thing in this bundle
+
+</details>
+
+<details>
+<summary><h4>Hint #2</h4></summary>
+
+This bundle always requests exactly 5 items
+
+</details>
+
+<details>
+<summary><h4>Hint #3</h4></summary>
+
+The order in which you donate the items matters
+
+</details>
+
+<details>
+<summary><h4>Hint #3</h4></summary>
+
+In stardew, mermaids are typically associated to a specific song that has 5 notes
+
+</details>
+
+<details>
+<summary><h4>Solution</h4></summary>
+
+You must donate the items in the order [1-5-4-2-3] (left to right) to play the mermaid song.
+
+</details>
+</ul>
+</details>
+
 - **NFT Bundle**
 - **Permit A38 Bundle**
 - **Pollution Bundle**
