@@ -1,6 +1,6 @@
 # Meme Bundle Hints
 
-Some of the meme bundles available in the [Bundle Randomization](./../Yaml%20 Settings/bundle_randomization.md) have special gimmicks, some of which akin to a small puzzle. In some cases, you must figure out the joke, to complete the bundle.
+Some of the meme bundles available in the [Bundle Randomization](./../Yaml%20Settings/bundle_randomization.md) have special gimmicks, some of which akin to a small puzzle. In some cases, you must figure out the joke, to complete the bundle.
 
 In this guide, we will be separating bundles into 3 distinct categories, and providing progressive hints for the ones in need
 
@@ -320,19 +320,557 @@ Notable games with EnergyLink support include Factorio, Stardew Valley, Satisfac
 </ul>
 </details>
 
-- **Death Bundle**
-- **Distracted Bundle**
-- **Doctor Bundle**
-- **Fast Bundle**
-- **Flashbang Bundle**
-- **Gacha Bundle**
-- **Hibernation Bundle**
-- **Hint Bundle**
-- **Honeywell Bundle**
-- **IKEA Bundle**
-- **Loser Club Bundle**
-- **Mermaid Bundle**
-- **NFT Bundle**
+<details>
+<summary><h3>Death Bundle</h3></summary>
+<ul>
+
+<details>
+<summary><h4>Hint #1</h4></summary>
+
+The skull Button allows you to spawn monsters in the Community Center.
+
+</details>
+
+<details>
+<summary><h4>Hint #2</h4></summary>
+
+The Bundle requires a death.
+
+</details>
+
+<details>
+<summary><h4>Solution</h4></summary>
+
+The bundle will complete after you die in the Community Center once. You can die in many ways, but the monsters that spawn when you press the button are probably the easiest method.
+
+</details>
+</ul>
+</details>
+
+<details>
+<summary><h3>Distracted Bundle</h3></summary>
+<ul>
+
+<details>
+<summary><h4>Hint #1</h4></summary>
+
+Every item in this bundle can be donated normally.
+
+</details>
+
+<details>
+<summary><h4>Hint #2</h4></summary>
+
+You might get distracted when trying to complete this bundle.
+
+</details>
+
+<details>
+<summary><h4>Hint #3</h4></summary>
+
+A distracted player might forget some items at their home when trying to bring them to the bundle.
+
+</details>
+
+<details>
+<summary><h4>Hint #4</h4></summary>
+
+If you try to bring more than one item at once for this bundle, you will "forget" some of them home.
+
+</details>
+
+<details>
+<summary><h4>Solution</h4></summary>
+
+Whenever you interact with this bundle, if you are carrying more than one donation for it, all but one will be immediately teleported home in one of your chests.
+
+It will try to stack with similar items if possible, for realism.
+
+This simulates you having "forgotten" some of the donation items home and forces you to make an extra trip.
+
+</details>
+</ul>
+</details>
+
+<details>
+<summary><h3>Doctor Bundle</h3></summary>
+<ul>
+
+<details>
+<summary><h4>Hint #1</h4></summary>
+
+The apples in this bundle can be donated normally.
+
+</details>
+
+<details>
+<summary><h4>Hint #2</h4></summary>
+
+The requirements from this bundle will change over time. You need to donate everything in one shot.
+
+</details>
+
+<details>
+<summary><h4>Hint #3</h4></summary>
+
+The requirements from this bundle will increase over time. You need to donate everything in one shot.
+
+</details>
+
+<details>
+<summary><h4>Hint #4</h4></summary>
+
+"An apple a day, keeps the doctor away"
+
+</details>
+
+<details>
+<summary><h4>Solution</h4></summary>
+
+This bundle requires one apple per total days you have played on your save. So if you are on day 55, it requests 55 apples.
+
+Once you unlock apple trees, you should immediately plant at least 2, so your own number of owned apples starts growing faster than the bundle. You can plant more to grow even faster.
+
+Once you have enough, you can simply donate them in a single stack.
+
+If you reach day 999, the bundle will stop growing due to the technical limitations of the max stack size of apples.
+
+</details>
+</ul>
+</details>
+
+<details>
+<summary><h3>Fast Bundle</h3></summary>
+<ul>
+
+<details>
+<summary><h4>Hint #1</h4></summary>
+
+This bundle is free.
+
+</details>
+
+<details>
+<summary><h4>Hint #2</h4></summary>
+
+Gotta go fast!
+
+</details>
+
+<details>
+<summary><h4>Hint #3</h4></summary>
+
+This bundle should be the first thing you do in the day.
+
+</details>
+
+<details>
+<summary><h4>Hint #4</h4></summary>
+
+Drinking coffee or riding a horse might help you.
+
+</details>
+
+<details>
+<summary><h4>Solution</h4></summary>
+
+This bundle has a purchase button that disappears after the time limit has passed. The timer starts when you wake up, and can be very tight.
+
+This bundle cannot appear if you use [Entrance Randomization](./../Yaml%20Settings/entrance_randomization.md), because the community center might be too far away to reach it in time.
+
+Depending on your [Bundle Price](./../Yaml%20Settings/bundle_price.md), your time limit will vary
+
+- Minimum: 84 seconds (very generous)
+- Very Cheap: 59 seconds
+- Cheap: 50 seconds
+- Normal: 42 seconds (approximately the time to reach it by walking)
+- Expensive: 39 seconds (approximately the time to reach it by drinking coffee)
+- Very Expensive: 36 seconds (approximately the time to reach it by horse)
+- Maximum: 34 seconds (approximately the time to reach it using both coffee and horse)
+
+</details>
+</ul>
+</details>
+
+<details>
+<summary><h3>Flashbang Bundle</h3></summary>
+<ul>
+
+<details>
+<summary><h4>Hint #1</h4></summary>
+
+This bundle is free.
+
+</details>
+
+<details>
+<summary><h4>Hint #2</h4></summary>
+
+This bundle is purchased by clicking the purchase button.
+
+</details>
+
+<details>
+<summary><h4>Hint #3</h4></summary>
+
+The purchase button is not different from any normal currency bundle.
+
+</details>
+
+<details>
+<summary><h4>Hint #4</h4></summary>
+
+The flashbang is only a visual effect
+
+</details>
+
+<details>
+<summary><h4>Solution</h4></summary>
+
+Opening this bundle triggers a flashbang, which is simply a white overlay on top of the screen. The purchase button is still active and in its normal spot, you can simply click on it.
+
+You cannot see the button, so you need to click on it blindly.
+
+</details>
+</ul>
+</details>
+
+<details>
+<summary><h3>Gacha Bundle</h3></summary>
+<ul>
+
+<details>
+<summary><h4>Hint #1</h4></summary>
+
+This bundle offers 3 tiers of lootboxes
+
+</details>
+
+<details>
+<summary><h4>Hint #2</h4></summary>
+
+Each lootbox you purchase contains a random reward
+
+</details>
+
+<details>
+<summary><h4>Hint #3</h4></summary>
+
+You can purchase unlimited lootboxes, as long as you have the funds.
+
+</details>
+
+<details>
+<summary><h4>Hint #4</h4></summary>
+
+One of the random rewards is the completion of the bundle.
+
+</details>
+
+<details>
+<summary><h4>Solution</h4></summary>
+
+Mathematically, every tier of lootbox has the same expected spent amount before you manage to complete the bundle. The difference is in variance, and also the quality of items you'll get when you don't get the bundle completion.
+
+The math behind the lootboxes is based on a 10000g money bundle, which scales with [Bundle Price](./../Yaml%20Settings/bundle_price.md).
+
+The chance of winning the bundle completion is calculated per dollar spent. It is a very low chance per dollar, that approximates to expecting you to spend 1.5x the price that your [Bundle Price](./../Yaml%20Settings/bundle_price.md) rolled. So for example, on default prices, the Bundle is a 10000g one, so the average player will spend 15000g before getting the bundle completion.
+
+The higher tier of lootbox you open, the higher the variance, but you get better items for every failure.
+
+</details>
+</ul>
+</details>
+
+<details>
+<summary><h3>Hibernation Bundle</h3></summary>
+<ul>
+
+<details>
+<summary><h4>Hint #1</h4></summary>
+
+This bundle requires you to sleep a lot
+
+</details>
+
+<details>
+<summary><h4>Hint #2</h4></summary>
+
+The hibernation duration scales with [Bundle Price](./../Yaml%20Settings/bundle_price.md)
+
+</details>
+
+<details>
+<summary><h4>Hint #3</h4></summary>
+
+After looking at the bundle, your next sleep will be a little bit different.
+
+</details>
+
+<details>
+<summary><h4>Hint #4</h4></summary>
+
+You can complete this bundle using MultiSleep.
+
+</details>
+
+<details>
+<summary><h4>Solution</h4></summary>
+
+The bundle requires you to sleep 60 days in a row, scaling with [Bundle Price](./../Yaml%20Settings/bundle_price.md), so it ranges from 6 to 240 days.
+
+On days where you looked a the bundle, a new option will appear in the `MultiSleep Until...?` menu called `Hibernate`. If you press it, it'll sleep for as long as you need to complete the bundle.
+
+On prices lower than `Maximum`, you can also just manually input a multisleep value, and if it is high enough, it will also complete the bundle.
+
+</details>
+</ul>
+</details>
+
+<details>
+<summary><h3>Hint Bundle</h3></summary>
+<ul>
+
+<details>
+<summary><h4>Hint #1</h4></summary>
+
+You need a hint for the hint bundle?
+
+</details>
+
+<details>
+<summary><h4>Hint #2</h4></summary>
+
+You need a hint for the hint bundle.
+
+</details>
+
+<details>
+<summary><h4>Hint #3</h4></summary>
+
+The bundle is a location.
+
+</details>
+
+<details>
+<summary><h4>Hint #4</h4></summary>
+
+This bundle does not scout itself.
+
+</details>
+
+<details>
+<summary><h4>Hint #5</h4></summary>
+
+You should learn what the bundle location contains, to send it
+
+</details>
+
+<details>
+<summary><h4>Solution</h4></summary>
+
+The bundle requires you to hint it manually, since it doesn't scout itself.
+
+To do so, you must hint the location of the bundle. As a client, you can do this doing `!hint_location Hint Bundle`. The host can also hint it for you using the server commands, for free.
+
+The bundle can also be hinted by another player, if they happen to hint the item that is on it. But this is less predictable and therefore not the main solution.
+
+You need to look at the bundle, by opening its menu, after it has been hinted from any source, for it to get completed.
+
+</details>
+</ul>
+</details>
+
+<details>
+<summary><h3>Honeywell Bundle</h3></summary>
+<ul>
+
+<details>
+<summary><h4>Hint #1</h4></summary>
+
+This bundle is very literal.
+
+</details>
+
+<details>
+<summary><h4>Hint #2</h4></summary>
+
+The well is very polite
+
+</details>
+
+<details>
+<summary><h4>Solution</h4></summary>
+
+Construct a well, then throw Honey in it.
+
+</details>
+
+<details>
+<summary><h4>Bonus Information</h4></summary>
+
+Bonus: Since this bundle is based on the content creator [Honeywell](https://www.youtube.com/@Honeywell.), if Honeywell is playing in your multiworld, the honey will get gifted to her.
+
+Honeywell also provided the voice line.
+
+</details>
+
+</details>
+</ul>
+</details>
+
+<details>
+<summary><h3>IKEA Bundle</h3></summary>
+<ul>
+
+<details>
+<summary><h4>Hint #1</h4></summary>
+
+IKEA is a store that sells furniture
+
+</details>
+
+<details>
+<summary><h4>Hint #2</h4></summary>
+
+IKEA is known for selling the furniture in pieces and the user must then build it on their own.
+
+</details>
+
+<details>
+<summary><h4>Hint #3</h4></summary>
+
+The item that the bundle requests can be crafted
+
+</details>
+
+<details>
+<summary><h4>Solution</h4></summary>
+
+You must donate the ingredients to craft the item that shows up in the bundle, rather than the item itself.
+
+</details>
+</ul>
+</details>
+
+<details>
+<summary><h3>Loser Club Bundle</h3></summary>
+<ul>
+
+<details>
+<summary><h4>Hint #1</h4></summary>
+
+This bundle is based on a memeable moment during a stream of [atwentysomethingloser](https://www.twitch.tv/atwentysomethingloser) where she said out loud that she needed to find a Tuna in the trash to save the day, then immediately opened a trash can and found one. She then yelled out loud "A TUNA?!?" leading to many memes.
+
+</details>
+
+<details>
+<summary><h4>Hint #2</h4></summary>
+
+The bundle is actually more flexible than you'd think based on the name
+
+</details>
+
+<details>
+<summary><h4>Hint #3</h4></summary>
+
+You don't need a tuna specifically, any fish will do
+
+</details>
+
+<details>
+<summary><h4>Solution</h4></summary>
+
+You must donate any fish that you found in a trash can specifically.
+
+</details>
+</ul>
+</details>
+
+<details>
+<summary><h3>Mermaid Bundle</h3></summary>
+<ul>
+
+<details>
+<summary><h4>Hint #1</h4></summary>
+
+The items are not the only mermaid-themed thing in this bundle
+
+</details>
+
+<details>
+<summary><h4>Hint #2</h4></summary>
+
+This bundle always requests exactly 5 items
+
+</details>
+
+<details>
+<summary><h4>Hint #3</h4></summary>
+
+The order in which you donate the items matters
+
+</details>
+
+<details>
+<summary><h4>Hint #4</h4></summary>
+
+In stardew, mermaids are typically associated to a specific song that has 5 notes
+
+</details>
+
+<details>
+<summary><h4>Solution</h4></summary>
+
+You must donate the items in the order [1-5-4-2-3] (left to right) to play the mermaid song.
+
+</details>
+</ul>
+</details>
+
+<details>
+<summary><h3>NFT Bundle</h3></summary>
+<ul>
+
+<details>
+<summary><h4>Hint #1</h4></summary>
+
+This bundle's icon represents an NFT
+
+</details>
+
+<details>
+<summary><h4>Hint #2</h4></summary>
+
+NFTs are designed to be "owned" and cannot be stolen. They have a whole market of sell/buy based on speculation
+
+</details>
+
+<details>
+<summary><h4>Hint #3</h4></summary>
+
+The internet quickly came up with a meme related to NFTs, notably an easy way for random people to "steal" them.
+
+</details>
+
+<details>
+<summary><h4>Hint #4</h4></summary>
+
+You must steal the NFT to complete the bundle
+
+</details>
+
+<details>
+<summary><h4>Solution</h4></summary>
+
+You can complete the bundle by taking a screenshot of the bundle, successfully "stealing" the image.
+
+There are multiple ways to take screenshots, that vary depending on your device. But the most common ones are the `F12` key (from Steam), and the `Prt Scrn` key (from Windows).
+
+</details>
+</ul>
+</details>
+
 - **Permit A38 Bundle**
 - **Pollution Bundle**
 - **Pomnut Bundle**
