@@ -228,6 +228,9 @@ namespace StardewArchipelago.Locations.Jojapocalypse
                 return true;
             }
 
+            var festivalDates = DataLoader.Festivals_FestivalDates(Game1.content);
+            var festivalNames = festivalDates.ToDictionary(x => x.Value, x => x.Key);
+
             foreach (var (festivalIdentifier, locations) in FestivalLocationNames.LocationsByFestival)
             {
                 if (!locations.Contains(location.Name))
@@ -236,6 +239,14 @@ namespace StardewArchipelago.Locations.Jojapocalypse
                 }
 
                 var season = festivalIdentifier.Split(" ").First();
+                if (festivalNames.ContainsKey(festivalIdentifier))
+                {
+                    var festivalDateKey = festivalNames[festivalIdentifier];
+                    var numbers = "0123456789".ToCharArray();
+                    var indexSplit = festivalDateKey.IndexOfAny(numbers);
+                    season = festivalDateKey.Substring(0, indexSplit);
+                }
+
                 return SeasonsRandomizer.GetUnlockedSeasons().Contains(season);
             }
 

@@ -314,7 +314,7 @@ namespace StardewArchipelago.GameModifications.Tooltips
         private static IEnumerable<string> GetMissingFestivalChecks(int day)
         {
             var season = Game1.currentSeason;
-            var festivalIdentifier = FestivalLocationNames.FestivalIdentifier(Game1.season, day);
+            var festivalIdentifier = FestivalLocationNames.GetFestivalIdentifier(Game1.season, day);
 
             if (!FestivalLocationNames.LocationsByFestival.ContainsKey(festivalIdentifier))
             {

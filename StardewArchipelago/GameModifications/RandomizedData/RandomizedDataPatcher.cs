@@ -7,6 +7,8 @@ using StardewArchipelago.Stardew;
 using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Locations;
+using StardewValley.Menus;
+using StardewValley.Mods;
 
 namespace StardewArchipelago.GameModifications.RandomizedData
 {
@@ -20,6 +22,7 @@ namespace StardewArchipelago.GameModifications.RandomizedData
         private readonly StardewItemManager _stardewItemManager;
         private readonly CropDataModifier _cropDataModifier;
         private readonly FishDataModifier _fishDataModifier;
+        private readonly FestivalDataModifier _festivalDataModifier;
         private readonly ObjectDataModifier _objectDataModifier;
 
         public RandomizedDataPatcher(LogHandler logger, IModHelper modHelper, Harmony harmony, StardewArchipelagoClient archipelago, StardewItemManager stardewItemManager)
@@ -32,6 +35,7 @@ namespace StardewArchipelago.GameModifications.RandomizedData
             _stardewItemManager = stardewItemManager;
             _cropDataModifier = new CropDataModifier(_logger, _helper, _archipelago, _stardewItemManager, _dataRandomization);
             _fishDataModifier = new FishDataModifier(_logger, _helper, _archipelago, _stardewItemManager, _dataRandomization);
+            _festivalDataModifier = new FestivalDataModifier(_logger, _helper, _archipelago, _stardewItemManager, _dataRandomization);
             _objectDataModifier = new ObjectDataModifier(_logger, _helper, _archipelago, _stardewItemManager, _dataRandomization);
             RandomizedFishDataInjections.Initialize(_logger, _helper, _archipelago, _stardewItemManager, _dataRandomization);
         }
@@ -52,15 +56,74 @@ namespace StardewArchipelago.GameModifications.RandomizedData
                 original: AccessTools.Method(typeof(MineShaft), nameof(MineShaft.getFish)),
                 postfix: new HarmonyMethod(typeof(RandomizedFishDataInjections), nameof(RandomizedFishDataInjections.GetFish_CorrectMinesFish_Postfix))
             );
+
+            PatchRandomizedFestivalsData();
+        }
+
+        private void PatchRandomizedFestivalsData()
+        {
+            if (_dataRandomization.FestivalData == null || _dataRandomization.FestivalData.Count <= 0)
+            {
+                return;
+            }
+
+            _helper.Events.Content.AssetRequested += _festivalDataModifier.OnFestivalDatesDataRequested;
+            //_helper.Events.Content.AssetRequested += _festivalDataModifier.OnPassiveFestivalsDataRequested;
+
+            _helper.GameContent.InvalidateCache("Data/Festivals/FestivalDates");
+            _helper.GameContent.InvalidateCache("Data/PassiveFestivals");
+
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(Event), nameof(Event.tryToLoadFestivalData)),
+                prefix: new HarmonyMethod(typeof(FestivalDataModifier), nameof(FestivalDataModifier.TryToLoadFestivalData_LoadOriginalDataForNewDate_Prefix))
+            );
+
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(Event), nameof(Event.tryToLoadFestival)),
+                prefix: new HarmonyMethod(typeof(FestivalDataModifier), nameof(FestivalDataModifier.TryToLoadFestival_ConsiderModifiedFestivals_Prefix))
+            );
+
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(Utility), nameof(Utility.getStartTimeOfFestival)),
+                prefix: new HarmonyMethod(typeof(FestivalDataModifier), nameof(FestivalDataModifier.GetStartTimeOfFestival_LoadOriginalDataForNewDate_Prefix))
+            );
+
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(Billboard), nameof(Billboard.GetEventsForDay)),
+                prefix: new HarmonyMethod(typeof(FestivalDataModifier), nameof(FestivalDataModifier.GetEventsForDay_ConsiderModifiedFestivals_Prefix))
+            );
+
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(Game1), nameof(Game1.warpFarmer), new []{typeof(LocationRequest), typeof(int), typeof(int), typeof(int) }),
+                prefix: new HarmonyMethod(typeof(FestivalDataModifier), nameof(FestivalDataModifier.WarpFarmer_ConsiderModifiedFestivals_Prefix))
+            );
+
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(ModHooks), nameof(ModHooks.OnGame1_PerformTenMinuteClockUpdate)),
+                prefix: new HarmonyMethod(typeof(FestivalDataModifier), nameof(FestivalDataModifier.OnGame1_PerformTenMinuteClockUpdate_ConsiderModifiedFestivals_Prefix)),
+                postfix: new HarmonyMethod(typeof(FestivalDataModifier), nameof(FestivalDataModifier.OnGame1_PerformTenMinuteClockUpdate_ConsiderModifiedFestivals_Postfix))
+            );
         }
 
         public void CleanRandomizedDataEvents()
         {
             _helper.Events.Content.AssetRequested -= _cropDataModifier.OnCropDataRequested;
+            _helper.Events.Content.AssetRequested -= _cropDataModifier.OnObjectDataRequested;
             _helper.Events.Content.AssetRequested -= _fishDataModifier.OnFishDataRequested;
             _helper.Events.Content.AssetRequested -= _fishDataModifier.OnLocationsDataRequested;
             _helper.Events.Content.AssetRequested -= _objectDataModifier.OnObjectDataRequested;
-            _helper.Events.Content.AssetRequested -= _cropDataModifier.OnObjectDataRequested;
+            CleanRandomizedFestivalDataEvents();
+        }
+
+        private void CleanRandomizedFestivalDataEvents()
+        {
+            if (_dataRandomization.FestivalData == null || _dataRandomization.FestivalData.Count <= 0)
+            {
+                return;
+            }
+
+            _helper.Events.Content.AssetRequested -= _festivalDataModifier.OnFestivalDatesDataRequested;
+            //_helper.Events.Content.AssetRequested -= _festivalDataModifier.OnPassiveFestivalsDataRequested;
         }
     }
 

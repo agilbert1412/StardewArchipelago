@@ -1,30 +1,23 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Microsoft.Xna.Framework.Input.Touch;
 using StardewValley;
 
 namespace StardewArchipelago.Locations.Festival
 {
     public class FestivalLocationNames
     {
-        public static readonly string EGG_FESTIVAL = FestivalIdentifier(Season.Spring, 13);
-        public static readonly string FLOWER_DANCE = FestivalIdentifier(Season.Spring, 24);
-        public static readonly string LUAU = FestivalIdentifier(Season.Summer, 11);
-        public static readonly string MOONLIGHT_JELLIES = FestivalIdentifier(Season.Summer, 28);
-        public static readonly string FAIR = FestivalIdentifier(Season.Fall, 16);
-        public static readonly string SPIRIT_EVE = FestivalIdentifier(Season.Fall, 27);
-        public static readonly string FESTIVAL_OF_ICE = FestivalIdentifier(Season.Winter, 8);
-        public static readonly string FEAST_OF_THE_WINTER_STAR = FestivalIdentifier(Season.Winter, 25);
-        public static readonly string NIGHT_MARKET_15 = FestivalIdentifier(Season.Winter, 15);
-        public static readonly string NIGHT_MARKET_16 = FestivalIdentifier(Season.Winter, 16);
-        public static readonly string NIGHT_MARKET_17 = FestivalIdentifier(Season.Winter, 17);
-        public static readonly string DESERT_FESTIVAL_15 = FestivalIdentifier(Season.Spring, 15);
-        public static readonly string DESERT_FESTIVAL_16 = FestivalIdentifier(Season.Spring, 16);
-        public static readonly string DESERT_FESTIVAL_17 = FestivalIdentifier(Season.Spring, 17);
-        public static readonly string TROUT_DERBY_20 = FestivalIdentifier(Season.Summer, 20);
-        public static readonly string TROUT_DERBY_21 = FestivalIdentifier(Season.Summer, 21);
-        public static readonly string SQUIDFEST_12 = FestivalIdentifier(Season.Winter, 12);
-        public static readonly string SQUIDFEST_13 = FestivalIdentifier(Season.Winter, 13);
+        public static readonly string NIGHT_MARKET_15 = GenerateFestivalIdentifier(Season.Winter, 15);
+        public static readonly string NIGHT_MARKET_16 = GenerateFestivalIdentifier(Season.Winter, 16);
+        public static readonly string NIGHT_MARKET_17 = GenerateFestivalIdentifier(Season.Winter, 17);
+        public static readonly string DESERT_FESTIVAL_15 = GenerateFestivalIdentifier(Season.Spring, 15);
+        public static readonly string DESERT_FESTIVAL_16 = GenerateFestivalIdentifier(Season.Spring, 16);
+        public static readonly string DESERT_FESTIVAL_17 = GenerateFestivalIdentifier(Season.Spring, 17);
+        public static readonly string TROUT_DERBY_20 = GenerateFestivalIdentifier(Season.Summer, 20);
+        public static readonly string TROUT_DERBY_21 = GenerateFestivalIdentifier(Season.Summer, 21);
+        public static readonly string SQUIDFEST_12 = GenerateFestivalIdentifier(Season.Winter, 12);
+        public static readonly string SQUIDFEST_13 = GenerateFestivalIdentifier(Season.Winter, 13);
 
 
         public const string EGG_HUNT = "Egg Hunt Victory";
@@ -145,29 +138,38 @@ namespace StardewArchipelago.Locations.Festival
 
         public static readonly Dictionary<string, string[]> LocationsByFestival = new()
         {
-            { EGG_FESTIVAL, new[] { EGG_HUNT, STRAWBERRY_SEEDS } },
+            { FestivalNames.EGG_FESTIVAL, new[] { EGG_HUNT, STRAWBERRY_SEEDS } },
             { DESERT_FESTIVAL_15, DESERT_FESTIVAL_ALL.Union(new[] { CALICO_STATUE }).ToArray() },
             { DESERT_FESTIVAL_16, DESERT_FESTIVAL_ALL },
             { DESERT_FESTIVAL_17, DESERT_FESTIVAL_ALL.Union(new[] { CALICO_STATUE }).ToArray() },
-            { FLOWER_DANCE, new[] { DANCE_WITH_SOMEONE, RARECROW_5, TUB_O_FLOWERS_RECIPE } },
-            { LUAU, new[] { LUAU_SOUP } },
+            { FestivalNames.FLOWER_DANCE, new[] { DANCE_WITH_SOMEONE, RARECROW_5, TUB_O_FLOWERS_RECIPE } },
+            { FestivalNames.LUAU, new[] { LUAU_SOUP } },
             { TROUT_DERBY_20, TROUT_DERBY_ALL },
             { TROUT_DERBY_21, TROUT_DERBY_ALL },
-            { MOONLIGHT_JELLIES, new[] { WATCH_MOONLIGHT_JELLIES, MOONLIGHT_JELLIES_BANNER, STARPORT_DECAL } },
-            { FAIR, new[] { STRENGTH_GAME, RARECROW_1, FAIR_STARDROP, GRANGE_DISPLAY } },
-            { SPIRIT_EVE, new[] { GOLDEN_PUMPKIN, RARECROW_2, JACK_O_LANTERN_RECIPE } },
-            { FESTIVAL_OF_ICE, new[] { FISHING_COMPETITION, RARECROW_4 } },
+            { FestivalNames.MOONLIGHT_JELLIES, new[] { WATCH_MOONLIGHT_JELLIES, MOONLIGHT_JELLIES_BANNER, STARPORT_DECAL } },
+            { FestivalNames.FAIR, new[] { STRENGTH_GAME, RARECROW_1, FAIR_STARDROP, GRANGE_DISPLAY } },
+            { FestivalNames.SPIRITS_EVE, new[] { GOLDEN_PUMPKIN, RARECROW_2, JACK_O_LANTERN_RECIPE } },
+            { FestivalNames.FESTIVAL_OF_ICE, new[] { FISHING_COMPETITION, RARECROW_4 } },
             { SQUIDFEST_12, SQUIDFEST_ALL.Union(new[] { SQUIDFEST_DAY_1_COPPER, SQUIDFEST_DAY_1_IRON, SQUIDFEST_DAY_1_GOLD, SQUIDFEST_DAY_1_IRIDIUM }).ToArray() },
             { SQUIDFEST_13, SQUIDFEST_ALL.Union(new[] { SQUIDFEST_DAY_2_COPPER, SQUIDFEST_DAY_2_IRON, SQUIDFEST_DAY_2_GOLD, SQUIDFEST_DAY_2_IRIDIUM }).ToArray() },
-            { FEAST_OF_THE_WINTER_STAR, new[] { LEGEND_OF_THE_WINTER_STAR, SECRET_SANTA } },
+            { FestivalNames.WINTER_STAR, new[] { LEGEND_OF_THE_WINTER_STAR, SECRET_SANTA } },
             { NIGHT_MARKET_15, NIGHT_MARKET_ALL.Union(new[] { LUPINI_YEAR_1_PAINTING_1, LUPINI_YEAR_2_PAINTING_1, LUPINI_YEAR_3_PAINTING_1 }).ToArray() },
             { NIGHT_MARKET_16, NIGHT_MARKET_ALL.Union(new[] { LUPINI_YEAR_1_PAINTING_2, LUPINI_YEAR_2_PAINTING_2, LUPINI_YEAR_3_PAINTING_2 }).ToArray() },
             { NIGHT_MARKET_17, NIGHT_MARKET_ALL.Union(new[] { LUPINI_YEAR_1_PAINTING_3, LUPINI_YEAR_2_PAINTING_3, LUPINI_YEAR_3_PAINTING_3 }).ToArray() },
         };
 
-        public static string FestivalIdentifier(Season season, int day)
+        public static string GenerateFestivalIdentifier(Season season, int day)
         {
-            return $"{season} {day}";
+            var key = $"{season.ToString().ToLower()}{day}";
+            return key;
+        }
+
+        public static string GetFestivalIdentifier(Season season, int day)
+        {
+            var festivalDates = DataLoader.Festivals_FestivalDates(Game1.content);
+            var key = GenerateFestivalIdentifier(season, day);
+            festivalDates.TryGetValue(key, out var festivalName);
+            return festivalName ?? key;
         }
     }
 }
