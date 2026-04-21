@@ -704,9 +704,16 @@ The well is very polite
 
 Construct a well, then throw Honey in it.
 
+</details>
+
+<details>
+<summary><h4>Bonus Information</h4></summary>
+
 Bonus: Since this bundle is based on the content creator [Honeywell](https://www.youtube.com/@Honeywell.), if Honeywell is playing in your multiworld, the honey will get gifted to her.
 
 Honeywell also provided the voice line.
+
+</details>
 
 </details>
 </ul>
