@@ -535,10 +535,183 @@ You cannot see the button, so you need to click on it blindly.
 </ul>
 </details>
 
-- **Gacha Bundle**
-- **Hibernation Bundle**
-- **Hint Bundle**
-- **Honeywell Bundle**
+<details>
+<summary><h3>Gacha Bundle</h3></summary>
+<ul>
+
+<details>
+<summary><h4>Hint #1</h4></summary>
+
+This bundle offers 3 tiers of lootboxes
+
+</details>
+
+<details>
+<summary><h4>Hint #2</h4></summary>
+
+Each lootbox you purchase contains a random reward
+
+</details>
+
+<details>
+<summary><h4>Hint #3</h4></summary>
+
+You can purchase unlimited lootboxes, as long as you have the funds.
+
+</details>
+
+<details>
+<summary><h4>Hint #4</h4></summary>
+
+One of the random rewards is the completion of the bundle.
+
+</details>
+
+<details>
+<summary><h4>Solution</h4></summary>
+
+Mathematically, every tier of lootbox has the same expected spent amount before you manage to complete the bundle. The difference is in variance, and also the quality of items you'll get when you don't get the bundle completion.
+
+The math behind the lootboxes is based on a 10000g money bundle, which scales with [Bundle Price](./../Yaml%20Settings/bundle_price.md).
+
+The chance of winning the bundle completion is calculated per dollar spent. It is a very low chance per dollar, that approximates to expecting you to spend 1.5x the price that your [Bundle Price](./../Yaml%20Settings/bundle_price.md) rolled. So for example, on default prices, the Bundle is a 10000g one, so the average player will spend 15000g before getting the bundle completion.
+
+The higher tier of lootbox you open, the higher the variance, but you get better items for every failure.
+
+</details>
+</ul>
+</details>
+
+<details>
+<summary><h3>Hibernation Bundle</h3></summary>
+<ul>
+
+<details>
+<summary><h4>Hint #1</h4></summary>
+
+This bundle requires you to sleep a lot
+
+</details>
+
+<details>
+<summary><h4>Hint #2</h4></summary>
+
+The hibernation duration scales with [Bundle Price](./../Yaml%20Settings/bundle_price.md)
+
+</details>
+
+<details>
+<summary><h4>Hint #3</h4></summary>
+
+After looking at the bundle, your next sleep will be a little bit different.
+
+</details>
+
+<details>
+<summary><h4>Hint #4</h4></summary>
+
+You can complete this bundle using MultiSleep.
+
+</details>
+
+<details>
+<summary><h4>Solution</h4></summary>
+
+The bundle requires you to sleep 60 days in a row, scaling with [Bundle Price](./../Yaml%20Settings/bundle_price.md), so it ranges from 6 to 240 days.
+
+On days where you looked a the bundle, a new option will appear in the `MultiSleep Until...?` menu called `Hibernate`. If you press it, it'll sleep for as long as you need to complete the bundle.
+
+On prices lower than `Maximum`, you can also just manually input a multisleep value, and if it is high enough, it will also complete the bundle.
+
+</details>
+</ul>
+</details>
+
+<details>
+<summary><h3>Hint Bundle</h3></summary>
+<ul>
+
+<details>
+<summary><h4>Hint #1</h4></summary>
+
+You need a hint for the hint bundle?
+
+</details>
+
+<details>
+<summary><h4>Hint #2</h4></summary>
+
+You need a hint for the hint bundle.
+
+</details>
+
+<details>
+<summary><h4>Hint #3</h4></summary>
+
+The bundle is a location.
+
+</details>
+
+<details>
+<summary><h4>Hint #4</h4></summary>
+
+This bundle does not scout itself.
+
+</details>
+
+<details>
+<summary><h4>Hint #5</h4></summary>
+
+You should learn what the bundle location contains, to send it
+
+</details>
+
+<details>
+<summary><h4>Solution</h4></summary>
+
+The bundle requires you to hint it manually, since it doesn't scout itself.
+
+To do so, you must hint the location of the bundle. As a client, you can do this doing `!hint_location Hint Bundle`. The host can also hint it for you using the server commands, for free.
+
+The bundle can also be hinted by another player, if they happen to hint the item that is on it. But this is less predictable and therefore not the main solution.
+
+You need to look at the bundle, by opening its menu, after it has been hinted from any source, for it to get completed.
+
+</details>
+</ul>
+</details>
+
+<details>
+<summary><h3>Honeywell Bundle</h3></summary>
+<ul>
+
+<details>
+<summary><h4>Hint #1</h4></summary>
+
+This bundle is very literal.
+
+</details>
+
+<details>
+<summary><h4>Hint #2</h4></summary>
+
+The well is very polite
+
+</details>
+
+<details>
+<summary><h4>Solution</h4></summary>
+
+Construct a well, then throw Honey in it.
+
+Bonus: Since this bundle is based on the content creator [Honeywell](https://www.youtube.com/@Honeywell.), if Honeywell is playing in your multiworld, the honey will get gifted to her.
+
+Honeywell also provided the voice line.
+
+</details>
+</ul>
+</details>
+
 - **IKEA Bundle**
 - **Loser Club Bundle**
 - **Mermaid Bundle**
