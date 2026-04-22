@@ -714,8 +714,6 @@ Bonus: Since this bundle is based on the content creator [Honeywell](https://www
 Honeywell also provided the voice line.
 
 </details>
-
-</details>
 </ul>
 </details>
 
