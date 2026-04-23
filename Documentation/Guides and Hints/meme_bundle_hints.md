@@ -869,7 +869,74 @@ There are multiple ways to take screenshots, that vary depending on your device.
 </ul>
 </details>
 
-- **Permit A38 Bundle**
+<details>
+<summary><h3>Permit A38 Bundle</h3></summary>
+<ul>
+
+<details>
+<summary><h4>Hint #1</h4></summary>
+
+This Bundle is a reference to the movie "The Twelve Tasks of Asterix"
+
+</details>
+
+<details>
+<summary><h4>Hint #2</h4></summary>
+
+In the movie, the protagonists are tasked with finding "Permit A38", through a series of convoluted forms and unhelpful clerks. They are stuck in bureaucracy.
+
+They eventually get through the task by confusing the employees.
+
+</details>
+
+<details>
+<summary><h4>Hint #3</h4></summary>
+
+When you bring the item the bundle asked you to, it will then ask for something else.
+
+</details>
+
+<details>
+<summary><h4>Hint #4</h4></summary>
+
+The bundle has a list of items, in order, to request.
+
+</details>
+
+<details>
+<summary><h4>Hint #4</h4></summary>
+
+The bundle looks at your inventory, at the time of opening it, to decide what item to request next. It requests the first item of the list that you are not currently carrying.
+
+</details>
+
+<details>
+<summary><h4>Solution</h4></summary>
+
+If you bring the entire list of all items the bundle can request at once, you will be able to donate one of them.
+
+</details>
+
+<details>
+<summary><h4>Alternate Solution Hint</h4></summary>
+
+If you trick the bundle into thinking you are not carrying something, it can request it.
+
+</details>
+
+<details>
+<summary><h4>Alternate Solution</h4></summary>
+
+If you throw an item on the ground at your own feet, there is a small delay before you can pick it back up.
+
+If you open the bundle during this delay, it can request the item that is currently on the ground. Then, the item will get picked up, and you can donate it.
+
+This allows you to complete the bundle using only one item. It is the "Permit A39" Loophole, you confused the bundle and got through the bureaucratic mess.
+
+</details>
+</ul>
+</details>
+
 - **Pollution Bundle**
 - **Pomnut Bundle**
 - **Pool Bundle**
