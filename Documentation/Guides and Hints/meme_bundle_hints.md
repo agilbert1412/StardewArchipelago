@@ -1010,7 +1010,7 @@ The items requested by this bundle represent the 8 balls of 8-ball pool.
 </details>
 
 <details>
-<summary><h4>Hint #12</h4></summary>
+<summary><h4>Hint #2</h4></summary>
 
 In the standard rules of 8-ball pool, one of the balls is special
 
@@ -1041,8 +1041,59 @@ If donated earlier, it will lose you the whole game of pool, and you must start 
 </ul>
 </details>
 
-- ****
-- **Reconnection Bundle**
+<details>
+<summary><h3>Reconnection Bundle</h3></summary>
+<ul>
+
+<details>
+<summary><h4>Hint #1</h4></summary>
+
+This bundle is the evil twin of the Connection Bundle.
+
+</details>
+
+<details>
+<summary><h4>Hint #2</h4></summary>
+
+To complete the Connection Bundle, you had to connect to the Archipelago server.
+
+</details>
+
+<details>
+<summary><h4>Hint #3</h4></summary>
+
+To complete the Reconnection Bundle, you have to reconnect to the Archipelago server.
+
+</details>
+
+<details>
+<summary><h4>Hint #4</h4></summary>
+
+A reconnection is not the same thing as just leaving the game and connecting again.
+
+</details>
+
+<details>
+<summary><h4>Solution</h4></summary>
+
+The StardewArchipelago mod has an auto-reconnect feature, for temporary outages. If you get disconnected, it will try to reconnect periodically. When disconnected, you can force an immediate reconnection attempt by using the command `!!sync`
+
+To complete this bundle, you must lose connection to the server while you are in-game, then successfully reconnect to it either automatically or manually with the `!!sync` command.
+
+There are various ways to accomplish this, depending on how your room is hosted (website, or local) and how you are connected to it.
+
+Common solutions include:
+- Unplugging your router then replugging it
+- Turning off the wi-fi on your device
+- Shutting down the room and starting it back up (make sure it has saved!)
+- Force-pausing the Stardew Process long enough for the socket to die
+
+Be creative!
+
+</details>
+</ul>
+</details>
+
 - **Restraint Bundle**
 - **SMAPI Bundle**
 - **Sacrifice Bundle**
