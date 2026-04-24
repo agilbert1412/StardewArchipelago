@@ -937,9 +937,111 @@ This allows you to complete the bundle using only one item. It is the "Permit A3
 </ul>
 </details>
 
-- **Pollution Bundle**
-- **Pomnut Bundle**
-- **Pool Bundle**
+<details>
+<summary><h3>Pollution Bundle</h3></summary>
+<ul>
+
+<details>
+<summary><h4>Hint #1</h4></summary>
+
+You must pollute using the trash shown in the bundle
+
+</details>
+
+<details>
+<summary><h4>Hint #2</h4></summary>
+
+When this bundle is active, all bodies of water behave similar to a Fish Pond
+
+</details>
+
+<details>
+<summary><h4>Solution</h4></summary>
+
+When facing a body of water, you can click with a trash in your hands to "throw" this trash into it. This will count as pollution for the bundle.
+
+</details>
+</ul>
+</details>
+
+<details>
+<summary><h3>Pomnut Bundle</h3></summary>
+<ul>
+
+<details>
+<summary><h4>Hint #1</h4></summary>
+
+Pomnut is the name of a Stardew horse.
+
+</details>
+
+<details>
+<summary><h4>Hint #2</h4></summary>
+
+Pomnut can help you complete this bundle.
+
+</details>
+
+<details>
+<summary><h4>Hint #3</h4></summary>
+
+Normal horses can be fed carrots to increase their movement speed for the rest of the day.
+
+</details>
+
+<details>
+<summary><h4>Solution</h4></summary>
+
+You can feed all items requested by this bundle to your horse and it will count as a donation.
+
+</details>
+</ul>
+</details>
+
+<details>
+<summary><h3>Pool Bundle</h3></summary>
+<ul>
+
+<details>
+<summary><h4>Hint #1</h4></summary>
+
+The items requested by this bundle represent the 8 balls of 8-ball pool.
+
+</details>
+
+<details>
+<summary><h4>Hint #12</h4></summary>
+
+In the standard rules of 8-ball pool, one of the balls is special
+
+</details>
+
+<details>
+<summary><h4>Hint #3</h4></summary>
+
+Every ball can be shot in a pocket in any order, except that one.
+
+</details>
+
+<details>
+<summary><h4>Hint #4</h4></summary>
+
+You must pocket the black 8-ball **last**, or you lose the whole game.
+
+</details>
+
+<details>
+<summary><h4>Solution</h4></summary>
+
+All the items can be donated in any order, except the stack of 8 black items, which represents the 8-ball. This one must be donated **last**.
+
+If donated earlier, it will lose you the whole game of pool, and you must start over from scratch.
+
+</details>
+</ul>
+</details>
+
+- ****
 - **Reconnection Bundle**
 - **Restraint Bundle**
 - **SMAPI Bundle**
