@@ -1094,14 +1094,309 @@ Be creative!
 </ul>
 </details>
 
-- **Restraint Bundle**
-- **SMAPI Bundle**
-- **Sacrifice Bundle**
-- **Schrodinger's Bundle**
-- **Sisyphus Bundle**
-- **Square Hole Bundle**
-- **The Floor Is Lava Bundle**
-- **TheAlGoreRhythm Bundle**
+<details>
+<summary><h3>Restraint Bundle</h3></summary>
+<ul>
+
+<details>
+<summary><h4>Hint #1</h4></summary>
+
+You don't need it.
+
+</details>
+
+<details>
+<summary><h4>Hint #2</h4></summary>
+
+You can look, but you can't touch.
+
+</details>
+
+<details>
+<summary><h4>Hint #3</h4></summary>
+
+It's not about waiting. It's about not touching.
+
+</details>
+
+<details>
+<summary><h4>Hint #4</h4></summary>
+
+Go on with your day. It's fine.
+
+</details>
+
+<details>
+<summary><h4>Solution</h4></summary>
+
+Look at the bundle, don't press the button. Walk out, go about your day, eventually go to sleep. If you looked at the bundle and didn't touch it, by the end of the day, it'll complete itself.
+
+</details>
+</ul>
+</details>
+
+<details>
+<summary><h3>SMAPI Bundle</h3></summary>
+<ul>
+
+<details>
+<summary><h4>Hint #1</h4></summary>
+
+The items requested by this bundle all exist in the vanilla Stardew Valley game.
+
+</details>
+
+<details>
+<summary><h4>Hint #2</h4></summary>
+
+The items requested by this bundle are all unobtainable through in-game means.
+
+</details>
+
+<details>
+<summary><h4>Hint #3</h4></summary>
+
+You will need to use unconventional methods to obtain these items.
+
+</details>
+
+<details>
+<summary><h4>Hint #4</h4></summary>
+
+There are many different ways to obtain these items.
+
+</details>
+
+<details>
+<summary><h4>Solutions</h4></summary>
+
+- Use [SMAPI Debug Commands](https://stardewvalleywiki.com/Modding:Console_commands#General_item_search_and_spawning) to spawn the items. For example, `in [itemName]` and `i [itemId]` work well.
+- Use the [Item ID Spawning Glitch](https://www.reddit.com/r/StardewValley/comments/1bm5kur/new_marnie_pets_name_exploit_full_item_list_ids/).
+- Use an external mod, such as [CBJ Item Spawner](https://www.nexusmods.com/stardewvalley/mods/93) to spawn the items.
+- Edit your save file directly to make the items exist.
+
+</details>
+</ul>
+</details>
+
+<details>
+<summary><h3>Sacrifice Bundle</h3></summary>
+<ul>
+
+<details>
+<summary><h4>Hint #1</h4></summary>
+
+This bundle requires a sacrifice.
+
+</details>
+
+<details>
+<summary><h4>Hint #2</h4></summary>
+
+This bundle requires a goat.
+
+</details>
+
+<details>
+<summary><h4>Hint #3</h4></summary>
+
+A sacrifice is different from an assisted suicide. Consent (or lack of) is key.
+
+</details>
+
+<details>
+<summary><h4>Hint #4</h4></summary>
+
+The goat had so much to live for.
+
+</details>
+
+<details>
+<summary><h4>Solution</h4></summary>
+
+The goat must be an adult, and must have been pet today as a goodbye. Then, you can sacrifice the goat.
+
+</details>
+</ul>
+</details>
+
+<details>
+<summary><h3>Schrodinger's Bundle</h3></summary>
+<ul>
+
+<details>
+<summary><h4>Hint #1</h4></summary>
+
+This bundle is in a superposition state of requesting two items
+
+</details>
+
+<details>
+<summary><h4>Hint #2</h4></summary>
+
+You cannot predict which item it will collapse to, when observed.
+
+</details>
+
+<details>
+<summary><h4>Solution</h4></summary>
+
+You can simply bring both items, and you're guaranteed the ability to donate at least one. Or just bring one item several times and hope to get the correct roll.
+
+</details>
+</ul>
+</details>
+
+<details>
+<summary><h3>Sisyphus Bundle</h3></summary>
+<ul>
+
+<details>
+<summary><h4>Hint #1</h4></summary>
+
+This bundle only requires one stone.
+
+</details>
+
+<details>
+<summary><h4>Hint #2</h4></summary>
+
+Your task is to donate the stone. But every time you do, it falls back down.
+
+</details>
+
+<details>
+<summary><h4>Hint #3</h4></summary>
+
+The original design for this bundle was unending, but sadly, it had to be changed to comply with core standards.
+
+</details>
+
+<details>
+<summary><h4>Hint #4</h4></summary>
+
+You must imagine yourself happy.
+
+</details>
+
+<details>
+<summary><h4>Solution</h4></summary>
+
+After donating the stone 12 times, the bundle will complete. The stone falls off every time you leave and re-enter the community center.
+
+</details>
+</ul>
+</details>
+
+<details>
+<summary><h3>Square Hole Bundle</h3></summary>
+<ul>
+
+<details>
+<summary><h4>Hint #1</h4></summary>
+
+It goes in the Square Hole
+
+</details>
+
+<details>
+<summary><h4>Hint #2</h4></summary>
+
+https://www.youtube.com/watch?v=6pDH66X3ClA
+
+</details>
+
+<details>
+<summary><h4>Solution</h4></summary>
+
+You must donate every item of this bundle into the square slot.
+
+</details>
+</ul>
+</details>
+
+<details>
+<summary><h3>The Floor Is Lava Bundle</h3></summary>
+<ul>
+
+<details>
+<summary><h4>Hint #1</h4></summary>
+
+This bundle requires you to play the children's game of the same name.
+
+</details>
+
+<details>
+<summary><h4>Hint #2</h4></summary>
+
+The game involves moving across an area without touching the floor.
+
+</details>
+
+<details>
+<summary><h4>Hint #3</h4></summary>
+
+Every Morning, you get one chance at playing. If you touch the lava, your feet will briefly catch fire, indicating you have lost the game today.
+
+</details>
+
+<details>
+<summary><h4>Hint #4</h4></summary>
+
+There are multiple ways to move without touching the lava. Not all methods work in all areas. You might need to combine them.
+
+</details>
+
+<details>
+<summary><h4>Solution</h4></summary>
+
+You are safe from lava when:
+- Sitting on furniture
+- Moving on a horse
+- Being immobile
+- Warping through a door
+- Stepping on a path
+- Stepping on a bridge
+
+If you reach the bundle without touching lava, you can click the button to complete it.
+
+</details>
+</ul>
+</details>
+
+<details>
+<summary><h3>TheAlGoreRhythm Bundle</h3></summary>
+<ul>
+
+<details>
+<summary><h4>Hint #1</h4></summary>
+
+These items are all stackable.
+
+</details>
+
+<details>
+<summary><h4>Hint #2</h4></summary>
+
+You do **not** need to stack 999 of these items.
+
+</details>
+
+<details>
+<summary><h4>Hint #3</h4></summary>
+
+Once you bring an item, TheAlGoreRhythm will teach you that this item is stackable.
+
+</details>
+
+<details>
+<summary><h4>Solution</h4></summary>
+
+You simply need a stack of 2 of the item, to donate it to the bundle, just to show it is stackable.
+
+</details>
+</ul>
+</details>
 
 </details>
 
