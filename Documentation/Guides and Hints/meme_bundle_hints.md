@@ -714,8 +714,6 @@ Bonus: Since this bundle is based on the content creator [Honeywell](https://www
 Honeywell also provided the voice line.
 
 </details>
-
-</details>
 </ul>
 </details>
 
@@ -871,19 +869,534 @@ There are multiple ways to take screenshots, that vary depending on your device.
 </ul>
 </details>
 
-- **Permit A38 Bundle**
-- **Pollution Bundle**
-- **Pomnut Bundle**
-- **Pool Bundle**
-- **Reconnection Bundle**
-- **Restraint Bundle**
-- **SMAPI Bundle**
-- **Sacrifice Bundle**
-- **Schrodinger's Bundle**
-- **Sisyphus Bundle**
-- **Square Hole Bundle**
-- **The Floor Is Lava Bundle**
-- **TheAlGoreRhythm Bundle**
+<details>
+<summary><h3>Permit A38 Bundle</h3></summary>
+<ul>
+
+<details>
+<summary><h4>Hint #1</h4></summary>
+
+This Bundle is a reference to the movie "The Twelve Tasks of Asterix"
+
+</details>
+
+<details>
+<summary><h4>Hint #2</h4></summary>
+
+In the movie, the protagonists are tasked with finding "Permit A38", through a series of convoluted forms and unhelpful clerks. They are stuck in bureaucracy.
+
+They eventually get through the task by confusing the employees.
+
+</details>
+
+<details>
+<summary><h4>Hint #3</h4></summary>
+
+When you bring the item the bundle asked you to, it will then ask for something else.
+
+</details>
+
+<details>
+<summary><h4>Hint #4</h4></summary>
+
+The bundle has a list of items, in order, to request.
+
+</details>
+
+<details>
+<summary><h4>Hint #4</h4></summary>
+
+The bundle looks at your inventory, at the time of opening it, to decide what item to request next. It requests the first item of the list that you are not currently carrying.
+
+</details>
+
+<details>
+<summary><h4>Solution</h4></summary>
+
+If you bring the entire list of all items the bundle can request at once, you will be able to donate one of them.
+
+</details>
+
+<details>
+<summary><h4>Alternate Solution Hint</h4></summary>
+
+If you trick the bundle into thinking you are not carrying something, it can request it.
+
+</details>
+
+<details>
+<summary><h4>Alternate Solution</h4></summary>
+
+If you throw an item on the ground at your own feet, there is a small delay before you can pick it back up.
+
+If you open the bundle during this delay, it can request the item that is currently on the ground. Then, the item will get picked up, and you can donate it.
+
+This allows you to complete the bundle using only one item. It is the "Permit A39" Loophole, you confused the bundle and got through the bureaucratic mess.
+
+</details>
+</ul>
+</details>
+
+<details>
+<summary><h3>Pollution Bundle</h3></summary>
+<ul>
+
+<details>
+<summary><h4>Hint #1</h4></summary>
+
+You must pollute using the trash shown in the bundle
+
+</details>
+
+<details>
+<summary><h4>Hint #2</h4></summary>
+
+When this bundle is active, all bodies of water behave similar to a Fish Pond
+
+</details>
+
+<details>
+<summary><h4>Solution</h4></summary>
+
+When facing a body of water, you can click with a trash in your hands to "throw" this trash into it. This will count as pollution for the bundle.
+
+</details>
+</ul>
+</details>
+
+<details>
+<summary><h3>Pomnut Bundle</h3></summary>
+<ul>
+
+<details>
+<summary><h4>Hint #1</h4></summary>
+
+Pomnut is the name of a Stardew horse.
+
+</details>
+
+<details>
+<summary><h4>Hint #2</h4></summary>
+
+Pomnut can help you complete this bundle.
+
+</details>
+
+<details>
+<summary><h4>Hint #3</h4></summary>
+
+Normal horses can be fed carrots to increase their movement speed for the rest of the day.
+
+</details>
+
+<details>
+<summary><h4>Solution</h4></summary>
+
+You can feed all items requested by this bundle to your horse and it will count as a donation.
+
+</details>
+</ul>
+</details>
+
+<details>
+<summary><h3>Pool Bundle</h3></summary>
+<ul>
+
+<details>
+<summary><h4>Hint #1</h4></summary>
+
+The items requested by this bundle represent the 8 balls of 8-ball pool.
+
+</details>
+
+<details>
+<summary><h4>Hint #2</h4></summary>
+
+In the standard rules of 8-ball pool, one of the balls is special
+
+</details>
+
+<details>
+<summary><h4>Hint #3</h4></summary>
+
+Every ball can be shot in a pocket in any order, except that one.
+
+</details>
+
+<details>
+<summary><h4>Hint #4</h4></summary>
+
+You must pocket the black 8-ball **last**, or you lose the whole game.
+
+</details>
+
+<details>
+<summary><h4>Solution</h4></summary>
+
+All the items can be donated in any order, except the stack of 8 black items, which represents the 8-ball. This one must be donated **last**.
+
+If donated earlier, it will lose you the whole game of pool, and you must start over from scratch.
+
+</details>
+</ul>
+</details>
+
+<details>
+<summary><h3>Reconnection Bundle</h3></summary>
+<ul>
+
+<details>
+<summary><h4>Hint #1</h4></summary>
+
+This bundle is the evil twin of the Connection Bundle.
+
+</details>
+
+<details>
+<summary><h4>Hint #2</h4></summary>
+
+To complete the Connection Bundle, you had to connect to the Archipelago server.
+
+</details>
+
+<details>
+<summary><h4>Hint #3</h4></summary>
+
+To complete the Reconnection Bundle, you have to reconnect to the Archipelago server.
+
+</details>
+
+<details>
+<summary><h4>Hint #4</h4></summary>
+
+A reconnection is not the same thing as just leaving the game and connecting again.
+
+</details>
+
+<details>
+<summary><h4>Solution</h4></summary>
+
+The StardewArchipelago mod has an auto-reconnect feature, for temporary outages. If you get disconnected, it will try to reconnect periodically. When disconnected, you can force an immediate reconnection attempt by using the command `!!sync`
+
+To complete this bundle, you must lose connection to the server while you are in-game, then successfully reconnect to it either automatically or manually with the `!!sync` command.
+
+There are various ways to accomplish this, depending on how your room is hosted (website, or local) and how you are connected to it.
+
+Common solutions include:
+- Unplugging your router then replugging it
+- Turning off the wi-fi on your device
+- Shutting down the room and starting it back up (make sure it has saved!)
+- Force-pausing the Stardew Process long enough for the socket to die
+
+Be creative!
+
+</details>
+</ul>
+</details>
+
+<details>
+<summary><h3>Restraint Bundle</h3></summary>
+<ul>
+
+<details>
+<summary><h4>Hint #1</h4></summary>
+
+You don't need it.
+
+</details>
+
+<details>
+<summary><h4>Hint #2</h4></summary>
+
+You can look, but you can't touch.
+
+</details>
+
+<details>
+<summary><h4>Hint #3</h4></summary>
+
+It's not about waiting. It's about not touching.
+
+</details>
+
+<details>
+<summary><h4>Hint #4</h4></summary>
+
+Go on with your day. It's fine.
+
+</details>
+
+<details>
+<summary><h4>Solution</h4></summary>
+
+Look at the bundle, don't press the button. Walk out, go about your day, eventually go to sleep. If you looked at the bundle and didn't touch it, by the end of the day, it'll complete itself.
+
+</details>
+</ul>
+</details>
+
+<details>
+<summary><h3>SMAPI Bundle</h3></summary>
+<ul>
+
+<details>
+<summary><h4>Hint #1</h4></summary>
+
+The items requested by this bundle all exist in the vanilla Stardew Valley game.
+
+</details>
+
+<details>
+<summary><h4>Hint #2</h4></summary>
+
+The items requested by this bundle are all unobtainable through in-game means.
+
+</details>
+
+<details>
+<summary><h4>Hint #3</h4></summary>
+
+You will need to use unconventional methods to obtain these items.
+
+</details>
+
+<details>
+<summary><h4>Hint #4</h4></summary>
+
+There are many different ways to obtain these items.
+
+</details>
+
+<details>
+<summary><h4>Solutions</h4></summary>
+
+- Use [SMAPI Debug Commands](https://stardewvalleywiki.com/Modding:Console_commands#General_item_search_and_spawning) to spawn the items. For example, `in [itemName]` and `i [itemId]` work well.
+- Use the [Item ID Spawning Glitch](https://www.reddit.com/r/StardewValley/comments/1bm5kur/new_marnie_pets_name_exploit_full_item_list_ids/).
+- Use an external mod, such as [CBJ Item Spawner](https://www.nexusmods.com/stardewvalley/mods/93) to spawn the items.
+- Edit your save file directly to make the items exist.
+
+</details>
+</ul>
+</details>
+
+<details>
+<summary><h3>Sacrifice Bundle</h3></summary>
+<ul>
+
+<details>
+<summary><h4>Hint #1</h4></summary>
+
+This bundle requires a sacrifice.
+
+</details>
+
+<details>
+<summary><h4>Hint #2</h4></summary>
+
+This bundle requires a goat.
+
+</details>
+
+<details>
+<summary><h4>Hint #3</h4></summary>
+
+A sacrifice is different from an assisted suicide. Consent (or lack of) is key.
+
+</details>
+
+<details>
+<summary><h4>Hint #4</h4></summary>
+
+The goat had so much to live for.
+
+</details>
+
+<details>
+<summary><h4>Solution</h4></summary>
+
+The goat must be an adult, and must have been pet today as a goodbye. Then, you can sacrifice the goat.
+
+</details>
+</ul>
+</details>
+
+<details>
+<summary><h3>Schrodinger's Bundle</h3></summary>
+<ul>
+
+<details>
+<summary><h4>Hint #1</h4></summary>
+
+This bundle is in a superposition state of requesting two items
+
+</details>
+
+<details>
+<summary><h4>Hint #2</h4></summary>
+
+You cannot predict which item it will collapse to, when observed.
+
+</details>
+
+<details>
+<summary><h4>Solution</h4></summary>
+
+You can simply bring both items, and you're guaranteed the ability to donate at least one. Or just bring one item several times and hope to get the correct roll.
+
+</details>
+</ul>
+</details>
+
+<details>
+<summary><h3>Sisyphus Bundle</h3></summary>
+<ul>
+
+<details>
+<summary><h4>Hint #1</h4></summary>
+
+This bundle only requires one stone.
+
+</details>
+
+<details>
+<summary><h4>Hint #2</h4></summary>
+
+Your task is to donate the stone. But every time you do, it falls back down.
+
+</details>
+
+<details>
+<summary><h4>Hint #3</h4></summary>
+
+You must imagine yourself happy.
+
+</details>
+
+<details>
+<summary><h4>Hint #4</h4></summary>
+
+The original design for this bundle was unending, but sadly, it had to be changed to comply with core standards.
+
+</details>
+
+<details>
+<summary><h4>Solution</h4></summary>
+
+After donating the stone 12 times, the bundle will complete. The stone falls off every time you leave and re-enter the community center.
+
+</details>
+</ul>
+</details>
+
+<details>
+<summary><h3>Square Hole Bundle</h3></summary>
+<ul>
+
+<details>
+<summary><h4>Hint #1</h4></summary>
+
+It goes in the Square Hole
+
+</details>
+
+<details>
+<summary><h4>Hint #2</h4></summary>
+
+https://www.youtube.com/watch?v=6pDH66X3ClA
+
+</details>
+
+<details>
+<summary><h4>Solution</h4></summary>
+
+You must donate every item of this bundle into the square slot.
+
+</details>
+</ul>
+</details>
+
+<details>
+<summary><h3>The Floor Is Lava Bundle</h3></summary>
+<ul>
+
+<details>
+<summary><h4>Hint #1</h4></summary>
+
+This bundle requires you to play the children's game of the same name.
+
+</details>
+
+<details>
+<summary><h4>Hint #2</h4></summary>
+
+The game involves moving across an area without touching the floor.
+
+</details>
+
+<details>
+<summary><h4>Hint #3</h4></summary>
+
+Every Morning, you get one chance at playing. If you touch the lava, your feet will briefly catch fire, indicating you have lost the game today.
+
+</details>
+
+<details>
+<summary><h4>Hint #4</h4></summary>
+
+There are multiple ways to move without touching the lava. Not all methods work in all areas. You might need to combine them.
+
+</details>
+
+<details>
+<summary><h4>Solution</h4></summary>
+
+You are safe from lava when:
+- Sitting on furniture
+- Moving on a horse
+- Being immobile
+- Warping through a door
+- Stepping on a path
+- Stepping on a bridge
+
+If you reach the bundle without touching lava, you can click the button to complete it.
+
+</details>
+</ul>
+</details>
+
+<details>
+<summary><h3>TheAlGoreRhythm Bundle</h3></summary>
+<ul>
+
+<details>
+<summary><h4>Hint #1</h4></summary>
+
+These items are all stackable.
+
+</details>
+
+<details>
+<summary><h4>Hint #2</h4></summary>
+
+You do **not** need to stack 999 of these items.
+
+</details>
+
+<details>
+<summary><h4>Hint #3</h4></summary>
+
+Once you bring an item, TheAlGoreRhythm will teach you that this item is stackable.
+
+</details>
+
+<details>
+<summary><h4>Solution</h4></summary>
+
+You simply need a stack of 2 of the item, to donate it to the bundle, just to show it is stackable.
+
+</details>
+</ul>
+</details>
 
 </details>
 
