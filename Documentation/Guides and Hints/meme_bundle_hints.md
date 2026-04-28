@@ -1268,14 +1268,14 @@ Your task is to donate the stone. But every time you do, it falls back down.
 <details>
 <summary><h4>Hint #3</h4></summary>
 
-The original design for this bundle was unending, but sadly, it had to be changed to comply with core standards.
+You must imagine yourself happy.
 
 </details>
 
 <details>
 <summary><h4>Hint #4</h4></summary>
 
-You must imagine yourself happy.
+The original design for this bundle was unending, but sadly, it had to be changed to comply with core standards.
 
 </details>
 
