@@ -4,7 +4,7 @@
 
 This document serves as a table of content for advanced documentation of every yaml setting available in Stardew Valley Archipelago.
 You can access the [Options Page](https://archipelago.gg/games/Stardew%20Valley/player-options) or the [Advanced Options Page](https://archipelago.gg/games/Stardew%20Valley/weighted-options) to generate a yaml, or use the [Archipelago Launcher](https://github.com/ArchipelagoMW/Archipelago/releases) to generate a template to edit manually.
-Options page are convenient, but not perfect. The space for descriptions is limited. The following pages give more detailed information about every possible setting.
+Options page are convenient, but not perfect. The space for descriptions is limited. The following guides give more detailed information about every possible setting.
 
 This document is a work in progress. Nodes that are ~~struck through~~ do not exist yet. We accept contributions!
 
