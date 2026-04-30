@@ -191,6 +191,34 @@ The stardrops are:
 - This goal is **not** *Focused*. The stardrops, shuffled or not, will require navigating many different tasks. This goal is essentially a Macguffin Hunt where the goal is to receive several specific items, and you cannot focus on them specifically.
 - This goal is **not** *Coopable*. The energy bar must reach 508 on a single save file to trigger the goal.
 
+### Mad Hatter
+
+#### Wear Every Hat
+
+You must wear every hat that you have enabled through ~~[Hatsanity](./hatsanity.md)~~.
+
+The game doesn't have internal tracking for hats worn, and even if it did, forcing an unsuspecting player to wear them all would be a goal worse than Perfection.
+
+As a result, If you disabled ~~[Hatsanity](./hatsanity.md)~~ but chose the Mad Hatter goal, your ~~[Hatsanity](./hatsanity.md)~~ setting will be force-changed to `[Easy, Tailoring]`, which is a reasonable compromise.
+
+- This goal is *Adaptable*. Its difficulty will greatly vary depending on ~~[Hatsanity](./hatsanity.md)~~
+- This goal is **not** *Focused*. The hats come as rewards from pretty much every facet of the game. It is possible to make it a little bit focused, if one picks only Tailoring hats for example, but it still isn't very focused.
+- This goal is *Coopable*. The goal triggers when all ~~[Hatsanity](./hatsanity.md)~~ locations are checked, regardless of who checked them.
+
+### Ultimate Foodie
+
+#### Eat Everything
+
+You must eat and drink every item you have enabled through ~~[Eatsanity](./eatsanity.md)~~
+
+The game doesn't have internal tracking for food eaten.
+
+As a result, if you disabled ~~[Eatsanity](./eatsanity.md)~~, or enabled it only on the toggles that don't add actual locations, the toggles `["Cooking", "Crops", "Fish", "Artisan", "Shop"]` will be force-added to your ~~[Eatsanity](./eatsanity.md)~~ setting.
+
+- This goal is *Adaptable*. You only need to eat and drink the items enabled in ~~[Eatsanity](./eatsanity.md)~~
+- This goal is *semi* *Focused*. Most edible items fall into a few specific categories that have very similar obtention methods. Farming, Foraging, Fishing and Cooking.
+- This goal is *Coopable*. The goal triggers when all ~~[Eatsanity](./eatsanity.md)~~ locations are checked, regardless of who checked them.
+
 ### Allsanity
 
 #### Complete every location check in your slot
