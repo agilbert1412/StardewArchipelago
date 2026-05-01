@@ -1,4 +1,5 @@
-﻿using HarmonyLib;
+﻿using System.Linq;
+using HarmonyLib;
 using StardewArchipelago.Archipelago;
 using StardewArchipelago.Archipelago.SlotData.SlotEnums.SlotDataRandomization;
 using StardewArchipelago.Locations.InGameLocations;
@@ -24,6 +25,7 @@ namespace StardewArchipelago.GameModifications.RandomizedData
         private readonly FishDataModifier _fishDataModifier;
         private readonly FestivalDataModifier _festivalDataModifier;
         private readonly ObjectDataModifier _objectDataModifier;
+        private readonly ShopEntriesDataModifier _shopDataModifier;
 
         public RandomizedDataPatcher(LogHandler logger, IModHelper modHelper, Harmony harmony, StardewArchipelagoClient archipelago, StardewItemManager stardewItemManager)
         {
@@ -37,6 +39,7 @@ namespace StardewArchipelago.GameModifications.RandomizedData
             _fishDataModifier = new FishDataModifier(_logger, _helper, _archipelago, _stardewItemManager, _dataRandomization);
             _festivalDataModifier = new FestivalDataModifier(_logger, _helper, _archipelago, _stardewItemManager, _dataRandomization);
             _objectDataModifier = new ObjectDataModifier(_logger, _helper, _archipelago, _stardewItemManager, _dataRandomization);
+            _shopDataModifier = new ShopEntriesDataModifier(_logger, _helper, _archipelago, _stardewItemManager, _dataRandomization);
             RandomizedFishDataInjections.Initialize(_logger, _helper, _archipelago, _stardewItemManager, _dataRandomization);
         }
 
@@ -58,6 +61,7 @@ namespace StardewArchipelago.GameModifications.RandomizedData
             );
 
             PatchRandomizedFestivalsData();
+            PatchRandomizedShopsData();
         }
 
         private void PatchRandomizedFestivalsData()
@@ -105,6 +109,17 @@ namespace StardewArchipelago.GameModifications.RandomizedData
             );
         }
 
+        private void PatchRandomizedShopsData()
+        {
+            if (!AreShopsDataRandomized())
+            {
+                return;
+            }
+
+            _helper.Events.Content.AssetRequested += _shopDataModifier.OnShopsDataRequested;
+            _helper.GameContent.InvalidateCache("Data/Shops");
+        }
+
         public void CleanRandomizedDataEvents()
         {
             _helper.Events.Content.AssetRequested -= _cropDataModifier.OnCropDataRequested;
@@ -113,6 +128,7 @@ namespace StardewArchipelago.GameModifications.RandomizedData
             _helper.Events.Content.AssetRequested -= _fishDataModifier.OnLocationsDataRequested;
             _helper.Events.Content.AssetRequested -= _objectDataModifier.OnObjectDataRequested;
             CleanRandomizedFestivalDataEvents();
+            CleanRandomizedShopDataEvents();
         }
 
         private void CleanRandomizedFestivalDataEvents()
@@ -124,6 +140,21 @@ namespace StardewArchipelago.GameModifications.RandomizedData
 
             _helper.Events.Content.AssetRequested -= _festivalDataModifier.OnFestivalDatesDataRequested;
             //_helper.Events.Content.AssetRequested -= _festivalDataModifier.OnPassiveFestivalsDataRequested;
+        }
+
+        private void CleanRandomizedShopDataEvents()
+        {
+            if (!AreShopsDataRandomized())
+            {
+                return;
+            }
+
+            _helper.Events.Content.AssetRequested -= _shopDataModifier.OnShopsDataRequested;
+        }
+
+        private bool AreShopsDataRandomized()
+        {
+            return _dataRandomization.ShopsData != null && _dataRandomization.ShopsData.Any() && _dataRandomization.ShopsData.SelectMany(x => x.Value).Any();
         }
     }
 
