@@ -61,7 +61,7 @@ namespace StardewArchipelago.GameModifications
             _seedShopStockModifier = seedShopStockModifier;
             _recipeDataRemover = new RecipeDataRemover(logger, modHelper, archipelago);
             ArchipelagoLocationsInjections.Initialize(logger, modHelper, archipelago, locationChecker);
-            MineshaftLogicInjections.Initialize(logger);
+            MineshaftLogicInjections.Initialize(logger, modHelper, _archipelago);
             CommunityCenterLogicInjections.Initialize(logger, locationChecker);
             FarmInjections.Initialize(logger, _archipelago, state);
             FarmerInjections.Initialize(logger, _archipelago);
