@@ -14,12 +14,12 @@ This setting can compound with [Bundle Price](./bundle_price.md) in both directi
 
 In a default community center, there are exactly 30 bundles, distributed like this:
 
-Pantry: 6 Bundles
-Crafts Room: 6 Bundles
-Fish Tank: 6 Bundles
-Boiler Room: 3 Bundles
-Vault: 4 Bundles
-Bulletin Board: 5 Bundles
+- Pantry: 6 Bundles
+- Crafts Room: 6 Bundles
+- Fish Tank: 6 Bundles
+- Boiler Room: 3 Bundles
+- Vault: 4 Bundles
+- Bulletin Board: 5 Bundles
 
 ### Relative Change
 
