@@ -323,8 +323,8 @@ namespace StardewArchipelago.Archipelago.Gifting
         {
             if (IsAyeishaHere(out var ayeisha))
             {
-                var tomorrowSentence = recipient == null ? $"It'll get there tomorrow!" : $"It'll reach {recipient} tomorrow!";
-                var dialogue = new Dialogue(ayeisha, null, $"Sure, I'll deliver that package! {tomorrowSentence} That'll cost you {tax}g.");
+                var tomorrowSentence = recipient == null ? $"It will get there tomorrow!" : $"It will reach {recipient} tomorrow!";
+                var dialogue = new Dialogue(ayeisha, null, $"Sure, I'll deliver that package! {tomorrowSentence} That will cost you {tax}g.");
                 ayeisha.setNewDialogue(dialogue);
                 Game1.drawDialogue(ayeisha);
                 return;
