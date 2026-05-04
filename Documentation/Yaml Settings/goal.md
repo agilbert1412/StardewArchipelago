@@ -28,8 +28,8 @@ In-game, you can read Grandpa's letter on his shrine to get reminded of what you
 
 Restore the community center, by completing every bundle in every room. External bundles, like for example the missing bundle or the raccoon requests still exist in the world, but are not considered part of the goal.
 
-- This goal can be **Short** and it can be **Long**. This will be mostly decided by the setting [Bundle Price](./bundle_price.md)
-- This goal is partially *Adaptable*. Settings like [Bundle Randomization](./bundle_randomization.md) and [Bundle Price](./bundle_price.md) will change the content of the bundles and therefore have a significant impact on the goal. Settings like [Exclude Ginger Island](./exclude_ginger_island.md) will have a slight impact, by allowing or banning certain items from appearing in bundles.
+- This goal can be **Short** and it can be **Long**. This will be mostly decided by the settings [Bundle Price](./bundle_price.md) and [Bundles Per Room](./bundles_per_room.md)
+- This goal is partially *Adaptable*. Settings like [Bundle Randomization](./bundle_randomization.md), [Bundle Price](./bundle_price.md) and [Bundles Per Room](./bundles_per_room.md) will change the content of the bundles and therefore have a significant impact on the goal. Settings like [Exclude Ginger Island](./exclude_ginger_island.md) will have a slight impact, by allowing or banning certain items from appearing in bundles.
 - This goal is **not** *Focused*. You will be doing a bit of everything to fulfill bundles.
 - This goal is *Coopable* if you turn on the config setting `RemoteCommunityCenter`. To win, a save file must exist with a fully locally completed Community Center. When this config is set to true, local bundles will atuomatically get completed at the start of each day to match the server state, which means several people can complete bundles and it will synchronise between them.
 
@@ -190,6 +190,34 @@ The stardrops are:
 - This goal is **not** *Adaptable*. The amount remains the same.
 - This goal is **not** *Focused*. The stardrops, shuffled or not, will require navigating many different tasks. This goal is essentially a Macguffin Hunt where the goal is to receive several specific items, and you cannot focus on them specifically.
 - This goal is **not** *Coopable*. The energy bar must reach 508 on a single save file to trigger the goal.
+
+### Mad Hatter
+
+#### Wear Every Hat
+
+You must wear every hat that you have enabled through ~~[Hatsanity](./hatsanity.md)~~.
+
+The game doesn't have internal tracking for hats worn, and even if it did, forcing an unsuspecting player to wear them all would be a goal worse than Perfection.
+
+As a result, If you disabled ~~[Hatsanity](./hatsanity.md)~~ but chose the Mad Hatter goal, your ~~[Hatsanity](./hatsanity.md)~~ setting will be force-changed to `[Easy, Tailoring]`, which is a reasonable compromise.
+
+- This goal is *Adaptable*. Its difficulty will greatly vary depending on ~~[Hatsanity](./hatsanity.md)~~
+- This goal is **not** *Focused*. The hats come as rewards from pretty much every facet of the game. It is possible to make it a little bit focused, if one picks only Tailoring hats for example, but it still isn't very focused.
+- This goal is *Coopable*. The goal triggers when all ~~[Hatsanity](./hatsanity.md)~~ locations are checked, regardless of who checked them.
+
+### Ultimate Foodie
+
+#### Eat Everything
+
+You must eat and drink every item you have enabled through ~~[Eatsanity](./eatsanity.md)~~
+
+The game doesn't have internal tracking for food eaten.
+
+As a result, if you disabled ~~[Eatsanity](./eatsanity.md)~~, or enabled it only on the toggles that don't add actual locations, the toggles `["Cooking", "Crops", "Fish", "Artisan", "Shop"]` will be force-added to your ~~[Eatsanity](./eatsanity.md)~~ setting.
+
+- This goal is *Adaptable*. You only need to eat and drink the items enabled in ~~[Eatsanity](./eatsanity.md)~~
+- This goal is *semi* *Focused*. Most edible items fall into a few specific categories that have very similar obtention methods. Farming, Foraging, Fishing and Cooking.
+- This goal is *Coopable*. The goal triggers when all ~~[Eatsanity](./eatsanity.md)~~ locations are checked, regardless of who checked them.
 
 ### Allsanity
 

@@ -38,7 +38,7 @@ The Missing Bundle and Raccoon Requests are the same in Thematic and Remixed.
 
 This setting uses all the bundles from Remixed, but it removes their room assignment. Every bundle can appear anywhere in the community center.
 
-This setting gives the most flexibility to ~~[Bundle Plando](./bundle-plando.md)~~, because it removes a big limitation on how many bundles you can request without hitting the cap on a given room.
+This setting gives the most flexibility to ~~[Bundle Whitelist](./bundle_whitelist.md)~~ and ~~[Bundle Blacklist](./bundle_blacklist.md)~~, because it removes a big limitation on how many bundles you can request without hitting the cap on a given room.
 
 This does not affect the Missing Bundle and Raccoon Requests.
 

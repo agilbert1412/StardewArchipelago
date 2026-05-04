@@ -222,7 +222,7 @@ namespace StardewArchipelago.Archipelago
             return !incompatibleMods.Any();
         }
 
-        private static string GetNormalizedModName(string modName)
+        public static string GetNormalizedModName(string modName)
         {
             var aliasedName = modName;
             if (ModInternalNames.InternalNames.ContainsKey(modName))

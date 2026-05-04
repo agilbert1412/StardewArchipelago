@@ -4,9 +4,11 @@
 
 The Bundle Price setting allows you to customize the difficulty of the bundles found in your community center, abandoned jojamart and raccoon requests.
 
-This setting has a massive impact on the difficulty and duration of a slot with the [Community Center](./goal.md#community-center) goal.
+This setting, along with [Bundles Per Room](./bundles_per_room.md), has a massive impact on the difficulty and duration of a slot with the [Community Center](./goal.md#community-center) goal.
 
 Expensive settings are very difficult, and you should only play Maximum Prices if you are truly ready for a crazy challenge.
+
+This setting can compound with [Bundles Per Room](./bundles_per_room.md) in both directions, or they can make for an interesting balanced run if set up to counter each other, such as a large number of extremely cheap bundles.
 
 ### How Bundles work
 
@@ -108,5 +110,27 @@ In the case of the Carnival Bundle, which requests a default of 2500 Star Tokens
 - Expensive (3500)
 - Very Expensive (4500)
 - Maximum (10000)
+
+### Bundle Price Impact on the Trash Bear
+
+While not technically bundles, the Trash Bear requests are affected by this setting, similar to how they are affected by [Bundles Per Room](./bundles_per_room.md).
+
+By default, the Trash Bear requests 2 items per category. You must donate all items in a given category to send the associated location.
+
+If Bundle Prices are reduced, each request will only ask for one single item.
+
+If Bundle Prices are increased by 1, each request will ask for 3 items.
+
+If Bundle Prices are increased by 2 or more, each request will ask for 4 items.
+
+As a result, a Trash Bear made as small as possible through both this setting and [Bundles Per Room](./bundles_per_room.md), would have one foraging request of 1 item.
+
+A Trash Bear made as big as possible through both this setting and [Bundles Per Room](./bundles_per_room.md), would have 4 requests of 4 items.
+
+Requests are displayed as rows, with each item on a row part of that same request. They can be progressed and completed in any order
+
+![Maxed out Trash Bear](https://i.imgur.com/15UsDrN.png)
+
+![The same Trash Bear after donating some of the items](https://i.imgur.com/516qNqz.png)
 
 ## [Return to Index](./index.md)
