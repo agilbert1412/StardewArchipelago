@@ -542,11 +542,11 @@ namespace StardewArchipelago.Stardew
                 }
 
                 _furnitureById.Add(id, furniture);
-                _furnitureByName.Add(furniture.Name, furniture);
+                _furnitureByName.TryAdd(furniture.Name, furniture);
                 if (IsPascalCaseName(furniture.Name))
                 {
                     var spacesName = PascalToSpaces(furniture.Name);
-                    _furnitureByName.Add(spacesName, furniture);
+                    _furnitureByName.TryAdd(spacesName, furniture);
                 }
                 if (furniture.Name == "Bed")
                 {
