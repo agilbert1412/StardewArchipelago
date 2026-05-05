@@ -447,7 +447,7 @@ namespace StardewArchipelago.Stardew
 
                 foreach (var alias in aliasGroup)
                 {
-                    _objectsByName.Add(alias, stardewItem);
+                    _objectsByName.TryAdd(alias, stardewItem);
                 }
 
                 return;
@@ -455,7 +455,7 @@ namespace StardewArchipelago.Stardew
 
             if (!_objectsByName.ContainsKey(stardewItem.Name))
             {
-                _objectsByName.Add(stardewItem.Name, stardewItem);
+                _objectsByName.TryAdd(stardewItem.Name, stardewItem);
             }
         }
 
@@ -590,11 +590,11 @@ namespace StardewArchipelago.Stardew
                 }
 
                 _mannequinById.Add(id, mannequin);
-                _mannequinByName.Add(mannequin.Name, mannequin);
+                _mannequinByName.TryAdd(mannequin.Name, mannequin);
                 if (IsPascalCaseName(mannequin.Name))
                 {
                     var spacesName = PascalToSpaces(mannequin.Name);
-                    _mannequinByName.Add(spacesName, mannequin);
+                    _mannequinByName.TryAdd(spacesName, mannequin);
                 }
 
                 _itemsByQualifiedId.Add(mannequin.GetQualifiedId(), mannequin);
@@ -623,7 +623,7 @@ namespace StardewArchipelago.Stardew
                 }
 
                 _hatsById.Add(id, hat);
-                _hatsByName.Add(hat.Name, hat);
+                _hatsByName.TryAdd(hat.Name, hat);
                 _itemsByQualifiedId.Add(hat.GetQualifiedId(), hat);
             }
         }
@@ -643,7 +643,7 @@ namespace StardewArchipelago.Stardew
                 }
 
                 _shirtsById.Add(id, shirt);
-                _shirtsByName.Add(shirt.Name, shirt);
+                _shirtsByName.TryAdd(shirt.Name, shirt);
                 _itemsByQualifiedId.Add(shirt.GetQualifiedId(), shirt);
             }
         }
@@ -663,7 +663,7 @@ namespace StardewArchipelago.Stardew
                 }
 
                 _weaponsById.Add(id, weapon);
-                _weaponsByName.Add(weapon.Name, weapon);
+                _weaponsByName.TryAdd(weapon.Name, weapon);
                 _itemsByQualifiedId.Add(weapon.GetQualifiedId(), weapon);
             }
         }
@@ -687,15 +687,15 @@ namespace StardewArchipelago.Stardew
                     continue;
                 }
 
-                _cookingRecipesByName.Add(recipe.RecipeName, recipe);
+                _cookingRecipesByName.TryAdd(recipe.RecipeName, recipe);
                 if (NameAliases.RecipeNameAliases.ContainsKey(recipe.RecipeName))
                 {
-                    _cookingRecipesByName.Add(NameAliases.RecipeNameAliases[recipe.RecipeName], recipe);
+                    _cookingRecipesByName.TryAdd(NameAliases.RecipeNameAliases[recipe.RecipeName], recipe);
                 }
 
                 if (!string.IsNullOrWhiteSpace(recipe.YieldItem?.Name) && !_cookingRecipesByName.ContainsKey(recipe.YieldItem.Name))
                 {
-                    _cookingRecipesByName.Add(recipe.YieldItem.Name, recipe);
+                    _cookingRecipesByName.TryAdd(recipe.YieldItem.Name, recipe);
                 }
             }
         }
@@ -719,7 +719,7 @@ namespace StardewArchipelago.Stardew
                     continue;
                 }
 
-                _craftingRecipesByName.Add(recipe.RecipeName, recipe);
+                _craftingRecipesByName.TryAdd(recipe.RecipeName, recipe);
             }
         }
 
