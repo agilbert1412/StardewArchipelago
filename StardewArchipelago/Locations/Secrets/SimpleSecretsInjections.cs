@@ -182,18 +182,27 @@ namespace StardewArchipelago.Locations.Secrets
 
                 var isInJunimoArea = x > __instance.xPositionOnScreen + IClickableMenu.spaceToClearSideBorder * 2 && x < __instance.xPositionOnScreen + IClickableMenu.spaceToClearSideBorder * 2 + 200 &&
                                      y > __instance.yPositionOnScreen + IClickableMenu.spaceToClearTopBorder + (int)(__instance.height / 2.0) + 21 && y < __instance.yPositionOnScreen + __instance.height;
-                if (isInJunimoArea && HasReceivedAllCCRewards() && !Game1.MasterPlayer.hasOrWillReceiveMail("JojaMember") && !Game1.player.mailReceived.Contains("activatedJungleJunimo"))
+                if (isInJunimoArea)
                 {
-                    timesClickedJunimoField.SetValue(timesClickedJunimoField.GetValue() + 1);
-                    if (timesClickedJunimoField.GetValue() > 6)
+                    if (HasReceivedAllCCRewards() && !Game1.MasterPlayer.hasOrWillReceiveMail("JojaMember"))
                     {
-                        Game1.playSound("discoverMineral");
-                        Game1.playSound("leafrustle");
-                        Game1.player.mailReceived.Add("activatedJungleJunimo");
-                        _locationChecker.AddCheckedLocation(SecretsLocationNames.JUNGLE_JUNIMO);
+                        timesClickedJunimoField.SetValue(timesClickedJunimoField.GetValue() + 1);
+                        if (timesClickedJunimoField.GetValue() > 6)
+                        {
+                            Game1.playSound("discoverMineral");
+                            Game1.playSound("leafrustle");
+                            Game1.player.mailReceived.Add("activatedJungleJunimo");
+                        }
+                        else
+                        {
+                            Game1.playSound("hammer");
+                        }
                     }
-                    else
-                        Game1.playSound("hammer");
+                }
+
+                if (Game1.player.mailReceived.Contains("activatedJungleJunimo"))
+                {
+                    _locationChecker.AddCheckedLocation(SecretsLocationNames.JUNGLE_JUNIMO);
                 }
 
                 foreach (var ccTrackerButton in __instance.ccTrackerButtons)
