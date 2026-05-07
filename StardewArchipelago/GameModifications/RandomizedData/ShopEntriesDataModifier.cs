@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using KaitoKid.Utilities.Interfaces;
 using Newtonsoft.Json;
@@ -22,6 +23,8 @@ namespace StardewArchipelago.GameModifications.RandomizedData
         private readonly StardewItemManager _itemManager;
         private readonly DataRandomization _dataRandomization;
 
+        private readonly Dictionary<string, object> _specialCaseShops;
+
         public ShopEntriesDataModifier(ILogger logger, IModHelper modHelper, StardewArchipelagoClient archipelago, StardewItemManager itemManager, DataRandomization dataRandomization)
         {
             _logger = logger;
@@ -29,6 +32,7 @@ namespace StardewArchipelago.GameModifications.RandomizedData
             _archipelago = archipelago;
             _itemManager = itemManager;
             _dataRandomization = dataRandomization;
+            _specialCaseShops = new Dictionary<string, object>();
         }
 
         public void OnShopsDataRequested(object sender, AssetRequestedEventArgs e)
@@ -41,11 +45,14 @@ namespace StardewArchipelago.GameModifications.RandomizedData
             e.Edit(asset =>
                 {
                     var shopsData = asset.AsDictionary<string, ShopData>().Data;
+                    _specialCaseShops.Clear();
 
                     foreach (var shopId in shopsData.Keys.ToArray())
                     {
                         ModifyShopData(shopsData, shopId);
                     }
+
+                    File.WriteAllText("DR - Special Shops.json", JsonConvert.SerializeObject(_specialCaseShops));
                 },
                 AssetEditPriority.Late + 1
             );
@@ -83,7 +90,7 @@ namespace StardewArchipelago.GameModifications.RandomizedData
             {
                 if (!TryModifyShopItemData(shopData, randomizedShopItemData))
                 {
-                    Debugger.Break();
+                    _specialCaseShops.Add(randomizedShopItemName, randomizedShopData);
                 }
             }
         }
@@ -106,7 +113,10 @@ namespace StardewArchipelago.GameModifications.RandomizedData
                     shopData.Items.InsertRange(i, replacementShopItemDatas);
                 }
                 hasModifiedOne = true;
-                shopData.Currency = GetVanillaCurrency(randomizedShopItemData.Currency);
+                if (!string.IsNullOrWhiteSpace(randomizedShopItemData.Currency))
+                {
+                    shopData.Currency = GetVanillaCurrency(randomizedShopItemData.Currency);
+                }
             }
 
             return hasModifiedOne;
@@ -115,6 +125,10 @@ namespace StardewArchipelago.GameModifications.RandomizedData
         private bool IsCorrectItem(ShopItemData shopDataItem, RandomizedShopItemData randomizedShopItemData)
         {
             var randomizedItemName = randomizedShopItemData.ItemName;
+            if (!_itemManager.ItemExists(randomizedItemName))
+            {
+                return false;
+            }
             var randomizedItem = _itemManager.GetItemByName(randomizedItemName);
             var randomizedItemId = randomizedItem.Id;
             var randomizedQualifiedItemId = randomizedItem.GetQualifiedId();
@@ -134,25 +148,49 @@ namespace StardewArchipelago.GameModifications.RandomizedData
                 return true;
             }
 
-            if (!string.IsNullOrWhiteSpace(randomizedShopItemData.Currency))
+            int? price = null;
+            if (randomizedShopItemData.Price != null)
             {
-                shopDataItem.ModData ??= new Dictionary<string, string>();
-                shopDataItem.ModData.TryAdd("Currency", randomizedShopItemData.Currency);
-                shopDataItem.ModData["Currency"] = randomizedShopItemData.Currency;
+                price = randomizedShopItemData.Price.Value;
             }
 
-            if (randomizedShopItemData.Price.HasValue)
+            Dictionary<string, int> materials = null;
+            if (randomizedShopItemData.Materials != null)
             {
-                shopDataItem.Price = randomizedShopItemData.Price.Value;
-                shopDataItem.PriceModifiers.Clear();
+                materials = randomizedShopItemData.Materials.ToDictionary(x => x.Key, x => x.Value);
+            }
+
+            if (!string.IsNullOrWhiteSpace(randomizedShopItemData.Currency))
+            {
+                if (randomizedShopItemData.Currency == "Calico Egg")
+                {
+                    materials ??= new Dictionary<string, int>();
+                    materials.Add(randomizedShopItemData.Currency, price ?? shopDataItem.Price);
+                    price = null;
+                }
+                else
+                {
+                    shopDataItem.ModData ??= new Dictionary<string, string>();
+                    shopDataItem.ModData.TryAdd("Currency", randomizedShopItemData.Currency);
+                    shopDataItem.ModData["Currency"] = randomizedShopItemData.Currency;
+                }
+            }
+
+            if (price.HasValue)
+            {
+                shopDataItem.Price = price.Value;
+                if (shopDataItem.PriceModifiers != null)
+                {
+                    shopDataItem.PriceModifiers.Clear();
+                }
                 shopDataItem.IgnoreShopPriceModifiers = true;
             }
 
-            if (randomizedShopItemData.Materials != null)
+            if (materials != null)
             {
-                if (randomizedShopItemData.Materials.Count == 1)
+                if (materials.Count == 1)
                 {
-                    var (materialName, materialAmount) = randomizedShopItemData.Materials.First();
+                    var (materialName, materialAmount) = materials.First();
                     var materialItem = _itemManager.GetObjectByName(materialName);
                     var materialQualifiedId = materialItem.GetQualifiedId();
                     shopDataItem.TradeItemId = materialQualifiedId;
@@ -160,9 +198,6 @@ namespace StardewArchipelago.GameModifications.RandomizedData
                 }
                 else
                 {
-                    shopDataItem.TradeItemId = null;
-                    shopDataItem.TradeItemAmount = 0;
-
                     shopDataItem.ModData ??= new Dictionary<string, string>();
                     shopDataItem.ModData.TryAdd("Materials", "");
                     shopDataItem.ModData["Materials"] = JsonConvert.SerializeObject(randomizedShopItemData.Materials);
@@ -187,7 +222,7 @@ namespace StardewArchipelago.GameModifications.RandomizedData
                 "Star Token" => 1,
                 "Qi Coin" => 2,
                 "Qi Gem" => 4,
-                "Calico Egg" => throw new Exception("Send help"),
+                "Calico Egg" => 0, // Money, but zero
                 _ => throw new Exception("Invalid Currency"),
             };
         }
