@@ -47,6 +47,8 @@ namespace StardewArchipelago.Stardew
         private Dictionary<string, StardewCookingRecipe> _cookingRecipesByName;
         private Dictionary<string, StardewCraftingRecipe> _craftingRecipesByName;
 
+        private const string STARTER_SUFFIX = " (Starter)";
+
         private readonly List<string> _priorityIds = new()
         {
             "390",
@@ -58,6 +60,18 @@ namespace StardewArchipelago.Stardew
             { "126", " (Green)" },
             { "180", " (Brown)" },
             { "182", " (Brown)" },
+        };
+
+        public List<string> ItemsWithStarters = new()
+        {
+            "433",
+            "176",
+            "180",
+            "442",
+            "305",
+            "107",
+            "289",
+            "928",
         };
 
         public StardewItemManager(ILogger logger)
@@ -428,6 +442,10 @@ namespace StardewArchipelago.Stardew
                 _objectsByQualifiedId.Add(stardewItem.GetQualifiedId(), stardewItem);
                 _itemsByQualifiedId.Add(stardewItem.GetQualifiedId(), stardewItem);
                 AddItemAndAliasesToNamesDictionary(stardewItem);
+                if (ItemsWithStarters.Contains(id))
+                {
+                    _objectsByName.TryAdd($"{stardewItem.Name}{STARTER_SUFFIX}", stardewItem);
+                }
             }
         }
 
