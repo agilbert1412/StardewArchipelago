@@ -8,6 +8,7 @@ using Newtonsoft.Json;
 using StardewArchipelago.Archipelago;
 using StardewArchipelago.Archipelago.SlotData.SlotEnums.SlotDataRandomization;
 using StardewArchipelago.Constants;
+using StardewArchipelago.Items;
 using StardewArchipelago.Stardew;
 using StardewModdingAPI;
 using StardewModdingAPI.Events;
@@ -23,7 +24,7 @@ namespace StardewArchipelago.GameModifications.RandomizedData
         private readonly StardewItemManager _itemManager;
         private readonly DataRandomization _dataRandomization;
 
-        private readonly Dictionary<string, object> _specialCaseShops;
+        private readonly Dictionary<string, RandomizedShopItemData> _specialCaseShops;
 
         public ShopEntriesDataModifier(ILogger logger, IModHelper modHelper, StardewArchipelagoClient archipelago, StardewItemManager itemManager, DataRandomization dataRandomization)
         {
@@ -32,7 +33,7 @@ namespace StardewArchipelago.GameModifications.RandomizedData
             _archipelago = archipelago;
             _itemManager = itemManager;
             _dataRandomization = dataRandomization;
-            _specialCaseShops = new Dictionary<string, object>();
+            _specialCaseShops = new Dictionary<string, RandomizedShopItemData>();
         }
 
         public void OnShopsDataRequested(object sender, AssetRequestedEventArgs e)
@@ -52,7 +53,7 @@ namespace StardewArchipelago.GameModifications.RandomizedData
                         ModifyShopData(shopsData, shopId);
                     }
 
-                    File.WriteAllText("DR - Special Shops.json", JsonConvert.SerializeObject(_specialCaseShops));
+                    File.WriteAllText("DR - Special Shops.json", JsonConvert.SerializeObject(_specialCaseShops, Formatting.Indented));
                 },
                 AssetEditPriority.Late + 1
             );
@@ -90,7 +91,7 @@ namespace StardewArchipelago.GameModifications.RandomizedData
             {
                 if (!TryModifyShopItemData(shopData, randomizedShopItemData))
                 {
-                    _specialCaseShops.Add(randomizedShopItemName, randomizedShopData);
+                    _specialCaseShops.Add(randomizedShopItemName, randomizedShopItemData);
                 }
             }
         }
@@ -135,6 +136,10 @@ namespace StardewArchipelago.GameModifications.RandomizedData
             if (shopDataItem.ItemId == randomizedItemId || shopDataItem.ItemId == randomizedQualifiedItemId ||
                 shopDataItem.Id == randomizedItemId || shopDataItem.Id == randomizedQualifiedItemId)
             {
+                if (shopDataItem.IsRecipe)
+                {
+                    return randomizedItemName.EndsWith(ItemParser.RECIPE_SUFFIX);
+                }
                 return true;
             }
 
