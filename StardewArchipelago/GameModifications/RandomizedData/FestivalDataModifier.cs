@@ -738,7 +738,7 @@ namespace StardewArchipelago.GameModifications.RandomizedData
         {
             try
             {
-                if (Game1.weatherIcon == 1)
+                if (Utility.isFestivalDay())
                 {
                     originalWeatherIcon = Game1.weatherIcon;
                     Game1.weatherIcon = 0;
@@ -769,7 +769,7 @@ namespace StardewArchipelago.GameModifications.RandomizedData
         {
             try
             {
-                if (originalWeatherIcon == 1)
+                if (Utility.isFestivalDay())
                 {
                     Game1.weatherIcon = originalWeatherIcon;
 
