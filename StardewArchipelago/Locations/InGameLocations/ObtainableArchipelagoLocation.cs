@@ -26,7 +26,6 @@ namespace StardewArchipelago.Locations.InGameLocations
         private const string ARCHIPELAGO_PREFIX = "Archipelago: ";
         private const string ARCHIPELAGO_SHORT_PREFIX = "AP: ";
         private const string ARCHIPELAGO_NO_PREFIX = "";
-        public const string EXTRA_MATERIALS_KEY = "Extra Materials";
         protected static Hint[] _activeHints;
         protected static uint _lastTimeUpdatedActiveHints;
 
@@ -38,36 +37,6 @@ namespace StardewArchipelago.Locations.InGameLocations
         public string LocationName { get; set; }
 
         private readonly string _description;
-
-        private Dictionary<string, int> _extraMaterialsRequired;
-
-        private Dictionary<string, int> ExtraMaterialsRequired
-        {
-            get
-            {
-                if (_extraMaterialsRequired != null)
-                {
-                    return _extraMaterialsRequired;
-                }
-
-                _extraMaterialsRequired = new Dictionary<string, int>();
-                if (modData == null || !modData.ContainsKey(EXTRA_MATERIALS_KEY))
-                {
-                    return _extraMaterialsRequired;
-                }
-
-                var extraMaterialsString = modData[EXTRA_MATERIALS_KEY];
-                foreach (var extraMaterialString in extraMaterialsString.Split(",", StringSplitOptions.RemoveEmptyEntries))
-                {
-                    var extraMaterialFields = extraMaterialString.Split(":");
-                    var materialQualifiedId = extraMaterialFields[0];
-                    var materialAmount = int.Parse(extraMaterialFields[1]);
-                    _extraMaterialsRequired.Add(materialQualifiedId, materialAmount);
-                }
-
-                return _extraMaterialsRequired;
-            }
-        }
 
         public bool AllowScouting { get; set; }
 
@@ -155,25 +124,8 @@ namespace StardewArchipelago.Locations.InGameLocations
 
         public override string DisplayName => _locationDisplayName;
 
-        public override bool CanBuyItem(Farmer who)
-        {
-            foreach (var (qualifiedId, amount) in ExtraMaterialsRequired)
-            {
-                if (who.Items.CountId(qualifiedId) < amount)
-                {
-                    return false;
-                }
-            }
-
-            return true;
-        }
-
         public override bool actionWhenPurchased(string shopId)
         {
-            foreach (var (qualifiedId, amount) in ExtraMaterialsRequired)
-            {
-                Game1.player.Items.ReduceId(qualifiedId, amount);
-            }
             SendCheck();
             return true;
         }
@@ -185,14 +137,7 @@ namespace StardewArchipelago.Locations.InGameLocations
 
         public override string getDescription()
         {
-            var descriptionWithExtraMaterials = $"{_description}{Environment.NewLine}";
-            foreach (var (qualifiedId, amount) in ExtraMaterialsRequired)
-            {
-                var resolvedItem = ItemRegistry.Create(qualifiedId, amount);
-                descriptionWithExtraMaterials += $"{Environment.NewLine}{amount} {resolvedItem.Name}";
-            }
-
-            return descriptionWithExtraMaterials;
+            return $"{_description}{Environment.NewLine}";
         }
 
         public static IEnumerable<ItemQueryResult> Create(string locationName, LogHandler logger, IModHelper modHelper, StardewArchipelagoClient archipelago, StardewLocationChecker locationChecker)

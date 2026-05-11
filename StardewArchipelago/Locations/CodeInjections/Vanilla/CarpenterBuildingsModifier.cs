@@ -1,14 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using Force.DeepCloner;
-using StardewArchipelago.Constants;
-using StardewModdingAPI;
-using StardewModdingAPI.Events;
-using StardewValley.GameData.Buildings;
+﻿using Force.DeepCloner;
 using KaitoKid.Utilities.Interfaces;
 using StardewArchipelago.Archipelago;
 using StardewArchipelago.Archipelago.SlotData.SlotEnums;
+using StardewArchipelago.Constants;
+using StardewArchipelago.Stardew;
+using StardewModdingAPI;
+using StardewModdingAPI.Events;
+using StardewValley.GameData.Buildings;
+using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Linq;
+using StardewArchipelago.Archipelago.SlotData.SlotEnums.SlotDataRandomization;
 
 namespace StardewArchipelago.Locations.CodeInjections.Vanilla
 {
@@ -17,12 +20,14 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
         protected static ILogger _logger;
         protected static IModHelper _helper;
         protected static StardewArchipelagoClient _archipelago;
+        private readonly StardewItemManager _itemManager;
 
-        public CarpenterBuildingsModifier(ILogger logger, IModHelper helper, StardewArchipelagoClient archipelago)
+        public CarpenterBuildingsModifier(ILogger logger, IModHelper helper, StardewArchipelagoClient archipelago, StardewItemManager itemManager)
         {
             _logger = logger;
             _helper = helper;
             _archipelago = archipelago;
+            _itemManager = itemManager;
         }
 
         public void OnBuildingsRequested(object sender, AssetRequestedEventArgs e)
@@ -35,11 +40,67 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
             e.Edit(asset =>
                 {
                     var buildingsData = asset.AsDictionary<string, BuildingData>().Data;
+                    ChangeCostsBasedOnDataRandomization(buildingsData);
                     ChangePrices(buildingsData);
                     AddFreeBuildings(buildingsData);
                 },
                 AssetEditPriority.Late
             );
+        }
+
+        private void ChangeCostsBasedOnDataRandomization(IDictionary<string, BuildingData> buildingsData)
+        {
+            var shopsData = _archipelago.SlotData.DataRandomization.ShopsData;
+            if (shopsData == null)
+            {
+                return;
+            }
+            foreach (var (buildingName, buildingData) in buildingsData)
+            {
+                if (!TryChangeCostBasedOnDataRandomization(shopsData, buildingName, buildingData))
+                {
+
+                }
+            }
+        }
+
+        private bool TryChangeCostBasedOnDataRandomization(Dictionary<string, Dictionary<string, RandomizedShopItemData>> shopsData, string buildingName, BuildingData buildingData)
+        {
+            foreach (var (shopName, shopItems) in shopsData)
+            {
+                foreach (var (itemName, itemData) in shopItems)
+                {
+                    if (itemName.Equals(buildingName, StringComparison.InvariantCultureIgnoreCase))
+                    {
+                        if (itemData.Currency != null && itemData.Currency != "Money")
+                        {
+                            buildingData.BuildCost = 0;
+                        }
+                        else if (itemData.Price != null)
+                        {
+                            buildingData.BuildCost = itemData.Price.Value;
+                        }
+                        if (itemData.Materials != null)
+                        {
+                            buildingData.BuildMaterials.Clear();
+                            foreach (var (materialName, materialAmount) in itemData.Materials)
+                            {
+                                var materialItem = _itemManager.GetItemByName(materialName);
+                                var material = new BuildingMaterial()
+                                {
+                                    ItemId = materialItem.GetQualifiedId(),
+                                    Amount = materialAmount,
+                                };
+                                buildingData.BuildMaterials.Add(material);
+                            }
+                        }
+
+                        return true;
+                    }
+                }
+            }
+
+            return false;
         }
 
         private void ChangePrices(IDictionary<string, BuildingData> buildingsData)

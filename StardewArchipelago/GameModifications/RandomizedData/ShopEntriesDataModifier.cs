@@ -1,18 +1,21 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.IO;
-using System.Linq;
-using KaitoKid.Utilities.Interfaces;
+﻿using KaitoKid.Utilities.Interfaces;
 using Newtonsoft.Json;
 using StardewArchipelago.Archipelago;
 using StardewArchipelago.Archipelago.SlotData.SlotEnums.SlotDataRandomization;
 using StardewArchipelago.Constants;
 using StardewArchipelago.Items;
+using StardewArchipelago.Locations.InGameLocations;
 using StardewArchipelago.Stardew;
 using StardewModdingAPI;
 using StardewModdingAPI.Events;
 using StardewValley.GameData.Shops;
+using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.IO;
+using System.Linq;
+using StardewArchipelago.Archipelago.ApworldData;
+using StardewArchipelago.GameModifications.Shops;
 
 namespace StardewArchipelago.GameModifications.RandomizedData
 {
@@ -24,6 +27,7 @@ namespace StardewArchipelago.GameModifications.RandomizedData
         private readonly StardewItemManager _itemManager;
         private readonly DataRandomization _dataRandomization;
 
+        private readonly HashSet<string> _processedShops;
         private readonly Dictionary<string, RandomizedShopItemData> _specialCaseShops;
 
         public ShopEntriesDataModifier(ILogger logger, IModHelper modHelper, StardewArchipelagoClient archipelago, StardewItemManager itemManager, DataRandomization dataRandomization)
@@ -33,6 +37,7 @@ namespace StardewArchipelago.GameModifications.RandomizedData
             _archipelago = archipelago;
             _itemManager = itemManager;
             _dataRandomization = dataRandomization;
+            _processedShops = new HashSet<string>();
             _specialCaseShops = new Dictionary<string, RandomizedShopItemData>();
         }
 
@@ -51,6 +56,19 @@ namespace StardewArchipelago.GameModifications.RandomizedData
                     foreach (var shopId in shopsData.Keys.ToArray())
                     {
                         ModifyShopData(shopsData, shopId);
+                    }
+
+                    foreach (var (shopName, items) in _dataRandomization.ShopsData)
+                    {
+                        if (_processedShops.Contains(shopName))
+                        {
+                            continue;
+                        }
+
+                        foreach (var (itemName, itemData) in items)
+                        {
+                            _specialCaseShops.Add(itemName, itemData);
+                        }
                     }
 
                     File.WriteAllText("DR - Special Shops.json", JsonConvert.SerializeObject(_specialCaseShops, Formatting.Indented));
@@ -82,6 +100,7 @@ namespace StardewArchipelago.GameModifications.RandomizedData
 
                 var randomizedShopData = _dataRandomization.ShopsData[shopName];
                 ModifyShopData(shopData, randomizedShopData);
+                _processedShops.Add(shopName);
             }
         }
 
@@ -91,6 +110,12 @@ namespace StardewArchipelago.GameModifications.RandomizedData
             {
                 if (!TryModifyShopItemData(shopData, randomizedShopItemData))
                 {
+                    if (_itemsProcessedElsewhere.Any(x =>
+                            randomizedShopItemData.ShopName.Equals(x.shopName, StringComparison.InvariantCultureIgnoreCase) &&
+                            randomizedShopItemData.ItemName.Equals(x.itemName, StringComparison.InvariantCultureIgnoreCase)))
+                    {
+                        continue;
+                    }
                     _specialCaseShops.Add(randomizedShopItemName, randomizedShopItemData);
                 }
             }
@@ -126,21 +151,22 @@ namespace StardewArchipelago.GameModifications.RandomizedData
         private bool IsCorrectItem(ShopItemData shopDataItem, RandomizedShopItemData randomizedShopItemData)
         {
             var randomizedItemName = randomizedShopItemData.ItemName;
-            if (!_itemManager.ItemExists(randomizedItemName))
+            if (_itemManager.ItemExists(randomizedItemName))
             {
-                return false;
-            }
-            var randomizedItem = _itemManager.GetItemByName(randomizedItemName);
-            var randomizedItemId = randomizedItem.Id;
-            var randomizedQualifiedItemId = randomizedItem.GetQualifiedId();
-            if (shopDataItem.ItemId == randomizedItemId || shopDataItem.ItemId == randomizedQualifiedItemId ||
-                shopDataItem.Id == randomizedItemId || shopDataItem.Id == randomizedQualifiedItemId)
-            {
-                if (shopDataItem.IsRecipe)
+                var randomizedItem = _itemManager.GetItemByName(randomizedItemName);
+                var randomizedItemId = randomizedItem.Id;
+                var randomizedQualifiedItemId = randomizedItem.GetQualifiedId();
+                if (shopDataItem.ItemId == randomizedItemId || shopDataItem.ItemId == randomizedQualifiedItemId ||
+                    shopDataItem.Id == randomizedItemId || shopDataItem.Id == randomizedQualifiedItemId)
                 {
-                    return randomizedItemName.EndsWith(ItemParser.RECIPE_SUFFIX);
+                    if (shopDataItem.IsRecipe)
+                    {
+                        return randomizedItemName.EndsWith(ItemParser.RECIPE_SUFFIX);
+                    }
+                    return true;
                 }
-                return true;
+
+                return false;
             }
 
             return false;
@@ -167,10 +193,11 @@ namespace StardewArchipelago.GameModifications.RandomizedData
 
             if (!string.IsNullOrWhiteSpace(randomizedShopItemData.Currency))
             {
-                if (randomizedShopItemData.Currency == "Calico Egg")
+                if (randomizedShopItemData.Currency is "Calico Egg" or "Qi Gem" or "Golden Walnut")
                 {
-                    materials ??= new Dictionary<string, int>();
-                    materials.Add(randomizedShopItemData.Currency, price ?? shopDataItem.Price);
+                    var tradeItem = _itemManager.GetItemByName(randomizedShopItemData.Currency);
+                    shopDataItem.TradeItemId = tradeItem.GetQualifiedId();
+                    shopDataItem.TradeItemAmount = price ?? shopDataItem.Price;
                     price = null;
                 }
                 else
@@ -204,8 +231,9 @@ namespace StardewArchipelago.GameModifications.RandomizedData
                 else
                 {
                     shopDataItem.ModData ??= new Dictionary<string, string>();
-                    shopDataItem.ModData.TryAdd("Materials", "");
-                    shopDataItem.ModData["Materials"] = JsonConvert.SerializeObject(randomizedShopItemData.Materials);
+                    shopDataItem.ModData.TryAdd(ShopMenuInjections.MATERIALS_KEY, "");
+                    var materialsDict = materials.ToDictionary(x => _itemManager.GetItemByName(x.Key).GetQualifiedId(), x => Math.Max(1, x.Value));
+                    shopDataItem.ModData[ShopMenuInjections.MATERIALS_KEY] = JsonConvert.SerializeObject(materialsDict);
                 }
             }
 
@@ -231,5 +259,23 @@ namespace StardewArchipelago.GameModifications.RandomizedData
                 _ => throw new Exception("Invalid Currency"),
             };
         }
+
+        private static readonly List<(string shopName, string itemName)> _itemsProcessedElsewhere = new()
+        {
+            (ShopNames.CARPENTER_SHOP, "Coop"),
+            (ShopNames.CARPENTER_SHOP, "Barn"),
+            (ShopNames.CARPENTER_SHOP, "Big Coop"),
+            (ShopNames.CARPENTER_SHOP, "Big Barn"),
+            (ShopNames.CARPENTER_SHOP, "Deluxe Coop"),
+            (ShopNames.CARPENTER_SHOP, "Deluxe Barn"),
+            (ShopNames.CARPENTER_SHOP, "Silo"),
+            (ShopNames.CARPENTER_SHOP, "Fish Pond"),
+            (ShopNames.CARPENTER_SHOP, "Shipping Bin"),
+            (ShopNames.CARPENTER_SHOP, "Pet Bowl"),
+            (ShopNames.CARPENTER_SHOP, "Stable"),
+            (ShopNames.CARPENTER_SHOP, "Slime Hutch"),
+            (ShopNames.CARPENTER_SHOP, "Shed"),
+            (ShopNames.CARPENTER_SHOP, "Big Shed"),
+        };
     }
 }

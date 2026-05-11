@@ -1,9 +1,13 @@
 ﻿using KaitoKid.Utilities.Interfaces;
+using Newtonsoft.Json;
 using StardewArchipelago.Archipelago;
+using StardewArchipelago.Archipelago.ApworldData;
 using StardewArchipelago.Archipelago.SlotData.SlotEnums;
+using StardewArchipelago.Archipelago.SlotData.SlotEnums.SlotDataRandomization;
 using StardewArchipelago.Constants;
 using StardewArchipelago.Constants.Modded;
 using StardewArchipelago.Constants.Vanilla;
+using StardewArchipelago.GameModifications.Shops;
 using StardewArchipelago.Locations.InGameLocations;
 using StardewArchipelago.Stardew;
 using StardewArchipelago.Stardew.NameMapping;
@@ -133,19 +137,54 @@ namespace StardewArchipelago.Locations.ShopStockModifiers
 
             var locationName = string.Format(BUILDING_BLUEPRINT_LOCATION_NAME, buildingName);
             var id = $"{IDProvider.AP_LOCATION} {locationName}";
+            var customFields = new Dictionary<string, string>();
+            var materialsDict = materials.ToDictionary(x => x.QualifiedItemId, x => x.Stack);
+            string tradeItemId = null;
+            var tradeItemAmount = 0;
+
+            if (TryFindDataRandomizationEntry(buildingName, out var randomizedData))
+            {
+                if (randomizedData.Price != null)
+                {
+                    price = randomizedData.Price.Value;
+                }
+                if (randomizedData.Currency != null && randomizedData.Currency != "Money")
+                {
+                    if (randomizedData.Currency is "Calico Egg" or "Qi Gem" or "Golden Walnut")
+                    {
+                        var tradeItem = _stardewItemManager.GetItemByName(randomizedData.Currency);
+                        tradeItemId = tradeItem.GetQualifiedId();
+                        tradeItemAmount = randomizedData.Price ?? price;
+
+                        materialsDict.Add(randomizedData.Currency, randomizedData.Price ?? price);
+                        price = 0;
+                    }
+                    else
+                    {
+                        customFields["Currency"] = randomizedData.Currency;
+                    }
+                }
+                if (randomizedData.Materials != null)
+                {
+                    materialsDict.Clear();
+                    foreach (var (materialName, materialAmount) in randomizedData.Materials)
+                    {
+                        materialsDict.Add(_stardewItemManager.GetItemByName(materialName).GetQualifiedId(), materialAmount);
+                    }
+                }
+            }
 
             var priceMultiplier = _archipelago.SlotData.BuildingPriceMultiplier;
             var finalPrice = (int)(price * priceMultiplier);
-            var materialsString = string.Join(',', materials.Select(x => GetMaterialString(x, priceMultiplier)));
+            var pricedMaterials = materialsDict.ToDictionary(x => x.Key, x => Math.Max(1, (int)Math.Round(x.Value * priceMultiplier)));
 
-            var customFields = new Dictionary<string, string>()
-            {
-                { ObtainableArchipelagoLocation.EXTRA_MATERIALS_KEY, materialsString },
-            };
+            customFields.Add(ShopMenuInjections.MATERIALS_KEY, JsonConvert.SerializeObject(pricedMaterials));
             var blueprintCheck = new ShopItemData()
             {
                 Id = id,
                 ItemId = id,
+                TradeItemId = tradeItemId,
+                TradeItemAmount = tradeItemAmount,
                 AvailableStock = 1,
                 Price = finalPrice,
                 IsRecipe = false,
@@ -156,6 +195,25 @@ namespace StardewArchipelago.Locations.ShopStockModifiers
             };
 
             shopItems.Add(blueprintCheck);
+        }
+
+        private bool TryFindDataRandomizationEntry(string buildingName, out RandomizedShopItemData randomizedData)
+        {
+            var randomizedShops = _archipelago.SlotData.DataRandomization?.ShopsData;
+            randomizedData = null;
+            if (randomizedShops == null || !randomizedShops.ContainsKey(ShopNames.CARPENTER_SHOP))
+            {
+                return false;
+            }
+
+            var randomizedCarpenter = randomizedShops[ShopNames.CARPENTER_SHOP];
+            if (!randomizedCarpenter.ContainsKey(buildingName))
+            {
+                return false;
+            }
+
+            randomizedData = randomizedCarpenter[buildingName];
+            return true;
         }
 
         private static string GetFarmhouseRequirementCondition(int level)
@@ -177,12 +235,6 @@ namespace StardewArchipelago.Locations.ShopStockModifiers
 
             var queryForThisBuilding = GameStateConditionProvider.CreateHasBuildingOrHigherCondition(requiredBuilding, true);
             return queryForThisBuilding;
-        }
-
-        private string GetMaterialString(ISalable material, double priceMultiplier)
-        {
-            var amount = Math.Max(1, (int)Math.Round(material.Stack * priceMultiplier));
-            return $"{material.QualifiedItemId}:{amount}";
         }
 
         private static Item Wood(int amount)

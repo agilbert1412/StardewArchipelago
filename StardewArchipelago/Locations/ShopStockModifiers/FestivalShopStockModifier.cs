@@ -144,7 +144,7 @@ namespace StardewArchipelago.Locations.ShopStockModifiers
 
                 if (IsRarecrow(unqualifiedItemId, bigCraftableData, out var rarecrowNumber))
                 {
-                    GetRarecrowCheckName(rarecrowNumber, out locationName, out itemName);
+                    GetRarecrowFullName(rarecrowNumber, out locationName, out itemName);
                     return true;
                 }
 
@@ -213,7 +213,7 @@ namespace StardewArchipelago.Locations.ShopStockModifiers
             return false;
         }
 
-        private bool IsRarecrow(string bigCraftableId, BigCraftableData bigCraftableData, out int rarecrowNumber)
+        public static bool IsRarecrow(string bigCraftableId, BigCraftableData bigCraftableData, out int rarecrowNumber)
         {
             if (!bigCraftableData.Name.Equals("Rarecrow", StringComparison.InvariantCultureIgnoreCase))
             {
@@ -237,7 +237,7 @@ namespace StardewArchipelago.Locations.ShopStockModifiers
             return true;
         }
 
-        public void GetRarecrowCheckName(int rarecrowNumber, out string locationName, out string itemName)
+        public static void GetRarecrowFullName(int rarecrowNumber, out string locationName, out string itemName)
         {
             locationName = rarecrowNumber switch
             {

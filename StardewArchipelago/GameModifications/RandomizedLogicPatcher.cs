@@ -38,6 +38,7 @@ using StardewArchipelago.GameModifications.CodeInjections.Powers;
 using StardewArchipelago.GameModifications.MultiplayerVision;
 using StardewValley.Tools;
 using StardewArchipelago.GameModifications.RandomizedData;
+using StardewArchipelago.GameModifications.Shops;
 using xTile.Dimensions;
 
 namespace StardewArchipelago.GameModifications
@@ -98,6 +99,7 @@ namespace StardewArchipelago.GameModifications
             MovementInjections.Initialize(logger, archipelago);
             BundleMenuInjection.Initialize(logger, modHelper, archipelago, state, locationChecker, bundleReader);
             InventoryInjections.Initialize(logger, archipelago, state.Wallet);
+            ShopMenuInjections.Initialize(logger, modHelper, archipelago, stardewItemManager, state);
             DebugPatchInjections.Initialize(logger, archipelago);
             _powersModifier = new PowersModifier(logger, modHelper, archipelago);
         }
@@ -152,6 +154,7 @@ namespace StardewArchipelago.GameModifications
             PatchEvents();
             PatchEmptyHandBreak();
             PatchTouchingItems();
+            PatchShopMenus();
 
             _dataPatcher.PatchAllRandomizedData();
             _startingResources.GivePlayerStartingResources();
@@ -1002,6 +1005,19 @@ namespace StardewArchipelago.GameModifications
             _harmony.Patch(
                 original: AccessTools.PropertySetter(typeof(Item), nameof(Item.HasBeenInInventory)),
                 postfix: new HarmonyMethod(typeof(InventoryInjections), nameof(InventoryInjections.HasBeenInInventorySet_TouchItems_Postfix))
+            );
+        }
+
+        private void PatchShopMenus()
+        {
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(ShopMenu), "tryToPurchaseItem"),
+                prefix: new HarmonyMethod(typeof(ShopMenuInjections), nameof(ShopMenuInjections.TryToPurchaseItem_ConsiderCurrencyAndMaterials_Prefix))
+            );
+
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(ShopMenu), nameof(ShopMenu.draw), new[] { typeof(SpriteBatch) }),
+                prefix: new HarmonyMethod(typeof(ShopMenuInjections), nameof(ShopMenuInjections.Draw_ConsiderCurrencyAndMaterials_Prefix))
             );
         }
 

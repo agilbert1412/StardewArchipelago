@@ -75,7 +75,7 @@ namespace StardewArchipelago.Locations.Patcher
             _toolUpgradesShopStockModifier = new ToolShopStockModifier(logger, modHelper, archipelago, stardewItemManager, nameSimplifier);
             _fishingRodShopStockModifier = new FishingRodShopStockModifier(logger, modHelper, archipelago, stardewItemManager, nameSimplifier);
             _carpenterShopStockModifier = new CarpenterShopStockModifier(logger, modHelper, archipelago, stardewItemManager, nameSimplifier);
-            _carpenterBuildingsModifier = new CarpenterBuildingsModifier(logger, modHelper, archipelago);
+            _carpenterBuildingsModifier = new CarpenterBuildingsModifier(logger, modHelper, archipelago, stardewItemManager);
             _guildShopStockModifier = new AdventureGuildShopStockModifier(logger, modHelper, archipelago, stardewItemManager, nameSimplifier);
             _travelingMerchantShopStockModifier = new TravelingMerchantShopStockModifier(logger, modHelper, archipelago, stardewItemManager, nameSimplifier);
             _festivalShopStockModifier = new FestivalShopStockModifier(logger, modHelper, archipelago, stardewItemManager, nameSimplifier);

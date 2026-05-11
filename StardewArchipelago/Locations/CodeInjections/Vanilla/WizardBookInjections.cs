@@ -12,6 +12,7 @@ using Archipelago.MultiClient.Net.Models;
 using StardewArchipelago.Archipelago;
 using StardewArchipelago.Logging;
 using StardewArchipelago.Constants.Vanilla;
+using StardewArchipelago.GameModifications.Shops;
 using Object = StardewValley.Object;
 using StardewValley.Locations;
 
@@ -173,7 +174,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
 
 
             var blueprintCheck = new ObtainableArchipelagoLocation(locationName, _logger, _modHelper, _locationChecker, _archipelago, hints, true);
-            blueprintCheck.modData.Add(ObtainableArchipelagoLocation.EXTRA_MATERIALS_KEY, materialsString);
+            blueprintCheck.modData.Add(ShopMenuInjections.MATERIALS_KEY, materialsString);
 
 
             shopItems.Add(blueprintCheck, new ItemStockInformation(finalPrice, 1));

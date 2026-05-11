@@ -12,6 +12,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using KaitoKid.Utilities.Interfaces;
+using StardewArchipelago.Locations.ShopStockModifiers;
 using StardewValley.GameData;
 using Object = StardewValley.Object;
 
@@ -505,14 +506,16 @@ namespace StardewArchipelago.Stardew
                     }
                 }
 
-                if (_bigCraftablesById.ContainsKey(id) || _bigCraftablesByName.ContainsKey(bigCraftable.Name))
-                {
-                    continue;
-                }
-
                 _bigCraftablesById.Add(id, bigCraftable);
-                _bigCraftablesByName.Add(bigCraftable.Name, bigCraftable);
+                _bigCraftablesByName.TryAdd(bigCraftable.Name, bigCraftable);
                 _itemsByQualifiedId.Add(bigCraftable.GetQualifiedId(), bigCraftable);
+
+                if (FestivalShopStockModifier­.IsRarecrow(id, bigCraftableData, out var rarecrowNumber))
+                {
+                    FestivalShopStockModifier.GetRarecrowFullName(rarecrowNumber, out var fullName, out var itemName);
+                    _bigCraftablesByName.TryAdd(fullName, bigCraftable);
+                    _bigCraftablesByName.TryAdd(itemName, bigCraftable);
+                }
             }
         }
 
