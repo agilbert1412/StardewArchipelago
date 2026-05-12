@@ -47,6 +47,7 @@ namespace StardewArchipelago.Textures
             if (!File.Exists(relativePathToTexture))
             {
                 _logger.Log($"Tried to load texture '{relativePathToTexture}', but it couldn't be found!", failureLogLevel);
+                _loadedTextures.Add(cacheKey, null);
                 return null;
             }
 
