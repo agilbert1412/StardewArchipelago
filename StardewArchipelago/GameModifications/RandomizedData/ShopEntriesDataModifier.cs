@@ -15,7 +15,10 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using StardewArchipelago.Archipelago.ApworldData;
+using StardewArchipelago.Constants.Locations;
+using StardewArchipelago.Constants.Vanilla;
 using StardewArchipelago.GameModifications.Shops;
+using StardewValley;
 
 namespace StardewArchipelago.GameModifications.RandomizedData
 {
@@ -139,10 +142,6 @@ namespace StardewArchipelago.GameModifications.RandomizedData
                     shopData.Items.InsertRange(i, replacementShopItemDatas);
                 }
                 hasModifiedOne = true;
-                if (!string.IsNullOrWhiteSpace(randomizedShopItemData.Currency))
-                {
-                    shopData.Currency = GetVanillaCurrency(randomizedShopItemData.Currency);
-                }
             }
 
             return hasModifiedOne;
@@ -165,8 +164,53 @@ namespace StardewArchipelago.GameModifications.RandomizedData
                     }
                     return true;
                 }
+            }
 
+            if (TryMatchItemId(shopDataItem, randomizedShopItemData, randomizedItemName, out var isCorrectItem))
+            {
+                return isCorrectItem;
+            }
+
+            return false;
+        }
+
+        private static bool TryMatchItemId(ShopItemData shopDataItem, RandomizedShopItemData randomizedShopItemData, string randomizedItemName, out bool isCorrectItem)
+        {
+            isCorrectItem = false;
+            if (shopDataItem.ItemId == null)
+            {
+                isCorrectItem = false;
                 return false;
+            }
+
+            if (shopDataItem.ItemId.StartsWith(IDProvider.AP_LOCATION))
+            {
+                var locationName = shopDataItem.ItemId.Substring(IDProvider.AP_LOCATION.Length + 1);
+                if (locationName.Equals(randomizedShopItemData.ItemName) || locationName.Equals($"{Prefix.PURCHASE}{randomizedShopItemData.ItemName}"))
+                {
+                    if (shopDataItem.IsRecipe)
+                    {
+                        isCorrectItem = randomizedItemName.EndsWith(ItemParser.RECIPE_SUFFIX);
+                        return true;
+                    }
+                    isCorrectItem = true;
+                    return true;
+                }
+            }
+
+            if (shopDataItem.ItemId.StartsWith(QualifiedItemIds.TOOLS_QUALIFIER))
+            {
+                var tool = ItemRegistry.Create(shopDataItem.ItemId);
+                if (tool.Name.Equals(randomizedShopItemData.ItemName) || tool.Name.Equals($"{Prefix.PURCHASE}{randomizedShopItemData.ItemName}"))
+                {
+                    if (shopDataItem.IsRecipe)
+                    {
+                        isCorrectItem = randomizedItemName.EndsWith(ItemParser.RECIPE_SUFFIX);
+                        return true;
+                    }
+                    isCorrectItem = true;
+                    return true;
+                }
             }
 
             return false;
@@ -193,19 +237,9 @@ namespace StardewArchipelago.GameModifications.RandomizedData
 
             if (!string.IsNullOrWhiteSpace(randomizedShopItemData.Currency))
             {
-                if (randomizedShopItemData.Currency is "Calico Egg" or "Qi Gem" or "Golden Walnut")
-                {
-                    var tradeItem = _itemManager.GetItemByName(randomizedShopItemData.Currency);
-                    shopDataItem.TradeItemId = tradeItem.GetQualifiedId();
-                    shopDataItem.TradeItemAmount = price ?? shopDataItem.Price;
-                    price = null;
-                }
-                else
-                {
-                    shopDataItem.ModData ??= new Dictionary<string, string>();
-                    shopDataItem.ModData.TryAdd("Currency", randomizedShopItemData.Currency);
-                    shopDataItem.ModData["Currency"] = randomizedShopItemData.Currency;
-                }
+                shopDataItem.ModData ??= new Dictionary<string, string>();
+                shopDataItem.ModData.TryAdd(ShopMenuInjections.CURRENCY_KEY, randomizedShopItemData.Currency);
+                shopDataItem.ModData[ShopMenuInjections.CURRENCY_KEY] = randomizedShopItemData.Currency;
             }
 
             if (price.HasValue)

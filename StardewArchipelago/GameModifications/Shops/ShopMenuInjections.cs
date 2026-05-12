@@ -22,6 +22,8 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
+using StardewArchipelago.Constants.Vanilla;
+using StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles;
 
 namespace StardewArchipelago.GameModifications.Shops
 {
@@ -69,9 +71,9 @@ namespace StardewArchipelago.GameModifications.Shops
                         __result = true;
                         return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
                     }
-                    if (stockToBuy > item.GetSalableInstance().maximumStackSize())
+                    if (stockToBuy > item.maximumStackSize())
                     {
-                        stockToBuy = Math.Max(1, item.GetSalableInstance().maximumStackSize());
+                        stockToBuy = Math.Max(1, item.maximumStackSize());
                     }
                     var totalPrice = stock.Price * stockToBuy;
                     var tradeItemId = (string)null;
@@ -86,7 +88,7 @@ namespace StardewArchipelago.GameModifications.Shops
                         }
                         totalTradeItemCount *= stockToBuy;
                     }
-                    if (CanAfford(__instance, item, Game1.player, stockToBuy, totalPrice) && (tradeItemId == null || __instance.HasTradeItem(tradeItemId, totalTradeItemCount)))
+                    if (CanAfford(__instance, item, Game1.player, totalPrice, stockToBuy) && (tradeItemId == null || __instance.HasTradeItem(tradeItemId, totalTradeItemCount)))
                     {
                         __instance.heldItem = item.GetSalableInstance();
                         __instance.heldItem.Stack = stack;
@@ -210,6 +212,7 @@ namespace StardewArchipelago.GameModifications.Shops
                 if (stock.Stock > 0)
                 {
                     __result = false;
+                    return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
                 }
                 __instance.buyBackItems.Remove(item);
                 __instance.hoveredItem = null;
@@ -301,11 +304,20 @@ namespace StardewArchipelago.GameModifications.Shops
                     {
                         return who.festivalScore + _state.Wallet.StarTokens;
                     }
+                    var randomAmounts = new List<int>() { 0 };
+                    for (var i = 0; Math.Pow(10, i) < int.MaxValue; i++)
+                    {
+                        randomAmounts.Add((int)Math.Pow(10, i));
+                    }
+                    var random = new Random(DateTime.Now.Second);
+                    _state.Wallet.StarTokens = randomAmounts[random.Next(randomAmounts.Count)];
                     return _state.Wallet.StarTokens;
                 case "Qi Coin":
                     return who.clubCoins;
                 case "Qi Gem":
                     return who.QiGems;
+                case "Calico Egg":
+                    return who.Items.CountId(QualifiedItemIds.CALICO_EGG);
                 default:
                     throw new ArgumentException($"Invalid Currency: {currencyName}");
             }
@@ -336,6 +348,7 @@ namespace StardewArchipelago.GameModifications.Shops
                     "Star Token" => 1,
                     "Qi Coin" => 2,
                     "Qi Gem" => 4,
+                    _ => -1,
                 };
             }
 
@@ -426,6 +439,9 @@ namespace StardewArchipelago.GameModifications.Shops
                     return;
                 case "Qi Gem":
                     who.QiGems -= totalPrice;
+                    return;
+                case "Calico Egg":
+                    who.Items.ReduceId(QualifiedItemIds.CALICO_EGG, totalPrice);
                     return;
                 default:
                     throw new ArgumentException($"Invalid Currency: {currency}");
@@ -520,7 +536,7 @@ namespace StardewArchipelago.GameModifications.Shops
                 return;
             }
 
-            var flag1 = menu.canPurchaseCheck != null && !menu.canPurchaseCheck(menu.currentItemIndex + index);
+            var cannotPurchase = menu.canPurchaseCheck != null && !menu.canPurchaseCheck(menu.currentItemIndex + index);
             var salableItem = menu.forSale[menu.currentItemIndex + index];
             var stockInfo = menu.itemPriceAndStock[salableItem];
             var stackDrawType = menu.GetStackDrawType(stockInfo, salableItem);
@@ -536,25 +552,25 @@ namespace StardewArchipelago.GameModifications.Shops
             }
             if (salableItem.ShouldDrawIcon())
             {
-                DrawSaleItemIcon(menu, b, forSaleButton, flag1, stockInfo, salableItem, stackDrawType, s1);
+                DrawSaleItemIcon(menu, b, forSaleButton, cannotPurchase, stockInfo, salableItem, stackDrawType, s1);
             }
             else
             {
-                SpriteText.drawString(b, s1, forSaleButton.bounds.X + 32 + 8, forSaleButton.bounds.Y + 28, alpha: flag1 ? 0.5f : 1f, color: visualTheme.ItemRowTextColor);
+                SpriteText.drawString(b, s1, forSaleButton.bounds.X + 32 + 8, forSaleButton.bounds.Y + 28, alpha: cannotPurchase ? 0.5f : 1f, color: visualTheme.ItemRowTextColor);
             }
             var right = forSaleButton.bounds.Right;
             var y1 = forSaleButton.bounds.Y + 28 - 4;
             var y2 = forSaleButton.bounds.Y + 44;
-            DrawSaleItemPrice(menu, b, salableItem, stockInfo, forSaleButton, flag1, ref right, ref y1, ref y2);
+            DrawSaleItemPrice(menu, b, salableItem, stockInfo, forSaleButton, cannotPurchase, ref right, ref y1, ref y2);
             DrawSaleItemTradeItems(menu, b, salableItem, index, stockInfo, ref right, y1, y2);
         }
 
-        private static void DrawSaleItemIcon(ShopMenu menu, SpriteBatch b, ClickableComponent forSaleButton, bool flag1, ItemStockInformation stockInfo, ISalable key, StackDrawType stackDrawType, string s1)
+        private static void DrawSaleItemIcon(ShopMenu menu, SpriteBatch b, ClickableComponent forSaleButton, bool cannotPurchase, ItemStockInformation stockInfo, ISalable key, StackDrawType stackDrawType, string s1)
         {
             var visualTheme = menu.VisualTheme;
             b.Draw(visualTheme.ItemIconBackgroundTexture, new Vector2(forSaleButton.bounds.X + 32 - 12, forSaleButton.bounds.Y + 24 - 4), new Rectangle?(visualTheme.ItemIconBackgroundSourceRect), Color.White, 0.0f, Vector2.Zero, 4f, SpriteEffects.None, 1f);
             var location = new Vector2(forSaleButton.bounds.X + 32 - 8, forSaleButton.bounds.Y + 24);
-            var color = Color.White * (!flag1 ? 1f : 0.25f);
+            var color = Color.White * (!cannotPurchase ? 1f : 0.25f);
             var stock = stockInfo.Stock;
             key.drawInMenu(b, location, 1f, 1f, 0.9f, StackDrawType.HideButShowQuality, color, true);
             if (stock != int.MaxValue && menu.ShopId != "ClintUpgrade" && (stackDrawType == StackDrawType.Draw && stock > 1 || stackDrawType == StackDrawType.Draw_OneInclusive))
@@ -563,7 +579,7 @@ namespace StardewArchipelago.GameModifications.Shops
             }
             if (menu.buyBackItems.Contains(key))
             {
-                b.Draw(Game1.mouseCursors2, new Vector2(forSaleButton.bounds.X + 32 - 8, forSaleButton.bounds.Y + 24), new Rectangle?(new Rectangle(64, 240, 16, 16)), Color.White * (!flag1 ? 1f : 0.25f), 0.0f, new Vector2(8f, 8f), 4f, SpriteEffects.None, 1f);
+                b.Draw(Game1.mouseCursors2, new Vector2(forSaleButton.bounds.X + 32 - 8, forSaleButton.bounds.Y + 24), new Rectangle?(new Rectangle(64, 240, 16, 16)), Color.White * (!cannotPurchase ? 1f : 0.25f), 0.0f, new Vector2(8f, 8f), 4f, SpriteEffects.None, 1f);
             }
             var s2 = s1;
             var flag2 = stockInfo.Price > 0;
@@ -571,10 +587,10 @@ namespace StardewArchipelago.GameModifications.Shops
             {
                 s2 = s2.Substring(0, flag2 ? 27 : 37) + "...";
             }
-            SpriteText.drawString(b, s2, forSaleButton.bounds.X + 96 + 8, forSaleButton.bounds.Y + 28, alpha: flag1 ? 0.5f : 1f, color: visualTheme.ItemRowTextColor);
+            SpriteText.drawString(b, s2, forSaleButton.bounds.X + 96 + 8, forSaleButton.bounds.Y + 28, alpha: cannotPurchase ? 0.5f : 1f, color: visualTheme.ItemRowTextColor);
         }
 
-        private static void DrawSaleItemPrice(ShopMenu menu, SpriteBatch b, ISalable salableItem, ItemStockInformation stockInfo, ClickableComponent forSaleButton, bool flag1, ref int right, ref int y1, ref int y2)
+        private static void DrawSaleItemPrice(ShopMenu menu, SpriteBatch b, ISalable salableItem, ItemStockInformation stockInfo, ClickableComponent forSaleButton, bool cannotPurchase, ref int right, ref int y1, ref int y2)
         {
             if (stockInfo.Price <= 0)
             {
@@ -583,28 +599,42 @@ namespace StardewArchipelago.GameModifications.Shops
 
             var canAffordItem = CanAffordCurrency(menu, salableItem, Game1.player, stockInfo.Price);
             var currencyIndex = GetCurrencyIndex(menu, salableItem);
-            SpriteText.drawString(b, stockInfo.Price.ToString() + " ", right - SpriteText.getWidthOfString(stockInfo.Price.ToString() + " ") - 60, forSaleButton.bounds.Y + 28, alpha: !canAffordItem || flag1 ? 0.5f : 1f, color: menu.VisualTheme.ItemRowTextColor);
-            Utility.drawWithShadow(b, Game1.mouseCursors, new Vector2(forSaleButton.bounds.Right - 52, forSaleButton.bounds.Y + 40 - 4), new Rectangle(193 + currencyIndex * 9, 373, 9, 10), Color.White * (!flag1 ? 1f : 0.25f), 0.0f, Vector2.Zero, 4f, shadowIntensity: !flag1 ? 0.35f : 0.0f);
-            right -= SpriteText.getWidthOfString(stockInfo.Price.ToString() + " ") + 68;
+            var widthOfString = SpriteText.getWidthOfString(stockInfo.Price.ToString() + " ");
+            SpriteText.drawString(b, stockInfo.Price.ToString() + " ", right - widthOfString - 76, forSaleButton.bounds.Y + 28, alpha: !canAffordItem || cannotPurchase ? 0.5f : 1f, color: menu.VisualTheme.ItemRowTextColor);
+            var texture = Game1.mouseCursors;
+            var sourceRect = new Rectangle(193 + currencyIndex * 9, 373, 9, 10);
+            var position = new Vector2(forSaleButton.bounds.Right - 68, forSaleButton.bounds.Y + 40 - 4);
+            if (currencyIndex > 3 || currencyIndex < 0)
+            {
+                var tradeId = currencyIndex switch
+                {
+                    -1 => QualifiedItemIds.CALICO_EGG,
+                    4 => QualifiedItemIds.QI_GEM,
+                    _ => "",
+                };
+                (texture, sourceRect) = GetTradeItemTextureAndSourceRect(tradeId);
+                position = new Vector2(forSaleButton.bounds.Right - 76, forSaleButton.bounds.Y + 40 - 16);
+            }
+            Utility.drawWithShadow(b, texture, position, sourceRect, Color.White * (!cannotPurchase ? 1f : 0.25f), 0.0f, Vector2.Zero, 4f, shadowIntensity: !cannotPurchase ? 0.35f : 0.0f);
+            right -= widthOfString + 74;
             y1 = forSaleButton.bounds.Y + 20;
             y2 = forSaleButton.bounds.Y + 28;
         }
 
         private static void DrawSaleItemTradeItems(ShopMenu menu, SpriteBatch b, ISalable salableItem, int index, ItemStockInformation stockInfo, ref int right, int y1, int y2)
         {
+            var materials = GetMaterialsPrice(salableItem);
             if (stockInfo.TradeItem != null)
             {
                 DrawSaleItemTradeItem(menu, b, index, stockInfo.TradeItem, stockInfo.TradeItemCount, right, y1, y2);
+                DrawSaleItemMaterials(menu, b, index, materials, ref right, y1, y2);
                 return;
             }
-
-            var materials = GetMaterialsPrice(salableItem);
-
-            if (materials.Count == 1)
+            if(materials.Count == 1)
             {
                 DrawSaleItemTradeItem(menu, b, index, materials.First().Key, materials.First().Value, right, y1, y2);
+                return;
             }
-
             if (materials.Count > 1)
             {
                 DrawSaleItemMaterials(menu, b, index, materials, ref right, y1, y2);
@@ -624,11 +654,17 @@ namespace StardewArchipelago.GameModifications.Shops
                 flag3 = false;
             }
             var widthOfString = (float)SpriteText.getWidthOfString("x" + count.ToString());
+            var (texture, sourceRect) = GetTradeItemTextureAndSourceRect(tradeItemId);
+            Utility.drawWithShadow(b, texture, new Vector2(right - 88 - widthOfString, y1), sourceRect, Color.White * (flag3 ? 1f : 0.25f), 0.0f, Vector2.Zero, shadowIntensity: flag3 ? 0.35f : 0.0f);
+            SpriteText.drawString(b, "x" + count.ToString(), right - (int)widthOfString - 22, y2, alpha: flag3 ? 1f : 0.5f, color: menu.VisualTheme.ItemRowTextColor);
+        }
+
+        private static (Texture2D texture, Rectangle sourceRect) GetTradeItemTextureAndSourceRect(string tradeItemId)
+        {
             var dataOrErrorItem = ItemRegistry.GetDataOrErrorItem(tradeItemId);
             var texture = dataOrErrorItem.GetTexture();
             var sourceRect = dataOrErrorItem.GetSourceRect();
-            Utility.drawWithShadow(b, texture, new Vector2(right - 88 - widthOfString, y1), sourceRect, Color.White * (flag3 ? 1f : 0.25f), 0.0f, Vector2.Zero, shadowIntensity: flag3 ? 0.35f : 0.0f);
-            SpriteText.drawString(b, "x" + count.ToString(), right - (int)widthOfString - 22, y2, alpha: flag3 ? 1f : 0.5f, color: menu.VisualTheme.ItemRowTextColor);
+            return (texture, sourceRect);
         }
 
         private static void DrawSaleItemMaterials(ShopMenu menu, SpriteBatch b, int index, Dictionary<string, int> materials, ref int right, int y1, int y2)
@@ -740,6 +776,35 @@ namespace StardewArchipelago.GameModifications.Shops
             else
             {
                 IClickableMenu.drawToolTip(b, materialsHoverText, menu.boldTitleText, hoveredItem1, menu.heldItem != null, currencySymbol: menu.currency, extraItemToShowIndex: hoveredItemExtraItemIndex, extraItemToShowAmount: hoveredItemExtraItemAmount, moneyAmountToShowAtBottom: menu.hoverPrice > 0 ? menu.hoverPrice : -1);
+            }
+
+            DrawHoverItemCurrency(menu, b, hoveredItem2);
+        }
+
+        private static void DrawHoverItemCurrency(ShopMenu menu, SpriteBatch b, ISalable hoveredItem2)
+        {
+            var currency = GetCurrencyIndex(menu, hoveredItem2);
+            if (currency != menu.currency)
+            {
+                switch (currency)
+                {
+                    case 0:
+                        Game1.dayTimeMoneyBox.drawMoneyBox(b, menu.xPositionOnScreen - 36, menu.yPositionOnScreen + menu.height - menu.inventory.height - 12);
+                        break;
+                    case 1:
+                        BundleCurrencyManager.DrawStarTokenCurrency(GetOwnedOfCurrency("Star Token", Game1.player));
+                        break;
+                    case 2:
+                        SpriteText.drawStringWithScrollBackground(b, Game1.player.clubCoins.ToString(), 64, 16);
+                        break;
+                    case 4:
+                        Game1.specialCurrencyDisplay.ShowCurrency("qiGems");
+                        break;
+                }
+            }
+            else
+            {
+                Game1.specialCurrencyDisplay.ShowCurrency(null);
             }
         }
 

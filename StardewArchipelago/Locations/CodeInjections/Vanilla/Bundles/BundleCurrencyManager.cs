@@ -240,7 +240,12 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
 
         private void DrawStarTokenCurrency()
         {
-            DrawSpecialCurrency(_wallet.StarTokens, Game1.mouseCursors, new Rectangle(338, 400, 8, 8));
+            DrawStarTokenCurrency(_wallet.StarTokens);
+        }
+
+        public static void DrawStarTokenCurrency(int amount)
+        {
+            DrawSpecialCurrency(amount, Game1.mouseCursors, new Rectangle(338, 400, 8, 8));
         }
 
         private void DrawBloodCurrency()
@@ -416,7 +421,8 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
             spriteBatch.End();
             Game1.PushUIMode();
             spriteBatch.Begin(blendState: BlendState.AlphaBlend, samplerState: SamplerState.PointClamp);
-            var width = 128 + (amountOwned.Length > 3 ? (amountOwned.Length-3) * 16 : 0);
+            var textSize = Game1.dialogueFont.MeasureString(amountOwned);
+            var width = 64 + (int)textSize.Y;
             spriteBatch.Draw(Game1.fadeToBlackRect, new Rectangle(16, 16, width, 64), Color.Black * 0.75f);
             var position = new Vector2(32f, 32f);
             if (sourceRectangle.Width >= 24)
@@ -436,7 +442,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
                 position.Y -= 8;
             }
             spriteBatch.Draw(texture, position, sourceRectangle, Color.White, 0.0f, Vector2.Zero, scale, SpriteEffects.None, 1f);
-            Game1.drawWithBorder(amountOwned, Color.Black, Color.White, new Vector2((72f + position.X), (float)(21 + (LocalizedContentManager.CurrentLanguageCode == LocalizedContentManager.LanguageCode.en ? 8 : (LocalizedContentManager.CurrentLanguageLatin ? 16 : 8)))), 0.0f, 1f, 1f, false);
+            Game1.drawWithBorder(amountOwned, Color.Black, Color.White, new Vector2((36f + position.X), (float)(21 + (LocalizedContentManager.CurrentLanguageCode == LocalizedContentManager.LanguageCode.en ? 8 : (LocalizedContentManager.CurrentLanguageLatin ? 16 : 8)))), 0.0f, 1f, 1f, false);
 
             spriteBatch.End();
             Game1.PopUIMode();

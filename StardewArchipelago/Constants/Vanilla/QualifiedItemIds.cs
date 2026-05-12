@@ -73,6 +73,7 @@ namespace StardewArchipelago.Constants.Vanilla
         public static readonly string BUG_MEAT = QualifiedObjectId(ObjectIds.BUG_MEAT);
         public static readonly string CACTUS_FRUIT = QualifiedObjectId(ObjectIds.CACTUS_FRUIT);
         public static readonly string CACTUS_SEEDS = QualifiedObjectId(ObjectIds.CACTUS_SEEDS);
+        public static readonly string CALICO_EGG = QualifiedObjectId(ObjectIds.CALICO_EGG);
         public static readonly string CARROT = QualifiedObjectId(ObjectIds.CARROT);
         public static readonly string CATALOGUE = QualifiedFurnitureId(FurnitureIds.CATALOGUE);
         public static readonly string CAULIFLOWER_SEEDS = QualifiedObjectId(ObjectIds.CAULIFLOWER_SEEDS);
@@ -253,6 +254,7 @@ namespace StardewArchipelago.Constants.Vanilla
         public static readonly string PYRAMID_DECAL = QualifiedFurnitureId(FurnitureIds.PYRAMID_DECAL);
         public static readonly string QI_BEAN = QualifiedObjectId(ObjectIds.QI_BEAN);
         public static readonly string QI_FRUIT = QualifiedObjectId(ObjectIds.QI_FRUIT);
+        public static readonly string QI_GEM = QualifiedObjectId(ObjectIds.QI_GEM);
         public static readonly string QI_SEASONING = QualifiedObjectId(ObjectIds.QI_SEASONING);
         public static readonly string QUALITY_FERTILIZER = QualifiedObjectId(ObjectIds.QUALITY_FERTILIZER);
         public static readonly string QUALITY_RETAINING_SOIL = QualifiedObjectId(ObjectIds.QUALITY_RETAINING_SOIL);

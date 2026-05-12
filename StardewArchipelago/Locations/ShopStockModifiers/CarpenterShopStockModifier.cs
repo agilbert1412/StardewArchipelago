@@ -148,28 +148,27 @@ namespace StardewArchipelago.Locations.ShopStockModifiers
                 {
                     price = randomizedData.Price.Value;
                 }
-                if (randomizedData.Currency != null && randomizedData.Currency != "Money")
+                if (randomizedData.Currency != null)
                 {
-                    if (randomizedData.Currency is "Calico Egg" or "Qi Gem" or "Golden Walnut")
-                    {
-                        var tradeItem = _stardewItemManager.GetItemByName(randomizedData.Currency);
-                        tradeItemId = tradeItem.GetQualifiedId();
-                        tradeItemAmount = randomizedData.Price ?? price;
-
-                        materialsDict.Add(randomizedData.Currency, randomizedData.Price ?? price);
-                        price = 0;
-                    }
-                    else
-                    {
-                        customFields["Currency"] = randomizedData.Currency;
-                    }
+                    customFields[ShopMenuInjections.CURRENCY_KEY] = randomizedData.Currency;
                 }
                 if (randomizedData.Materials != null)
                 {
                     materialsDict.Clear();
-                    foreach (var (materialName, materialAmount) in randomizedData.Materials)
+                    if (randomizedData.Materials.Count == 1)
                     {
-                        materialsDict.Add(_stardewItemManager.GetItemByName(materialName).GetQualifiedId(), materialAmount);
+                        var (materialName, materialAmount) = randomizedData.Materials.First();
+                        var materialItem = _stardewItemManager.GetObjectByName(materialName);
+                        var materialQualifiedId = materialItem.GetQualifiedId();
+                        tradeItemId = materialQualifiedId;
+                        tradeItemAmount = materialAmount;
+                    }
+                    else
+                    {
+                        foreach (var (materialName, materialAmount) in randomizedData.Materials)
+                        {
+                            materialsDict.Add(_stardewItemManager.GetItemByName(materialName).GetQualifiedId(), materialAmount);
+                        }
                     }
                 }
             }
