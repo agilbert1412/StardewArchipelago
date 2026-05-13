@@ -1091,9 +1091,14 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
             }
 
             base.TakeDownSpecificBundleComponents();
+            _isCurrentlySticky = false;
+        }
+
+        protected override void ClearBundleUIComponents()
+        {
             _donateButton = null;
             ExtraButtons.Clear();
-            _isCurrentlySticky = false;
+            base.ClearBundleUIComponents();
         }
 
         public override void update(GameTime time)
@@ -1211,7 +1216,8 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
             }
 
             var ingredientRectangles = GenerateIngredientRectangles(1);
-            CreateIngredientComponent(IkeaItemQualifiedId, 1, 0, ingredientRectangles);
+            var ingredientButton = CreateIngredientButton(IkeaItemQualifiedId, ingredientRectangles[0], 0, new BundleIngredientDescription(IkeaItemQualifiedId, 1, 0, false));
+            this.IngredientList.Add(ingredientButton);
 
             for (var i = 0; i < IngredientList.Count - 1; i++)
             {
@@ -1474,6 +1480,15 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
                         PerformCurrencyPurchase();
                     }
                     return true;
+                }
+            }
+            if (CurrentPageBundle.name == MemeBundleNames.COOKIE_CLICKER)
+            {
+                var texturePosition = new Vector2(xPositionOnScreen + 872, yPositionOnScreen + 88);
+                var textureRectangle = new Rectangle((int)texturePosition.X, (int)texturePosition.Y, 128, 128);
+                if (textureRectangle.Contains(x, y))
+                {
+                    _wallet.CookieClicker.ClickCookie();
                 }
             }
 

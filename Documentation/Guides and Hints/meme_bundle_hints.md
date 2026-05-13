@@ -204,7 +204,7 @@ Each item represents a big commitment that you must perform.
 - Bouquets are used to start a relationship
 - Mermaid Pendants are used to marry
 - Wilted Bouquets are used to end a relationship
-- Ancient Dolls are often used to symbolize children
+- Ancient Dolls are often used to symbolize cursed children
 
 </details>
 
@@ -214,7 +214,7 @@ Each item represents a big commitment that you must perform.
 - Bouquet: You need to be dating someone
 - Mermaid Pendant: You need to be married to someone. You can get a 2nd pendant during the engagement period, which you can then donate to the bundle after the marriage.
 - Wilted Bouquet: You need to have divorced someone
-- Ancient Dolls: You need to be the parent of two children
+- Ancient Dolls: You need to have turned 2 children into doves at the Witch Hut
 
 </details>
 </ul>
