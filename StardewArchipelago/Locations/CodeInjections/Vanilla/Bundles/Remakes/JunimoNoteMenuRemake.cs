@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using StardewArchipelago.Bundles;
+using StardewArchipelago.Constants.Vanilla;
 using StardewValley;
 using StardewValley.BellsAndWhistles;
 using StardewValley.Extensions;
@@ -9,8 +10,10 @@ using StardewValley.ItemTypeDefinitions;
 using StardewValley.Locations;
 using StardewValley.Menus;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 // ReSharper disable PossibleLossOfFraction
 
 #nullable disable
@@ -1828,15 +1831,9 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles.Remakes
             {
                 return;
             }
-            var ofIngredientSlots = CurrentPageBundle.NumberOfIngredientSlots;
-            var toAddTo1 = GenerateIngredientSlotsRectangles(ofIngredientSlots);
-            IngredientSlots.Clear();
-            for (var index = 0; index < toAddTo1.Count; ++index)
-            {
-                IngredientSlots.Add(new ClickableTextureComponent(toAddTo1[index], NoteTexture, new Rectangle(512, 244, 18, 18), 4f));
-            }
-            CreateIngredients();
-            UpdateIngredientSlots();
+
+            ClearBundleUIComponents();
+            SetUpBundleSpecificPage(CurrentPageBundle);
         }
 
         protected List<Rectangle> GenerateIngredientRectangles(int numberIngredients)
@@ -1851,45 +1848,6 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles.Remakes
             var toAddTo1 = new List<Rectangle>();
             AddRectangleRowsToList(toAddTo1, numberIngredientSlots, INGREDIENT_SLOTS_CENTER_X, INGREDIENT_SLOTS_CENTER_Y);
             return toAddTo1;
-        }
-
-        private void CreateIngredients()
-        {
-            IngredientList.Clear();
-            var ingredientRectangles = GenerateIngredientRectangles(CurrentPageBundle.Ingredients.Count);
-            for (var index = 0; index < ingredientRectangles.Count; ++index)
-            {
-                CreateIngredientComponent(index, ingredientRectangles);
-            }
-        }
-
-        private void CreateIngredientComponent(int index, List<Rectangle> ingredientRectangles)
-        {
-            var ingredient = CurrentPageBundle.Ingredients[index];
-            CreateIngredientComponent(ingredient, index, ingredientRectangles);
-        }
-
-        private void CreateIngredientComponent(BundleIngredientDescription ingredient, int index, List<Rectangle> ingredientRectangles)
-        {
-            CreateIngredientComponent(ingredient.id, ingredient.stack, index, ingredientRectangles, ingredient.quality, ingredient.preservesId);
-        }
-
-        protected void CreateIngredientComponent(string itemId, int stack, int index, List<Rectangle> ingredientRectangles, int quality = 0, string preservesId = null)
-        {
-            var metadata = ItemRegistry.GetMetadata(itemId);
-            var parsedOrErrorData = metadata.GetParsedOrErrorData();
-            var texture = parsedOrErrorData.GetTexture();
-            var sourceRect = parsedOrErrorData.GetSourceRect();
-            var obj = preservesId != null ? Utility.CreateFlavoredItem(itemId, preservesId, quality, stack) : ItemRegistry.Create(itemId, stack, quality);
-            var ingredientList = this.IngredientList;
-            var textureComponent = new ClickableTextureComponent("", ingredientRectangles[index], "", obj.DisplayName, texture, sourceRect, 4f);
-            textureComponent.myID = index + REGION_INGREDIENT_LIST_MODIFIER;
-            textureComponent.item = obj;
-            textureComponent.upNeighborID = -99998;
-            textureComponent.rightNeighborID = -99998;
-            textureComponent.leftNeighborID = -99998;
-            textureComponent.downNeighborID = -99998;
-            ingredientList.Add(textureComponent);
         }
 
         protected virtual void SetUpBundleSpecificPage(ArchipelagoBundle bundle)
@@ -1969,50 +1927,59 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles.Remakes
             {
                 var ingredient = b.Ingredients[index];
                 var representativeItemId = GetRepresentativeItemId(ingredient);
-                var dataOrErrorItem = ItemRegistry.GetDataOrErrorItem(representativeItemId);
                 // StardewArchipelago: Patch to allow any object type in a bundle
                 //if (dataOrErrorItem.HasTypeObject())
                 //{
-                var category = ingredient.category;
-                string hoverText;
-                if (category.HasValue)
-                {
-                    switch (category.GetValueOrDefault())
-                    {
-                        case -75:
-                            hoverText = Game1.content.LoadString("Strings\\StringsFromCSFiles:CraftingRecipe.cs.570");
-                            goto label_18;
-                        case -6:
-                            hoverText = Game1.content.LoadString("Strings\\StringsFromCSFiles:CraftingRecipe.cs.573");
-                            goto label_18;
-                        case -5:
-                            hoverText = Game1.content.LoadString("Strings\\StringsFromCSFiles:CraftingRecipe.cs.572");
-                            goto label_18;
-                        case -4:
-                            hoverText = Game1.content.LoadString("Strings\\StringsFromCSFiles:CraftingRecipe.cs.571");
-                            goto label_18;
-                        case -2:
-                            hoverText = Game1.content.LoadString("Strings\\StringsFromCSFiles:CraftingRecipe.cs.569");
-                            goto label_18;
-                    }
-                }
-                hoverText = dataOrErrorItem.DisplayName;
-                label_18:
-                Item flavoredItem;
-                if (ingredient.preservesId != null)
-                {
-                    flavoredItem = Utility.CreateFlavoredItem(ingredient.id, ingredient.preservesId, ingredient.quality, ingredient.stack);
-                    hoverText = flavoredItem.DisplayName;
-                }
-                else
-                {
-                    flavoredItem = ItemRegistry.Create(representativeItemId, ingredient.stack, ingredient.quality);
-                }
                 var ingredientList = this.IngredientList;
-                var textureComponent = CreateIngredientButton(dataOrErrorItem, toAddTo2[index], index, hoverText, flavoredItem);
+                var textureComponent = CreateIngredientButton(representativeItemId, toAddTo2[index], index, ingredient);
                 ingredientList.Add(textureComponent);
                 //}
             }
+        }
+
+        protected virtual ClickableTextureComponent CreateIngredientButton(string representativeItemId, Rectangle bounds, int index, BundleIngredientDescription ingredient)
+        {
+            var dataOrErrorItem = ItemRegistry.GetDataOrErrorItem(representativeItemId);
+            string hoverText = dataOrErrorItem.DisplayName;
+            var category = ingredient.category;
+            if (category.HasValue)
+            {
+                switch (category.GetValueOrDefault())
+                {
+                    case -75:
+                        hoverText = Game1.content.LoadString("Strings\\StringsFromCSFiles:CraftingRecipe.cs.570");
+                        break;
+                    case -6:
+                        hoverText = Game1.content.LoadString("Strings\\StringsFromCSFiles:CraftingRecipe.cs.573");
+                        break;
+                    case -5:
+                        hoverText = Game1.content.LoadString("Strings\\StringsFromCSFiles:CraftingRecipe.cs.572");
+                        break;
+                    case -4:
+                        hoverText = Game1.content.LoadString("Strings\\StringsFromCSFiles:CraftingRecipe.cs.571");
+                        break;
+                    case -2:
+                        hoverText = Game1.content.LoadString("Strings\\StringsFromCSFiles:CraftingRecipe.cs.569");
+                        break;
+                }
+            }
+            return CreateIngredientButton(dataOrErrorItem, bounds, index, hoverText, ingredient, representativeItemId);
+        }
+
+        protected virtual ClickableTextureComponent CreateIngredientButton(ParsedItemData dataOrErrorItem, Rectangle bounds, int index, string hoverText, BundleIngredientDescription ingredient, string representativeItemId)
+        {
+            Item flavoredItem;
+            if (ingredient.preservesId != null)
+            {
+                flavoredItem = Utility.CreateFlavoredItem(ingredient.id, ingredient.preservesId, ingredient.quality, ingredient.stack);
+                hoverText = flavoredItem.DisplayName;
+            }
+            else
+            {
+                flavoredItem = ItemRegistry.Create(representativeItemId, ingredient.stack, ingredient.quality);
+            }
+
+            return CreateIngredientButton(dataOrErrorItem, bounds, index, hoverText, flavoredItem);
         }
 
         protected virtual ClickableTextureComponent CreateIngredientButton(ParsedItemData dataOrErrorItem, Rectangle bounds, int index, string hoverText, Item flavoredItem)
@@ -2167,10 +2134,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles.Remakes
         protected virtual void TakeDownSpecificBundleComponents()
         {
             SpecificBundlePage = false;
-            IngredientSlots.Clear();
-            IngredientList.Clear();
-            TempSprites.Clear();
-            PurchaseButton = null;
+            ClearBundleUIComponents();
             if (!Game1.options.SnappyMenus)
             {
                 return;
@@ -2184,6 +2148,14 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles.Remakes
             {
                 snapToDefaultClickableComponent();
             }
+        }
+
+        protected virtual void ClearBundleUIComponents()
+        {
+            IngredientSlots.Clear();
+            IngredientList.Clear();
+            TempSprites.Clear();
+            PurchaseButton = null;
         }
 
         protected Point GetBundleLocationFromNumber(int whichBundle)
