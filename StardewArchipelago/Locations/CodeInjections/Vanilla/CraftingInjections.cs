@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using KaitoKid.ArchipelagoUtilities.Net.Client;
 using StardewArchipelago.Constants.Modded;
 using StardewArchipelago.Stardew;
@@ -82,7 +83,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
             var recipe = _stardewItemManager.GetRecipeByName(recipeId, true);
             if (recipe?.YieldItem == null)
             {
-                _logger.LogWarning($"Tried to check Craftsanity locationName for recipe {recipeId}, but could not find it");
+                LogCraftsanityLocationNotFoundWarning(recipeId);
                 return false;
             }
 
@@ -113,8 +114,21 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
                 return false;
             }
 
-            _logger.LogWarning($"Tried to check Craftsanity locationName for recipe {recipeId}, but could not find it");
+            LogCraftsanityLocationNotFoundWarning(recipeId);
             return false;
+        }
+
+        private static HashSet<string> _recipesAlreadyWarnedAbout = new HashSet<string>();
+
+        private static void LogCraftsanityLocationNotFoundWarning(string recipeId)
+        {
+            if (_recipesAlreadyWarnedAbout.Contains(recipeId))
+            {
+                return;
+            }
+
+            _logger.LogWarning($"Tried to check Craftsanity locationName for recipe {recipeId}, but could not find it");
+            _recipesAlreadyWarnedAbout.Add(recipeId);
         }
 
         // public static void AddCraftingRecipe(Event @event, string[] args, EventContext context)
