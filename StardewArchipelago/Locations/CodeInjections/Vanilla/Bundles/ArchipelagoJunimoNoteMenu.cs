@@ -1482,6 +1482,15 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
                     return true;
                 }
             }
+            if (CurrentPageBundle.name == MemeBundleNames.COOKIE_CLICKER)
+            {
+                var texturePosition = new Vector2(xPositionOnScreen + 872, yPositionOnScreen + 88);
+                var textureRectangle = new Rectangle((int)texturePosition.X, (int)texturePosition.Y, 128, 128);
+                if (textureRectangle.Contains(x, y))
+                {
+                    _wallet.CookieClicker.ClickCookie();
+                }
+            }
 
             return base.ReceiveLeftClickInSpecificBundlePage(x, y);
         }
