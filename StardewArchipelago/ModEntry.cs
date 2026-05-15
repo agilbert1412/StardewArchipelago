@@ -515,6 +515,8 @@ namespace StardewArchipelago
         {
             _archipelago.APUpdate();
 
+            // _helper.GameContent.InvalidateCache("Data/Shops");
+
             ArchipelagoJunimoNoteMenu.OnUpdateTickedStatic(e);
             State?.Wallet?.CookieClicker?.DoFrame();
             if (!_archipelago.IsConnected || _itemManager == null)

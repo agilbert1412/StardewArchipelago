@@ -472,6 +472,11 @@ namespace StardewArchipelago.Stardew
                 return;
             }
 
+            if (PowerBooks.BookIdsToNames.ContainsKey(stardewItem.Id))
+            {
+                _objectsByName.TryAdd(PowerBooks.BookIdsToNames[stardewItem.Id], stardewItem);
+            }
+
             if (!_objectsByName.ContainsKey(stardewItem.Name))
             {
                 _objectsByName.TryAdd(stardewItem.Name, stardewItem);

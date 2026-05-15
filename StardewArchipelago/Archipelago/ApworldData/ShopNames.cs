@@ -32,6 +32,7 @@
         public const string CASINO = "Casino";
         public const string DESERT_FESTIVAL = "Desert Festival";
         public const string ADVENTURERS_GUILD = "Adventurer's Guild";
+        public const string CLINT_SHOP = "Clint's Shop";
         public const string CLINTS_BLACKSMITH = "Clint's Blacksmith";
         public const string RACCOON_SHOP_AFTER_1_REQUEST = "Raccoon Shop After 1 Request";
         public const string RACCOON_SHOP_AFTER_2_REQUESTS = "Raccoon Shop After 2 Requests";

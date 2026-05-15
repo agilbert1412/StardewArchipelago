@@ -186,7 +186,9 @@ namespace StardewArchipelago.GameModifications.RandomizedData
             if (shopDataItem.ItemId.StartsWith(IDProvider.AP_LOCATION))
             {
                 var locationName = shopDataItem.ItemId.Substring(IDProvider.AP_LOCATION.Length + 1);
-                if (locationName.Equals(randomizedShopItemData.ItemName) || locationName.Equals($"{Prefix.PURCHASE}{randomizedShopItemData.ItemName}"))
+                if (locationName.Equals(randomizedShopItemData.ItemName) ||
+                    locationName.Equals($"{Prefix.PURCHASE}{randomizedShopItemData.ItemName}") ||
+                    locationName.Equals($"{randomizedShopItemData.ItemName}{Suffix.UPGRADE}"))
                 {
                     if (shopDataItem.IsRecipe)
                     {
@@ -264,6 +266,8 @@ namespace StardewArchipelago.GameModifications.RandomizedData
                 }
                 else
                 {
+                    shopDataItem.TradeItemId = null;
+                    shopDataItem.TradeItemAmount = 0;
                     shopDataItem.ModData ??= new Dictionary<string, string>();
                     shopDataItem.ModData.TryAdd(ShopMenuInjections.MATERIALS_KEY, "");
                     var materialsDict = materials.ToDictionary(x => _itemManager.GetItemByName(x.Key).GetQualifiedId(), x => Math.Max(1, x.Value));

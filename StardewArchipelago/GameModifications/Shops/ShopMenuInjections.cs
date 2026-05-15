@@ -304,13 +304,13 @@ namespace StardewArchipelago.GameModifications.Shops
                     {
                         return who.festivalScore + _state.Wallet.StarTokens;
                     }
-                    var randomAmounts = new List<int>() { 0 };
-                    for (var i = 0; Math.Pow(10, i) < int.MaxValue; i++)
-                    {
-                        randomAmounts.Add((int)Math.Pow(10, i));
-                    }
-                    var random = new Random(DateTime.Now.Second);
-                    _state.Wallet.StarTokens = randomAmounts[random.Next(randomAmounts.Count)];
+                    //var randomAmounts = new List<int>() { 0 };
+                    //for (var i = 0; Math.Pow(10, i) < int.MaxValue; i++)
+                    //{
+                    //    randomAmounts.Add((int)Math.Pow(10, i));
+                    //}
+                    //var random = new Random(DateTime.Now.Second);
+                    //_state.Wallet.StarTokens = 10000;// randomAmounts[random.Next(randomAmounts.Count)];
                     return _state.Wallet.StarTokens;
                 case "Qi Coin":
                     return who.clubCoins;
@@ -786,26 +786,48 @@ namespace StardewArchipelago.GameModifications.Shops
             var currency = GetCurrencyIndex(menu, hoveredItem2);
             if (currency != menu.currency)
             {
+                var offset = 0;
+                if (menu.currency == 1 || menu.currency == 2 || menu.currency == 4)
+                {
+                    offset = 80;
+                }
                 switch (currency)
                 {
                     case 0:
                         Game1.dayTimeMoneyBox.drawMoneyBox(b, menu.xPositionOnScreen - 36, menu.yPositionOnScreen + menu.height - menu.inventory.height - 12);
                         break;
                     case 1:
-                        BundleCurrencyManager.DrawStarTokenCurrency(GetOwnedOfCurrency("Star Token", Game1.player));
+                        var starTokens = GetOwnedOfCurrency("Star Token", Game1.player);
+                        BundleCurrencyManager.DrawStarTokenCurrency(starTokens, new Vector2(0, offset));
                         break;
                     case 2:
-                        SpriteText.drawStringWithScrollBackground(b, Game1.player.clubCoins.ToString(), 64, 16);
+                        SpriteText.drawStringWithScrollBackground(b, "  " + Game1.player.clubCoins.ToString(), 64, 16 + offset);
+                        Utility.drawWithShadow(b, Game1.mouseCursors, new Vector2(68f, 20f + offset), new Rectangle(211, 373, 9, 10), Color.White, 0.0f, Vector2.Zero, 4f, layerDepth: 1f);
                         break;
                     case 4:
                         Game1.specialCurrencyDisplay.ShowCurrency("qiGems");
                         break;
                 }
             }
-            else
+        }
+
+        private static void DrawQiGems(SpriteBatch b, int yOffset)
+        {
+            var display = Game1.specialCurrencyDisplay;
+            if (!display.registeredCurrencyDisplays.TryGetValue("qiGems", out var currencyDisplayType))
             {
-                Game1.specialCurrencyDisplay.ShowCurrency(null);
+                return;
             }
+            var renderInfo = new SpecialCurrencyDisplay.CurrencyRenderInfo(currencyDisplayType, null, 5f);
+            var moneyDial = renderInfo.moneyDial;
+            var upperLeft = display.GetUpperLeft(1);
+            upperLeft = upperLeft + new Vector2(0, yOffset);
+            var rectangle = new Rectangle(48, 176, 52, 26);
+            b.Draw(Game1.mouseCursors2, upperLeft, rectangle, Color.White, 0.0f, Vector2.Zero, 4f, SpriteEffects.None, 0.0f);
+            var previousTargetValue = renderInfo.currency.field.Value;
+            moneyDial.draw(b, upperLeft + new Vector2(108f, 40f), previousTargetValue);
+            Action<SpriteBatch, Vector2> drawIcon = currencyDisplayType.drawIcon;
+            drawIcon?.Invoke(b, upperLeft + new Vector2(4f, 6f) * 4f);
         }
 
         private static string AddMaterialsToDescription(string description, Dictionary<string, int> materials)

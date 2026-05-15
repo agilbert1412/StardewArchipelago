@@ -243,9 +243,9 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
             DrawStarTokenCurrency(_wallet.StarTokens);
         }
 
-        public static void DrawStarTokenCurrency(int amount)
+        public static void DrawStarTokenCurrency(int amount, Vector2? offset = null)
         {
-            DrawSpecialCurrency(amount, Game1.mouseCursors, new Rectangle(338, 400, 8, 8));
+            DrawSpecialCurrency(amount, Game1.mouseCursors, new Rectangle(338, 400, 8, 8), offset: offset);
         }
 
         private void DrawBloodCurrency()
@@ -409,12 +409,12 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
             DrawText(spriteBatch, $"Do not look at this bundle for 5 years", centeredX, textY, font);
         }
 
-        private static void DrawSpecialCurrency(int amountOwned, Texture2D texture, Rectangle sourceRectangle, float scale = 4f)
+        private static void DrawSpecialCurrency(int amountOwned, Texture2D texture, Rectangle sourceRectangle, float scale = 4f, Vector2? offset = null)
         {
-            DrawSpecialCurrency(amountOwned.ToString(), texture, sourceRectangle, scale);
+            DrawSpecialCurrency(amountOwned.ToString(), texture, sourceRectangle, scale, offset);
         }
 
-        private static void DrawSpecialCurrency(string amountOwned, Texture2D texture, Rectangle sourceRectangle, float scale = 4f)
+        private static void DrawSpecialCurrency(string amountOwned, Texture2D texture, Rectangle sourceRectangle, float scale = 4f, Vector2? offset = null)
         {
             amountOwned ??= "";
             var spriteBatch = Game1.spriteBatch;
@@ -422,8 +422,8 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
             Game1.PushUIMode();
             spriteBatch.Begin(blendState: BlendState.AlphaBlend, samplerState: SamplerState.PointClamp);
             var textSize = Game1.dialogueFont.MeasureString(amountOwned);
-            var width = 64 + (int)textSize.Y;
-            spriteBatch.Draw(Game1.fadeToBlackRect, new Rectangle(16, 16, width, 64), Color.Black * 0.75f);
+            var width = 64 + (int)textSize.X;
+            var backgroundRectangle = new Rectangle(16, 16, width, 64);
             var position = new Vector2(32f, 32f);
             if (sourceRectangle.Width >= 24)
             {
@@ -441,8 +441,20 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
             {
                 position.Y -= 8;
             }
+            if (offset.HasValue)
+            {
+                position.X += offset.Value.X;
+                position.Y += offset.Value.Y;
+                backgroundRectangle.X += (int)offset.Value.X;
+                backgroundRectangle.Y += (int)offset.Value.Y;
+            }
+
+            spriteBatch.Draw(Game1.fadeToBlackRect, backgroundRectangle, Color.Black * 0.75f);
+
+            var languageYOffset = LocalizedContentManager.CurrentLanguageCode == LocalizedContentManager.LanguageCode.en ? 8 : (LocalizedContentManager.CurrentLanguageLatin ? 16 : 8);
+            var textPosition = new Vector2(36f + position.X, position.Y - 11 + languageYOffset);
             spriteBatch.Draw(texture, position, sourceRectangle, Color.White, 0.0f, Vector2.Zero, scale, SpriteEffects.None, 1f);
-            Game1.drawWithBorder(amountOwned, Color.Black, Color.White, new Vector2((36f + position.X), (float)(21 + (LocalizedContentManager.CurrentLanguageCode == LocalizedContentManager.LanguageCode.en ? 8 : (LocalizedContentManager.CurrentLanguageLatin ? 16 : 8)))), 0.0f, 1f, 1f, false);
+            Game1.drawWithBorder(amountOwned, Color.Black, Color.White, textPosition, 0.0f, 1f, 1f, false);
 
             spriteBatch.End();
             Game1.PopUIMode();
