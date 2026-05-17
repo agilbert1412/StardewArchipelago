@@ -1,36 +1,36 @@
 ﻿using KaitoKid.Utilities.Interfaces;
 using Newtonsoft.Json;
 using StardewArchipelago.Archipelago;
+using StardewArchipelago.Archipelago.ApworldData;
 using StardewArchipelago.Archipelago.SlotData.SlotEnums.SlotDataRandomization;
 using StardewArchipelago.Constants;
-using StardewArchipelago.Items;
-using StardewArchipelago.Locations.InGameLocations;
-using StardewArchipelago.Stardew;
-using StardewModdingAPI;
-using StardewModdingAPI.Events;
-using StardewValley.GameData.Shops;
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.IO;
-using System.Linq;
-using StardewArchipelago.Archipelago.ApworldData;
 using StardewArchipelago.Constants.Locations;
 using StardewArchipelago.Constants.Vanilla;
 using StardewArchipelago.GameModifications.Shops;
+using StardewArchipelago.Items;
+using StardewArchipelago.Stardew;
+using StardewModdingAPI;
+using StardewModdingAPI.Events;
 using StardewValley;
+using StardewValley.GameData.Shops;
+using StardewValley.Internal;
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using StardewArchipelago.Locations.Festival;
 
 namespace StardewArchipelago.GameModifications.RandomizedData
 {
     public class ShopEntriesDataModifier
     {
-        private ILogger _logger;
-        private IModHelper _modHelper;
-        private readonly StardewArchipelagoClient _archipelago;
-        private readonly StardewItemManager _itemManager;
-        private readonly DataRandomization _dataRandomization;
+        private static ILogger _logger;
+        private static IModHelper _modHelper;
+        private static StardewArchipelagoClient _archipelago;
+        private static StardewItemManager _itemManager;
+        private static DataRandomization _dataRandomization;
 
-        private readonly HashSet<string> _processedShops;
+        private static HashSet<string> _processedShops;
         private readonly Dictionary<string, RandomizedShopItemData> _specialCaseShops;
 
         public ShopEntriesDataModifier(ILogger logger, IModHelper modHelper, StardewArchipelagoClient archipelago, StardewItemManager itemManager, DataRandomization dataRandomization)
@@ -130,12 +130,12 @@ namespace StardewArchipelago.GameModifications.RandomizedData
             for (var i = shopData.Items.Count - 1; i >= 0; i--)
             {
                 var shopDataItem = shopData.Items[i];
-                if (!IsCorrectItem(shopDataItem, randomizedShopItemData))
+                if (!IsCorrectItem(shopDataItem, randomizedShopItemData, out var priceMultiplier))
                 {
                     continue;
                 }
 
-                var shouldReplace = ModifyShopItemData(shopDataItem, randomizedShopItemData, out var replacementShopItemDatas);
+                var shouldReplace = ModifyShopItemData(shopDataItem, randomizedShopItemData, priceMultiplier, out var replacementShopItemDatas);
                 if (shouldReplace)
                 {
                     shopData.Items.RemoveAt(i);
@@ -147,18 +147,29 @@ namespace StardewArchipelago.GameModifications.RandomizedData
             return hasModifiedOne;
         }
 
-        private bool IsCorrectItem(ShopItemData shopDataItem, RandomizedShopItemData randomizedShopItemData)
+        private bool IsCorrectItem(ShopItemData shopDataItem, RandomizedShopItemData randomizedShopItemData, out double priceMultiplier)
         {
+            return IsCorrectItem(shopDataItem.ItemId, shopDataItem.Id, shopDataItem.IsRecipe, randomizedShopItemData, out priceMultiplier);
+        }
+
+        private static bool IsCorrectItem(string shopDataItemId, string shopDataEntryId, bool shopDataEntryIsRecipe, RandomizedShopItemData randomizedShopItemData)
+        {
+            return IsCorrectItem(shopDataItemId, shopDataEntryId, shopDataEntryIsRecipe, randomizedShopItemData, out _);
+        }
+
+        private static bool IsCorrectItem(string shopDataItemId, string shopDataEntryId, bool shopDataEntryIsRecipe, RandomizedShopItemData randomizedShopItemData, out double priceMultiplier)
+        {
+            priceMultiplier = 1;
             var randomizedItemName = randomizedShopItemData.ItemName;
             if (_itemManager.ItemExists(randomizedItemName))
             {
                 var randomizedItem = _itemManager.GetItemByName(randomizedItemName);
                 var randomizedItemId = randomizedItem.Id;
                 var randomizedQualifiedItemId = randomizedItem.GetQualifiedId();
-                if (shopDataItem.ItemId == randomizedItemId || shopDataItem.ItemId == randomizedQualifiedItemId ||
-                    shopDataItem.Id == randomizedItemId || shopDataItem.Id == randomizedQualifiedItemId)
+                if (shopDataItemId == randomizedItemId || shopDataItemId == randomizedQualifiedItemId ||
+                    shopDataEntryId == randomizedItemId || shopDataEntryId == randomizedQualifiedItemId)
                 {
-                    if (shopDataItem.IsRecipe)
+                    if (shopDataEntryIsRecipe)
                     {
                         return randomizedItemName.EndsWith(ItemParser.RECIPE_SUFFIX);
                     }
@@ -166,7 +177,7 @@ namespace StardewArchipelago.GameModifications.RandomizedData
                 }
             }
 
-            if (TryMatchItemId(shopDataItem, randomizedShopItemData, randomizedItemName, out var isCorrectItem))
+            if (TryMatchItemId(shopDataItemId, shopDataEntryIsRecipe, randomizedShopItemData, randomizedItemName, out var isCorrectItem, out priceMultiplier))
             {
                 return isCorrectItem;
             }
@@ -174,23 +185,24 @@ namespace StardewArchipelago.GameModifications.RandomizedData
             return false;
         }
 
-        private static bool TryMatchItemId(ShopItemData shopDataItem, RandomizedShopItemData randomizedShopItemData, string randomizedItemName, out bool isCorrectItem)
+        private static bool TryMatchItemId(string shopDataItemId, bool shopDataEntryIsRecipe, RandomizedShopItemData randomizedShopItemData, string randomizedItemName, out bool isCorrectItem, out double priceMultiplier)
         {
             isCorrectItem = false;
-            if (shopDataItem.ItemId == null)
+            priceMultiplier = 1;
+            if (shopDataItemId == null)
             {
                 isCorrectItem = false;
                 return false;
             }
 
-            if (shopDataItem.ItemId.StartsWith(IDProvider.AP_LOCATION))
+            if (shopDataItemId.StartsWith(IDProvider.AP_LOCATION))
             {
-                var locationName = shopDataItem.ItemId.Substring(IDProvider.AP_LOCATION.Length + 1);
+                var locationName = shopDataItemId.Substring(IDProvider.AP_LOCATION.Length + 1);
                 if (locationName.Equals(randomizedShopItemData.ItemName) ||
                     locationName.Equals($"{Prefix.PURCHASE}{randomizedShopItemData.ItemName}") ||
                     locationName.Equals($"{randomizedShopItemData.ItemName}{Suffix.UPGRADE}"))
                 {
-                    if (shopDataItem.IsRecipe)
+                    if (shopDataEntryIsRecipe)
                     {
                         isCorrectItem = randomizedItemName.EndsWith(ItemParser.RECIPE_SUFFIX);
                         return true;
@@ -198,14 +210,20 @@ namespace StardewArchipelago.GameModifications.RandomizedData
                     isCorrectItem = true;
                     return true;
                 }
+                if (locationName.Equals(FestivalLocationNames.STRAWBERRY_SEEDS))
+                {
+                    priceMultiplier = 10;
+                    isCorrectItem = true;
+                    return true;
+                }
             }
 
-            if (shopDataItem.ItemId.StartsWith(QualifiedItemIds.TOOLS_QUALIFIER))
+            if (shopDataItemId.StartsWith(QualifiedItemIds.TOOLS_QUALIFIER))
             {
-                var tool = ItemRegistry.Create(shopDataItem.ItemId);
+                var tool = ItemRegistry.Create(shopDataItemId);
                 if (tool.Name.Equals(randomizedShopItemData.ItemName) || tool.Name.Equals($"{Prefix.PURCHASE}{randomizedShopItemData.ItemName}"))
                 {
-                    if (shopDataItem.IsRecipe)
+                    if (shopDataEntryIsRecipe)
                     {
                         isCorrectItem = randomizedItemName.EndsWith(ItemParser.RECIPE_SUFFIX);
                         return true;
@@ -218,64 +236,69 @@ namespace StardewArchipelago.GameModifications.RandomizedData
             return false;
         }
 
-        private bool ModifyShopItemData(ShopItemData shopDataItem, RandomizedShopItemData randomizedShopItemData, out List<ShopItemData> replacementShopItemDatas)
+        private bool ModifyShopItemData(ShopItemData shopDataItem, RandomizedShopItemData randomizedShopItemData, double priceMultiplier, out List<ShopItemData> replacementShopItemDatas)
         {
             if (TryReplaceShopItemData(shopDataItem, randomizedShopItemData, out replacementShopItemDatas))
             {
                 return true;
             }
 
-            int? price = null;
-            if (randomizedShopItemData.Price != null)
-            {
-                price = randomizedShopItemData.Price.Value;
-            }
+            shopDataItem.ModData ??= new Dictionary<string, string>();
+            ModifyShopItemCurrency(shopDataItem, randomizedShopItemData);
+            ModifyShopItemPrice(shopDataItem, randomizedShopItemData, priceMultiplier);
+            ModifyShopItemMaterials(shopDataItem, randomizedShopItemData, priceMultiplier);
 
-            Dictionary<string, int> materials = null;
-            if (randomizedShopItemData.Materials != null)
-            {
-                materials = randomizedShopItemData.Materials.ToDictionary(x => x.Key, x => x.Value);
-            }
+            return false;
+        }
 
+        private static void ModifyShopItemCurrency(ShopItemData shopDataItem, RandomizedShopItemData randomizedShopItemData)
+        {
+            ModifyShopItemCurrency(shopDataItem.ModData, randomizedShopItemData);
+        }
+
+        private static void ModifyShopItemCurrency(Dictionary<string, string> shopDataItemModData, RandomizedShopItemData randomizedShopItemData)
+        {
             if (!string.IsNullOrWhiteSpace(randomizedShopItemData.Currency))
             {
-                shopDataItem.ModData ??= new Dictionary<string, string>();
-                shopDataItem.ModData.TryAdd(ShopMenuInjections.CURRENCY_KEY, randomizedShopItemData.Currency);
-                shopDataItem.ModData[ShopMenuInjections.CURRENCY_KEY] = randomizedShopItemData.Currency;
+                shopDataItemModData.TryAdd(ShopMenuInjections.CURRENCY_KEY, randomizedShopItemData.Currency);
+                shopDataItemModData[ShopMenuInjections.CURRENCY_KEY] = randomizedShopItemData.Currency;
             }
+        }
 
-            if (price.HasValue)
+        private static void ModifyShopItemPrice(ShopItemData shopDataItem, RandomizedShopItemData randomizedShopItemData, double priceMultiplier)
+        {
+            if (randomizedShopItemData.Price.HasValue)
             {
-                shopDataItem.Price = price.Value;
+                shopDataItem.Price = (int)Math.Round(randomizedShopItemData.Price.Value * priceMultiplier);
                 if (shopDataItem.PriceModifiers != null)
                 {
                     shopDataItem.PriceModifiers.Clear();
                 }
                 shopDataItem.IgnoreShopPriceModifiers = true;
             }
+        }
 
-            if (materials != null)
+        private static void ModifyShopItemMaterials(ShopItemData shopDataItem, RandomizedShopItemData randomizedShopItemData, double priceMultiplier)
+        {
+            if (randomizedShopItemData.Materials != null)
             {
-                if (materials.Count == 1)
+                if (randomizedShopItemData.Materials.Count == 1)
                 {
-                    var (materialName, materialAmount) = materials.First();
+                    var (materialName, materialAmount) = randomizedShopItemData.Materials.First();
                     var materialItem = _itemManager.GetObjectByName(materialName);
                     var materialQualifiedId = materialItem.GetQualifiedId();
                     shopDataItem.TradeItemId = materialQualifiedId;
-                    shopDataItem.TradeItemAmount = materialAmount;
+                    shopDataItem.TradeItemAmount = (int)Math.Round(materialAmount * priceMultiplier);
                 }
                 else
                 {
                     shopDataItem.TradeItemId = null;
                     shopDataItem.TradeItemAmount = 0;
-                    shopDataItem.ModData ??= new Dictionary<string, string>();
                     shopDataItem.ModData.TryAdd(ShopMenuInjections.MATERIALS_KEY, "");
-                    var materialsDict = materials.ToDictionary(x => _itemManager.GetItemByName(x.Key).GetQualifiedId(), x => Math.Max(1, x.Value));
+                    var materialsDict = randomizedShopItemData.Materials.ToDictionary(x => _itemManager.GetItemByName(x.Key).GetQualifiedId(), x => Math.Max(1, (int)Math.Round(x.Value * priceMultiplier)));
                     shopDataItem.ModData[ShopMenuInjections.MATERIALS_KEY] = JsonConvert.SerializeObject(materialsDict);
                 }
             }
-
-            return false;
         }
 
         private bool TryReplaceShopItemData(ShopItemData shopDataItem, RandomizedShopItemData randomizedShopItemData, out List<ShopItemData> replacementShopItemDatas)
@@ -284,18 +307,95 @@ namespace StardewArchipelago.GameModifications.RandomizedData
             return false;
         }
 
-        private int GetVanillaCurrency(string currency)
+        // public static IEnumerable<ItemQueryResult> MONSTER_SLAYER_REWARDS(string key, string arguments, ItemQueryContext context, bool avoidRepeat, HashSet<string> avoidItemIds, Action<string, string> logError)
+        public static void MonsterSlayerRewards_AddRandomizedData_Postfix(string key, string arguments, ItemQueryContext context, bool avoidRepeat, HashSet<string> avoidItemIds, Action<string, string> logError, ref IEnumerable<ItemQueryResult> __result)
         {
-            // The valid values are 0 (money), 1 (star tokens), 2 (Qi coins), and 4 (Qi gems)
-            return currency switch
+            try
             {
-                "Money" => 0,
-                "Star Token" => 1,
-                "Qi Coin" => 2,
-                "Qi Gem" => 4,
-                "Calico Egg" => 0, // Money, but zero
-                _ => throw new Exception("Invalid Currency"),
-            };
+                var shopName = ShopNames.ADVENTURERS_GUILD;
+                var randomizedShopData = _dataRandomization.ShopsData[shopName];
+                _processedShops.Add(shopName);
+
+                var modifiedShopItems = new List<ItemQueryResult>();
+
+                foreach (var shopItem in __result)
+                {
+                    foreach (var (randomizedItemName, randomizedShopItemData) in randomizedShopData)
+                    {
+                        if (IsCorrectItem(shopItem.Item.QualifiedItemId, shopItem.Item.QualifiedItemId, shopItem.Item.IsRecipe, randomizedShopItemData))
+                        {
+                            ModifyShopItem(shopItem, randomizedShopItemData);
+                            break;
+                        }
+                    }
+                    modifiedShopItems.Add(shopItem);
+                }
+
+                __result = modifiedShopItems;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Failed in {nameof(MonsterSlayerRewards_AddRandomizedData_Postfix)}:\n{ex}");
+                return;
+            }
+        }
+
+        private static void ModifyShopItem(ItemQueryResult itemResult, RandomizedShopItemData randomizedShopItemData)
+        {
+
+            ModifyShopItemCurrency(itemResult, randomizedShopItemData);
+            ModifyShopItemPrice(itemResult, randomizedShopItemData);
+            ModifyShopItemMaterials(itemResult, randomizedShopItemData);
+        }
+
+        private static void ModifyShopItemCurrency(ItemQueryResult itemResult, RandomizedShopItemData randomizedShopItemData)
+        {
+            if (itemResult.Item is not Item shopItem)
+            {
+                return;
+            }
+
+            if (!string.IsNullOrWhiteSpace(randomizedShopItemData.Currency))
+            {
+                shopItem.modData.TryAdd(ShopMenuInjections.CURRENCY_KEY, randomizedShopItemData.Currency);
+                shopItem.modData[ShopMenuInjections.CURRENCY_KEY] = randomizedShopItemData.Currency;
+            }
+        }
+
+        private static void ModifyShopItemPrice(ItemQueryResult shopDataItem, RandomizedShopItemData randomizedShopItemData)
+        {
+            if (randomizedShopItemData.Price.HasValue)
+            {
+                shopDataItem.OverrideBasePrice = randomizedShopItemData.Price.Value;
+            }
+        }
+
+        private static void ModifyShopItemMaterials(ItemQueryResult itemResult, RandomizedShopItemData randomizedShopItemData)
+        {
+            if (itemResult.Item is not Item shopItem)
+            {
+                return;
+            }
+
+            if (randomizedShopItemData.Materials != null)
+            {
+                if (randomizedShopItemData.Materials.Count == 1)
+                {
+                    var (materialName, materialAmount) = randomizedShopItemData.Materials.First();
+                    var materialItem = _itemManager.GetObjectByName(materialName);
+                    var materialQualifiedId = materialItem.GetQualifiedId();
+                    itemResult.OverrideTradeItemId = materialQualifiedId;
+                    itemResult.OverrideTradeItemAmount = materialAmount;
+                }
+                else
+                {
+                    itemResult.OverrideTradeItemId = null;
+                    itemResult.OverrideTradeItemAmount = 0;
+                    shopItem.modData.TryAdd(ShopMenuInjections.MATERIALS_KEY, "");
+                    var materialsDict = randomizedShopItemData.Materials.ToDictionary(x => _itemManager.GetItemByName(x.Key).GetQualifiedId(), x => Math.Max(1, x.Value));
+                    shopItem.modData[ShopMenuInjections.MATERIALS_KEY] = JsonConvert.SerializeObject(materialsDict);
+                }
+            }
         }
 
         private static readonly List<(string shopName, string itemName)> _itemsProcessedElsewhere = new()

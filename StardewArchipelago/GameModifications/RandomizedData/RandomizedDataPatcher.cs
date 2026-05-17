@@ -7,6 +7,7 @@ using StardewArchipelago.Logging;
 using StardewArchipelago.Stardew;
 using StardewModdingAPI;
 using StardewValley;
+using StardewValley.Internal;
 using StardewValley.Locations;
 using StardewValley.Menus;
 using StardewValley.Mods;
@@ -26,6 +27,7 @@ namespace StardewArchipelago.GameModifications.RandomizedData
         private readonly FestivalDataModifier _festivalDataModifier;
         private readonly ObjectDataModifier _objectDataModifier;
         private readonly ShopEntriesDataModifier _shopDataModifier;
+        private readonly AnimalsDataModifier _animalsDataModifier;
 
         public RandomizedDataPatcher(LogHandler logger, IModHelper modHelper, Harmony harmony, StardewArchipelagoClient archipelago, StardewItemManager stardewItemManager)
         {
@@ -40,6 +42,7 @@ namespace StardewArchipelago.GameModifications.RandomizedData
             _festivalDataModifier = new FestivalDataModifier(_logger, _helper, _archipelago, _stardewItemManager, _dataRandomization);
             _objectDataModifier = new ObjectDataModifier(_logger, _helper, _archipelago, _stardewItemManager, _dataRandomization);
             _shopDataModifier = new ShopEntriesDataModifier(_logger, _helper, _archipelago, _stardewItemManager, _dataRandomization);
+            _animalsDataModifier = new AnimalsDataModifier(_logger, _helper, _archipelago, _stardewItemManager, _dataRandomization);
             RandomizedFishDataInjections.Initialize(_logger, _helper, _archipelago, _stardewItemManager, _dataRandomization);
         }
 
@@ -117,7 +120,14 @@ namespace StardewArchipelago.GameModifications.RandomizedData
             }
 
             _helper.Events.Content.AssetRequested += _shopDataModifier.OnShopsDataRequested;
+            _helper.Events.Content.AssetRequested += _animalsDataModifier.OnAnimalsDataRequested;
             _helper.GameContent.InvalidateCache("Data/Shops");
+            _helper.GameContent.InvalidateCache("Data/FarmAnimals");
+
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(ItemQueryResolver.DefaultResolvers), nameof(ItemQueryResolver.DefaultResolvers.MONSTER_SLAYER_REWARDS)),
+                postfix: new HarmonyMethod(typeof(ShopEntriesDataModifier), nameof(ShopEntriesDataModifier.MonsterSlayerRewards_AddRandomizedData_Postfix))
+            );
         }
 
         public void CleanRandomizedDataEvents()
@@ -150,6 +160,7 @@ namespace StardewArchipelago.GameModifications.RandomizedData
             }
 
             _helper.Events.Content.AssetRequested -= _shopDataModifier.OnShopsDataRequested;
+            _helper.Events.Content.AssetRequested -= _animalsDataModifier.OnAnimalsDataRequested;
         }
 
         private bool AreShopsDataRandomized()

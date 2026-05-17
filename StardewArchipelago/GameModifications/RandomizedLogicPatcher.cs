@@ -1016,8 +1016,13 @@ namespace StardewArchipelago.GameModifications
             );
 
             _harmony.Patch(
-                original: AccessTools.Method(typeof(ShopMenu), nameof(ShopMenu.draw), new[] { typeof(SpriteBatch) }),
+                original: AccessTools.Method(typeof(ShopMenu), nameof(ShopMenu.draw), new[] { typeof(SpriteBatch) }),   
                 prefix: new HarmonyMethod(typeof(ShopMenuInjections), nameof(ShopMenuInjections.Draw_ConsiderCurrencyAndMaterials_Prefix))
+            );
+
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(MovieTheater), nameof(MovieTheater.performAction), new[] { typeof(string[]), typeof(Farmer), typeof(Location) }),
+                prefix: new HarmonyMethod(typeof(ShopMenuInjections), nameof(ShopMenuInjections.PerformAction_RandomizedCraneGamePrice_Prefix))
             );
         }
 

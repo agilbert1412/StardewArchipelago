@@ -5,6 +5,10 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Newtonsoft.Json;
 using StardewArchipelago.Archipelago;
+using StardewArchipelago.Archipelago.ApworldData;
+using StardewArchipelago.Archipelago.SlotData.SlotEnums.SlotDataRandomization;
+using StardewArchipelago.Constants.Vanilla;
+using StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles;
 using StardewArchipelago.Logging;
 using StardewArchipelago.Serialization;
 using StardewArchipelago.Stardew;
@@ -12,18 +16,20 @@ using StardewModdingAPI;
 using StardewValley;
 using StardewValley.BellsAndWhistles;
 using StardewValley.Buildings;
+using StardewValley.Extensions;
+using StardewValley.GameData;
 using StardewValley.ItemTypeDefinitions;
+using StardewValley.Locations;
 using StardewValley.Logging;
 using StardewValley.Menus;
+using StardewValley.Minigames;
 using StardewValley.Triggers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
-using StardewArchipelago.Constants.Vanilla;
-using StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles;
+using xTile.Dimensions;
+using Rectangle = Microsoft.Xna.Framework.Rectangle;
 
 namespace StardewArchipelago.GameModifications.Shops
 {
@@ -34,7 +40,7 @@ namespace StardewArchipelago.GameModifications.Shops
 
         private static ILogger _logger;
         private static IModHelper _helper;
-        private static ArchipelagoClient _archipelago;
+        private static StardewArchipelagoClient _archipelago;
         private static StardewItemManager _itemManager;
         private static ArchipelagoStateDto _state;
 
@@ -285,11 +291,24 @@ namespace StardewArchipelago.GameModifications.Shops
             return CanAffordCurrency(shop, salable, who, price) && CanAffordMaterials(salable, who, amountToPurchase);
         }
 
+        private static bool CanAfford(RandomizedShopItemData randomizedData, Farmer who, int amountToPurchase, int defaultPrice)
+        {
+            return CanAffordCurrency(randomizedData, who, amountToPurchase, defaultPrice) && CanAffordMaterials(randomizedData, who, amountToPurchase);
+        }
+
         private static bool CanAffordCurrency(ShopMenu shop, ISalable salable, Farmer who, int price)
         {
             var currencyName = GetCurrencyName(shop, salable);
 
             var currencyOwned = GetOwnedOfCurrency(currencyName, who);
+            return currencyOwned >= price;
+        }
+
+        private static bool CanAffordCurrency(RandomizedShopItemData randomizedData, Farmer who, int amountToPurchase, int defaultPrice)
+        {
+            var currencyName = GetCurrencyName(randomizedData);
+            var currencyOwned = GetOwnedOfCurrency(currencyName, who);
+            var price = GetPrice(randomizedData, defaultPrice) * amountToPurchase;
             return currencyOwned >= price;
         }
 
@@ -338,6 +357,26 @@ namespace StardewArchipelago.GameModifications.Shops
             };
         }
 
+        private static string GetCurrencyName(RandomizedShopItemData randomizedData)
+        {
+            if (randomizedData == null || randomizedData.Currency == null)
+            {
+                return "Money";
+            }
+
+            return randomizedData.Currency;
+        }
+
+        private static int GetPrice(RandomizedShopItemData randomizedData, int defaultPrice)
+        {
+            if (randomizedData == null || randomizedData.Price == null)
+            {
+                return defaultPrice;
+            }
+
+            return randomizedData.Price.Value;
+        }
+
         private static int GetCurrencyIndex(ShopMenu shop, ISalable salable)
         {
             if (salable is Item salableItem && salableItem.modData.ContainsKey(CURRENCY_KEY))
@@ -358,10 +397,10 @@ namespace StardewArchipelago.GameModifications.Shops
         private static bool CanAffordMaterials(ISalable salable, Farmer who, int amountToPurchase)
         {
             var materials = GetMaterialsPrice(salable);
-            return CanAffordMaterials(who, materials, amountToPurchase);
+            return CanAffordMaterials(materials, who, amountToPurchase);
         }
 
-        private static bool CanAffordMaterials(Farmer who, Dictionary<string, int> materials, int amountToPurchase)
+        private static bool CanAffordMaterials(Dictionary<string, int> materials, Farmer who, int amountToPurchase)
         {
             foreach (var (identifier, amount) in materials)
             {
@@ -380,6 +419,16 @@ namespace StardewArchipelago.GameModifications.Shops
 
         }
 
+        private static bool CanAffordMaterials(RandomizedShopItemData randomizedData, Farmer who, int amountToPurchase)
+        {
+            if (randomizedData == null || randomizedData.Materials == null || randomizedData.Materials.Count <= 0)
+            {
+                return true;
+            }
+
+            return CanAffordMaterials(randomizedData.Materials, who, amountToPurchase);
+        }
+
         private static Dictionary<string, int> GetMaterialsPrice(ISalable salable)
         {
             if (salable is not Item salableItem || !salableItem.modData.ContainsKey(MATERIALS_KEY))
@@ -391,30 +440,43 @@ namespace StardewArchipelago.GameModifications.Shops
             return materials;
         }
 
+        private static Dictionary<string, int> GetMaterialsPrice(RandomizedShopItemData randomizedData)
+        {
+            if (randomizedData == null || randomizedData.Materials == null || randomizedData.Materials.Count <= 0)
+            {
+                return new Dictionary<string, int>();
+            }
+
+            return randomizedData.Materials;
+        }
+
         private static void ChargeForPurchase(ShopMenu shop, ISalable salable, Farmer who, int amountToPurchase, int totalPrice)
         {
             ChargeCurrency(shop, salable, who, totalPrice);
             ChargeMaterials(salable, who, amountToPurchase);
         }
 
+        private static void ChargeForPurchase(RandomizedShopItemData randomizedData, Farmer who, int amountToPurchase, int defaultPrice)
+        {
+            ChargeCurrency(randomizedData, who, defaultPrice);
+            ChargeMaterials(randomizedData, who, amountToPurchase);
+        }
+
         private static void ChargeCurrency(ShopMenu shop, ISalable salable, Farmer who, int totalPrice)
         {
-            var currency = "";
-            if (salable is Item salableItem && salableItem.modData.ContainsKey(CURRENCY_KEY))
-            {
-                currency = salableItem.modData[CURRENCY_KEY];
-            }
-            else
-            {
-                currency = shop.currency switch
-                {
-                    0 => "Money",
-                    1 => "Star Token",
-                    2 => "Qi Coin",
-                    4 => "Qi Gem",
-                };
-            }
+            var currency = GetCurrencyName(shop, salable);
+            ChargeCurrency(currency, who, totalPrice);
+        }
 
+        private static void ChargeCurrency(RandomizedShopItemData randomizedData, Farmer who, int defaultPrice)
+        {
+            var currency = GetCurrencyName(randomizedData);
+            var price = GetPrice(randomizedData, defaultPrice);
+            ChargeCurrency(currency, who, price);
+        }
+
+        private static void ChargeCurrency(string currency, Farmer who, int totalPrice)
+        {
             switch (currency)
             {
                 case "Money":
@@ -451,12 +513,21 @@ namespace StardewArchipelago.GameModifications.Shops
         private static void ChargeMaterials(ISalable salable, Farmer who, int amountToPurchase)
         {
             var materials = GetMaterialsPrice(salable);
+            ChargeMaterials(materials, who, amountToPurchase);
+        }
+
+        private static void ChargeMaterials(RandomizedShopItemData randomizedData, Farmer who, int amountToPurchase)
+        {
+            var materials = GetMaterialsPrice(randomizedData);
+            ChargeMaterials(materials, who, amountToPurchase);
+        }
+
+        private static void ChargeMaterials(Dictionary<string, int> materials, Farmer who, int amountToPurchase)
+        {
             foreach (var (qualifiedId, amount) in materials)
             {
-                Game1.player.Items.ReduceId(qualifiedId, amount * amountToPurchase);
+                who.Items.ReduceId(qualifiedId, amount * amountToPurchase);
             }
-
-            return;
         }
 
         private static void LogTriggerActionError(ShopMenu __instance, ISalable item, string action, string error, Exception exception1)
@@ -887,6 +958,123 @@ namespace StardewArchipelago.GameModifications.Shops
             }
 
             menu.upperRightCloseButton.draw(b);
+        }
+
+        private const string CRANE_GAME = "House Plant 13 (Crane Game)";
+
+        // public override bool performAction(string[] action, Farmer who, Location tileLocation)
+        public static bool PerformAction_RandomizedCraneGamePrice_Prefix(MovieTheater __instance, string[] action, Farmer who, Location tileLocation, ref bool __result)
+        {
+            try
+            {
+                if (ArgUtility.Get(action, 0) != "CraneGame")
+                {
+                    return MethodPrefix.RUN_ORIGINAL_METHOD;
+                }
+
+                if (_archipelago.SlotData.DataRandomization == null ||
+                    _archipelago.SlotData.DataRandomization.ShopsData == null ||
+                    !_archipelago.SlotData.DataRandomization.ShopsData.ContainsKey(ShopNames.MOVIE_THEATER) ||
+                    _archipelago.SlotData.DataRandomization.ShopsData[ShopNames.MOVIE_THEATER] == null ||
+                    !_archipelago.SlotData.DataRandomization.ShopsData[ShopNames.MOVIE_THEATER].ContainsKey(CRANE_GAME))
+                {
+                    return MethodPrefix.RUN_ORIGINAL_METHOD;
+                }
+
+                var randomizedCraneGame = _archipelago.SlotData.DataRandomization.ShopsData[ShopNames.MOVIE_THEATER][CRANE_GAME];
+
+                if (!__instance.hasTileAt(2, 9, "Buildings"))
+                {
+                    var question = "Play the Crane Game? (Costs {0})";
+                    var priceString = GetPriceString(randomizedCraneGame);
+                    var questionWithPrice = string.Format(question, priceString);
+                    __instance.createQuestionDialogue(questionWithPrice, __instance.createYesNoResponses(), (who, whichAnswer) => TryToStartCraneGame(__instance, who, whichAnswer));
+                }
+                else
+                {
+                    Game1.drawObjectDialogue(Game1.content.LoadString("Strings\\StringsFromMaps:MovieTheater_CraneOccupied"));
+                }
+
+                return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Failed in {nameof(PerformAction_RandomizedCraneGamePrice_Prefix)}:\n{ex}");
+                return MethodPrefix.RUN_ORIGINAL_METHOD;
+            }
+        }
+
+        // private void tryToStartCraneGame(Farmer who, string whichAnswer)
+        public static void TryToStartCraneGame(MovieTheater __instance, Farmer who, string whichAnswer)
+        {
+            try
+            {
+                if (_archipelago.SlotData.DataRandomization == null ||
+                    _archipelago.SlotData.DataRandomization.ShopsData == null ||
+                    !_archipelago.SlotData.DataRandomization.ShopsData.ContainsKey(ShopNames.MOVIE_THEATER) ||
+                    _archipelago.SlotData.DataRandomization.ShopsData[ShopNames.MOVIE_THEATER] == null ||
+                    !_archipelago.SlotData.DataRandomization.ShopsData[ShopNames.MOVIE_THEATER].ContainsKey(CRANE_GAME))
+                {
+                    return;
+                }
+
+                var randomizedCraneGame = _archipelago.SlotData.DataRandomization.ShopsData[ShopNames.MOVIE_THEATER][CRANE_GAME];
+
+                if (!whichAnswer.EqualsIgnoreCase("yes"))
+                {
+                    return;
+                }
+
+                if (CanAfford(randomizedCraneGame, Game1.player, 1, 500))
+                {
+                    ChargeForPurchase(randomizedCraneGame, Game1.player, 1, 500);
+                    Game1.changeMusicTrack("none", music_context: MusicContext.MiniGame);
+                    Game1.globalFadeToBlack((Game1.afterFadeFunction)(() => Game1.currentMinigame = (IMinigame)new CraneGame()), 0.008f);
+                }
+                else
+                {
+                    Game1.drawObjectDialogue(Game1.content.LoadString("Strings\\StringsFromCSFiles:PurchaseAnimalsMenu.cs.11325"));
+                }
+                return;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Failed in {nameof(TryToStartCraneGame)}:\n{ex}");
+                return;
+            }
+        }
+
+        private static string GetPriceString(RandomizedShopItemData randomizedCraneGame)
+        {
+            var priceString = "";
+            if (randomizedCraneGame.Price == null)
+            {
+                priceString += "500g";
+            }
+            else if ( randomizedCraneGame.Price > 0)
+            {
+                var currencyString = $" {GetCurrencyName(randomizedCraneGame)}";
+                if (currencyString == " Money")
+                {
+                    currencyString = "g";
+                }
+                priceString += $"{randomizedCraneGame.Price}{currencyString}";
+            }
+
+            if (randomizedCraneGame.Materials != null)
+            {
+                foreach (var (materialId, amount) in randomizedCraneGame.Materials)
+                {
+                    var material = _itemManager.GetItemByQualifiedId(materialId);
+                    if (priceString.Length > 0)
+                    {
+                        priceString += " and ";
+                    }
+                    priceString += $"{amount} {material.Name}";
+                }
+            }
+
+            return priceString;
         }
     }
 }

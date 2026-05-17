@@ -1,6 +1,7 @@
 ﻿using Archipelago.MultiClient.Net.Enums;
 using Archipelago.MultiClient.Net.Models;
 using KaitoKid.ArchipelagoUtilities.AssetDownloader.ItemSprites;
+using KaitoKid.ArchipelagoUtilities.Net;
 using KaitoKid.ArchipelagoUtilities.Net.Client;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -12,11 +13,13 @@ using StardewArchipelago.Textures;
 using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Internal;
+using StardewValley.Mods;
 using StardewValley.Objects;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.Json;
+using static StardewValley.Menus.CharacterCustomization;
 using Color = Microsoft.Xna.Framework.Color;
 
 namespace StardewArchipelago.Locations.InGameLocations
@@ -29,14 +32,14 @@ namespace StardewArchipelago.Locations.InGameLocations
         protected static Hint[] _activeHints;
         protected static uint _lastTimeUpdatedActiveHints;
 
-        private readonly Texture2D _archipelagoTexture;
+        private Texture2D _archipelagoTexture;
 
         protected ILocationChecker _locationChecker;
         protected string _locationDisplayName;
 
         public string LocationName { get; set; }
 
-        private readonly string _description;
+        private string _description;
 
         public bool AllowScouting { get; set; }
 
@@ -53,7 +56,37 @@ namespace StardewArchipelago.Locations.InGameLocations
         public ObtainableArchipelagoLocation(string locationDisplayName, string locationName, LogHandler logger, IModHelper modHelper, ILocationChecker locationChecker, StardewArchipelagoClient archipelago, Hint[] myActiveHints, bool allowScouting)
         {
             ItemSpritesProvider.Initialize(logger, modHelper);
+            var relatedHint = myActiveHints.FirstOrDefault(hint => archipelago.GetLocationName(hint).Equals(locationName, StringComparison.OrdinalIgnoreCase));
 
+            string description;
+            Texture2D texture;
+            if (allowScouting)
+            {
+                var scoutedLocation = archipelago.ScoutStardewLocation(locationName);
+                texture = GetCorrectTexture(logger, modHelper, archipelago, scoutedLocation, relatedHint);
+                description = scoutedLocation == null ? ScoutedLocation.GenericItemName() : scoutedLocation.ToString();
+            }
+            else if (relatedHint != null)
+            {
+                texture = GetCorrectTexture(logger, modHelper, archipelago, null, relatedHint);
+                description = archipelago.GetHintString(relatedHint);
+            }
+            else
+            {
+                texture = GetCorrectTexture(logger, modHelper, archipelago, null, null);
+                description = ScoutedLocation.GenericItemName();
+            }
+
+            Initialize(locationDisplayName, locationName, locationChecker, allowScouting, texture, description);
+        }
+
+        private ObtainableArchipelagoLocation(string locationDisplayName, string locationName, ILocationChecker locationChecker, bool allowScouting, Texture2D texture, string description)
+        {
+            Initialize(locationDisplayName, locationName, locationChecker, allowScouting, texture, description);
+        }
+
+        private void Initialize(string locationDisplayName, string locationName, ILocationChecker locationChecker, bool allowScouting, Texture2D texture, string description)
+        {
             // Prefix removed for now, because the inconsistency makes it ugly
             // var prefix = locationDisplayName.Length < 18 ? ARCHIPELAGO_PREFIX : ARCHIPELAGO_NO_PREFIX;
             var prefix = ARCHIPELAGO_NO_PREFIX;
@@ -65,24 +98,8 @@ namespace StardewArchipelago.Locations.InGameLocations
             _locationChecker = locationChecker;
             AllowScouting = allowScouting;
 
-            var relatedHint = myActiveHints.FirstOrDefault(hint => archipelago.GetLocationName(hint).Equals(locationName, StringComparison.OrdinalIgnoreCase));
-
-            if (AllowScouting)
-            {
-                var scoutedLocation = archipelago.ScoutStardewLocation(LocationName);
-                _archipelagoTexture = GetCorrectTexture(logger, modHelper, archipelago, scoutedLocation, relatedHint);
-                _description = scoutedLocation == null ? ScoutedLocation.GenericItemName() : scoutedLocation.ToString();
-            }
-            else if (relatedHint != null)
-            {
-                _archipelagoTexture = GetCorrectTexture(logger, modHelper, archipelago, null, relatedHint);
-                _description = archipelago.GetHintString(relatedHint);
-            }
-            else
-            {
-                _archipelagoTexture = GetCorrectTexture(logger, modHelper, archipelago, null, null);
-                _description = ScoutedLocation.GenericItemName();
-            }
+            _archipelagoTexture = texture;
+            _description = description;
         }
 
         protected virtual Texture2D GetCorrectTexture(LogHandler logger, IModHelper modHelper, StardewArchipelagoClient archipelago, ScoutedLocation scoutedLocation, Hint relatedHint)
@@ -112,7 +129,14 @@ namespace StardewArchipelago.Locations.InGameLocations
 
         protected override Item GetOneNew()
         {
-            return this;
+            var newItem = new ObtainableArchipelagoLocation(_locationDisplayName, LocationName, _locationChecker, AllowScouting, _archipelagoTexture, _description);
+
+            foreach (var key in modData.Keys)
+            {
+                newItem.modData[key] = modData[key];
+            }
+
+            return newItem;
         }
 
         public override bool canBeTrashed()
