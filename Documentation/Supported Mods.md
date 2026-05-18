@@ -27,11 +27,11 @@ Skills:
 
 Custom NPCs:
 - [Juna - Roommate NPC](https://www.nexusmods.com/stardewvalley/mods/8606), by elhrvy 2.2.x
-- [Professor Jasper Thomas](https://www.nexusmods.com/stardewvalley/mods/5599), by Lemurkat 1.8.4 (including additional [patch](https://github.com/Witchybun/SDV-Randomizer-Content-Patcher/releases))
+- [Professor Jasper Thomas](https://www.nexusmods.com/stardewvalley/mods/5599), by Lemurkat 1.8.4
 - [Alec Revisited](https://www.nexusmods.com/stardewvalley/mods/10697), by HopeWasHere and SoftPandaBoi, Version 2.2.x
 - [Mister Ginger (cat npc)](https://www.nexusmods.com/stardewvalley/mods/5295), by Lemurkat, Version 1.6.x
 - [Ayeisha - The Postal Worker (Custom NPC)](https://www.nexusmods.com/stardewvalley/mods/6427), by TheLimeyDragon, Version 0.8.x
-- [Alecto the Witch](https://www.nexusmods.com/stardewvalley/mods/10671), by zoedoll, Version 1.2.x (including additional [patch](https://github.com/Witchybun/SDV-Randomizer-Content-Patcher/releases))
+- [Alecto the Witch](https://www.nexusmods.com/stardewvalley/mods/10671), by zoedoll, Version 1.2.x
 - [Hat Mouse Lacey](https://github.com/ichortower/HatMouseLacey) by khortower, Version 1.6.x
 
 In addition, a [Content Patcher mod](https://github.com/Witchybun/SDV-Randomizer-Content-Patcher/releases) may be required for the mod to properly function alongside your game.  Include these alongside StardewArchipelago.
