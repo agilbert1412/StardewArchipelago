@@ -424,7 +424,7 @@ namespace StardewArchipelago.Locations.Jojapocalypse
                 return true;
             }
 
-            if (!_archipelago.SlotData.BuildingProgression.HasFlag(BuildingProgression.Progressive) || _archipelago.HasReceivedItem(CarpenterInjections.BUILDING_PROGRESSIVE_HOUSE))
+            if (_archipelago.SlotData.BuildingProgression.HasFlag(BuildingProgression.Progressive) && !_archipelago.HasReceivedItem(CarpenterInjections.BUILDING_PROGRESSIVE_HOUSE))
             {
                 return false;
             }
