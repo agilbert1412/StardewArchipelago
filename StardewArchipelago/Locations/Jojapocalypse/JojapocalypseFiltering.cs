@@ -187,6 +187,11 @@ namespace StardewArchipelago.Locations.Jojapocalypse
 
         private bool ValidateNPCLocation(string locationName)
         {
+            if (!locationName.EndsWith(" <3"))
+            {
+                return true;
+            }
+
             foreach (var (name, characterData) in Game1.characterData)
             {
                 if (characterData.CanSocialize != null && characterData.CanSocialize.Equals("FALSE", StringComparison.InvariantCultureIgnoreCase))
@@ -194,7 +199,7 @@ namespace StardewArchipelago.Locations.Jojapocalypse
                     continue;
                 }
 
-                if (!locationName.StartsWith(name) && !locationName.EndsWith(" <3"))
+                if (!locationName.Contains(name))
                 {
                     continue;
                 }
