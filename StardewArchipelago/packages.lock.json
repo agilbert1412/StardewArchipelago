@@ -25,21 +25,21 @@
       },
       "KaitoKid.ArchipelagoUtilities.AssetDownloader": {
         "type": "Direct",
-        "requested": "[3.1.13, )",
-        "resolved": "3.1.13",
-        "contentHash": "WShiAoB0Fwezg0BqtCVIRvmfvViZ/qJmVXJhln8uCKKlB+SCSsdASNd8/VBNokcJrpqf95IiI3w2KkdKSaXUNA==",
+        "requested": "[3.1.15, )",
+        "resolved": "3.1.15",
+        "contentHash": "pDIXIaEcXbAhAqVkqEB0dY7PH2OkXB0hzlHKSDc4R1xx0kr3n+9555FA6ZfGKE7t3/0YtY0zRQkDaLRtcm2IHQ==",
         "dependencies": {
-          "KaitoKid.Utilities.Interfaces": "3.1.13"
+          "KaitoKid.Utilities.Interfaces": "3.1.15"
         }
       },
       "KaitoKid.ArchipelagoUtilities.Net": {
         "type": "Direct",
-        "requested": "[3.1.13, )",
-        "resolved": "3.1.13",
-        "contentHash": "PO1dVwQybji1ONj9/0q240e5QoI5a67Df/kXmnUREc1jZBUk5bWndDQsyOk4KzOXHt6ysfNVQ0Oec+s4Dy0mng==",
+        "requested": "[3.1.15, )",
+        "resolved": "3.1.15",
+        "contentHash": "WRE8wJsKjVVMC3KL9PNyKMZV6PdicBVfFXoP2tUT/dFuHgKCpfBCPWaRpsZFvR2pSQUlyEH+ouPMQ3bnKOJ6iQ==",
         "dependencies": {
           "Archipelago.MultiClient.Net": "6.6.0",
-          "KaitoKid.Utilities.Interfaces": "3.1.13"
+          "KaitoKid.Utilities.Interfaces": "3.1.15"
         }
       },
       "Pathoschild.Stardew.ModBuildConfig": {
@@ -50,8 +50,8 @@
       },
       "KaitoKid.Utilities.Interfaces": {
         "type": "Transitive",
-        "resolved": "3.1.13",
-        "contentHash": "Emo7zqtpQmqff04mZ6jDYBaBWTIsR8N1tE06JYyNR6ubuO1ofdQ8R2KtYps6eqKGQ/qL2TEN98f/do/L9H5ZwQ=="
+        "resolved": "3.1.15",
+        "contentHash": "BaV74VK+F8Q8i39A909COSVV4gP/jUC+EaNBncdfOarKzCLDPWQuGfGuN2uYeFPT1hSSdSSqg9Uit0u7v3Ok1g=="
       }
     }
   }
