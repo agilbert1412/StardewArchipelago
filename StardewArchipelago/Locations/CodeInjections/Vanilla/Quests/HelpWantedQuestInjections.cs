@@ -253,6 +253,21 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Quests
             return $"{string.Format(DailyQuest.HELP_WANTED, type)} {number}";
         }
 
+        // public static string getRandomItemFromSeason(Season season, int randomSeedAddition, bool forQuest, bool changeDaily = true)
+        public static bool GetRandomItemFromSeason_ConsiderRerolls_Prefix(Season season, ref int randomSeedAddition, bool forQuest, bool changeDaily, ref string __result)
+        {
+            try
+            {
+                randomSeedAddition += (int)_rerollCount;
+                return MethodPrefix.RUN_ORIGINAL_METHOD;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Failed in {nameof(GetRandomItemFromSeason_ConsiderRerolls_Prefix)}:\n{ex}");
+                return MethodPrefix.RUN_ORIGINAL_METHOD;
+            }
+        }
+
         // public static string getRandomItemFromSeason(Season season, bool forQuest, Random random)
         public static void GetRandomItemFromSeason_RemoveFishIfCantCatchThem_Postfix(Season season, bool forQuest, Random random, ref string __result)
         {
