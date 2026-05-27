@@ -555,6 +555,11 @@ namespace StardewArchipelago.Locations.Patcher
             );
 
             _harmony.Patch(
+                original: AccessTools.Method(typeof(Utility), nameof(Utility.getRandomItemFromSeason), new[] { typeof(Season), typeof(int), typeof(bool), typeof(bool) }),
+                prefix: new HarmonyMethod(typeof(HelpWantedQuestInjections), nameof(HelpWantedQuestInjections.GetRandomItemFromSeason_ConsiderRerolls_Prefix))
+            );
+
+            _harmony.Patch(
                 original: AccessTools.Method(typeof(Utility), nameof(Utility.getRandomItemFromSeason), new[] { typeof(Season), typeof(bool), typeof(Random) }),
                 postfix: new HarmonyMethod(typeof(HelpWantedQuestInjections), nameof(HelpWantedQuestInjections.GetRandomItemFromSeason_RemoveFishIfCantCatchThem_Postfix))
             );
