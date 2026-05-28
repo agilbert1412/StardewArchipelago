@@ -161,19 +161,20 @@ namespace StardewArchipelago.GameModifications.RandomizedData
         {
             priceMultiplier = 1;
             var randomizedItemName = randomizedShopItemData.ItemName;
-            if (_itemManager.ItemExists(randomizedItemName))
+            var randomizedItemCleanName = randomizedItemName;
+            if (randomizedItemName.EndsWith(ItemParser.RECIPE_SUFFIX))
             {
-                var randomizedItem = _itemManager.GetItemByName(randomizedItemName);
+                randomizedItemCleanName = randomizedItemName.Substring(0, randomizedItemName.Length - ItemParser.RECIPE_SUFFIX.Length);
+            }
+            if (_itemManager.ItemExists(randomizedItemCleanName))
+            {
+                var randomizedItem = _itemManager.GetItemByName(randomizedItemCleanName);
                 var randomizedItemId = randomizedItem.Id;
                 var randomizedQualifiedItemId = randomizedItem.GetQualifiedId();
                 if (shopDataItemId == randomizedItemId || shopDataItemId == randomizedQualifiedItemId ||
                     shopDataEntryId == randomizedItemId || shopDataEntryId == randomizedQualifiedItemId)
                 {
-                    if (shopDataEntryIsRecipe)
-                    {
-                        return randomizedItemName.EndsWith(ItemParser.RECIPE_SUFFIX);
-                    }
-                    return true;
+                    return shopDataEntryIsRecipe == randomizedItemName.EndsWith(ItemParser.RECIPE_SUFFIX);
                 }
             }
 
@@ -202,12 +203,7 @@ namespace StardewArchipelago.GameModifications.RandomizedData
                     locationName.Equals($"{Prefix.PURCHASE}{randomizedShopItemData.ItemName}") ||
                     locationName.Equals($"{randomizedShopItemData.ItemName}{Suffix.UPGRADE}"))
                 {
-                    if (shopDataEntryIsRecipe)
-                    {
-                        isCorrectItem = randomizedItemName.EndsWith(ItemParser.RECIPE_SUFFIX);
-                        return true;
-                    }
-                    isCorrectItem = true;
+                    isCorrectItem = shopDataEntryIsRecipe == randomizedItemName.EndsWith(ItemParser.RECIPE_SUFFIX);
                     return true;
                 }
                 if (locationName.Equals(FestivalLocationNames.STRAWBERRY_SEEDS))
@@ -223,12 +219,7 @@ namespace StardewArchipelago.GameModifications.RandomizedData
                 var tool = ItemRegistry.Create(shopDataItemId);
                 if (tool.Name.Equals(randomizedShopItemData.ItemName) || tool.Name.Equals($"{Prefix.PURCHASE}{randomizedShopItemData.ItemName}"))
                 {
-                    if (shopDataEntryIsRecipe)
-                    {
-                        isCorrectItem = randomizedItemName.EndsWith(ItemParser.RECIPE_SUFFIX);
-                        return true;
-                    }
-                    isCorrectItem = true;
+                    isCorrectItem = shopDataEntryIsRecipe == randomizedItemName.EndsWith(ItemParser.RECIPE_SUFFIX);
                     return true;
                 }
             }
