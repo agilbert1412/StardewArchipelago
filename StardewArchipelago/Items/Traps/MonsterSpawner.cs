@@ -36,6 +36,15 @@ namespace StardewArchipelago.Items.Traps
             AddMonster(map, monster);
         }
 
+        public void SpawnOneBoostedMonster(GameLocation map, TrapItemsDifficulty trapDifficulty, int boostLevel)
+        {
+            var monster = ChooseRandomMonster(map, trapDifficulty);
+            for (var i = 0; i < boostLevel; i++)
+            {
+                AddMonster(map, monster);
+            }
+        }
+
         public void SpawnOneMonster(GameLocation map, double quality)
         {
             Monster monster;

@@ -306,7 +306,7 @@ namespace StardewArchipelago
             _seasonsRandomizer = new SeasonsRandomizer(_logger, _helper, _archipelago, State);
             _appearanceRandomizer = new AppearanceRandomizer(_logger, _helper, _archipelago, _harmony);
 
-            var trapExecutor = new TrapExecutor(_logger, Helper, _archipelago, _giftHandler);
+            var trapExecutor = new TrapExecutor(_logger, Helper, _archipelago, _giftHandler, State);
             var giftTrapManager = new GiftTrapManager(_logger, trapExecutor);
             _giftHandler.Initialize(_logger, _archipelago, _stardewItemManager, _mail, giftTrapManager);
 

@@ -8,5 +8,6 @@
         Hard = 3,
         Hell = 4,
         Nightmare = 5,
+        Eldritch = 6,
     }
 }

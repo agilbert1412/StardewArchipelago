@@ -13,7 +13,8 @@ namespace StardewArchipelago.Items.Traps
             { TrapItemsDifficulty.Medium, BuffDuration.HalfHour },
             { TrapItemsDifficulty.Hard, BuffDuration.OneHour },
             { TrapItemsDifficulty.Hell, BuffDuration.TwoHours },
-            { TrapItemsDifficulty.Nightmare, BuffDuration.WholeDay },
+            { TrapItemsDifficulty.Nightmare, BuffDuration.OneMinuteRealTime },
+            { TrapItemsDifficulty.Eldritch, BuffDuration.FiveMinutesRealTime },
         };
 
         public Dictionary<TrapItemsDifficulty, BuffDuration> DefaultDebuffDurations = new()
@@ -23,7 +24,8 @@ namespace StardewArchipelago.Items.Traps
             { TrapItemsDifficulty.Medium, BuffDuration.OneHour },
             { TrapItemsDifficulty.Hard, BuffDuration.TwoHours },
             { TrapItemsDifficulty.Hell, BuffDuration.FourHours },
-            { TrapItemsDifficulty.Nightmare, BuffDuration.WholeDay },
+            { TrapItemsDifficulty.Nightmare, BuffDuration.FiveMinutesRealTime },
+            { TrapItemsDifficulty.Eldritch, BuffDuration.TwentyMinutesRealTime },
         };
 
         public Dictionary<TrapItemsDifficulty, double> TaxRates = new()
@@ -34,6 +36,7 @@ namespace StardewArchipelago.Items.Traps
             { TrapItemsDifficulty.Hard, 0.4 },
             { TrapItemsDifficulty.Hell, 0.8 },
             { TrapItemsDifficulty.Nightmare, 1 },
+            { TrapItemsDifficulty.Eldritch, 2 },
         };
 
         public Dictionary<TrapItemsDifficulty, TeleportDestination> TeleportDestinations = new()
@@ -44,6 +47,7 @@ namespace StardewArchipelago.Items.Traps
             { TrapItemsDifficulty.Hard, TeleportDestination.SameMapOrHome },
             { TrapItemsDifficulty.Hell, TeleportDestination.PelicanTown },
             { TrapItemsDifficulty.Nightmare, TeleportDestination.Anywhere },
+            { TrapItemsDifficulty.Eldritch, TeleportDestination.Anywhere },
         };
 
         public Dictionary<TrapItemsDifficulty, double> CrowAttackRate = new()
@@ -54,6 +58,7 @@ namespace StardewArchipelago.Items.Traps
             { TrapItemsDifficulty.Hard, 0.25 },
             { TrapItemsDifficulty.Hell, 0.60 },
             { TrapItemsDifficulty.Nightmare, 1 },
+            { TrapItemsDifficulty.Eldritch, 1 },
         };
 
         public Dictionary<TrapItemsDifficulty, CrowTargets> CrowValidTargets = new()
@@ -64,9 +69,19 @@ namespace StardewArchipelago.Items.Traps
             { TrapItemsDifficulty.Hard, CrowTargets.Outside },
             { TrapItemsDifficulty.Hell, CrowTargets.Everywhere },
             { TrapItemsDifficulty.Nightmare, CrowTargets.Everywhere },
+            { TrapItemsDifficulty.Eldritch, CrowTargets.Everywhere },
         };
 
-        public const double SCARECROW_EFFICIENCY = 0.40;
+        public Dictionary<TrapItemsDifficulty, double> ScarecrowEfficiency = new()
+        {
+            { TrapItemsDifficulty.NoTraps, 0.8 },
+            { TrapItemsDifficulty.Easy, 0.7 },
+            { TrapItemsDifficulty.Medium, 0.6 },
+            { TrapItemsDifficulty.Hard, 0.5 },
+            { TrapItemsDifficulty.Hell, 0.4 },
+            { TrapItemsDifficulty.Nightmare, 0.3 },
+            { TrapItemsDifficulty.Eldritch, 0.05 },
+        };
 
         public Dictionary<TrapItemsDifficulty, int> NumberOfMonsters = new()
         {
@@ -76,6 +91,29 @@ namespace StardewArchipelago.Items.Traps
             { TrapItemsDifficulty.Hard, 4 },
             { TrapItemsDifficulty.Hell, 8 },
             { TrapItemsDifficulty.Nightmare, 12 },
+            { TrapItemsDifficulty.Eldritch, 50 },
+        };
+
+        public Dictionary<TrapItemsDifficulty, int> NumberOfSuperMonsters = new()
+        {
+            { TrapItemsDifficulty.NoTraps, 0 },
+            { TrapItemsDifficulty.Easy, 1 },
+            { TrapItemsDifficulty.Medium, 1 },
+            { TrapItemsDifficulty.Hard, 1 },
+            { TrapItemsDifficulty.Hell, 2 },
+            { TrapItemsDifficulty.Nightmare, 4 },
+            { TrapItemsDifficulty.Eldritch, 12 },
+        };
+
+        public Dictionary<TrapItemsDifficulty, int> SuperMonsterStrength = new()
+        {
+            { TrapItemsDifficulty.NoTraps, 0 },
+            { TrapItemsDifficulty.Easy, 2 },
+            { TrapItemsDifficulty.Medium, 3 },
+            { TrapItemsDifficulty.Hard, 4 },
+            { TrapItemsDifficulty.Hell, 4 },
+            { TrapItemsDifficulty.Nightmare, 6 },
+            { TrapItemsDifficulty.Eldritch, 10 },
         };
 
         public Dictionary<TrapItemsDifficulty, int> AmountOfDebris = new()
@@ -86,6 +124,18 @@ namespace StardewArchipelago.Items.Traps
             { TrapItemsDifficulty.Hard, 200 },
             { TrapItemsDifficulty.Hell, 400 },
             { TrapItemsDifficulty.Nightmare, 800 },
+            { TrapItemsDifficulty.Eldritch, 4000 },
+        };
+
+        public Dictionary<TrapItemsDifficulty, int> AmountOfTrees = new()
+        {
+            { TrapItemsDifficulty.NoTraps, 0 },
+            { TrapItemsDifficulty.Easy, 14 },
+            { TrapItemsDifficulty.Medium, 28 },
+            { TrapItemsDifficulty.Hard, 56 },
+            { TrapItemsDifficulty.Hell, 224 },
+            { TrapItemsDifficulty.Nightmare, 448 },
+            { TrapItemsDifficulty.Eldritch, 2000 },
         };
 
         public Dictionary<TrapItemsDifficulty, ShuffleTarget> ShuffleTargets = new()
@@ -96,6 +146,7 @@ namespace StardewArchipelago.Items.Traps
             { TrapItemsDifficulty.Hard, ShuffleTarget.Close },
             { TrapItemsDifficulty.Hell, ShuffleTarget.SameMap },
             { TrapItemsDifficulty.Nightmare, ShuffleTarget.AllMaps },
+            { TrapItemsDifficulty.Eldritch, ShuffleTarget.AllMaps },
         };
 
         public Dictionary<TrapItemsDifficulty, double> ShuffleRate = new()
@@ -106,6 +157,7 @@ namespace StardewArchipelago.Items.Traps
             { TrapItemsDifficulty.Hard, 0.4 },
             { TrapItemsDifficulty.Hell, 0.5 },
             { TrapItemsDifficulty.Nightmare, 0.6 },
+            { TrapItemsDifficulty.Eldritch, 1 },
         };
 
         public Dictionary<TrapItemsDifficulty, double> ShuffleRateToFriends = new()
@@ -116,16 +168,40 @@ namespace StardewArchipelago.Items.Traps
             { TrapItemsDifficulty.Hard, 0 },
             { TrapItemsDifficulty.Hell, 0.04 },
             { TrapItemsDifficulty.Nightmare, 0.1 },
+            { TrapItemsDifficulty.Eldritch, 0.2 },
+        };
+
+        public Dictionary<TrapItemsDifficulty, int> ExtraSwapsAfterShuffle = new()
+        {
+            { TrapItemsDifficulty.NoTraps, 0 },
+            { TrapItemsDifficulty.Easy, 0 },
+            { TrapItemsDifficulty.Medium, 0 },
+            { TrapItemsDifficulty.Hard, 0 },
+            { TrapItemsDifficulty.Hell, 0 },
+            { TrapItemsDifficulty.Nightmare, 0 },
+            { TrapItemsDifficulty.Eldritch, 100 },
         };
 
         public Dictionary<TrapItemsDifficulty, int> PariahFriendshipLoss = new()
         {
             { TrapItemsDifficulty.NoTraps, -0 },
-            { TrapItemsDifficulty.Easy, -10 },
-            { TrapItemsDifficulty.Medium, -20 },
-            { TrapItemsDifficulty.Hard, -40 },
-            { TrapItemsDifficulty.Hell, -100 },
-            { TrapItemsDifficulty.Nightmare, -400 },
+            { TrapItemsDifficulty.Easy, -5 },
+            { TrapItemsDifficulty.Medium, -10 },
+            { TrapItemsDifficulty.Hard, -20 },
+            { TrapItemsDifficulty.Hell, -50 },
+            { TrapItemsDifficulty.Nightmare, -200 },
+            { TrapItemsDifficulty.Eldritch, -2500 },
+        };
+
+        public Dictionary<TrapItemsDifficulty, int> PariahShunningDays = new()
+        {
+            { TrapItemsDifficulty.NoTraps, 0 },
+            { TrapItemsDifficulty.Easy, 1 },
+            { TrapItemsDifficulty.Medium, 2 },
+            { TrapItemsDifficulty.Hard, 3 },
+            { TrapItemsDifficulty.Hell, 5 },
+            { TrapItemsDifficulty.Nightmare, 10 },
+            { TrapItemsDifficulty.Eldritch, 28 },
         };
 
         public Dictionary<TrapItemsDifficulty, DroughtTarget> DroughtTargets = new()
@@ -134,8 +210,9 @@ namespace StardewArchipelago.Items.Traps
             { TrapItemsDifficulty.Easy, DroughtTarget.Soil },
             { TrapItemsDifficulty.Medium, DroughtTarget.Crops },
             { TrapItemsDifficulty.Hard, DroughtTarget.CropsIncludingInside },
-            { TrapItemsDifficulty.Hell, DroughtTarget.CropsIncludingInside },
-            { TrapItemsDifficulty.Nightmare, DroughtTarget.CropsIncludingWateringCan },
+            { TrapItemsDifficulty.Hell, DroughtTarget.CropsAndWateringCan },
+            { TrapItemsDifficulty.Nightmare, DroughtTarget.All },
+            { TrapItemsDifficulty.Eldritch, DroughtTarget.All },
         };
 
         public Dictionary<TrapItemsDifficulty, TimeFliesDuration> TimeFliesDurations = new()
@@ -146,6 +223,7 @@ namespace StardewArchipelago.Items.Traps
             { TrapItemsDifficulty.Hard, TimeFliesDuration.SixHours },
             { TrapItemsDifficulty.Hell, TimeFliesDuration.TwelveHours },
             { TrapItemsDifficulty.Nightmare, TimeFliesDuration.TwoDays },
+            { TrapItemsDifficulty.Eldritch, TimeFliesDuration.TwoWeeks },
         };
 
         public Dictionary<TrapItemsDifficulty, int> NumberOfBabies = new()
@@ -156,6 +234,18 @@ namespace StardewArchipelago.Items.Traps
             { TrapItemsDifficulty.Hard, 16 },
             { TrapItemsDifficulty.Hell, 32 },
             { TrapItemsDifficulty.Nightmare, 128 },
+            { TrapItemsDifficulty.Eldritch, 64 },
+        };
+
+        public Dictionary<TrapItemsDifficulty, int> BabiesDespawnAge = new()
+        {
+            { TrapItemsDifficulty.NoTraps, 1 },
+            { TrapItemsDifficulty.Easy, 1 },
+            { TrapItemsDifficulty.Medium, 1 },
+            { TrapItemsDifficulty.Hard, 1 },
+            { TrapItemsDifficulty.Hell, 1 },
+            { TrapItemsDifficulty.Nightmare, 40 },
+            { TrapItemsDifficulty.Eldritch, 80 },
         };
 
         public Dictionary<TrapItemsDifficulty, int> MeowBarkNumber = new()
@@ -166,6 +256,18 @@ namespace StardewArchipelago.Items.Traps
             { TrapItemsDifficulty.Hard, 16 },
             { TrapItemsDifficulty.Hell, 32 },
             { TrapItemsDifficulty.Nightmare, 128 },
+            { TrapItemsDifficulty.Eldritch, 128 },
+        };
+
+        public Dictionary<TrapItemsDifficulty, int> NoiseNumber = new()
+        {
+            { TrapItemsDifficulty.NoTraps, 0 },
+            { TrapItemsDifficulty.Easy, 2 },
+            { TrapItemsDifficulty.Medium, 4 },
+            { TrapItemsDifficulty.Hard, 8 },
+            { TrapItemsDifficulty.Hell, 16 },
+            { TrapItemsDifficulty.Nightmare, 64 },
+            { TrapItemsDifficulty.Eldritch, 96 },
         };
 
         public Dictionary<TrapItemsDifficulty, int> DepressionTrapDays = new()
@@ -176,6 +278,7 @@ namespace StardewArchipelago.Items.Traps
             { TrapItemsDifficulty.Hard, 7 },
             { TrapItemsDifficulty.Hell, 14 },
             { TrapItemsDifficulty.Nightmare, 28 },
+            { TrapItemsDifficulty.Eldritch, 224 },
         };
 
         public Dictionary<TrapItemsDifficulty, int> UngrowthDays = new()
@@ -186,6 +289,7 @@ namespace StardewArchipelago.Items.Traps
             { TrapItemsDifficulty.Hard, 4 },
             { TrapItemsDifficulty.Hell, 8 },
             { TrapItemsDifficulty.Nightmare, 14 },
+            { TrapItemsDifficulty.Eldritch, 56 },
         };
 
         public Dictionary<TrapItemsDifficulty, int> TreeUngrowthDays = new()
@@ -196,6 +300,7 @@ namespace StardewArchipelago.Items.Traps
             { TrapItemsDifficulty.Hard, 7 },
             { TrapItemsDifficulty.Hell, 21 },
             { TrapItemsDifficulty.Nightmare, 56 },
+            { TrapItemsDifficulty.Eldritch, 112 },
         };
 
         public Dictionary<TrapItemsDifficulty, double> InflationAmount = new()
@@ -206,6 +311,7 @@ namespace StardewArchipelago.Items.Traps
             { TrapItemsDifficulty.Hard, 1.75 },
             { TrapItemsDifficulty.Hell, 2.25 }, // Vanilla Inflation at Robin's after a year is equivalent to 2 traps
             { TrapItemsDifficulty.Nightmare, 3 },
+            { TrapItemsDifficulty.Eldritch, 16 },
         };
 
         public Dictionary<TrapItemsDifficulty, int> ExplosionSize = new()
@@ -216,6 +322,7 @@ namespace StardewArchipelago.Items.Traps
             { TrapItemsDifficulty.Hard, 5 }, // Bomb
             { TrapItemsDifficulty.Hell, 7 }, // Mega Bomb
             { TrapItemsDifficulty.Nightmare, 15 }, // Good luck!
+            { TrapItemsDifficulty.Eldritch, 64 },
         };
 
         public Dictionary<TrapItemsDifficulty, double> NudgeChance = new()
@@ -226,6 +333,7 @@ namespace StardewArchipelago.Items.Traps
             { TrapItemsDifficulty.Hard, 1 },
             { TrapItemsDifficulty.Hell, 4 },
             { TrapItemsDifficulty.Nightmare, 8 },
+            { TrapItemsDifficulty.Eldritch, 64 },
         };
 
         public Dictionary<TrapItemsDifficulty, int> HoardAmount = new()
@@ -236,6 +344,7 @@ namespace StardewArchipelago.Items.Traps
             { TrapItemsDifficulty.Hard, 25 },
             { TrapItemsDifficulty.Hell, 60 },
             { TrapItemsDifficulty.Nightmare, 200 },
+            { TrapItemsDifficulty.Eldritch, 1600 },
         };
     }
 
@@ -273,7 +382,8 @@ namespace StardewArchipelago.Items.Traps
         Soil = 1,
         Crops = 2,
         CropsIncludingInside = 3,
-        CropsIncludingWateringCan = 4,
+        CropsAndWateringCan = 4,
+        All = 5,
     }
 
     public enum TimeFliesDuration
@@ -284,5 +394,6 @@ namespace StardewArchipelago.Items.Traps
         SixHours = 36,
         TwelveHours = 72,
         TwoDays = 240,
+        TwoWeeks = 1680,
     }
 }

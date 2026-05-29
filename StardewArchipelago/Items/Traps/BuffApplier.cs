@@ -1,4 +1,5 @@
 ﻿using System;
+using StardewArchipelago.Serialization;
 using StardewArchipelago.Stardew;
 using StardewValley;
 
@@ -6,6 +7,12 @@ namespace StardewArchipelago.Items.Traps
 {
     public class BuffApplier
     {
+        private static TrapsStateDto _permanentState;
+        public BuffApplier(TrapsStateDto permanentState)
+        {
+            _permanentState = permanentState;
+        }
+
         public bool IsBuff(string buffName, out Buffs buff)
         {
             buffName = buffName.Replace("_", " ");
@@ -58,10 +65,15 @@ namespace StardewArchipelago.Items.Traps
                 return;
             }
 
-            AddBuff(whichBuff, (int)duration);
+            AddBuff(whichBuff, (int)duration, IsRealTime(duration));
         }
 
-        public void AddBuff(Buffs whichBuff, int duration)
+        public static bool IsRealTime(BuffDuration duration)
+        {
+            return duration is BuffDuration.OneMinuteRealTime or BuffDuration.FiveMinutesRealTime or BuffDuration.TwentyMinutesRealTime;
+        }
+
+        public void AddBuff(Buffs whichBuff, int duration, bool realTime)
         {
             if (duration <= 0)
             {
@@ -107,6 +119,10 @@ namespace StardewArchipelago.Items.Traps
             }
 
             Game1.player.applyBuff(buff);
+            if (realTime)
+            {
+                _permanentState.CurrentBuffs.Add(whichBuff, duration);
+            }
         }
     }
 }

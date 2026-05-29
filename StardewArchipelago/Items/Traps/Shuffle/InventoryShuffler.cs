@@ -1,13 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using KaitoKid.Utilities.Interfaces;
+﻿using KaitoKid.Utilities.Interfaces;
 using StardewArchipelago.Archipelago.Gifting;
 using StardewArchipelago.Extensions;
 using StardewValley;
 using StardewValley.Locations;
 using StardewValley.Objects;
 using StardewValley.Tools;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
+using KaitoKid.ArchipelagoUtilities.Net.Extensions;
 using Object = StardewValley.Object;
 
 namespace StardewArchipelago.Items.Traps.Shuffle
@@ -389,6 +392,102 @@ namespace StardewArchipelago.Items.Traps.Shuffle
                 _logger.LogWarning($"Could not find a fridge in the island farmhouse. {ex}");
                 return null;
             }
+        }
+
+        protected List<StardewValley.Inventories.Inventory> GetAllInventoriesWithItems()
+        {
+            var inventories = new List<StardewValley.Inventories.Inventory>();
+            inventories.Add(Game1.player.Items);
+            var chests = FindAllChests();
+            foreach (var chest in chests.Values)
+            {
+                if (chest.Items.Any(x => x != null))
+                {
+                    inventories.Add(chest.Items);
+                }
+            }
+
+            if (Game1.getLocationFromName("FarmHouse") is not FarmHouse farmHouse)
+            {
+                return null;
+            }
+
+            var farmFridge = farmHouse.fridge.Value;
+            if (farmFridge != null && farmFridge.Items.Any(x => x != null))
+            {
+                inventories.Add(farmFridge.Items);
+            }
+
+            if (Game1.getLocationFromName("IslandFarmHouse") is not IslandFarmHouse islandHouse)
+            {
+                return null;
+            }
+
+            var islandFridge = islandHouse.fridge.Value;
+            if (islandFridge != null && islandFridge.Items.Any(x => x != null))
+            {
+                inventories.Add(islandFridge.Items);
+            }
+
+
+            return inventories;
+        }
+
+        protected Dictionary<Item, Tuple<StardewValley.Inventories.Inventory, int>> GenerateItemMap(List<StardewValley.Inventories.Inventory> inventories)
+        {
+            var itemMap = new Dictionary<Item, Tuple<StardewValley.Inventories.Inventory, int>>();
+            foreach (var inventory in inventories)
+            {
+                for (var index = 0; index < inventory.Count; index++)
+                {
+                    var item = inventory[index];
+                    if (item == null || item.Stack <= 0)
+                    {
+                        continue;
+                    }
+                    itemMap.Add(item, new Tuple<StardewValley.Inventories.Inventory, int>(inventory, index));
+                }
+            }
+
+            return itemMap;
+        }
+
+        public void InitiateExtraSwaps(int extraSwaps)
+        {
+            DoExtraSwapsAsync(extraSwaps).FireAndForget();
+        }
+
+        private async Task DoExtraSwapsAsync(int extraSwaps)
+        {
+            var inventories = GetAllInventoriesWithItems();
+            var itemMap = GenerateItemMap(inventories);
+
+            for (var i = 0; i < extraSwaps; i++)
+            {
+                await Task.Run(() => Thread.Sleep(10000));
+                SwapTwoItems(itemMap);
+            }
+        }
+
+        private void SwapTwoItems(Dictionary<Item, Tuple<StardewValley.Inventories.Inventory, int>> itemMap)
+        {
+            var validItemsToSwap = itemMap.Keys.ToArray();
+            var totalCount = validItemsToSwap.Length;
+            var indexSwap1 = Game1.random.Next(totalCount);
+            var indexSwap2 = Game1.random.Next(totalCount);
+            if (indexSwap1 == indexSwap2)
+            {
+                return;
+            }
+
+            var item1 = validItemsToSwap[indexSwap1];
+            var item2 = validItemsToSwap[indexSwap2];
+            var (inventory1, index1) = itemMap[item1];
+            var (inventory2, index2) = itemMap[item2];
+            inventory1[index1] = item2;
+            inventory2[index2] = item1;
+            itemMap[item1] = new Tuple<StardewValley.Inventories.Inventory, int>(inventory2, index2);
+            itemMap[item2] = new Tuple<StardewValley.Inventories.Inventory, int>(inventory1, index1);
         }
     }
 }

@@ -172,7 +172,7 @@ namespace StardewArchipelago.Items.Traps
             _traps.Add(DEBRIS, TrapExecutor.CreateDebris);
             _traps.Add(SHUFFLE, TrapExecutor.ShuffleInventory);
             // _traps.Add(WINTER, );
-            _traps.Add(PARIAH, TrapExecutor.SendDislikedGiftToEveryone);
+            _traps.Add(PARIAH, TrapExecutor.BecomePariah);
             _traps.Add(DROUGHT, TrapExecutor.PerformDroughtTrap);
             _traps.Add(TIME_FLIES, TrapExecutor.SkipTimeForward);
             _traps.Add(BABIES, TrapExecutor.SpawnTemporaryBabies);

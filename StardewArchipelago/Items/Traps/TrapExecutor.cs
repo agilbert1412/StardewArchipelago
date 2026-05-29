@@ -3,16 +3,19 @@ using KaitoKid.ArchipelagoUtilities.Net.Constants;
 using KaitoKid.ArchipelagoUtilities.Net.Extensions;
 using KaitoKid.Utilities.Interfaces;
 using Microsoft.Xna.Framework;
-using Newtonsoft.Json.Linq;
+using Microsoft.Xna.Framework.Audio;
+using Microsoft.Xna.Framework.Media;
 using StardewArchipelago.Archipelago;
 using StardewArchipelago.Archipelago.Gifting;
 using StardewArchipelago.Archipelago.SlotData.SlotEnums;
 using StardewArchipelago.GameModifications.MultiSleep;
 using StardewArchipelago.Items.Traps.Shuffle;
+using StardewArchipelago.Serialization;
 using StardewArchipelago.Stardew;
 using StardewModdingAPI;
 using StardewValley;
 using StardewValley.BellsAndWhistles;
+using StardewValley.Buildings;
 using StardewValley.Characters;
 using StardewValley.Locations;
 using StardewValley.Network.ChestHit;
@@ -35,6 +38,7 @@ namespace StardewArchipelago.Items.Traps
         private static StardewArchipelagoClient _archipelago;
         private static ILogger _logger;
         private readonly IModHelper _helper;
+        private static TrapsStateDto _permanentState;
         public static TrapDifficultyBalancer _difficultyBalancer;
 
         public readonly BombSpawner BombSpawner;
@@ -44,12 +48,14 @@ namespace StardewArchipelago.Items.Traps
         public readonly DebrisSpawner DebrisSpawner;
         public readonly InventoryShuffler InventoryShuffler;
         public readonly BuffApplier DebuffApplier;
+        private readonly string[] _availableSoundCues;
 
-        public TrapExecutor(ILogger logger, IModHelper modHelper, StardewArchipelagoClient archipelago, IGiftHandler giftHandler)
+        public TrapExecutor(ILogger logger, IModHelper modHelper, StardewArchipelagoClient archipelago, IGiftHandler giftHandler, ArchipelagoStateDto state)
         {
             _logger = logger;
             _helper = modHelper;
             _archipelago = archipelago;
+            _permanentState = state.TrapsState;
             _difficultyBalancer = new TrapDifficultyBalancer();
             BombSpawner = new BombSpawner(_helper);
             TileChooser = new TileChooser();
@@ -57,7 +63,15 @@ namespace StardewArchipelago.Items.Traps
             BabyBirther = new BabyBirther();
             DebrisSpawner = new DebrisSpawner(_logger);
             InventoryShuffler = new InventoryShuffler(_logger, giftHandler);
-            DebuffApplier = new BuffApplier();
+            DebuffApplier = new BuffApplier(_permanentState);
+
+            // private SoundBank soundBank;
+            var soundBankField = _helper.Reflection.GetField<SoundBank>(Game1.soundBank, "soundBank");
+            var soundBank = soundBankField.GetValue();
+
+            // private readonly Dictionary<string, CueDefinition> _cues = new Dictionary<string, CueDefinition>();
+            var cuesField = _helper.Reflection.GetField<Dictionary<string, CueDefinition>>(soundBank, "_cues");
+            _availableSoundCues = cuesField.GetValue().Keys.ToArray();
         }
 
         public void AddBurntDebuff()
@@ -108,14 +122,20 @@ namespace StardewArchipelago.Items.Traps
             DebrisSpawner.CreateDebris(amountOfDebris);
         }
 
+        public void GrowTrees()
+        {
+            var amountOfTrees = _difficultyBalancer.AmountOfTrees[_archipelago.SlotData.TrapItemsDifficulty];
+            DebrisSpawner.CreateTrees(amountOfTrees);
+        }
+
         public void TeleportRandomly()
         {
             var difficulty = _archipelago.SlotData.TrapItemsDifficulty;
             var destination = _difficultyBalancer.TeleportDestinations[difficulty];
-            TeleportRandomly(destination);
+            TeleportRandomly(destination, difficulty == TrapItemsDifficulty.Eldritch ? 20 : 1);
         }
 
-        public void TeleportRandomly(TeleportDestination destination)
+        public void TeleportRandomly(TeleportDestination destination, int numberOfTeleports)
         {
             var validMaps = new List<GameLocation>();
             switch (destination)
@@ -145,11 +165,37 @@ namespace StardewArchipelago.Items.Traps
                     throw new ArgumentOutOfRangeException();
             }
 
-            TeleportRandomly(validMaps, destination);
+            TeleportRandomly(validMaps, destination, numberOfTeleports);
+        }
+
+        private void TeleportRandomly(List<GameLocation> validMaps, TeleportDestination destination, int numberOfTeleports)
+        {
+            if (numberOfTeleports <= 0)
+            {
+                return;
+            }
+
+            if (numberOfTeleports == 1)
+            {
+                TeleportRandomly(validMaps, destination);
+                return;
+            }
+
+            TeleportRandomlyAsync(validMaps, destination, numberOfTeleports).FireAndForget();
+        }
+
+        private async Task TeleportRandomlyAsync(List<GameLocation> validMaps, TeleportDestination destination, int numberOfTeleports)
+        {
+            for (var i = 0; i < numberOfTeleports; i++)
+            {
+                await Task.Run(() => Thread.Sleep(4000));
+                TeleportRandomly(validMaps, destination, numberOfTeleports);
+            }
         }
 
         private void TeleportRandomly(List<GameLocation> validMaps, TeleportDestination destination)
         {
+
             GameLocation chosenLocation = null;
             Vector2? chosenTile = null;
             while (chosenLocation == null || chosenTile == null)
@@ -166,32 +212,6 @@ namespace StardewArchipelago.Items.Traps
             }
 
             TeleportFarmerTo(chosenLocation.Name, chosenTile.Value);
-        }
-
-        public void ChargeTaxes()
-        {
-            var difficulty = _archipelago.SlotData.TrapItemsDifficulty;
-            var taxRate = _difficultyBalancer.TaxRates[difficulty];
-            var player = Game1.player;
-            var currentMoney = player.Money;
-            var tax = (int)(currentMoney * taxRate);
-            Game1.player.addUnearnedMoney(tax * -1);
-            if (difficulty == TrapItemsDifficulty.Nightmare)
-            {
-                RemoveTaxTrapFromBankAsync().FireAndForget();
-            }
-        }
-
-        public async Task RemoveTaxTrapFromBankAsync()
-        {
-            var bankingKey = string.Format(BankHandler.BANKING_TEAM_KEY, _archipelago.GetTeam());
-            var currentAmountJoules = await _archipelago.ReadBigIntegerFromDataStorageAsync(Scope.Global, bankingKey);
-            if (currentAmountJoules == null || currentAmountJoules <= 0)
-            {
-                return;
-            }
-
-            _archipelago.DivideBigIntegerDataStorage(Scope.Global, bankingKey, 2);
         }
 
         private void TeleportFarmerTo(string locationName, Vector2 tile)
@@ -246,6 +266,33 @@ namespace StardewArchipelago.Items.Traps
             farmer.CanMove = true;
         }
 
+        public void ChargeTaxes()
+        {
+            var difficulty = _archipelago.SlotData.TrapItemsDifficulty;
+            var taxRate = _difficultyBalancer.TaxRates[difficulty];
+            var player = Game1.player;
+            var currentMoney = player.Money;
+            var tax = (int)(currentMoney * taxRate);
+            Game1.player.addUnearnedMoney(tax * -1);
+            if (difficulty >= TrapItemsDifficulty.Nightmare)
+            {
+                RemoveTaxTrapFromBankAsync(difficulty).FireAndForget();
+            }
+        }
+
+        public async Task RemoveTaxTrapFromBankAsync(TrapItemsDifficulty difficulty)
+        {
+            var bankingKey = string.Format(BankHandler.BANKING_TEAM_KEY, _archipelago.GetTeam());
+            var currentAmountJoules = await _archipelago.ReadBigIntegerFromDataStorageAsync(Scope.Global, bankingKey);
+            if (currentAmountJoules == null || currentAmountJoules <= 0)
+            {
+                return;
+            }
+
+            var divisor = difficulty == TrapItemsDifficulty.Eldritch ? 10 : 2;
+            _archipelago.DivideBigIntegerDataStorage(Scope.Global, bankingKey, divisor);
+        }
+
         public void SendCrows()
         {
             var crowRate = _difficultyBalancer.CrowAttackRate[_archipelago.SlotData.TrapItemsDifficulty];
@@ -255,10 +302,12 @@ namespace StardewArchipelago.Items.Traps
                 return;
             }
 
+            var scarecrowEfficiency = _difficultyBalancer.ScarecrowEfficiency[_archipelago.SlotData.TrapItemsDifficulty];
+
             if (crowTargets == CrowTargets.Farm)
             {
                 var farm = Game1.getFarm();
-                SendCrowsForLocation(farm, crowRate);
+                SendCrowsForLocation(farm, crowRate, scarecrowEfficiency);
                 return;
             }
 
@@ -271,18 +320,18 @@ namespace StardewArchipelago.Items.Traps
                         continue;
                     }
 
-                    SendCrowsForLocation(gameLocation, crowRate);
+                    SendCrowsForLocation(gameLocation, crowRate, scarecrowEfficiency);
                 }
                 return;
             }
 
             foreach (var gameLocation in Game1.locations)
             {
-                SendCrowsForLocation(gameLocation, crowRate);
+                SendCrowsForLocation(gameLocation, crowRate, scarecrowEfficiency);
             }
         }
 
-        private static void SendCrowsForLocation(GameLocation map, double crowRate)
+        private static void SendCrowsForLocation(GameLocation map, double crowRate, double scarecrowEfficiency)
         {
             var scarecrowPositions = GetScarecrowPositions(map);
             var crops = GetAllCrops(map);
@@ -295,7 +344,7 @@ namespace StardewArchipelago.Items.Traps
                     continue;
                 }
 
-                if (IsCropDefended(map, scarecrowPositions, cropPosition))
+                if (IsCropDefended(map, scarecrowPositions, cropPosition, scarecrowEfficiency))
                 {
                     continue;
                 }
@@ -305,12 +354,12 @@ namespace StardewArchipelago.Items.Traps
             }
         }
 
-        private static bool IsCropDefended(GameLocation map, List<Vector2> scarecrowPositions, Vector2 cropPosition)
+        private static bool IsCropDefended(GameLocation map, List<Vector2> scarecrowPositions, Vector2 cropPosition, double scarecrowEfficiency)
         {
-            var vulnerability = GetCropVulnerability(map, scarecrowPositions, cropPosition);
-            for (var i = 0; i < vulnerability; i++)
+            var defendingScarecrows = GetCropDefense(map, scarecrowPositions, cropPosition);
+            for (var i = 0; i < defendingScarecrows; i++)
             {
-                if (Game1.random.NextDouble() < TrapDifficultyBalancer.SCARECROW_EFFICIENCY)
+                if (Game1.random.NextDouble() < scarecrowEfficiency)
                 {
                     return true;
                 }
@@ -356,7 +405,7 @@ namespace StardewArchipelago.Items.Traps
             }
         }
 
-        private static int GetCropVulnerability(GameLocation farm, List<Vector2> scarecrowPositions, Vector2 cropPosition)
+        private static int GetCropDefense(GameLocation farm, List<Vector2> scarecrowPositions, Vector2 cropPosition)
         {
             var numberOfDefendingScarecrows = 0;
             foreach (var scarecrowPosition in scarecrowPositions)
@@ -380,18 +429,35 @@ namespace StardewArchipelago.Items.Traps
             }
         }
 
-        public void ShuffleInventory()
+        public void SpawnSuperMonsters()
         {
-            var targets = _difficultyBalancer.ShuffleTargets[_archipelago.SlotData.TrapItemsDifficulty];
-            var rate = _difficultyBalancer.ShuffleRate[_archipelago.SlotData.TrapItemsDifficulty];
-            var rateToFriends = _difficultyBalancer.ShuffleRateToFriends[_archipelago.SlotData.TrapItemsDifficulty];
-            InventoryShuffler.ShuffleInventories(targets, rate, rateToFriends);
+            var numberMonsters = _difficultyBalancer.NumberOfSuperMonsters[_archipelago.SlotData.TrapItemsDifficulty];
+            var monsterPower = _difficultyBalancer.SuperMonsterStrength[_archipelago.SlotData.TrapItemsDifficulty];
+            for (var i = 0; i < numberMonsters; i++)
+            {
+                MonsterSpawner.SpawnOneBoostedMonster(Game1.player.currentLocation, _archipelago.SlotData.TrapItemsDifficulty, monsterPower);
+            }
         }
 
-        public void SendDislikedGiftToEveryone()
+        public void ShuffleInventory()
+        {
+            var difficulty = _archipelago.SlotData.TrapItemsDifficulty;
+            var targets = _difficultyBalancer.ShuffleTargets[difficulty];
+            var rate = _difficultyBalancer.ShuffleRate[difficulty];
+            var rateToFriends = _difficultyBalancer.ShuffleRateToFriends[difficulty];
+            InventoryShuffler.ShuffleInventories(targets, rate, rateToFriends);
+            var extraSwaps = _difficultyBalancer.ExtraSwapsAfterShuffle[difficulty];
+            if (extraSwaps > 0)
+            {
+                InventoryShuffler.InitiateExtraSwaps(extraSwaps);
+            }
+        }
+
+        public void BecomePariah()
         {
             var player = Game1.player;
             var friendshipLoss = _difficultyBalancer.PariahFriendshipLoss[_archipelago.SlotData.TrapItemsDifficulty];
+            var shunningDays = _difficultyBalancer.PariahShunningDays[_archipelago.SlotData.TrapItemsDifficulty];
             foreach (var name in player.friendshipData.Keys)
             {
                 var npc = Game1.getCharacterFromName(name) ?? Game1.getCharacterFromName<Child>(name, false);
@@ -406,12 +472,15 @@ namespace StardewArchipelago.Items.Traps
                 ++player.friendshipData[name].GiftsThisWeek;
                 player.friendshipData[name].LastGiftDate = new WorldDate(Game1.Date);
                 Game1.player.changeFriendship(friendshipLoss, npc);
+                _permanentState.PariahShunning.TryAdd(name, 0);
+                _permanentState.PariahShunning[name] += shunningDays;
             }
         }
 
         public void PerformDroughtTrap()
         {
-            var droughtTargets = _difficultyBalancer.DroughtTargets[_archipelago.SlotData.TrapItemsDifficulty];
+            var difficulty = _archipelago.SlotData.TrapItemsDifficulty;
+            var droughtTargets = _difficultyBalancer.DroughtTargets[difficulty];
             var hoeDirts = GetAllHoeDirt(droughtTargets);
             foreach (var hoeDirt in hoeDirts)
             {
@@ -421,7 +490,7 @@ namespace StardewArchipelago.Items.Traps
                 }
             }
 
-            if (droughtTargets != DroughtTarget.CropsIncludingWateringCan)
+            if (droughtTargets != DroughtTarget.CropsAndWateringCan)
             {
                 return;
             }
@@ -430,6 +499,32 @@ namespace StardewArchipelago.Items.Traps
             {
                 wateringCan.WaterLeft = 0;
             }
+
+            if (droughtTargets != DroughtTarget.All)
+            {
+                DryFishPonds(difficulty);
+            }
+        }
+
+        private static void DryFishPonds(TrapItemsDifficulty difficulty)
+        {
+            Utility.ForEachBuilding(building =>
+            {
+                if (building is FishPond fishPond && fishPond.FishCount > 1)
+                {
+                    if (difficulty >= TrapItemsDifficulty.Eldritch)
+                    {
+                        fishPond.currentOccupants.Set(1);
+                    }
+                    else if (difficulty >= TrapItemsDifficulty.Nightmare)
+                    {
+                        fishPond.currentOccupants.Set(fishPond.FishCount - 1);
+                    }
+
+                    fishPond.ClearPond();
+                }
+                return true;
+            });
         }
 
         private IEnumerable<HoeDirt> GetAllHoeDirt(DroughtTarget validTargets)
@@ -537,21 +632,48 @@ namespace StardewArchipelago.Items.Traps
         public void PlayMeows()
         {
             var numberOfMeows = _difficultyBalancer.MeowBarkNumber[_archipelago.SlotData.TrapItemsDifficulty];
-            PlaySoundsAsync(numberOfMeows, "cat").FireAndForget();
+            var (minPitch, maxPitch) = GetPitchBounds();
+            PlaySoundsAsync(numberOfMeows, "cat", minPitch, maxPitch).FireAndForget();
         }
 
         public void PlayBarks()
         {
             var numberOfMeows = _difficultyBalancer.MeowBarkNumber[_archipelago.SlotData.TrapItemsDifficulty];
-            PlaySoundsAsync(numberOfMeows, "dog_bark").FireAndForget();
+            var (minPitch, maxPitch) = GetPitchBounds();
+            PlaySoundsAsync(numberOfMeows, "dog_bark", minPitch, maxPitch).FireAndForget();
         }
 
-        private async Task PlaySoundsAsync(int numberOfSounds, string sound)
+        public void PlayNoises()
+        {
+            var numberOfMeows = _difficultyBalancer.NoiseNumber[_archipelago.SlotData.TrapItemsDifficulty];
+            var (minPitch, maxPitch) = GetPitchBounds();
+            PlaySoundsAsync(numberOfMeows, "random", minPitch, maxPitch).FireAndForget();
+        }
+
+        private string GetRandomSoundCue()
+        {
+            var soundCue = _availableSoundCues[Game1.random.Next(_availableSoundCues.Length)];
+            return soundCue;
+        }
+
+        private (int?, int?) GetPitchBounds()
+        {
+            if (_archipelago.SlotData.TrapItemsDifficulty == TrapItemsDifficulty.Eldritch)
+            {
+                return (100, 2300);
+            }
+
+            return (null, null);
+        }
+
+        private async Task PlaySoundsAsync(int numberOfSounds, string sound, int? minPitch, int? maxPitch)
         {
             for (var i = 0; i < numberOfSounds; i++)
             {
                 await Task.Run(() => Thread.Sleep(2000));
-                Game1.playSound(sound);
+                var soundToPlay = sound == "random" ? GetRandomSoundCue() : sound;
+                int ? pitch = minPitch == null || maxPitch == null ? null : Game1.random.Next(minPitch.Value, maxPitch.Value + 1);
+                Game1.playSound(soundToPlay, pitch);
             }
         }
 
