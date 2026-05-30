@@ -314,6 +314,17 @@ namespace StardewArchipelago.Items.Traps
             { TrapItemsDifficulty.Eldritch, 16 },
         };
 
+        public Dictionary<TrapItemsDifficulty, int> InflationSoftcapThreshold = new()
+        {
+            { TrapItemsDifficulty.NoTraps, 2 },
+            { TrapItemsDifficulty.Easy, 4 },
+            { TrapItemsDifficulty.Medium, 8 },
+            { TrapItemsDifficulty.Hard, 10 },
+            { TrapItemsDifficulty.Hell, 10 },
+            { TrapItemsDifficulty.Nightmare, 15 },
+            { TrapItemsDifficulty.Eldritch, 50 },
+        };
+
         public Dictionary<TrapItemsDifficulty, int> ExplosionSize = new()
         {
             { TrapItemsDifficulty.NoTraps, 0 },

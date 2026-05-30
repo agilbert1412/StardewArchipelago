@@ -30,8 +30,8 @@ namespace StardewArchipelago.Items.Traps
             _difficultyBalancer = new TrapDifficultyBalancer();
         }
 
-        // public void dayUpdate(GameLocation environment)
-        public static void DayUpdate_TemporaryBaby_Postfix(Child __instance, GameLocation environment)
+        // public override void dayUpdate(int dayOfMonth)
+        public static void DayUpdate_TemporaryBaby_Postfix(Child __instance, int dayOfMonth)
         {
             try
             {

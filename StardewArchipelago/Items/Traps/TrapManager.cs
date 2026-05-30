@@ -74,19 +74,23 @@ namespace StardewArchipelago.Items.Traps
                 original: AccessTools.Method(typeof(Object), nameof(Object.salePrice)),
                 prefix: new HarmonyMethod(typeof(TrapExecutor), nameof(TrapExecutor.SalePrice_GetCorrectInflation_Prefix))
             );
-            InitializeTemporaryBaby(logger, helper, harmony);
+            InitializeTemporaryBaby(logger, helper, harmony, archipelago);
         }
 
-        private void InitializeTemporaryBaby(ILogger logger, IModHelper helper, Harmony harmony)
+        private void InitializeTemporaryBaby(ILogger logger, IModHelper helper, Harmony harmony, StardewArchipelagoClient archipelago)
         {
-            TemporaryBaby.Initialize(logger, helper);
+            TemporaryBabyInjections.Initialize(logger, helper, archipelago);
+            harmony.Patch(
+                original: AccessTools.Method(typeof(Child), nameof(Child.dayUpdate)),
+                postfix: new HarmonyMethod(typeof(TemporaryBabyInjections), nameof(TemporaryBabyInjections.DayUpdate_TemporaryBaby_Postfix))
+            );
             harmony.Patch(
                 original: AccessTools.Method(typeof(Child), nameof(Child.tenMinuteUpdate)),
-                prefix: new HarmonyMethod(typeof(TemporaryBaby), nameof(TemporaryBaby.ChildTenMinuteUpdate_MoveBabiesAnywhere_Prefix))
+                prefix: new HarmonyMethod(typeof(TemporaryBabyInjections), nameof(TemporaryBabyInjections.TenMinuteUpdate_TemporaryBaby_Prefix))
             );
             harmony.Patch(
                 original: AccessTools.Method(typeof(GameLocation), nameof(GameLocation.performTenMinuteUpdate)),
-                prefix: new HarmonyMethod(typeof(TemporaryBaby), nameof(TemporaryBaby.GameLocationPerformTenMinuteUpdate_MoveBabiesAnywhere_Prefix))
+                prefix: new HarmonyMethod(typeof(TemporaryBabyInjections), nameof(TemporaryBabyInjections.GameLocationPerformTenMinuteUpdate_MoveBabiesAnywhere_Prefix))
             );
         }
 
@@ -179,13 +183,14 @@ namespace StardewArchipelago.Items.Traps
             _traps.Add(MEOW, TrapExecutor.PlayMeows);
             _traps.Add(BARK, TrapExecutor.PlayBarks);
             // _traps.Add(DEPRESSION, TrapExecutor.ForceNextMultisleep);
-            _traps.Add(UNGROWTH, TrapExecutor.UngrowCrops);
+            _traps.Add(UNGROWTH, TrapExecutor.UngrowThings);
             _traps.Add(INFLATION, TrapExecutor.ActivateInflation);
             _traps.Add(BOMB, TrapExecutor.Explode);
             _traps.Add(NUDGE, TrapExecutor.NudgePlayerItems);
 
             RegisterTrapsWithTrapSuffix();
             RegisterTrapsWithDifferentSpace();
+            RegisterTrapsWithDifferentCasing();
         }
 
         private void RegisterTrapsWithDifferentSpace()
@@ -206,6 +211,23 @@ namespace StardewArchipelago.Items.Traps
             {
                 var trapWithSuffix = $"{trapName} Trap";
                 _traps.Add(trapWithSuffix, _traps[trapName]);
+            }
+        }
+
+        private void RegisterTrapsWithDifferentCasing()
+        {
+            foreach (var trapName in _traps.Keys.ToArray())
+            {
+                var trapLower = trapName.ToLower();
+                var trapUpper = trapName.ToUpper();
+                if (!_traps.ContainsKey(trapLower))
+                {
+                    _traps.Add(trapLower, _traps[trapName]);
+                }
+                if (!_traps.ContainsKey(trapUpper))
+                {
+                    _traps.Add(trapUpper, _traps[trapName]);
+                }
             }
         }
     }

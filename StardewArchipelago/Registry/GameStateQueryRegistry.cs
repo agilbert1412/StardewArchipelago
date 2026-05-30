@@ -8,6 +8,7 @@ using StardewValley;
 using StardewValley.Delegates;
 using System.Linq;
 using StardewArchipelago.Archipelago.Gifting;
+using StardewArchipelago.Items.Traps;
 using StardewArchipelago.Serialization;
 using StardewArchipelago.Stardew;
 using StardewArchipelago.Locations;
@@ -24,7 +25,8 @@ namespace StardewArchipelago.Registry
             _logger = logger;
         }
 
-        public void Initialize(StardewArchipelagoClient archipelago, StardewItemManager stardewItemManager, StardewLocationChecker locationChecker, IGiftHandler _giftHandler, WeaponsManager weaponsManager, ArchipelagoStateDto state)
+        public void Initialize(StardewArchipelagoClient archipelago, StardewItemManager stardewItemManager, StardewLocationChecker locationChecker, IGiftHandler _giftHandler, WeaponsManager weaponsManager, ArchipelagoStateDto state,
+            TrapManager trapManager)
         {
             _archipelago = archipelago;
         }

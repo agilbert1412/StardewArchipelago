@@ -53,7 +53,7 @@ namespace StardewArchipelago.Items.Traps
 
             // TODO: Code more of these
             //_giftTraps.Add(GiftFlag.Grass, SpawnDebris);
-            //_giftTraps.Add(GiftFlag.Seed, UngrowCrops);
+            //_giftTraps.Add(GiftFlag.Seed, UngrowThings);
             //_giftTraps.Add(GiftFlag.Wood, SpawnTree);
         }
 
@@ -139,7 +139,7 @@ namespace StardewArchipelago.Items.Traps
         private void GetTrapGiftDebuff(Buffs whichDebuff, double quality, double duration, double durationMultiplier = 1.0)
         {
             var debuffDuration = (int)Math.Round((int)BuffDuration.HalfHour * duration * quality * durationMultiplier);
-            _trapExecutor.DebuffApplier.AddBuff(whichDebuff, debuffDuration);
+            _trapExecutor.DebuffApplier.AddBuff(whichDebuff, debuffDuration, false);
         }
 
         private void LoseEnergy(double quality, double duration)
