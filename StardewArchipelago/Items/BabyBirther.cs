@@ -68,6 +68,7 @@ namespace StardewArchipelago.Items
             {
                 baby.Age = 1;
             }
+            baby.modData.Add(TemporaryBabyInjections.TEMPORARY_BABY_KEY, true.ToString());
             Game1.currentLocation.characters.Add(baby);
         }
 

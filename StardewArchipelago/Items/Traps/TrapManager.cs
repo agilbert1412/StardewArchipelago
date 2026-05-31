@@ -82,7 +82,7 @@ namespace StardewArchipelago.Items.Traps
             TemporaryBabyInjections.Initialize(logger, helper, archipelago);
             harmony.Patch(
                 original: AccessTools.Method(typeof(Child), nameof(Child.dayUpdate)),
-                postfix: new HarmonyMethod(typeof(TemporaryBabyInjections), nameof(TemporaryBabyInjections.DayUpdate_TemporaryBaby_Postfix))
+                prefix: new HarmonyMethod(typeof(TemporaryBabyInjections), nameof(TemporaryBabyInjections.DayUpdate_TemporaryBaby_Prefix))
             );
             harmony.Patch(
                 original: AccessTools.Method(typeof(Child), nameof(Child.tenMinuteUpdate)),
