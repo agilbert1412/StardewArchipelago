@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using StardewArchipelago.Serialization;
 using StardewArchipelago.Stardew;
 using StardewValley;
@@ -121,8 +122,60 @@ namespace StardewArchipelago.Items.Traps
             Game1.player.applyBuff(buff);
             if (realTime)
             {
-                _permanentState.CurrentBuffs.Add(whichBuff, duration);
+                if (_permanentState.CurrentBuffs.ContainsKey(whichBuff))
+                {
+                    _permanentState.CurrentBuffs.Add(whichBuff, Math.Max(_permanentState.CurrentBuffs[whichBuff], duration));
+                }
+                else
+                {
+                    _permanentState.CurrentBuffs.Add(whichBuff, duration);
+                }
             }
+        }
+
+        public void SaveBuffs()
+        {
+            foreach (var realTimeBuff in _permanentState.CurrentBuffs.Keys.ToArray())
+            {
+                SaveBuff(realTimeBuff);
+            }
+        }
+
+        private static void SaveBuff(Buffs realTimeBuff)
+        {
+            foreach (var (appliedBuffName, appliedBuff) in Game1.player.buffs.AppliedBuffs)
+            {
+                if (appliedBuff.id.Equals(((int)realTimeBuff).ToString(), StringComparison.InvariantCultureIgnoreCase))
+                {
+                    var timeRemaining = appliedBuff.millisecondsDuration;
+                    _permanentState.CurrentBuffs[realTimeBuff] = timeRemaining;
+                    return;
+                }
+            }
+
+            _permanentState.CurrentBuffs.Remove(realTimeBuff);
+        }
+
+        public void LoadBuffs()
+        {
+            foreach (var realTimeBuff in _permanentState.CurrentBuffs.Keys.ToArray())
+            {
+                LoadBuff(realTimeBuff);
+            }
+        }
+
+        private void LoadBuff(Buffs realTimeBuff)
+        {
+            foreach (var (appliedBuffName, appliedBuff) in Game1.player.buffs.AppliedBuffs)
+            {
+                if (appliedBuff.id.Equals(((int)realTimeBuff).ToString(), StringComparison.InvariantCultureIgnoreCase))
+                {
+                    appliedBuff.millisecondsDuration = Math.Max(appliedBuff.millisecondsDuration, _permanentState.CurrentBuffs[realTimeBuff]);
+                    return;
+                }
+            }
+
+            AddBuff(realTimeBuff, _permanentState.CurrentBuffs[realTimeBuff], true);
         }
     }
 }

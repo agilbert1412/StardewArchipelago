@@ -453,6 +453,7 @@ namespace StardewArchipelago
             SeasonsRandomizer.ChangeMailKeysBasedOnSeasonsToDaysElapsed();
             SeasonsRandomizer.SendMailHardcodedForToday();
             ArchipelagoJunimoNoteMenu.OnDayStarted(_giftHandler.Receiver);
+            _itemManager.TrapManager.TrapExecutor.DebuffApplier.LoadBuffs();
 
             if (MultiSleepManager.TryDoMultiSleepOnDayStarted())
             {
@@ -503,6 +504,7 @@ namespace StardewArchipelago
             _giftHandler.ReceiveAllGiftsTomorrow();
             _villagerEvents.CheckJunaHearts(_archipelago);
             _shippingBehaviors?.CheckShipsanityLocationsBeforeSleep();
+            _itemManager.TrapManager.TrapExecutor.DebuffApplier.SaveBuffs();
             ArchipelagoJunimoNoteMenu.OnDayEnded();
         }
 

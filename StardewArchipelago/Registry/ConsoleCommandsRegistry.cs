@@ -178,6 +178,7 @@ namespace StardewArchipelago.Registry
             if (arg2.Length < 1)
             {
                 _logger.Log($"Choose one of the following difficulties: [NoTraps, Easy, Medium, Hard, Hell, Nightmare].", LogLevel.Info);
+                _logger.Log($"Current Difficulty: {_state.TrapDifficultyOverride ?? _archipelago.SlotData.TrapItemsDifficulty}", LogLevel.Info);
                 return;
             }
 
