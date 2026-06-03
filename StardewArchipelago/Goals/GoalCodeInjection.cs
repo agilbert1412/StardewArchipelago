@@ -95,7 +95,7 @@ namespace StardewArchipelago.Goals
 
             var lowestMineLevel = Game1.netWorldState.Value.LowestMineLevel;
 
-            if (lowestMineLevel < 120)
+            if (lowestMineLevel != 120)
             {
                 return;
             }
