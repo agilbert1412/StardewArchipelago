@@ -71,6 +71,14 @@ namespace StardewArchipelago.Items.Traps
             _giftTrapManager.AssignTrapQueue(_queuedTraps);
 
             _harmony.Patch(
+                original: AccessTools.Method(typeof(NPC), nameof(NPC.update), new[] { typeof(GameTime), typeof(GameLocation) }),
+                postfix: new HarmonyMethod(typeof(TrapExecutor), nameof(TrapExecutor.Update_ShunPlayer_Postfix))
+            );
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(NPC), nameof(NPC.MovePosition)),
+                prefix: new HarmonyMethod(typeof(TrapExecutor), nameof(TrapExecutor.MovePosition_SkipIfShunningPlayer_Prefix))
+            );
+            _harmony.Patch(
                 original: AccessTools.Method(typeof(Object), nameof(Object.salePrice)),
                 prefix: new HarmonyMethod(typeof(TrapExecutor), nameof(TrapExecutor.SalePrice_GetCorrectInflation_Prefix))
             );

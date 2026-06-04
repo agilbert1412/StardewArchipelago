@@ -185,7 +185,7 @@ namespace StardewArchipelago.Items.Traps
         public Dictionary<TrapItemsDifficulty, int> PariahFriendshipLoss = new()
         {
             { TrapItemsDifficulty.NoTraps, -0 },
-            { TrapItemsDifficulty.Easy, -5 },
+            { TrapItemsDifficulty.Easy, -10 },
             { TrapItemsDifficulty.Medium, -10 },
             { TrapItemsDifficulty.Hard, -20 },
             { TrapItemsDifficulty.Hell, -50 },
@@ -196,12 +196,23 @@ namespace StardewArchipelago.Items.Traps
         public Dictionary<TrapItemsDifficulty, int> PariahShunningDays = new()
         {
             { TrapItemsDifficulty.NoTraps, 0 },
-            { TrapItemsDifficulty.Easy, 1 },
-            { TrapItemsDifficulty.Medium, 2 },
+            { TrapItemsDifficulty.Easy, 0 },
+            { TrapItemsDifficulty.Medium, 1 },
             { TrapItemsDifficulty.Hard, 3 },
             { TrapItemsDifficulty.Hell, 5 },
             { TrapItemsDifficulty.Nightmare, 10 },
             { TrapItemsDifficulty.Eldritch, 28 },
+        };
+
+        public Dictionary<TrapItemsDifficulty, int> PariahShunningDistance = new()
+        {
+            { TrapItemsDifficulty.NoTraps, 0 },
+            { TrapItemsDifficulty.Easy, 1 },
+            { TrapItemsDifficulty.Medium, 5 },
+            { TrapItemsDifficulty.Hard, 10 },
+            { TrapItemsDifficulty.Hell, 24 },
+            { TrapItemsDifficulty.Nightmare, 64 },
+            { TrapItemsDifficulty.Eldritch, 256 },
         };
 
         public Dictionary<TrapItemsDifficulty, DroughtTarget> DroughtTargets = new()

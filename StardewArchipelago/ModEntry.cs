@@ -454,6 +454,7 @@ namespace StardewArchipelago
             SeasonsRandomizer.SendMailHardcodedForToday();
             ArchipelagoJunimoNoteMenu.OnDayStarted(_giftHandler.Receiver);
             _itemManager.TrapManager.TrapExecutor.DebuffApplier.LoadBuffs();
+            State.TrapsState.DaysShunRemaining = Math.Max(0, State.TrapsState.DaysShunRemaining-1);
 
             if (MultiSleepManager.TryDoMultiSleepOnDayStarted())
             {

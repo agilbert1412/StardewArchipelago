@@ -4,10 +4,10 @@ using KaitoKid.ArchipelagoUtilities.Net.Extensions;
 using KaitoKid.Utilities.Interfaces;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Audio;
-using Microsoft.Xna.Framework.Media;
 using StardewArchipelago.Archipelago;
 using StardewArchipelago.Archipelago.Gifting;
 using StardewArchipelago.Archipelago.SlotData.SlotEnums;
+using StardewArchipelago.Constants.Vanilla;
 using StardewArchipelago.GameModifications.MultiSleep;
 using StardewArchipelago.Items.Traps.Shuffle;
 using StardewArchipelago.Serialization;
@@ -17,21 +17,18 @@ using StardewValley;
 using StardewValley.BellsAndWhistles;
 using StardewValley.Buildings;
 using StardewValley.Characters;
-using StardewValley.Delegates;
 using StardewValley.Internal;
 using StardewValley.Locations;
-using StardewValley.Network.ChestHit;
 using StardewValley.Objects;
 using StardewValley.TerrainFeatures;
 using StardewValley.Tools;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Numerics;
-using System.Security.AccessControl;
 using System.Threading;
 using System.Threading.Tasks;
-using StardewArchipelago.Constants.Vanilla;
 using Object = StardewValley.Object;
 using Vector2 = Microsoft.Xna.Framework.Vector2;
 
@@ -40,7 +37,7 @@ namespace StardewArchipelago.Items.Traps
     public class TrapExecutor
     {
         private static ILogger _logger;
-        private readonly IModHelper _helper;
+        private static IModHelper _helper;
         private static StardewArchipelagoClient _archipelago;
         private static TrapsStateDto _permanentState;
         public static TrapDifficultyBalancer _difficultyBalancer;
@@ -478,9 +475,125 @@ namespace StardewArchipelago.Items.Traps
                 ++player.friendshipData[name].GiftsThisWeek;
                 player.friendshipData[name].LastGiftDate = new WorldDate(Game1.Date);
                 Game1.player.changeFriendship(friendshipLoss, npc);
-                _permanentState.PariahShunning.TryAdd(name, 0);
-                _permanentState.PariahShunning[name] += shunningDays;
+                _permanentState.DaysShunRemaining += shunningDays;
             }
+        }
+
+        private static bool _isShunMovement = false;
+
+        // public override void MovePosition(GameTime time, xTile.Dimensions.Rectangle viewport, GameLocation currentLocation)
+        public static bool MovePosition_SkipIfShunningPlayer_Prefix(NPC __instance, GameTime time, xTile.Dimensions.Rectangle viewport, GameLocation currentLocation)
+        {
+            try
+            {
+                if (ShouldShun(__instance) && !_isShunMovement)
+                {
+                    return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
+                }
+
+                return MethodPrefix.RUN_ORIGINAL_METHOD;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Failed in {nameof(MovePosition_SkipIfShunningPlayer_Prefix)}:\n{ex}");
+                return MethodPrefix.RUN_ORIGINAL_METHOD;
+            }
+        }
+
+        // public override void update(GameTime time, GameLocation location)
+        public static void Update_ShunPlayer_Postfix(NPC __instance, GameTime time, GameLocation location)
+        {
+            try
+            {
+                if (ShouldShun(__instance))
+                {
+                    ShunPlayer(__instance, time, location);
+                }
+
+                return;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Failed in {nameof(Update_ShunPlayer_Postfix)}:\n{ex}");
+                return;
+            }
+        }
+
+        private static bool ShouldShun(NPC npc)
+        {
+            if (_permanentState.DaysShunRemaining <= 0)
+            {
+                return false;
+            }
+
+            if (!npc.IsVillager || !Game1.player.friendshipData.ContainsKey(npc.Name))
+            {
+                return false;
+            }
+
+            if (IsInShunDistance(npc))
+            {
+                return true;
+            }
+
+            return false;
+        }
+
+        private static bool IsInShunDistance(NPC npc)
+        {
+            return npc.withinPlayerThreshold(_difficultyBalancer.PariahShunningDistance[_archipelago.SlotData.TrapItemsDifficulty]);
+        }
+
+        private static void ShunPlayer(NPC npc, GameTime time, GameLocation location)
+        {
+            npc.faceDirection(Game1.player.FacingDirection);
+
+            var playerPosition = Game1.player.Position;
+            var npcPosition = npc.Position;
+
+            var deltaX = npcPosition.X - playerPosition.X;
+            var deltaY = npcPosition.Y - playerPosition.Y;
+            var totalDelta = Math.Abs(deltaX) + Math.Abs(deltaY);
+
+            //protected bool moveUp;
+            //protected bool moveRight;
+            //protected bool moveDown;
+            //protected bool moveLeft;
+
+            var moveUpField = _helper.Reflection.GetField<bool>(npc, "moveUp");
+            var moveRightField = _helper.Reflection.GetField<bool>(npc, "moveRight");
+            var moveDownField = _helper.Reflection.GetField<bool>(npc, "moveDown");
+            var moveLeftField = _helper.Reflection.GetField<bool>(npc, "moveLeft");
+
+            moveUpField.SetValue(deltaY < 0 && deltaY < (Math.Abs(deltaX) * -1));
+            moveRightField.SetValue(deltaX > 0 && deltaX > (Math.Abs(deltaY)));
+            moveDownField.SetValue(deltaY > 0 && deltaY > (Math.Abs(deltaX)));
+            moveLeftField.SetValue(deltaX < 0 && deltaX < (Math.Abs(deltaY) * -1));
+
+            var usualSpeed = npc.Speed;
+
+            if (totalDelta < 1 * 64)
+            {
+                npc.Speed = Math.Max((int)Math.Round(usualSpeed * 6.0), (int)Math.Round(Game1.player.Speed * 1.05));
+            }
+            else if (totalDelta < 2 * 64)
+            {
+                npc.Speed = Math.Max((int)Math.Round(usualSpeed * 4.0), (int)Math.Round(Game1.player.Speed * 1.05));
+            }
+            else if (totalDelta < 5 * 64)
+            {
+                npc.Speed = (int)Math.Round(usualSpeed * 2.0);
+            }
+            else if (totalDelta < 12 * 64)
+            {
+                npc.Speed = (int)Math.Round(usualSpeed * 1.5);
+            }
+
+            _isShunMovement = true;
+            npc.MovePosition(time, Game1.viewport, location);
+            _isShunMovement = false;
+
+            npc.Speed = usualSpeed;
         }
 
         public void PerformDroughtTrap()

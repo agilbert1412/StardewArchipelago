@@ -122,14 +122,12 @@ namespace StardewArchipelago.Items.Traps
             Game1.player.applyBuff(buff);
             if (realTime)
             {
-                if (_permanentState.CurrentBuffs.ContainsKey(whichBuff))
+                if (!_permanentState.CurrentBuffs.ContainsKey(whichBuff))
                 {
-                    _permanentState.CurrentBuffs.Add(whichBuff, Math.Max(_permanentState.CurrentBuffs[whichBuff], duration));
+                    _permanentState.CurrentBuffs.Add(whichBuff, 0);
                 }
-                else
-                {
-                    _permanentState.CurrentBuffs.Add(whichBuff, duration);
-                }
+
+                _permanentState.CurrentBuffs[whichBuff] = Math.Max(_permanentState.CurrentBuffs[whichBuff], duration);
             }
         }
 

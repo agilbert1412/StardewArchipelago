@@ -1,7 +1,5 @@
-﻿using KaitoKid.ArchipelagoUtilities.Net.Client;
-using KaitoKid.Utilities.Interfaces;
+﻿using KaitoKid.Utilities.Interfaces;
 using Microsoft.Xna.Framework;
-using Netcode;
 using StardewArchipelago.Archipelago;
 using StardewArchipelago.Archipelago.SlotData.SlotEnums;
 using StardewModdingAPI;
@@ -14,8 +12,6 @@ using StardewValley.TerrainFeatures;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Numerics;
-using System.Xml.Serialization;
 using xTile.Dimensions;
 using Object = StardewValley.Object;
 using Vector2 = Microsoft.Xna.Framework.Vector2;

@@ -2,14 +2,12 @@
 using KaitoKid.Utilities.Interfaces;
 using Microsoft.Xna.Framework;
 using StardewArchipelago.Archipelago;
-using StardewArchipelago.Archipelago.SlotData.SlotEnums;
 using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Characters;
 using StardewValley.Locations;
 using StardewValley.Pathfinding;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 
 namespace StardewArchipelago.Items.Traps
