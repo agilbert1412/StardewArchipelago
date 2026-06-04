@@ -572,21 +572,21 @@ namespace StardewArchipelago.Items.Traps
 
             var usualSpeed = npc.Speed;
 
-            if (totalDelta < 1 * 64)
+            if (totalDelta < 1.5 * 64)
             {
-                npc.Speed = Math.Max((int)Math.Round(usualSpeed * 6.0), (int)Math.Round(Game1.player.Speed * 1.05));
+                npc.Speed = Math.Max((int)Math.Round(usualSpeed * 6.0), (int)Math.Round(Game1.player.Speed * 1.2));
             }
-            else if (totalDelta < 2 * 64)
+            else if (totalDelta < 2.5 * 64)
             {
-                npc.Speed = Math.Max((int)Math.Round(usualSpeed * 4.0), (int)Math.Round(Game1.player.Speed * 1.05));
+                npc.Speed = Math.Max((int)Math.Round(usualSpeed * 4.0), (int)Math.Round(Game1.player.Speed * 1.1));
             }
             else if (totalDelta < 5 * 64)
             {
-                npc.Speed = (int)Math.Round(usualSpeed * 2.0);
+                npc.Speed = Math.Max((int)Math.Round(usualSpeed * 2.0), (int)Math.Round(Game1.player.Speed * 0.8));
             }
             else if (totalDelta < 12 * 64)
             {
-                npc.Speed = (int)Math.Round(usualSpeed * 1.5);
+                npc.Speed = Math.Max((int)Math.Round(usualSpeed * 1.5), (int)Math.Round(Game1.player.Speed * 0.6));
             }
 
             _isShunMovement = true;
@@ -791,7 +791,7 @@ namespace StardewArchipelago.Items.Traps
             {
                 await Task.Run(() => Thread.Sleep(2000));
                 var soundToPlay = sound == "random" ? GetRandomSoundCue() : sound;
-                int ? pitch = minPitch == null || maxPitch == null ? null : Game1.random.Next(minPitch.Value, maxPitch.Value + 1);
+                int? pitch = minPitch == null || maxPitch == null ? null : Game1.random.Next(minPitch.Value, maxPitch.Value + 1);
                 Game1.playSound(soundToPlay, pitch);
             }
         }
