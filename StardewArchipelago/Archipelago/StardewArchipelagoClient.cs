@@ -10,7 +10,6 @@ using KaitoKid.ArchipelagoUtilities.Net.Client;
 using KaitoKid.ArchipelagoUtilities.Net.Client.ConnectionResults;
 using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
 using KaitoKid.Utilities.Interfaces;
-using Microsoft.Xna.Framework.Input;
 using StardewArchipelago.Archipelago.ConnectionResults;
 using StardewArchipelago.Bundles;
 using StardewArchipelago.Extensions;
@@ -581,7 +580,6 @@ namespace StardewArchipelago.Archipelago
                 }
             }
 
-            value = new BigInteger(0);
             _bigIntegerDataStorage.Set(Scope.Slot, EntrancesKey, value);
         }
     }
