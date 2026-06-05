@@ -10,6 +10,7 @@ using KaitoKid.ArchipelagoUtilities.Net.Client;
 using KaitoKid.ArchipelagoUtilities.Net.Client.ConnectionResults;
 using KaitoKid.ArchipelagoUtilities.Net.Interfaces;
 using KaitoKid.Utilities.Interfaces;
+using Microsoft.Xna.Framework.Input;
 using StardewArchipelago.Archipelago.ConnectionResults;
 using StardewArchipelago.Bundles;
 using StardewArchipelago.Extensions;
@@ -554,6 +555,34 @@ namespace StardewArchipelago.Archipelago
             }
 
             SendBouncePacket(tags, dataString, dataInt, dataFloat);
+        }
+
+        const string EntrancesKey = "found_entrances";
+        public void SaveEntrancesTraversedToServer(Dictionary<string, string> slotDataModifiedEntrances, List<string> stateEntrancesTraversed)
+        {
+            _bigIntegerDataStorage.ReadAsync(Scope.Slot, EntrancesKey, (x) => SaveEntrancesTraversedToServer(slotDataModifiedEntrances, stateEntrancesTraversed, x));
+        }
+
+        public void SaveEntrancesTraversedToServer(Dictionary<string, string> slotDataModifiedEntrances, List<string> stateEntrancesTraversed, BigInteger existingValue)
+        {
+            var sortedEntrances = slotDataModifiedEntrances.Keys.ToList();
+            sortedEntrances.Sort();
+            var value = new BigInteger(0);
+            for (var i = 0; i < sortedEntrances.Count; i++)
+            {
+                var entrance = sortedEntrances[i];
+                var bitValue = new BigInteger(Math.Pow(2, i));
+                var wasAlreadySet = (existingValue & bitValue) == bitValue;
+                var hasTraversed = stateEntrancesTraversed.Contains(entrance);
+                var shouldBeset = wasAlreadySet || hasTraversed;
+                if (shouldBeset)
+                {
+                    value += bitValue;
+                }
+            }
+
+            value = new BigInteger(0);
+            _bigIntegerDataStorage.Set(Scope.Slot, EntrancesKey, value);
         }
     }
 }

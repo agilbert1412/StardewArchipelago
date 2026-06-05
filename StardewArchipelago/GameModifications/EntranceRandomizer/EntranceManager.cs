@@ -19,17 +19,20 @@ namespace StardewArchipelago.GameModifications.EntranceRandomizer
         public const string TRANSITIONAL_STRING = " to ";
 
         private readonly ILogger _logger;
+        private readonly StardewArchipelagoClient _archipelago;
         private readonly EquivalentWarps _equivalentAreas;
         private readonly ModEntranceManager _modEntranceManager;
         private readonly ArchipelagoStateDto _state;
 
+        public Dictionary<string, string> EntranceAliasesMap { get; private set; }
         public Dictionary<string, string> ModifiedEntrances { get; private set; }
         private HashSet<string> _checkedEntrancesToday;
         private readonly Dictionary<string, WarpRequest> generatedWarps;
 
-        public EntranceManager(ILogger logger, ArchipelagoClient archipelago, ArchipelagoStateDto state)
+        public EntranceManager(ILogger logger, StardewArchipelagoClient archipelago, ArchipelagoStateDto state)
         {
             _logger = logger;
+            _archipelago = archipelago;
             _equivalentAreas = new EquivalentWarps(archipelago);
             _modEntranceManager = new ModEntranceManager();
             _state = state;
@@ -67,6 +70,7 @@ namespace StardewArchipelago.GameModifications.EntranceRandomizer
 
         public void SetEntranceRandomizerSettings(SlotData slotData)
         {
+            EntranceAliasesMap = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
             ModifiedEntrances = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
             if (slotData.EntranceRandomization == EntranceRandomization.Disabled)
             {
@@ -139,6 +143,8 @@ namespace StardewArchipelago.GameModifications.EntranceRandomizer
         {
             var aliasedOriginal = TurnAliased(originalEntrance);
             var aliasedReplacement = TurnAliased(replacementEntrance);
+            EntranceAliasesMap.TryAdd(aliasedOriginal, originalEntrance);
+            EntranceAliasesMap.TryAdd(aliasedReplacement, replacementEntrance);
             RegisterRandomizedEntranceWithCoordinates(aliasedOriginal, aliasedReplacement);
         }
 
@@ -257,9 +263,12 @@ namespace StardewArchipelago.GameModifications.EntranceRandomizer
             if (ModifiedEntrances.ContainsKey(key))
             {
                 desiredWarpName = ModifiedEntrances[key];
-                if (!_state.EntrancesTraversed.Contains(key))
+                var entranceBeforeAlias = EntranceAliasesMap[key];
+                if (!_state.EntrancesTraversed.Contains(entranceBeforeAlias))
                 {
-                    _state.EntrancesTraversed.Add(key);
+                    _state.EntrancesTraversed.Add(entranceBeforeAlias);
+                    _archipelago.SaveEntrancesTraversedToServer(_archipelago.SlotData.ModifiedEntrances, _state.EntrancesTraversed);
+
                 }
                 return true;
             }
