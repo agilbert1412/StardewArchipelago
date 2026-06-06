@@ -122,11 +122,6 @@ namespace StardewArchipelago.Items.Traps
 
         public bool TryExecuteTrapImmediately(string trapName)
         {
-            if (!CanGetTrappedRightNow())
-            {
-                return false;
-            }
-
             ExecuteTrapImmediately(trapName);
             return true;
         }
