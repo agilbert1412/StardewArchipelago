@@ -285,7 +285,7 @@ namespace StardewArchipelago.Items.Traps.Shuffle
             }
         }
 
-        private static Dictionary<InventoryInfo, Chest> FindAllChests()
+        public static Dictionary<InventoryInfo, Chest> FindAllChests()
         {
             var locations = Game1.locations.ToList();
             foreach (var building in Game1.getFarm().buildings)

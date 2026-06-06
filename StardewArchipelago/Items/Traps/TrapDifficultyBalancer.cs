@@ -368,6 +368,83 @@ namespace StardewArchipelago.Items.Traps
             { TrapItemsDifficulty.Nightmare, 200 },
             { TrapItemsDifficulty.Eldritch, 1600 },
         };
+
+        public Dictionary<TrapItemsDifficulty, ButterfingersTarget> ButterfingersTargets = new()
+        {
+            { TrapItemsDifficulty.NoTraps, ButterfingersTarget.None },
+            { TrapItemsDifficulty.Easy, ButterfingersTarget.ActiveItem },
+            { TrapItemsDifficulty.Medium, ButterfingersTarget.Hotbar },
+            { TrapItemsDifficulty.Hard, ButterfingersTarget.Inventory },
+            { TrapItemsDifficulty.Hell, ButterfingersTarget.Inventory },
+            { TrapItemsDifficulty.Nightmare, ButterfingersTarget.InventoryAndChestsOnSameMap },
+            { TrapItemsDifficulty.Eldritch, ButterfingersTarget.InventoryAndAllChests },
+        };
+
+        public Dictionary<TrapItemsDifficulty, double> ButterfingersRate = new()
+        {
+            { TrapItemsDifficulty.NoTraps, 0 },
+            { TrapItemsDifficulty.Easy, 1 },
+            { TrapItemsDifficulty.Medium, 0.5 },
+            { TrapItemsDifficulty.Hard, 0.5 },
+            { TrapItemsDifficulty.Hell, 1 },
+            { TrapItemsDifficulty.Nightmare, 0.5 },
+            { TrapItemsDifficulty.Eldritch, 1 },
+        };
+
+        public Dictionary<TrapItemsDifficulty, int> ButterfingersExtraDrops = new()
+        {
+            { TrapItemsDifficulty.NoTraps, 0 },
+            { TrapItemsDifficulty.Easy, 0 },
+            { TrapItemsDifficulty.Medium, 0 },
+            { TrapItemsDifficulty.Hard, 0 },
+            { TrapItemsDifficulty.Hell, 0 },
+            { TrapItemsDifficulty.Nightmare, 12 },
+            { TrapItemsDifficulty.Eldritch, 128 },
+        };
+
+        public Dictionary<TrapItemsDifficulty, double> SellRate = new()
+        {
+            { TrapItemsDifficulty.NoTraps, 0 },
+            { TrapItemsDifficulty.Easy, 0.01 },
+            { TrapItemsDifficulty.Medium, 0.02 },
+            { TrapItemsDifficulty.Hard, 0.05 },
+            { TrapItemsDifficulty.Hell, 0.1 },
+            { TrapItemsDifficulty.Nightmare, 0.2 },
+            { TrapItemsDifficulty.Eldritch, 0.5 },
+        };
+
+        public Dictionary<TrapItemsDifficulty, int> SellNumberCap = new()
+        {
+            { TrapItemsDifficulty.NoTraps, 0 },
+            { TrapItemsDifficulty.Easy, 1 },
+            { TrapItemsDifficulty.Medium, 2 },
+            { TrapItemsDifficulty.Hard, 4 },
+            { TrapItemsDifficulty.Hell, 8 },
+            { TrapItemsDifficulty.Nightmare, 32 },
+            { TrapItemsDifficulty.Eldritch, 128 },
+        };
+
+        public Dictionary<TrapItemsDifficulty, double> SellMultiplier = new()
+        {
+            { TrapItemsDifficulty.NoTraps, 0 },
+            { TrapItemsDifficulty.Easy, 2 },
+            { TrapItemsDifficulty.Medium, 1.5 },
+            { TrapItemsDifficulty.Hard, 1 },
+            { TrapItemsDifficulty.Hell, 1 },
+            { TrapItemsDifficulty.Nightmare, 0.5 },
+            { TrapItemsDifficulty.Eldritch, 0.1 },
+        };
+
+        public Dictionary<TrapItemsDifficulty, int> EncumberAmount = new()
+        {
+            { TrapItemsDifficulty.NoTraps, 0 },
+            { TrapItemsDifficulty.Easy, 8 },
+            { TrapItemsDifficulty.Medium, 16 },
+            { TrapItemsDifficulty.Hard, 32 },
+            { TrapItemsDifficulty.Hell, 64 },
+            { TrapItemsDifficulty.Nightmare, 256 },
+            { TrapItemsDifficulty.Eldritch, 1024 },
+        };
     }
 
     public enum TeleportDestination
@@ -417,5 +494,15 @@ namespace StardewArchipelago.Items.Traps
         TwelveHours = 72,
         TwoDays = 240,
         TwoWeeks = 1680,
+    }
+
+    public enum ButterfingersTarget
+    {
+        None,
+        ActiveItem,
+        Hotbar,
+        Inventory,
+        InventoryAndChestsOnSameMap,
+        InventoryAndAllChests,
     }
 }

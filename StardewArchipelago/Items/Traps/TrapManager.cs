@@ -1,17 +1,20 @@
-﻿using System;
-using System.Collections.Concurrent;
-using System.Collections.Generic;
-using System.Linq;
-using HarmonyLib;
+﻿using HarmonyLib;
 using KaitoKid.ArchipelagoUtilities.Net.Client;
 using KaitoKid.Utilities.Interfaces;
 using Microsoft.Xna.Framework;
+using Newtonsoft.Json.Linq;
 using StardewArchipelago.Archipelago;
 using StardewArchipelago.Items.Mail;
 using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Characters;
 using StardewValley.Locations;
+using StardewValley.Monsters;
+using System;
+using System.Collections.Concurrent;
+using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
 using Object = StardewValley.Object;
 
 namespace StardewArchipelago.Items.Traps
@@ -44,6 +47,27 @@ namespace StardewArchipelago.Items.Traps
         private const string INFLATION = "Inflation";
         private const string BOMB = "Bomb";
         private const string NUDGE = "Nudge";
+
+        private const string BUTTERFINGERS = "Butterfingers";
+        private const string SALE = "Sale";
+        private const string EXOTIC = "Exotic";
+        private const string ENCUMBERED = "Encumbered";
+        private const string SPOILED = "Spoiled";
+        private const string SUPER_MONSTER = "Super Monster";
+        private const string WE_MOO_UNSEEN = "We Moo Unseen";
+        private const string CONSTRUCTION = "Construction";
+        private const string ERROR = "Error";
+        private const string CUTSCENE = "Cutscene";
+        private const string LORAX = "Lorax";
+        private const string CLIMATE_CHANGE = "Climate Change";
+        private const string NOISE = "Noise";
+        private const string FISHING = "Fishing";
+        private const string MENU = "Menu";
+        private const string EMOTE = "Emote";
+        private const string MAKEOVER = "Makeover";
+        private const string BACK_TO_SCHOOL = "Back To School";
+        private const string TIRED = "Tired";
+        private const string INJURY = "Injury";
 
         private static ILogger _logger;
         private readonly IModHelper _helper;
@@ -195,6 +219,27 @@ namespace StardewArchipelago.Items.Traps
             _traps.Add(INFLATION, TrapExecutor.ActivateInflation);
             _traps.Add(BOMB, TrapExecutor.Explode);
             _traps.Add(NUDGE, TrapExecutor.NudgePlayerItems);
+
+            _traps.Add(BUTTERFINGERS, TrapExecutor.Butterfingers);
+            _traps.Add(SALE, TrapExecutor.SellItems);
+            // _traps.Add(EXOTIC, TrapExecutor.Exotic);
+            _traps.Add(ENCUMBERED, TrapExecutor.EncumberPlayer);
+            _traps.Add(SPOILED, TrapExecutor.Spoiled);
+            _traps.Add(SUPER_MONSTER, TrapExecutor.SpawnSuperMonsters);
+            _traps.Add(WE_MOO_UNSEEN, TrapExecutor.SpawnInvisibleCows);
+            _traps.Add(CONSTRUCTION, TrapExecutor.AAA);
+            _traps.Add(ERROR, TrapExecutor.Error);
+            _traps.Add(CUTSCENE, TrapExecutor.PlayCutscene);
+            _traps.Add(LORAX, TrapExecutor.GrowTrees);
+            _traps.Add(CLIMATE_CHANGE, TrapExecutor.ChangeWeather);
+            _traps.Add(NOISE, TrapExecutor.PlayNoises);
+            _traps.Add(FISHING, TrapExecutor.CatchFish);
+            _traps.Add(MENU, TrapExecutor.OpenMenu);
+            _traps.Add(EMOTE, TrapExecutor.Emote);
+            _traps.Add(MAKEOVER, TrapExecutor.Makeover);
+            _traps.Add(BACK_TO_SCHOOL, TrapExecutor.RandomizeProfessions);
+            _traps.Add(TIRED, TrapExecutor.Tired);
+            _traps.Add(INJURY, TrapExecutor.Injury);
 
             RegisterTrapsWithTrapSuffix();
             RegisterTrapsWithDifferentSpace();

@@ -27,7 +27,9 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Numerics;
+using System.Security.Cryptography.X509Certificates;
 using System.Threading;
+using System.Threading.Channels;
 using System.Threading.Tasks;
 using Object = StardewValley.Object;
 using Vector2 = Microsoft.Xna.Framework.Vector2;
@@ -1079,6 +1081,317 @@ namespace StardewArchipelago.Items.Traps
 
             Nudger.NudgeObjectsEverywhere(baseNudgeChance);
             Nudger.NudgeBuildings(baseNudgeChance);
+        }
+
+        public void Butterfingers()
+        {
+            var difficulty = _archipelago.SlotData.TrapItemsDifficulty;
+            var targets = _difficultyBalancer.ButterfingersTargets[difficulty];
+            var rate = _difficultyBalancer.ButterfingersRate[difficulty];
+            var extraDrops = _difficultyBalancer.ButterfingersExtraDrops[difficulty];
+
+            Butterfingers(targets, rate);
+            if (extraDrops > 0)
+            {
+                InitiateExtraDrops(extraDrops);
+            }
+        }
+
+        private void Butterfingers(ButterfingersTarget targets, double rate)
+        {
+            switch (targets)
+            {
+                case ButterfingersTarget.None:
+                    return;
+                case ButterfingersTarget.ActiveItem:
+                    Butterfingers(Game1.player, Game1.player.CurrentToolIndex, rate);
+                    return;
+                case ButterfingersTarget.Hotbar:
+                    for (var i = 0; i < Math.Min(12, Game1.player.MaxItems); i++)
+                    {
+                        Butterfingers(Game1.player, i, rate);
+                    }
+                    return;
+                case ButterfingersTarget.Inventory:
+                    ButterfingersWholeInventory(rate);
+                    return;
+                case ButterfingersTarget.InventoryAndChestsOnSameMap:
+                    ButterfingersWholeInventory(rate);
+                    ButterfingerChests(InventoryShuffler.FindAllChests().Values.Where(x => x.Location == Game1.currentLocation), rate);
+                    return;
+                case ButterfingersTarget.InventoryAndAllChests:
+                    ButterfingersWholeInventory(rate);
+                    ButterfingerChests(InventoryShuffler.FindAllChests().Values, rate);
+                    return;
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(targets), targets, null);
+            }
+        }
+
+        private void ButterfingersWholeInventory(double rate)
+        {
+            for (var i = 0; i < Game1.player.MaxItems; i++)
+            {
+                Butterfingers(Game1.player, i, rate);
+            }
+        }
+
+        protected void Butterfingers(Farmer player, int slotToModify, double chance)
+        {
+            var roll = Game1.random.NextDouble();
+            if (roll > chance)
+            {
+                return;
+            }
+
+            var item = player.Items[slotToModify];
+            if (item == null || item.Stack <= 0)
+            {
+                return;
+            }
+
+            for (var i = 0; i < item.Stack; i++)
+            {
+                player.dropItem(item);
+            }
+            player.removeItemFromInventory(item);
+        }
+
+        private void ButterfingerChests(IEnumerable<Chest> chests, double rate)
+        {
+            foreach (var chest in chests)
+            {
+                ButterfingerChest(chest, rate);
+            }
+        }
+
+        private void ButterfingerChest(Chest chest, double rate)
+        {
+            foreach (var item in chest.Items)
+            {
+                ButterfingerChest(chest, item, rate);
+            }
+        }
+
+        protected void ButterfingerChest(Chest chest, Item item, double chance)
+        {
+            var roll = Game1.random.NextDouble();
+            if (roll > chance)
+            {
+                return;
+            }
+
+            if (item == null || item.Stack <= 0)
+            {
+                return;
+            }
+
+            for (var i = 0; i < item.Stack; i++)
+            {
+                DropItem(chest, item);
+            }
+
+            chest.Items.Remove(item);
+        }
+
+        public void DropItem(Chest chest, Item item)
+        {
+            if (item == null || !item.canBeDropped())
+            {
+                return;
+            }
+            Game1.createItemDebris(item.getOne(), chest.TileLocation * 64, Game1.random.Next(0, 4));
+        }
+
+        private void InitiateExtraDrops(int extraDrops)
+        {
+            DoExtraDropsAsync(extraDrops).FireAndForget();
+        }
+
+        private async Task DoExtraDropsAsync(int extraDrops)
+        {
+            for (var i = 0; i < extraDrops; i++)
+            {
+                await Task.Run(() => Thread.Sleep(10000));
+                ButterfingersOneRandomItem();
+            }
+        }
+
+        private void ButterfingersOneRandomItem()
+        {
+            var validSlots = new List<int>();
+            for (var i = 0; i < Game1.player.MaxItems; i++)
+            {
+                var item = Game1.player.Items[i];
+                if (item != null && item.Stack >= 1)
+                {
+                    validSlots.Add(i);
+                }
+            }
+
+            var chosenSlot = validSlots[Game1.random.Next(validSlots.Count)];
+            Butterfingers(Game1.player, chosenSlot, 1.0);
+        }
+
+        public void SellItems()
+        {
+            var difficulty = _archipelago.SlotData.TrapItemsDifficulty;
+            var sellCap = _difficultyBalancer.SellNumberCap[difficulty];
+            var rate = _difficultyBalancer.SellRate[difficulty];
+            var sellPriceMultiplier = _difficultyBalancer.SellMultiplier[difficulty];
+
+            SellItems(rate, sellCap, sellPriceMultiplier);
+        }
+
+        private void SellItems(double rate, int sellCap, double sellPriceMultiplier)
+        {
+            var chests = InventoryShuffler.FindAllChests().Values.OrderBy(x => Game1.random.NextDouble()).ToArray();
+            var salesSoFar = 0;
+
+            for (var i = 0; i < Game1.player.MaxItems; i++)
+            {
+                if (TrySellPlayerItem(rate, sellPriceMultiplier, i))
+                {
+                    salesSoFar++;
+                    if (salesSoFar >= sellCap)
+                    {
+                        return;
+                    }
+                }
+            }
+
+            foreach (var chest in chests)
+            {
+                foreach (var chestItem in chest.Items)
+                {
+                    if (TrySellChestItem(rate, sellPriceMultiplier, chest, chestItem))
+                    {
+                        salesSoFar++;
+                        if (salesSoFar >= sellCap)
+                        {
+                            return;
+                        }
+                    }
+                }
+            }
+        }
+
+        private static bool TrySellPlayerItem(double rate, double sellPriceMultiplier, int itemIndex)
+        {
+            var roll = Game1.random.NextDouble();
+            if (roll > rate)
+            {
+                return false;
+            }
+
+            var item = Game1.player.Items[itemIndex];
+            if (item == null || item.Stack <= 0)
+            {
+                return false;
+            }
+
+            SellItem(item, sellPriceMultiplier);
+            Game1.player.removeItemFromInventory(item);
+            return true;
+        }
+
+        private static bool TrySellChestItem(double rate, double sellPriceMultiplier, Chest chest, Item chestItem)
+        {
+            var roll = Game1.random.NextDouble();
+            if (roll > rate)
+            {
+                return false;
+            }
+
+            if (chestItem == null || chestItem.Stack <= 0)
+            {
+                return false;
+            }
+
+            SellItem(chestItem, sellPriceMultiplier);
+            chest.Items.Remove(chestItem);
+            return true;
+        }
+
+        private static void SellItem(Item item, double sellPriceMultiplier)
+        {
+            var price = (int)Math.Round(item.sellToStorePrice() * item.Stack * sellPriceMultiplier);
+            Game1.player.Money += price;
+            Game1.playSound("sell");
+        }
+
+        public void EncumberPlayer()
+        {
+            var difficulty = _archipelago.SlotData.TrapItemsDifficulty;
+            var amountOfTrash = _difficultyBalancer.EncumberAmount[difficulty];
+            var trashRemaining = amountOfTrash;
+            for (var i = 0; i < Game1.player.MaxItems; i++)
+            {
+                if (Game1.player.Items[i] != null)
+                {
+                    continue;
+                }
+
+                GivePlayerOneTrash(i);
+                trashRemaining--;
+            }
+
+            if (trashRemaining > 0)
+            {
+                InitiateRemainingEncumbers(trashRemaining);
+            }
+        }
+
+        private void GivePlayerOneTrash(int inventoryIndex)
+        {
+            var itemId = GetRandomTrashId();
+            var item = ItemRegistry.Create(itemId);
+            Game1.player.Items[inventoryIndex] = item;
+        }
+
+        private string GetRandomTrashId()
+        {
+            var trashItems = new[] { "92", "388", "390", "167", "168", "169", "170", "171", "172", "747" };
+            var chosenItemId = trashItems[Game1.random.Next(trashItems.Length)];
+            return $"(O){chosenItemId}";
+        }
+
+        private void InitiateRemainingEncumbers(int trashRemaining)
+        {
+            DoExtraDropsAsync(trashRemaining).FireAndForget();
+        }
+
+        private async Task DoEncumberAsync(int trashRemaining)
+        {
+            while (trashRemaining > 0)
+            {
+                await Task.Run(() => Thread.Sleep(10000));
+                if (TryEncumberOneItem())
+                {
+                    trashRemaining--;
+                }
+            }
+        }
+
+        private bool TryEncumberOneItem()
+        {
+            var validSlots = new List<int>();
+            for (var i = 0; i < Game1.player.MaxItems; i++)
+            {
+                if (Game1.player.Items[i] == null)
+                {
+                    validSlots.Add(i);
+                }
+            }
+
+            if (validSlots.Any())
+            {
+                var chosenSlot = validSlots[Game1.random.Next(validSlots.Count)];
+                GivePlayerOneTrash(chosenSlot);
+                return true;
+            }
+
+            return false;
         }
     }
 }
