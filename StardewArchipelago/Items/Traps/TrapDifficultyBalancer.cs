@@ -445,6 +445,39 @@ namespace StardewArchipelago.Items.Traps
             { TrapItemsDifficulty.Nightmare, 256 },
             { TrapItemsDifficulty.Eldritch, 1024 },
         };
+
+        public Dictionary<TrapItemsDifficulty, int> SpoilsNumber = new()
+        {
+            { TrapItemsDifficulty.NoTraps, 0 },
+            { TrapItemsDifficulty.Easy, 4 },
+            { TrapItemsDifficulty.Medium, 8 },
+            { TrapItemsDifficulty.Hard, 16 },
+            { TrapItemsDifficulty.Hell, 64 },
+            { TrapItemsDifficulty.Nightmare, 256 },
+            { TrapItemsDifficulty.Eldritch, 1024 },
+        };
+
+        public Dictionary<TrapItemsDifficulty, int> NumberOfCows = new()
+        {
+            { TrapItemsDifficulty.NoTraps, 0 },
+            { TrapItemsDifficulty.Easy, 10 },
+            { TrapItemsDifficulty.Medium, 20 },
+            { TrapItemsDifficulty.Hard, 30 },
+            { TrapItemsDifficulty.Hell, 50 },
+            { TrapItemsDifficulty.Nightmare, 200 },
+            { TrapItemsDifficulty.Eldritch, 1000 },
+        };
+
+        public Dictionary<TrapItemsDifficulty, double> CowDespawnChancePerDay = new()
+        {
+            { TrapItemsDifficulty.NoTraps, 1 },
+            { TrapItemsDifficulty.Easy, 0.6 },
+            { TrapItemsDifficulty.Medium, 0.4 },
+            { TrapItemsDifficulty.Hard, 0.2 },
+            { TrapItemsDifficulty.Hell, 0.1 },
+            { TrapItemsDifficulty.Nightmare, 0.05 },
+            { TrapItemsDifficulty.Eldritch, 0.02 },
+        };
     }
 
     public enum TeleportDestination

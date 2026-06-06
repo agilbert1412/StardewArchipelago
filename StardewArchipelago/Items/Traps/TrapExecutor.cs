@@ -48,6 +48,7 @@ namespace StardewArchipelago.Items.Traps
         public readonly TileChooser TileChooser;
         public readonly MonsterSpawner MonsterSpawner;
         public readonly BabyBirther BabyBirther;
+        public readonly CowSpawner CowSpawner;
         public readonly DebrisSpawner DebrisSpawner;
         public readonly InventoryShuffler InventoryShuffler;
         public readonly BuffApplier DebuffApplier;
@@ -65,6 +66,7 @@ namespace StardewArchipelago.Items.Traps
             TileChooser = new TileChooser();
             MonsterSpawner = new MonsterSpawner(TileChooser);
             BabyBirther = new BabyBirther();
+            CowSpawner = new CowSpawner();
             DebrisSpawner = new DebrisSpawner(_logger);
             InventoryShuffler = new InventoryShuffler(_logger, giftHandler);
             DebuffApplier = new BuffApplier(_permanentState);
@@ -1392,6 +1394,44 @@ namespace StardewArchipelago.Items.Traps
             }
 
             return false;
+        }
+
+        public void SpoilItems()
+        {
+            var difficulty = _archipelago.SlotData.TrapItemsDifficulty;
+            var spoilsRemaining = _difficultyBalancer.SpoilsNumber[difficulty];
+
+            var allItemsWithQuality = new List<Item>();
+            Utility.ForEachItem(item =>
+            {
+                if (item.Quality > 0)
+                {
+                    allItemsWithQuality.Add(item);
+                }
+                return true;
+            });
+
+            allItemsWithQuality = FilterItemsThatCanSpoil(allItemsWithQuality, spoilsRemaining);
+
+            while (spoilsRemaining >= 0 && allItemsWithQuality.Any())
+            {
+                var itemToSpoil = allItemsWithQuality[Game1.random.Next(allItemsWithQuality.Count)];
+                itemToSpoil.Quality -= 1;
+                spoilsRemaining -= itemToSpoil.Stack;
+                allItemsWithQuality = FilterItemsThatCanSpoil(allItemsWithQuality, spoilsRemaining);
+            }
+        }
+
+        private List<Item> FilterItemsThatCanSpoil(List<Item> items, int spoilsRemaining)
+        {
+            return items.Where(x => x.Quality > 0 && x.Stack <= spoilsRemaining).ToList();
+        }
+
+        public void SpawnInvisibleCows()
+        {
+            var difficulty = _archipelago.SlotData.TrapItemsDifficulty;
+            var amount = _difficultyBalancer.NumberOfCows[difficulty];
+            CowSpawner.SpawnManyInvisibleCows(amount);
         }
     }
 }

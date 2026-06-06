@@ -2,6 +2,7 @@
 using KaitoKid.ArchipelagoUtilities.Net.Client;
 using KaitoKid.Utilities.Interfaces;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using Newtonsoft.Json.Linq;
 using StardewArchipelago.Archipelago;
 using StardewArchipelago.Items.Mail;
@@ -106,7 +107,9 @@ namespace StardewArchipelago.Items.Traps
                 original: AccessTools.Method(typeof(Object), nameof(Object.salePrice)),
                 prefix: new HarmonyMethod(typeof(TrapExecutor), nameof(TrapExecutor.SalePrice_GetCorrectInflation_Prefix))
             );
+
             InitializeTemporaryBaby(logger, helper, harmony, archipelago);
+            InitializeInvisibleCows(logger, helper, harmony, archipelago);
         }
 
         private void InitializeTemporaryBaby(ILogger logger, IModHelper helper, Harmony harmony, StardewArchipelagoClient archipelago)
@@ -123,6 +126,26 @@ namespace StardewArchipelago.Items.Traps
             harmony.Patch(
                 original: AccessTools.Method(typeof(GameLocation), nameof(GameLocation.performTenMinuteUpdate)),
                 prefix: new HarmonyMethod(typeof(TemporaryBabyInjections), nameof(TemporaryBabyInjections.GameLocationPerformTenMinuteUpdate_MoveBabiesAnywhere_Prefix))
+            );
+        }
+
+        private void InitializeInvisibleCows(ILogger logger, IModHelper helper, Harmony harmony, StardewArchipelagoClient archipelago)
+        {
+            CowInjections.Initialize(logger, helper, archipelago);
+
+            harmony.Patch(
+                original: AccessTools.Method(typeof(FarmAnimal), nameof(FarmAnimal.draw), new[] { typeof(SpriteBatch) }),
+                prefix: new HarmonyMethod(typeof(CowInjections), nameof(CowInjections.Draw_InvisibleCow_Prefix))
+            );
+
+            harmony.Patch(
+                original: AccessTools.Method(typeof(FarmAnimal), nameof(FarmAnimal.dayUpdate)),
+                prefix: new HarmonyMethod(typeof(CowInjections), nameof(CowInjections.DayUpdate_InvisibleCow_Prefix))
+            );
+
+            harmony.Patch(
+                original: AccessTools.Method(typeof(FarmAnimal), nameof(FarmAnimal.farmerPushing)),
+                prefix: new HarmonyMethod(typeof(CowInjections), nameof(CowInjections.FarmerPushing_TakeLongerToReact_Prefix))
             );
         }
 
@@ -224,7 +247,7 @@ namespace StardewArchipelago.Items.Traps
             _traps.Add(SALE, TrapExecutor.SellItems);
             // _traps.Add(EXOTIC, TrapExecutor.Exotic);
             _traps.Add(ENCUMBERED, TrapExecutor.EncumberPlayer);
-            _traps.Add(SPOILED, TrapExecutor.Spoiled);
+            _traps.Add(SPOILED, TrapExecutor.SpoilItems);
             _traps.Add(SUPER_MONSTER, TrapExecutor.SpawnSuperMonsters);
             _traps.Add(WE_MOO_UNSEEN, TrapExecutor.SpawnInvisibleCows);
             _traps.Add(CONSTRUCTION, TrapExecutor.AAA);
