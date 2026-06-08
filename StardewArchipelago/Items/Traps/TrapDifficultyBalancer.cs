@@ -478,6 +478,17 @@ namespace StardewArchipelago.Items.Traps
             { TrapItemsDifficulty.Nightmare, 0.05 },
             { TrapItemsDifficulty.Eldritch, 0.02 },
         };
+
+        public Dictionary<TrapItemsDifficulty, int> NumberOfFish = new()
+        {
+            { TrapItemsDifficulty.NoTraps, 0 },
+            { TrapItemsDifficulty.Easy, 1 },
+            { TrapItemsDifficulty.Medium, 1 },
+            { TrapItemsDifficulty.Hard, 1 },
+            { TrapItemsDifficulty.Hell, 2 },
+            { TrapItemsDifficulty.Nightmare, 4 },
+            { TrapItemsDifficulty.Eldritch, 12 },
+        };
     }
 
     public enum TeleportDestination

@@ -159,16 +159,6 @@ namespace StardewArchipelago.Items.Traps
             return new LetterTrapAttachment(unlock, unlock.ItemName);
         }
 
-        public bool CanGetTrappedRightNow()
-        {
-            var isSafeLocation = Game1.player.currentLocation is (FarmHouse or IslandFarmHouse);
-            var isSleepTime = Game1.player.isInBed.Value || Game1.player.FarmerSprite.isPassingOut() || Game1.player.passedOut;
-            var isFestival = Game1.CurrentEvent != null && Game1.CurrentEvent.isFestival;
-            // || Game1.eventUp || Game1.fadeToBlack || Game1.currentMinigame != null || Game1.isWarping || Game1.killScreen;
-
-            return !isSafeLocation && !isSleepTime && !isFestival;
-        }
-
         public string ExecuteRandomTrapImmediately(int seed)
         {
             var random = Utility.CreateRandom(Game1.uniqueIDForThisGame, seed);
@@ -192,7 +182,7 @@ namespace StardewArchipelago.Items.Traps
 
         public void DequeueTrap()
         {
-            if (!CanGetTrappedRightNow())
+            if (!TrapExecutor.CanGetTrappedRightNow())
             {
                 return;
             }
