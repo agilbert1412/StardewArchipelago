@@ -5,6 +5,7 @@ using System.Linq;
 using HarmonyLib;
 using KaitoKid.ArchipelagoUtilities.Net.Client;
 using KaitoKid.Utilities.Interfaces;
+using Microsoft.Xna.Framework;
 using StardewArchipelago.Archipelago;
 using StardewArchipelago.Items.Mail;
 using StardewModdingAPI;
@@ -103,9 +104,10 @@ namespace StardewArchipelago.Items.Traps
         {
             var isSafeLocation = Game1.player.currentLocation is (FarmHouse or IslandFarmHouse);
             var isSleepTime = Game1.player.isInBed.Value || Game1.player.FarmerSprite.isPassingOut() || Game1.player.passedOut;
+            var isFestival = Game1.CurrentEvent != null && Game1.CurrentEvent.isFestival;
             // || Game1.eventUp || Game1.fadeToBlack || Game1.currentMinigame != null || Game1.isWarping || Game1.killScreen;
 
-            return !isSafeLocation && !isSleepTime;
+            return !isSafeLocation && !isSleepTime && !isFestival;
         }
 
         public string ExecuteRandomTrapImmediately(int seed)
@@ -120,11 +122,6 @@ namespace StardewArchipelago.Items.Traps
 
         public bool TryExecuteTrapImmediately(string trapName)
         {
-            if (!CanGetTrappedRightNow())
-            {
-                return false;
-            }
-
             ExecuteTrapImmediately(trapName);
             return true;
         }
