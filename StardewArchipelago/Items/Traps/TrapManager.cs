@@ -250,7 +250,7 @@ namespace StardewArchipelago.Items.Traps
             _traps.Add(SPOILED, TrapExecutor.SpoilItems);
             _traps.Add(SUPER_MONSTER, TrapExecutor.SpawnSuperMonsters);
             _traps.Add(WE_MOO_UNSEEN, TrapExecutor.SpawnInvisibleCows);
-            _traps.Add(CONSTRUCTION, TrapExecutor.AAA);
+            _traps.Add(CONSTRUCTION, TrapExecutor.Construction);
             _traps.Add(ERROR, TrapExecutor.Error);
             _traps.Add(CUTSCENE, TrapExecutor.PlayCutscene);
             _traps.Add(LORAX, TrapExecutor.GrowTrees);

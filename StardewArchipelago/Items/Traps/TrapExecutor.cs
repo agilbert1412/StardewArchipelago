@@ -1433,5 +1433,82 @@ namespace StardewArchipelago.Items.Traps
             var amount = _difficultyBalancer.NumberOfCows[difficulty];
             CowSpawner.SpawnManyInvisibleCows(amount);
         }
+
+        public void ChangeWeather()
+        {
+            var difficulty = _archipelago.SlotData.TrapItemsDifficulty;
+            var validWeathers = new List<string> { "Sun", "Rain", "Wind", "Snow" };
+            if (difficulty >= TrapItemsDifficulty.Medium)
+            {
+                validWeathers.Add("Storm");
+            }
+            if (difficulty >= TrapItemsDifficulty.Hard)
+            {
+                validWeathers.Add("GreenRain");
+            }
+            if (difficulty >= TrapItemsDifficulty.Nightmare)
+            {
+                validWeathers.Add("Festival");
+                validWeathers.Add("Wedding");
+            }
+            var chosenWeather = validWeathers[Game1.random.Next(validWeathers.Count)];
+
+            SetWeather(chosenWeather);
+        }
+
+        private void SetWeather(string chosenWeather)
+        {
+            LightningStrikeOnce();
+            Game1.weatherForTomorrow = chosenWeather;
+            switch (chosenWeather)
+            {
+                case "Rain":
+                    Game1.isRaining = true;
+                    break;
+                case "GreenRain":
+                    Game1.isGreenRain = true;
+                    break;
+                case "Storm":
+                    Game1.isRaining = true;
+                    Game1.isLightning = true;
+                    break;
+                case "Wind":
+                    Game1.isDebrisWeather = true;
+                    break;
+                case "Snow":
+                    Game1.isSnowing = true;
+                    break;
+            }
+
+            Game1.updateWeather(Game1.currentGameTime);
+        }
+
+        public static void LightningStrikeOnce()
+        {
+            Game1.flashAlpha = (float)(0.5 + Game1.random.NextDouble());
+            Game1.playSound("thunder");
+        }
+
+        public void CatchFish()
+        {
+
+        }
+
+        private bool PlayerHasFishingRod()
+        {
+            var rodAnywhere = false;
+            Utility.ForEachItem(x =>
+            {
+                if (x is FishingRod rod)
+                {
+                    rodAnywhere = true;
+                    return false;
+                }
+
+                return true;
+            });
+
+            return rodAnywhere;
+        }
     }
 }
