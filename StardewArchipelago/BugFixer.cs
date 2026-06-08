@@ -1,12 +1,15 @@
 ﻿using KaitoKid.ArchipelagoUtilities.Net;
+using KaitoKid.Utilities.Interfaces;
+using StardewArchipelago.Archipelago;
+using StardewArchipelago.Constants;
 using StardewArchipelago.Locations.CodeInjections.Vanilla;
 using StardewValley;
 using StardewValley.Locations;
 using StardewValley.Network;
 using System;
 using System.Collections.Generic;
-using KaitoKid.Utilities.Interfaces;
-using StardewArchipelago.Archipelago;
+using System.Linq;
+using StardewArchipelago.Archipelago.SlotData.SlotEnums;
 
 namespace StardewArchipelago
 {
@@ -28,7 +31,7 @@ namespace StardewArchipelago
         {
             FixFreeBuildingsWithFreeInTheId();
             FixBundleRoomsNotProperlyCompleted();
-            MakeArgonDonatedHairCorrect();
+            TryFixStardrops();
         }
 
         private static void FixFreeBuildingsWithFreeInTheId()
@@ -103,12 +106,47 @@ namespace StardewArchipelago
             return areaToBundleDictionary;
         }
 
-        private void MakeArgonDonatedHairCorrect()
+        private void TryFixStardrops()
         {
-            if (_archipelago.SlotData.SlotName.Contains("Argon", StringComparison.InvariantCultureIgnoreCase))
+            var allUpcomingMail = Game1.player.mailForTomorrow.Union(Game1.player.mailbox);
+            if (allUpcomingMail.Any(x => x.Contains("AP|Stardrop|")))
             {
-                ModEntry.Instance.State.Wallet.DonatedHair = 30;
-                ModEntry.Instance.State.Wallet.DonatedHairColor = new List<int> {91, 36, 17};
+                return;
+            }
+
+            FixStardrops();
+        }
+
+        private void FixStardrops()
+        {
+            var numberStardropsDeserved = _archipelago.GetReceivedItemCount(APItem.STARDROP);
+
+            if (_archipelago.SlotData.FestivalLocations == FestivalLocations.Vanilla && Game1.player.mailReceived.Contains("CF_Fair"))
+            {
+                numberStardropsDeserved++;
+            }
+
+            if (_archipelago.SlotData.Friendsanity == Friendsanity.None && Game1.player.mailReceived.Contains("CF_Spouse"))
+            {
+                numberStardropsDeserved++;
+            }
+
+            if (!_archipelago.SlotData.Secretsanity.HasFlag(Secretsanity.Easy) && Game1.player.mailReceived.Contains("CF_Statue"))
+            {
+                numberStardropsDeserved++;
+            }
+
+            if (_archipelago.SlotData.Fishsanity == Fishsanity.None && Game1.player.mailReceived.Contains("CF_Fish"))
+            {
+                numberStardropsDeserved++;
+            }
+
+            var expectedMaxStamina = 270 + (numberStardropsDeserved * 34);
+
+            if (Game1.player.MaxStamina < expectedMaxStamina)
+            {
+                _logger.LogWarning($"Detected the player max stamina is lower than expected, based on found Stardrops. Current Max: {Game1.player.MaxStamina}, Expected: {expectedMaxStamina}. StardewArchipelago will attempt to automatically fix the problem.");
+                Game1.player.maxStamina.Value = expectedMaxStamina;
             }
         }
     }

@@ -82,7 +82,7 @@ namespace StardewArchipelago.Items.Unlocks.Vanilla
             unlocks.Add(APItem.SPECIAL_CHARM, SendSpecialCharmLetter);
 
             unlocks.Add("Progressive Backpack", SendProgressiveBackpackLetter);
-            unlocks.Add("Stardrop", SendStardropLetter);
+            unlocks.Add(APItem.STARDROP, SendStardropLetter);
             unlocks.Add(APItem.DWARVISH_TRANSLATION_GUIDE, SendDwarvishTranslationGuideLetter);
             unlocks.Add(APItem.SKULL_KEY, SendSkullKeyLetter);
             unlocks.Add(APItem.RUSTY_KEY, SendRustyKeyLetter);
