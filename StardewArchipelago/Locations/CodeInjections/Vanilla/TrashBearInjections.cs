@@ -193,6 +193,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
                 __result = false;
                 if (who == null || who.ActiveObject == null || string.IsNullOrWhiteSpace(who.ActiveObject.QualifiedItemId))
                 {
+                    CheckAllTrashBearFinishedLocations();
                     return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
                 }
 
