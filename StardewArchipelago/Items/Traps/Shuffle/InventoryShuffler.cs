@@ -452,24 +452,14 @@ namespace StardewArchipelago.Items.Traps.Shuffle
             return itemMap;
         }
 
-        public void InitiateExtraSwaps(int extraSwaps)
-        {
-            DoExtraSwapsAsync(extraSwaps).FireAndForget();
-        }
-
-        private async Task DoExtraSwapsAsync(int extraSwaps)
+        public void InitiateExtraSwaps(TrapExecutor executor, int extraSwaps)
         {
             var inventories = GetAllInventoriesWithItems();
             var itemMap = GenerateItemMap(inventories);
-
-            for (var i = 0; i < extraSwaps; i++)
-            {
-                await Task.Run(() => Thread.Sleep(10000));
-                SwapTwoItems(itemMap);
-            }
+            executor.PerformTrapManyTimes(extraSwaps, 10, () => SwapTwoItems(itemMap));
         }
 
-        private void SwapTwoItems(Dictionary<Item, Tuple<StardewValley.Inventories.Inventory, int>> itemMap)
+        private bool SwapTwoItems(Dictionary<Item, Tuple<StardewValley.Inventories.Inventory, int>> itemMap)
         {
             var validItemsToSwap = itemMap.Keys.ToArray();
             var totalCount = validItemsToSwap.Length;
@@ -477,7 +467,7 @@ namespace StardewArchipelago.Items.Traps.Shuffle
             var indexSwap2 = Game1.random.Next(totalCount);
             if (indexSwap1 == indexSwap2)
             {
-                return;
+                return false;
             }
 
             var item1 = validItemsToSwap[indexSwap1];
@@ -488,6 +478,7 @@ namespace StardewArchipelago.Items.Traps.Shuffle
             inventory2[index2] = item1;
             itemMap[item1] = new Tuple<StardewValley.Inventories.Inventory, int>(inventory2, index2);
             itemMap[item2] = new Tuple<StardewValley.Inventories.Inventory, int>(inventory1, index1);
+            return true;
         }
     }
 }

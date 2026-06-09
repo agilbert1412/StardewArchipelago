@@ -193,26 +193,15 @@ namespace StardewArchipelago.Items.Traps
                 return;
             }
 
-            if (numberOfTeleports == 1)
-            {
-                TeleportRandomly(validMaps, destination);
-                return;
-            }
-
-            TeleportRandomlyAsync(validMaps, destination, numberOfTeleports).FireAndForget();
+            PerformTrapManyTimes(numberOfTeleports, 4, () => TeleportRandomly(validMaps, destination));
         }
 
-        private async Task TeleportRandomlyAsync(List<GameLocation> validMaps, TeleportDestination destination, int numberOfTeleports)
+        private bool TeleportRandomly(List<GameLocation> validMaps, TeleportDestination destination)
         {
-            for (var i = 0; i < numberOfTeleports; i++)
+            if (CanGetTrappedRightNow())
             {
-                await Task.Run(() => Thread.Sleep(4000));
-                TeleportRandomly(validMaps, destination, numberOfTeleports);
+                return false;
             }
-        }
-
-        private void TeleportRandomly(List<GameLocation> validMaps, TeleportDestination destination)
-        {
 
             GameLocation chosenLocation = null;
             Vector2? chosenTile = null;
@@ -230,6 +219,7 @@ namespace StardewArchipelago.Items.Traps
             }
 
             TeleportFarmerTo(chosenLocation.Name, chosenTile.Value);
+            return true;
         }
 
         private void TeleportFarmerTo(string locationName, Vector2 tile)
@@ -467,7 +457,7 @@ namespace StardewArchipelago.Items.Traps
             var extraSwaps = _difficultyBalancer.ExtraSwapsAfterShuffle[difficulty];
             if (extraSwaps > 0)
             {
-                InventoryShuffler.InitiateExtraSwaps(extraSwaps);
+                InventoryShuffler.InitiateExtraSwaps(this, extraSwaps);
             }
         }
 
@@ -766,22 +756,19 @@ namespace StardewArchipelago.Items.Traps
         public void PlayMeows()
         {
             var numberOfMeows = _difficultyBalancer.MeowBarkNumber[_archipelago.SlotData.TrapItemsDifficulty];
-            var (minPitch, maxPitch) = GetPitchBounds();
-            PlaySoundsAsync(numberOfMeows, "cat", minPitch, maxPitch).FireAndForget();
+            PerformTrapManyTimes(numberOfMeows, 2, () => PlaySound("cat"));
         }
 
         public void PlayBarks()
         {
-            var numberOfMeows = _difficultyBalancer.MeowBarkNumber[_archipelago.SlotData.TrapItemsDifficulty];
-            var (minPitch, maxPitch) = GetPitchBounds();
-            PlaySoundsAsync(numberOfMeows, "dog_bark", minPitch, maxPitch).FireAndForget();
+            var numberOfBarks = _difficultyBalancer.MeowBarkNumber[_archipelago.SlotData.TrapItemsDifficulty];
+            PerformTrapManyTimes(numberOfBarks, 2, () => PlaySound("dog_bark"));
         }
 
         public void PlayNoises()
         {
-            var numberOfMeows = _difficultyBalancer.NoiseNumber[_archipelago.SlotData.TrapItemsDifficulty];
-            var (minPitch, maxPitch) = GetPitchBounds();
-            PlaySoundsAsync(numberOfMeows, "random", minPitch, maxPitch).FireAndForget();
+            var numberOfNoises = _difficultyBalancer.NoiseNumber[_archipelago.SlotData.TrapItemsDifficulty];
+            PerformTrapManyTimes(numberOfNoises, 2, () => PlaySound("random"));
         }
 
         private string GetRandomSoundCue()
@@ -800,15 +787,18 @@ namespace StardewArchipelago.Items.Traps
             return (null, null);
         }
 
-        private async Task PlaySoundsAsync(int numberOfSounds, string sound, int? minPitch, int? maxPitch)
+        private bool PlaySound(string sound)
         {
-            for (var i = 0; i < numberOfSounds; i++)
-            {
-                await Task.Run(() => Thread.Sleep(2000));
-                var soundToPlay = sound == "random" ? GetRandomSoundCue() : sound;
-                int? pitch = minPitch == null || maxPitch == null ? null : Game1.random.Next(minPitch.Value, maxPitch.Value + 1);
-                Game1.playSound(soundToPlay, pitch);
-            }
+            var (minPitch, maxPitch) = GetPitchBounds();
+            return PlaySound(sound, minPitch, maxPitch);
+        }
+
+        private bool PlaySound(string sound, int? minPitch, int? maxPitch)
+        {
+            var soundToPlay = sound == "random" ? GetRandomSoundCue() : sound;
+            int? pitch = minPitch == null || maxPitch == null ? null : Game1.random.Next(minPitch.Value, maxPitch.Value + 1);
+            Game1.playSound(soundToPlay, pitch);
+            return true;
         }
 
         public void ForceNextMultisleep()
@@ -1106,7 +1096,7 @@ namespace StardewArchipelago.Items.Traps
             Butterfingers(targets, rate);
             if (extraDrops > 0)
             {
-                InitiateExtraDrops(extraDrops);
+                PerformTrapManyTimes(extraDrops, 10, () => ButterfingersOneRandomItem());
             }
         }
 
@@ -1158,7 +1148,7 @@ namespace StardewArchipelago.Items.Traps
             }
 
             var item = player.Items[slotToModify];
-            if (item == null || item.Stack <= 0)
+            if (item == null || item.Stack <= 0 || !item.canBeDropped())
             {
                 return;
             }
@@ -1216,27 +1206,13 @@ namespace StardewArchipelago.Items.Traps
             Game1.createItemDebris(item.getOne(), chest.TileLocation * 64, Game1.random.Next(0, 4));
         }
 
-        private void InitiateExtraDrops(int extraDrops)
-        {
-            DoExtraDropsAsync(extraDrops).FireAndForget();
-        }
-
-        private async Task DoExtraDropsAsync(int extraDrops)
-        {
-            for (var i = 0; i < extraDrops; i++)
-            {
-                await Task.Run(() => Thread.Sleep(10000));
-                ButterfingersOneRandomItem();
-            }
-        }
-
-        private void ButterfingersOneRandomItem()
+        private bool ButterfingersOneRandomItem()
         {
             var validSlots = new List<int>();
             for (var i = 0; i < Game1.player.MaxItems; i++)
             {
                 var item = Game1.player.Items[i];
-                if (item != null && item.Stack >= 1)
+                if (item != null && item.Stack >= 1 && item.canBeDropped())
                 {
                     validSlots.Add(i);
                 }
@@ -1244,6 +1220,7 @@ namespace StardewArchipelago.Items.Traps
 
             var chosenSlot = validSlots[Game1.random.Next(validSlots.Count)];
             Butterfingers(Game1.player, chosenSlot, 1.0);
+            return true;
         }
 
         public void SellItems()
@@ -1351,7 +1328,7 @@ namespace StardewArchipelago.Items.Traps
 
             if (trashRemaining > 0)
             {
-                InitiateRemainingEncumbers(trashRemaining);
+                PerformTrapManyTimes(trashRemaining, 10, TryEncumberOneItem);
             }
         }
 
@@ -1367,23 +1344,6 @@ namespace StardewArchipelago.Items.Traps
             var trashItems = new[] { "92", "388", "390", "167", "168", "169", "170", "171", "172", "747" };
             var chosenItemId = trashItems[Game1.random.Next(trashItems.Length)];
             return $"(O){chosenItemId}";
-        }
-
-        private void InitiateRemainingEncumbers(int trashRemaining)
-        {
-            DoExtraDropsAsync(trashRemaining).FireAndForget();
-        }
-
-        private async Task DoEncumberAsync(int trashRemaining)
-        {
-            while (trashRemaining > 0)
-            {
-                await Task.Run(() => Thread.Sleep(10000));
-                if (TryEncumberOneItem())
-                {
-                    trashRemaining--;
-                }
-            }
         }
 
         private bool TryEncumberOneItem()
@@ -1504,20 +1464,16 @@ namespace StardewArchipelago.Items.Traps
         {
             var difficulty = _archipelago.SlotData.TrapItemsDifficulty;
             var numberFish = _difficultyBalancer.NumberOfFish[difficulty];
-            DoFishingASync(numberFish).FireAndForget();
-        }
-
-        private async Task DoFishingASync(int fishRemaining)
-        {
-            while (fishRemaining > 0)
+            PerformTrapManyTimes(numberFish, 10, () =>
             {
-                await Task.Run(() => Thread.Sleep(10000));
                 if (CanFishRightNow())
                 {
                     StartFishing();
-                    fishRemaining--;
+                    return true;
                 }
-            }
+
+                return false;
+            });
         }
 
         private bool CanFishRightNow()
@@ -1673,6 +1629,30 @@ namespace StardewArchipelago.Items.Traps
             Game1.player.Items[slotToFill] = fishingRod;
             Game1.player.CurrentToolIndex = slotToFill;
             return false;
+        }
+
+        public void PerformTrapManyTimes(int iterations, int delayInSeconds, Func<bool> trapMethod)
+        {
+            PerformTrapManyTimesAsync(iterations, delayInSeconds, trapMethod).FireAndForget();
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="iterations">Number of times to run the trap code</param>
+        /// <param name="delayInSeconds">Delay between iterations</param>
+        /// <param name="trapMethod">Method to try to run the trap code. If it returns true, then it has run successfully and counts as an iteration. If it returns false, then it has been skipped and should not count.</param>
+        /// <returns></returns>
+        private async Task PerformTrapManyTimesAsync(int iterations, int delayInSeconds, Func<bool> trapMethod)
+        {
+            while (iterations > 0)
+            {
+                await Task.Run(() => Thread.Sleep(delayInSeconds * 1000));
+                if (trapMethod())
+                {
+                    iterations--;
+                }
+            }
         }
     }
 }
