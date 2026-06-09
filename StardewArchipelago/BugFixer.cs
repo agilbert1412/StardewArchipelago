@@ -1,15 +1,18 @@
 ﻿using KaitoKid.ArchipelagoUtilities.Net;
 using KaitoKid.Utilities.Interfaces;
 using StardewArchipelago.Archipelago;
+using StardewArchipelago.Archipelago.SlotData.SlotEnums;
 using StardewArchipelago.Constants;
+using StardewArchipelago.Items;
 using StardewArchipelago.Locations.CodeInjections.Vanilla;
+using StardewArchipelago.Serialization;
+using StardewArchipelago.Stardew;
 using StardewValley;
 using StardewValley.Locations;
 using StardewValley.Network;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using StardewArchipelago.Archipelago.SlotData.SlotEnums;
 
 namespace StardewArchipelago
 {
@@ -18,12 +21,16 @@ namespace StardewArchipelago
         private readonly StardewArchipelagoClient _archipelago;
         private readonly ILogger _logger;
         private readonly LocationChecker _locationChecker;
+        private readonly StardewItemManager _itemManager;
+        private readonly ArchipelagoStateDto _state;
 
-        public BugFixer(StardewArchipelagoClient archipelago, ILogger logger, LocationChecker locationChecker)
+        public BugFixer(StardewArchipelagoClient archipelago, ILogger logger, LocationChecker locationChecker, StardewItemManager itemManager, ArchipelagoStateDto state)
         {
             _archipelago = archipelago;
             _logger = logger;
             _locationChecker = locationChecker;
+            _itemManager = itemManager;
+            _state = state;
         }
 
 
@@ -32,6 +39,7 @@ namespace StardewArchipelago
             FixFreeBuildingsWithFreeInTheId();
             FixBundleRoomsNotProperlyCompleted();
             TryFixStardrops();
+            FixTrashBearItemsEatenByIds();
         }
 
         private static void FixFreeBuildingsWithFreeInTheId()
@@ -143,11 +151,45 @@ namespace StardewArchipelago
 
             var expectedMaxStamina = 270 + (numberStardropsDeserved * 34);
 
-            if (Game1.player.MaxStamina < expectedMaxStamina)
+            if (Game1.player.maxStamina.Value < expectedMaxStamina)
             {
                 _logger.LogWarning($"Detected the player max stamina is lower than expected, based on found Stardrops. Current Max: {Game1.player.MaxStamina}, Expected: {expectedMaxStamina}. StardewArchipelago will attempt to automatically fix the problem.");
                 Game1.player.maxStamina.Value = expectedMaxStamina;
             }
+        }
+
+        private void FixTrashBearItemsEatenByIds()
+        {
+            _state.TrashBearItemsEaten = _state.TrashBearItemsEaten.Select(FixTrashBearItemEaten).ToList();
+        }
+
+        private string FixTrashBearItemEaten(string itemEaten)
+        {
+            if (_itemManager.ItemExistsByQualifiedId(itemEaten))
+            {
+                return itemEaten;
+            }
+
+            _logger.LogWarning($"Attempting to convert Trash Bear item eaten [{itemEaten}] to use the Qualified ID...");
+
+            if (_itemManager.ItemExists(itemEaten))
+            {
+                var item = _itemManager.GetItemByName(itemEaten);
+                var qualifiedId = item.GetQualifiedId();
+                _logger.LogWarning($"Successfully converted [{itemEaten}] to [{qualifiedId}]");
+                return qualifiedId;
+            }
+
+            if (_itemManager.ItemExistsById(itemEaten))
+            {
+                var item = _itemManager.GetObjectById(itemEaten);
+                var qualifiedId = item.GetQualifiedId();
+                _logger.LogWarning($"Successfully converted [{itemEaten}] to [{qualifiedId}]");
+                return qualifiedId;
+            }
+
+            _logger.LogError($"Could not fix item [{itemEaten}]. Your trash bear items may be corrupt and need to be fed again.");
+            return itemEaten;
         }
     }
 }
