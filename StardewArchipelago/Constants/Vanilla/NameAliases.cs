@@ -17,6 +17,7 @@ namespace StardewArchipelago.Constants.Vanilla
             new List<string> { "Dried Mushrooms", "DriedMushrooms", "Dried Mushroom", "DriedMushroom" },
             new List<string> { "Smoked Fish", "SmokedFish", "Smoked" },
             new List<string> { "SpecificBait", "Specific Bait", "Specific", "TargetedBait", "Targeted Bait", "Targeted" },
+            new List<string> { "Water Shifter", "Water Sifter" },
         };
 
         public static Dictionary<string, string> RecipeNameAliases = new()

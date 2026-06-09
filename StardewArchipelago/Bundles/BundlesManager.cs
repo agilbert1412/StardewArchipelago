@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using KaitoKid.Utilities.Interfaces;
 using Netcode;
 using Newtonsoft.Json;
@@ -31,7 +32,9 @@ namespace StardewArchipelago.Bundles
             modHelper.GameContent.InvalidateCache(x => x.NameWithoutLocale.IsEquivalentTo("Data/Bundles"));
             ReplaceAllBundles();
 
-            TrashBearRequests = JsonConvert.DeserializeObject<Dictionary<string, List<string>>>(archipelago.SlotData.TrashBearRequestsData);
+            var trashBearRequestsByName = JsonConvert.DeserializeObject<Dictionary<string, List<string>>>(archipelago.SlotData.TrashBearRequestsData);
+            TrashBearRequests = trashBearRequestsByName.ToDictionary(x => x.Key,
+                x => x.Value.Select(y => itemManager.GetItemByName(y).GetQualifiedId()).ToList());
         }
 
         public void CleanEvents()

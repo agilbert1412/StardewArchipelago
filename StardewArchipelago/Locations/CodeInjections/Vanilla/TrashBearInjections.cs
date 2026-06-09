@@ -193,15 +193,15 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
                 __result = false;
                 if (who == null || who.ActiveObject == null || string.IsNullOrWhiteSpace(who.ActiveObject.QualifiedItemId))
                 {
+                    CheckAllTrashBearFinishedLocations();
                     return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
                 }
 
                 var heldItemId = who.ActiveObject.QualifiedItemId;
-                var heldItemName = who.ActiveObject.Name;
 
-                var desiredItems = _bundlesManager.TrashBearRequests.SelectMany(x => x.Value);
-                var remainingItems = desiredItems.Where(x => !_state.TrashBearItemsEaten.Contains(x));
-                var remainingItemIds = remainingItems.Select(x => _itemManager.GetObjectByName(x).GetQualifiedId()).ToHashSet();
+                var desiredItemIds = _bundlesManager.TrashBearRequests.SelectMany(x => x.Value);
+                var eatenItemIds = _state.TrashBearItemsEaten.ToHashSet();
+                var remainingItemIds = desiredItemIds.Where(x => !eatenItemIds.Contains(x));
 
                 if (!remainingItemIds.Contains(heldItemId))
                 {
@@ -217,7 +217,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
                     var eatEvent = eatEventField.GetValue();
                     eatEvent.Fire(__instance.itemWantedIndex);
                     who.reduceActiveItemByOne();
-                    _state.TrashBearItemsEaten.Add(heldItemName);
+                    _state.TrashBearItemsEaten.Add(heldItemId);
                 }
 
                 CheckAllTrashBearFinishedLocations();
@@ -233,9 +233,9 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
 
         private static void CheckAllTrashBearFinishedLocations()
         {
-            foreach (var (requestType, requestItems) in _bundlesManager.TrashBearRequests)
+            foreach (var (requestType, requestItemIds) in _bundlesManager.TrashBearRequests)
             {
-                var itemsRemaining = requestItems.Where(x => !_state.TrashBearItemsEaten.Contains(x)).ToArray();
+                var itemsRemaining = requestItemIds.Where(x => !_state.TrashBearItemsEaten.Contains(x)).ToArray();
                 if (itemsRemaining.Any())
                 {
                     continue;
