@@ -2214,7 +2214,7 @@
             "tags": ["ARCADE_MACHINE_VICTORY", "JUNIMO_KART"],
             "content_packs": []
         },
-        "Old Master Cannoli": {
+        "Secret: Old Master Cannoli": {
             "code": 717701,
             "region": "Secret Woods",
             "tags": ["EASY_SECRET", "SECRETSANITY"],
@@ -2256,7 +2256,7 @@
             "tags": ["MANDATORY"],
             "content_packs": []
         },
-        "Pot Of Gold": {
+        "Secret: Pot Of Gold": {
             "code": 717708,
             "region": "Forest",
             "tags": ["EASY_SECRET", "SECRETSANITY"],
@@ -2646,6 +2646,18 @@
             "tags": ["TRAVELING_MERCHANT"],
             "content_packs": []
         },
+        "Traveling Merchant Sunday Item 9": {
+            "code": 717909,
+            "region": "Traveling Cart Sunday",
+            "tags": ["TRAVELING_MERCHANT"],
+            "content_packs": []
+        },
+        "Traveling Merchant Sunday Item 10": {
+            "code": 717910,
+            "region": "Traveling Cart Sunday",
+            "tags": ["TRAVELING_MERCHANT"],
+            "content_packs": []
+        },
         "Traveling Merchant Monday Item 1": {
             "code": 717911,
             "region": "Traveling Cart Monday",
@@ -2690,6 +2702,18 @@
         },
         "Traveling Merchant Monday Item 8": {
             "code": 717918,
+            "region": "Traveling Cart Monday",
+            "tags": ["TRAVELING_MERCHANT"],
+            "content_packs": []
+        },
+        "Traveling Merchant Monday Item 9": {
+            "code": 717919,
+            "region": "Traveling Cart Monday",
+            "tags": ["TRAVELING_MERCHANT"],
+            "content_packs": []
+        },
+        "Traveling Merchant Monday Item 10": {
+            "code": 717920,
             "region": "Traveling Cart Monday",
             "tags": ["TRAVELING_MERCHANT"],
             "content_packs": []
@@ -2742,6 +2766,18 @@
             "tags": ["TRAVELING_MERCHANT"],
             "content_packs": []
         },
+        "Traveling Merchant Tuesday Item 9": {
+            "code": 717929,
+            "region": "Traveling Cart Tuesday",
+            "tags": ["TRAVELING_MERCHANT"],
+            "content_packs": []
+        },
+        "Traveling Merchant Tuesday Item 10": {
+            "code": 717930,
+            "region": "Traveling Cart Tuesday",
+            "tags": ["TRAVELING_MERCHANT"],
+            "content_packs": []
+        },
         "Traveling Merchant Wednesday Item 1": {
             "code": 717931,
             "region": "Traveling Cart Wednesday",
@@ -2786,6 +2822,18 @@
         },
         "Traveling Merchant Wednesday Item 8": {
             "code": 717938,
+            "region": "Traveling Cart Wednesday",
+            "tags": ["TRAVELING_MERCHANT"],
+            "content_packs": []
+        },
+        "Traveling Merchant Wednesday Item 9": {
+            "code": 717939,
+            "region": "Traveling Cart Wednesday",
+            "tags": ["TRAVELING_MERCHANT"],
+            "content_packs": []
+        },
+        "Traveling Merchant Wednesday Item 10": {
+            "code": 717940,
             "region": "Traveling Cart Wednesday",
             "tags": ["TRAVELING_MERCHANT"],
             "content_packs": []
@@ -2838,6 +2886,18 @@
             "tags": ["TRAVELING_MERCHANT"],
             "content_packs": []
         },
+        "Traveling Merchant Thursday Item 9": {
+            "code": 717949,
+            "region": "Traveling Cart Thursday",
+            "tags": ["TRAVELING_MERCHANT"],
+            "content_packs": []
+        },
+        "Traveling Merchant Thursday Item 10": {
+            "code": 717950,
+            "region": "Traveling Cart Thursday",
+            "tags": ["TRAVELING_MERCHANT"],
+            "content_packs": []
+        },
         "Traveling Merchant Friday Item 1": {
             "code": 717951,
             "region": "Traveling Cart Friday",
@@ -2886,6 +2946,18 @@
             "tags": ["TRAVELING_MERCHANT"],
             "content_packs": []
         },
+        "Traveling Merchant Friday Item 9": {
+            "code": 717959,
+            "region": "Traveling Cart Friday",
+            "tags": ["TRAVELING_MERCHANT"],
+            "content_packs": []
+        },
+        "Traveling Merchant Friday Item 10": {
+            "code": 717960,
+            "region": "Traveling Cart Friday",
+            "tags": ["TRAVELING_MERCHANT"],
+            "content_packs": []
+        },
         "Traveling Merchant Saturday Item 1": {
             "code": 717961,
             "region": "Traveling Cart Saturday",
@@ -2930,6 +3002,18 @@
         },
         "Traveling Merchant Saturday Item 8": {
             "code": 717968,
+            "region": "Traveling Cart Saturday",
+            "tags": ["TRAVELING_MERCHANT"],
+            "content_packs": []
+        },
+        "Traveling Merchant Saturday Item 9": {
+            "code": 717969,
+            "region": "Traveling Cart Saturday",
+            "tags": ["TRAVELING_MERCHANT"],
+            "content_packs": []
+        },
+        "Traveling Merchant Saturday Item 10": {
+            "code": 717970,
             "region": "Traveling Cart Saturday",
             "tags": ["TRAVELING_MERCHANT"],
             "content_packs": []
@@ -6786,130 +6870,130 @@
             "tags": ["FESTIVAL"],
             "content_packs": []
         },
-        "Earthy Mousse": {
+        "Desert Chef: Earthy Mousse": {
             "code": 719045,
             "region": "Desert Festival",
-            "tags": ["DESERT_FESTIVAL_CHEF"],
+            "tags": ["DESERT_FESTIVAL_CHEF_MEAL"],
             "content_packs": []
         },
-        "Sweet Bean Cake": {
+        "Desert Chef: Sweet Bean Cake": {
             "code": 719046,
             "region": "Desert Festival",
-            "tags": ["DESERT_FESTIVAL_CHEF"],
+            "tags": ["DESERT_FESTIVAL_CHEF_MEAL"],
             "content_packs": []
         },
-        "Skull Cave Casserole": {
+        "Desert Chef: Skull Cave Casserole": {
             "code": 719047,
             "region": "Desert Festival",
-            "tags": ["DESERT_FESTIVAL_CHEF"],
+            "tags": ["DESERT_FESTIVAL_CHEF_MEAL"],
             "content_packs": []
         },
-        "Spicy Tacos": {
+        "Desert Chef: Spicy Tacos": {
             "code": 719048,
             "region": "Desert Festival",
-            "tags": ["DESERT_FESTIVAL_CHEF"],
+            "tags": ["DESERT_FESTIVAL_CHEF_MEAL"],
             "content_packs": []
         },
-        "Mountain Chili": {
+        "Desert Chef: Mountain Chili": {
             "code": 719049,
             "region": "Desert Festival",
-            "tags": ["DESERT_FESTIVAL_CHEF"],
+            "tags": ["DESERT_FESTIVAL_CHEF_MEAL"],
             "content_packs": []
         },
-        "Crystal Cake": {
+        "Desert Chef: Crystal Cake": {
             "code": 719050,
             "region": "Desert Festival",
-            "tags": ["DESERT_FESTIVAL_CHEF"],
+            "tags": ["DESERT_FESTIVAL_CHEF_MEAL"],
             "content_packs": []
         },
-        "Cave Kebab": {
+        "Desert Chef: Cave Kebab": {
             "code": 719051,
             "region": "Desert Festival",
-            "tags": ["DESERT_FESTIVAL_CHEF"],
+            "tags": ["DESERT_FESTIVAL_CHEF_MEAL"],
             "content_packs": []
         },
-        "Hot Log": {
+        "Desert Chef: Hot Log": {
             "code": 719052,
             "region": "Desert Festival",
-            "tags": ["DESERT_FESTIVAL_CHEF"],
+            "tags": ["DESERT_FESTIVAL_CHEF_MEAL"],
             "content_packs": []
         },
-        "Sour Salad": {
+        "Desert Chef: Sour Salad": {
             "code": 719053,
             "region": "Desert Festival",
-            "tags": ["DESERT_FESTIVAL_CHEF"],
+            "tags": ["DESERT_FESTIVAL_CHEF_MEAL"],
             "content_packs": []
         },
-        "Superfood Cake": {
+        "Desert Chef: Superfood Cake": {
             "code": 719054,
             "region": "Desert Festival",
-            "tags": ["DESERT_FESTIVAL_CHEF"],
+            "tags": ["DESERT_FESTIVAL_CHEF_MEAL"],
             "content_packs": []
         },
-        "Warrior Smoothie": {
+        "Desert Chef: Warrior Smoothie": {
             "code": 719055,
             "region": "Desert Festival",
-            "tags": ["DESERT_FESTIVAL_CHEF"],
+            "tags": ["DESERT_FESTIVAL_CHEF_MEAL"],
             "content_packs": []
         },
-        "Rumpled Fruit Skin": {
+        "Desert Chef: Rumpled Fruit Skin": {
             "code": 719056,
             "region": "Desert Festival",
-            "tags": ["DESERT_FESTIVAL_CHEF"],
+            "tags": ["DESERT_FESTIVAL_CHEF_MEAL"],
             "content_packs": []
         },
-        "Calico Pizza": {
+        "Desert Chef: Calico Pizza": {
             "code": 719057,
             "region": "Desert Festival",
-            "tags": ["DESERT_FESTIVAL_CHEF"],
+            "tags": ["DESERT_FESTIVAL_CHEF_MEAL"],
             "content_packs": []
         },
-        "Stuffed Mushrooms": {
+        "Desert Chef: Stuffed Mushrooms": {
             "code": 719058,
             "region": "Desert Festival",
-            "tags": ["DESERT_FESTIVAL_CHEF"],
+            "tags": ["DESERT_FESTIVAL_CHEF_MEAL"],
             "content_packs": []
         },
-        "Elf Quesadilla": {
+        "Desert Chef: Elf Quesadilla": {
             "code": 719059,
             "region": "Desert Festival",
-            "tags": ["DESERT_FESTIVAL_CHEF"],
+            "tags": ["DESERT_FESTIVAL_CHEF_MEAL"],
             "content_packs": []
         },
-        "Nachos Of The Desert": {
+        "Desert Chef: Nachos Of The Desert": {
             "code": 719060,
             "region": "Desert Festival",
-            "tags": ["DESERT_FESTIVAL_CHEF"],
+            "tags": ["DESERT_FESTIVAL_CHEF_MEAL"],
             "content_packs": []
         },
-        "Cioppino": {
+        "Desert Chef: Cioppino": {
             "code": 719061,
             "region": "Desert Festival",
-            "tags": ["DESERT_FESTIVAL_CHEF"],
+            "tags": ["DESERT_FESTIVAL_CHEF_MEAL"],
             "content_packs": []
         },
-        "Rainforest Shrimp": {
+        "Desert Chef: Rainforest Shrimp": {
             "code": 719062,
             "region": "Desert Festival",
-            "tags": ["DESERT_FESTIVAL_CHEF"],
+            "tags": ["DESERT_FESTIVAL_CHEF_MEAL"],
             "content_packs": []
         },
-        "Shrimp Donut": {
+        "Desert Chef: Shrimp Donut": {
             "code": 719063,
             "region": "Desert Festival",
-            "tags": ["DESERT_FESTIVAL_CHEF"],
+            "tags": ["DESERT_FESTIVAL_CHEF_MEAL"],
             "content_packs": []
         },
-        "Smell Of The Sea": {
+        "Desert Chef: Smell Of The Sea": {
             "code": 719064,
             "region": "Desert Festival",
-            "tags": ["DESERT_FESTIVAL_CHEF"],
+            "tags": ["DESERT_FESTIVAL_CHEF_MEAL"],
             "content_packs": []
         },
-        "Desert Gumbo": {
+        "Desert Chef: Desert Gumbo": {
             "code": 719065,
             "region": "Desert Festival",
-            "tags": ["DESERT_FESTIVAL_CHEF"],
+            "tags": ["DESERT_FESTIVAL_CHEF_MEAL"],
             "content_packs": []
         },
         "Free Cactis": {
@@ -7068,6 +7152,12 @@
             "tags": ["FESTIVAL_HARD"],
             "content_packs": []
         },
+        "Desert Chef": {
+            "code": 719092,
+            "region": "Desert Festival",
+            "tags": ["DESERT_FESTIVAL_CHEF"],
+            "content_packs": []
+        },
         "Island Ingredients": {
             "code": 719101,
             "region": "Town",
@@ -7107,8 +7197,8 @@
         "Fragments of the past": {
             "code": 719107,
             "region": "Museum",
-            "tags": ["GINGER_ISLAND", "SPECIAL_ORDER_BOARD"],
-            "content_packs": ["Ginger Island (Vanilla)"]
+            "tags": ["SPECIAL_ORDER_BOARD"],
+            "content_packs": []
         },
         "Gus' Famous Omelet": {
             "code": 719108,
@@ -13377,8 +13467,8 @@
         "Craft Blue Grass Starter": {
             "code": 720533,
             "region": "Farm",
-            "tags": ["CRAFTSANITY", "CRAFTSANITY_CRAFT", "GINGER_ISLAND"],
-            "content_packs": ["Ginger Island (Vanilla)"]
+            "tags": ["CRAFTSANITY", "CRAFTSANITY_CRAFT", "GINGER_ISLAND", "REQUIRES_QI_ORDERS"],
+            "content_packs": ["Ginger Island (Vanilla)", "Qi Board (Vanilla)"]
         },
         "Craft Mystic Tree Seed": {
             "code": 720534,
@@ -14958,277 +15048,277 @@
             "tags": ["WALNUTSANITY", "WALNUTSANITY_DIG"],
             "content_packs": []
         },
-        "Poison The Governor": {
+        "Secret: Poison The Governor": {
             "code": 721201,
             "region": "Luau",
             "tags": ["EASY_SECRET", "SECRETSANITY"],
             "content_packs": []
         },
-        "Grange Display Bribe": {
+        "Secret: Grange Display Bribe": {
             "code": 721202,
             "region": "Stardew Valley Fair",
             "tags": ["EASY_SECRET", "SECRETSANITY"],
             "content_packs": []
         },
-        "Purple Lettuce": {
+        "Secret: Purple Lettuce": {
             "code": 721203,
             "region": "Stardew Valley Fair",
             "tags": ["EASY_SECRET", "SECRETSANITY"],
             "content_packs": []
         },
-        "Make Marnie Laugh": {
+        "Secret: Make Marnie Laugh": {
             "code": 721204,
             "region": "Marnie's Ranch",
             "tags": ["EASY_SECRET", "SECRETSANITY"],
             "content_packs": []
         },
-        "Jumpscare Lewis": {
+        "Secret: Jumpscare Lewis": {
             "code": 721205,
             "region": "Mayor's Manor",
             "tags": ["EASY_SECRET", "SECRETSANITY"],
             "content_packs": []
         },
-        "Confront Marnie": {
+        "Secret: Confront Marnie": {
             "code": 721206,
             "region": "Marnie's Ranch",
             "tags": ["EASY_SECRET", "SECRETSANITY"],
             "content_packs": []
         },
-        "Lucky Purple Bobber": {
+        "Secret: Lucky Purple Bobber": {
             "code": 721207,
             "region": "Fishing",
             "tags": ["EASY_SECRET", "SECRETSANITY"],
             "content_packs": []
         },
-        "Free The Forsaken Souls": {
+        "Secret: Free The Forsaken Souls": {
             "code": 721208,
             "region": "Witch's Hut",
             "tags": ["DIFFICULT_SECRET", "SECRETSANITY"],
             "content_packs": []
         },
-        "Something For Santa": {
+        "Secret: Something For Santa": {
             "code": 721209,
             "region": "Feast of the Winter Star",
             "tags": ["EASY_SECRET", "SECRETSANITY"],
             "content_packs": []
         },
-        "Thank the Devs": {
+        "Secret: Thank the Devs": {
             "code": 721210,
             "region": "Menu",
             "tags": ["EASY_SECRET", "SECRETSANITY"],
             "content_packs": []
         },
-        "Annoy the Moon Man": {
+        "Secret: Annoy the Moon Man": {
             "code": 721211,
             "region": "Menu",
             "tags": ["DIFFICULT_SECRET", "SECRETSANITY"],
             "content_packs": []
         },
-        "Acknowledge the Lonely Stone": {
+        "Secret: Acknowledge the Lonely Stone": {
             "code": 721212,
             "region": "Menu",
             "tags": ["EASY_SECRET", "SECRETSANITY"],
             "content_packs": []
         },
-        "Jungle Junimo": {
+        "Secret: Jungle Junimo": {
             "code": 721213,
             "region": "Menu",
             "tags": ["EASY_SECRET", "SECRETSANITY"],
             "content_packs": []
         },
-        "??HMTGF??": {
+        "Secret: ??HMTGF??": {
             "code": 721214,
             "region": "Town",
             "tags": ["EASY_SECRET", "SECRETSANITY"],
             "content_packs": []
         },
-        "??Pinky Lemon??": {
+        "Secret: ??Pinky Lemon??": {
             "code": 721215,
             "region": "Saloon",
             "tags": ["EASY_SECRET", "SECRETSANITY"],
             "content_packs": []
         },
-        "??Foroguemon??": {
+        "Secret: ??Foroguemon??": {
             "code": 721216,
             "region": "Sam's House",
             "tags": ["EASY_SECRET", "SECRETSANITY"],
             "content_packs": []
         },
-        "Galaxies Will Heed Your Cry": {
+        "Secret: Galaxies Will Heed Your Cry": {
             "code": 721217,
             "region": "Town",
             "tags": ["EASY_SECRET", "SECRETSANITY"],
             "content_packs": []
         },
-        "Strange Sighting": {
+        "Secret: Strange Sighting": {
             "code": 721219,
             "region": "Town",
             "tags": ["DIFFICULT_SECRET", "SECRETSANITY"],
             "content_packs": []
         },
-        "'Boat'": {
+        "Fishing Secret: 'Boat'": {
             "code": 721220,
             "region": "Farm",
             "tags": ["BEACH_FARM", "FISHING_SECRET", "SECRETSANITY"],
             "content_packs": []
         },
-        "Decorative Trash Can": {
+        "Fishing Secret: Decorative Trash Can": {
             "code": 721221,
             "region": "Town",
             "tags": ["FISHING_SECRET", "SECRETSANITY"],
             "content_packs": []
         },
-        "Foliage Print": {
+        "Fishing Secret: Foliage Print": {
             "code": 721222,
             "region": "Island North",
             "tags": ["FISHING_SECRET", "GINGER_ISLAND", "SECRETSANITY"],
             "content_packs": ["Ginger Island (Vanilla)"]
         },
-        "Frog Hat": {
+        "Fishing Secret: Frog Hat": {
             "code": 721223,
             "region": "Gourmand Frog Cave",
             "tags": ["FISHING_SECRET", "GINGER_ISLAND", "SECRETSANITY"],
             "content_packs": ["Ginger Island (Vanilla)"]
         },
-        "Gourmand Statue": {
+        "Fishing Secret: Gourmand Statue": {
             "code": 721224,
             "region": "Pirate Cove",
             "tags": ["FISHING_SECRET", "GINGER_ISLAND", "SECRETSANITY"],
             "content_packs": ["Ginger Island (Vanilla)"]
         },
-        "Iridium Krobus": {
+        "Fishing Secret: Iridium Krobus": {
             "code": 721225,
             "region": "Forest",
             "tags": ["FISHING_SECRET", "SECRETSANITY"],
             "content_packs": []
         },
-        "Lifesaver": {
+        "Fishing Secret: Lifesaver": {
             "code": 721226,
             "region": "Boat Tunnel",
             "tags": ["FISHING_SECRET", "GINGER_ISLAND", "SECRETSANITY"],
             "content_packs": ["Ginger Island (Vanilla)"]
         },
-        "'Physics 101'": {
+        "Fishing Secret: 'Physics 101'": {
             "code": 721227,
             "region": "Volcano - Floor 10",
             "tags": ["FISHING_SECRET", "GINGER_ISLAND", "SECRETSANITY"],
             "content_packs": ["Ginger Island (Vanilla)"]
         },
-        "Pyramid Decal": {
+        "Fishing Secret: Pyramid Decal": {
             "code": 721228,
             "region": "Desert",
             "tags": ["FISHING_SECRET", "SECRETSANITY"],
             "content_packs": []
         },
-        "Squirrel Figurine": {
+        "Fishing Secret: Squirrel Figurine": {
             "code": 721229,
             "region": "Volcano Secret Beach",
             "tags": ["FISHING_SECRET", "GINGER_ISLAND", "SECRETSANITY"],
             "content_packs": ["Ginger Island (Vanilla)"]
         },
-        "'Vista'": {
+        "Fishing Secret: 'Vista'": {
             "code": 721230,
             "region": "Railroad",
             "tags": ["FISHING_SECRET", "SECRETSANITY"],
             "content_packs": []
         },
-        "Wall Basket": {
+        "Fishing Secret: Wall Basket": {
             "code": 721231,
             "region": "Secret Woods",
             "tags": ["FISHING_SECRET", "SECRETSANITY"],
             "content_packs": []
         },
-        "Summon Bone Serpent": {
+        "Secret: Summon Bone Serpent": {
             "code": 721232,
             "region": "The Mines - Floor 100",
             "tags": ["EASY_SECRET", "SECRETSANITY"],
             "content_packs": []
         },
-        "Meowmere": {
+        "Secret: Meowmere": {
             "code": 721233,
             "region": "Wizard Basement",
             "tags": ["EASY_SECRET", "SECRETSANITY"],
             "content_packs": []
         },
-        "A Familiar Tune": {
+        "Secret: A Familiar Tune": {
             "code": 721234,
             "region": "Elliott's House",
             "tags": ["EASY_SECRET", "SECRETSANITY"],
             "content_packs": []
         },
-        "Sea Monster Sighting": {
+        "Secret: Sea Monster Sighting": {
             "code": 721235,
             "region": "Beach",
             "tags": ["DIFFICULT_SECRET", "SECRETSANITY"],
             "content_packs": []
         },
-        "...Bigfoot?": {
+        "Secret: ...Bigfoot?": {
             "code": 721236,
             "region": "Forest",
             "tags": ["DIFFICULT_SECRET", "SECRETSANITY"],
             "content_packs": []
         },
-        "Flubber Experiment": {
+        "Secret: Flubber Experiment": {
             "code": 721237,
             "region": "Farmhouse",
             "tags": ["EASY_SECRET", "SECRETSANITY"],
             "content_packs": []
         },
-        "Seems Fishy": {
+        "Secret: Seems Fishy": {
             "code": 721238,
             "region": "Wizard Basement",
             "tags": ["EASY_SECRET", "SECRETSANITY"],
             "content_packs": []
         },
-        "'Me me me me me me me me me me me me me me me me'": {
+        "Secret: 'Me me me me me me me me me me me me me me me me'": {
             "code": 721239,
             "region": "Railroad",
             "tags": ["DIFFICULT_SECRET", "SECRETSANITY"],
             "content_packs": []
         },
-        "Nice Try": {
+        "Secret: Nice Try": {
             "code": 721240,
             "region": "Menu",
             "tags": ["EASY_SECRET", "SECRETSANITY"],
             "content_packs": []
         },
-        "Enjoy your new life here": {
+        "Secret: Enjoy your new life here": {
             "code": 721241,
             "region": "Menu",
             "tags": ["EASY_SECRET", "SECRETSANITY"],
             "content_packs": []
         },
-        "'What'd you expect?'": {
+        "Secret: 'What'd you expect?'": {
             "code": 721242,
             "region": "Menu",
             "tags": ["EASY_SECRET", "SECRETSANITY"],
             "content_packs": []
         },
-        "Secret Iridium Stackmaster Trophy": {
+        "Secret: Secret Iridium Stackmaster Trophy": {
             "code": 721243,
             "region": "Farm",
             "tags": ["DIFFICULT_SECRET", "SECRETSANITY"],
             "content_packs": []
         },
-        "What kind of monster is this?": {
+        "Secret: What kind of monster is this?": {
             "code": 721244,
             "region": "Willy's Fish Shop",
             "tags": ["EASY_SECRET", "SECRETSANITY"],
             "content_packs": []
         },
-        "My mouth is watering already": {
+        "Secret: My mouth is watering already": {
             "code": 721245,
             "region": "Pierre's General Store",
             "tags": ["EASY_SECRET", "SECRETSANITY"],
             "content_packs": []
         },
-        "A gift of lovely perfume": {
+        "Secret: A gift of lovely perfume": {
             "code": 721246,
             "region": "Sewer",
             "tags": ["EASY_SECRET", "SECRETSANITY"],
             "content_packs": []
         },
-        "Where exactly does this juice come from?": {
+        "Secret: Where exactly does this juice come from?": {
             "code": 721247,
             "region": "Mines Dwarf Shop",
             "tags": ["EASY_SECRET", "SECRETSANITY"],
@@ -15402,7 +15492,7 @@
             "tags": ["SECRETSANITY", "SECRET_NOTE"],
             "content_packs": []
         },
-        "Obtain my precious fruit whenever you like": {
+        "Secret: Obtain my precious fruit whenever you like": {
             "code": 721289,
             "region": "Farm",
             "tags": ["EASY_SECRET", "GINGER_ISLAND", "REQUIRES_QI_ORDERS", "SECRETSANITY"],
