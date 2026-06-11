@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using StardewArchipelago.Archipelago.SlotData.SlotEnums;
 using StardewArchipelago.Stardew;
 
@@ -489,6 +490,61 @@ namespace StardewArchipelago.Items.Traps
             { TrapItemsDifficulty.Nightmare, 4 },
             { TrapItemsDifficulty.Eldritch, 12 },
         };
+
+        public Dictionary<TrapItemsDifficulty, int> NumberOfMenus = new()
+        {
+            { TrapItemsDifficulty.NoTraps, 0 },
+            { TrapItemsDifficulty.Easy, 1 },
+            { TrapItemsDifficulty.Medium, 1 },
+            { TrapItemsDifficulty.Hard, 2 },
+            { TrapItemsDifficulty.Hell, 4 },
+            { TrapItemsDifficulty.Nightmare, 12 },
+            { TrapItemsDifficulty.Eldritch, 32 },
+        };
+
+        public Dictionary<TrapItemsDifficulty, int> NumberOfEmotes = new()
+        {
+            { TrapItemsDifficulty.NoTraps, 0 },
+            { TrapItemsDifficulty.Easy, 1 },
+            { TrapItemsDifficulty.Medium, 2 },
+            { TrapItemsDifficulty.Hard, 4 },
+            { TrapItemsDifficulty.Hell, 8 },
+            { TrapItemsDifficulty.Nightmare, 24 },
+            { TrapItemsDifficulty.Eldritch, 80 },
+        };
+
+        public Dictionary<TrapItemsDifficulty, MakeoverTargets> MakeoverTargets = new()
+        {
+            { TrapItemsDifficulty.NoTraps, Traps.MakeoverTargets.None },
+            { TrapItemsDifficulty.Easy, Traps.MakeoverTargets.Shirt },
+            { TrapItemsDifficulty.Medium, Traps.MakeoverTargets.OutfitServices },
+            { TrapItemsDifficulty.Hard, Traps.MakeoverTargets.OutfitServices | Traps.MakeoverTargets.Eyes },
+            { TrapItemsDifficulty.Hell, Traps.MakeoverTargets.OutfitServices | Traps.MakeoverTargets.Eyes | Traps.MakeoverTargets.Hair },
+            { TrapItemsDifficulty.Nightmare, Traps.MakeoverTargets.Clothes | Traps.MakeoverTargets.PhysicalAppearance },
+            { TrapItemsDifficulty.Eldritch, Traps.MakeoverTargets.RandomizeEntireAppearance },
+        };
+
+        public Dictionary<TrapItemsDifficulty, float> EnergyToRemove = new()
+        {
+            { TrapItemsDifficulty.NoTraps, 0 },
+            { TrapItemsDifficulty.Easy, 20 },
+            { TrapItemsDifficulty.Medium, 50 },
+            { TrapItemsDifficulty.Hard, 100 },
+            { TrapItemsDifficulty.Hell, 200 },
+            { TrapItemsDifficulty.Nightmare, 500 },
+            { TrapItemsDifficulty.Eldritch, 2000 },
+        };
+
+        public Dictionary<TrapItemsDifficulty, int> HealthToRemove = new()
+        {
+            { TrapItemsDifficulty.NoTraps, 0 },
+            { TrapItemsDifficulty.Easy, 10 },
+            { TrapItemsDifficulty.Medium, 30 },
+            { TrapItemsDifficulty.Hard, 75 },
+            { TrapItemsDifficulty.Hell, 125 },
+            { TrapItemsDifficulty.Nightmare, 250 },
+            { TrapItemsDifficulty.Eldritch, 1000 },
+        };
     }
 
     public enum TeleportDestination
@@ -548,5 +604,23 @@ namespace StardewArchipelago.Items.Traps
         Inventory,
         InventoryAndChestsOnSameMap,
         InventoryAndAllChests,
+    }
+
+    [Flags]
+    public enum MakeoverTargets
+    {
+        None =        0,
+        Pants =       0b00000001,
+        Shirt =       0b00000010,
+        Hat =         0b00000100,
+        Hair =        0b00001000,
+        Eyes =        0b00010000,
+        Gender =      0b00100000,
+        Accessory =   0b01000000,
+        FollowTheme = 0b10000000,
+        Clothes = Shirt | Pants | Hat,
+        PhysicalAppearance = Hair | Eyes | Gender,
+        OutfitServices = Clothes | FollowTheme,
+        RandomizeEntireAppearance = Clothes | PhysicalAppearance | Accessory,
     }
 }

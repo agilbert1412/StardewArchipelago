@@ -17,8 +17,10 @@ using StardewValley;
 using StardewValley.BellsAndWhistles;
 using StardewValley.Buildings;
 using StardewValley.Characters;
+using StardewValley.GameData.MakeoverOutfits;
 using StardewValley.Internal;
 using StardewValley.Locations;
+using StardewValley.Menus;
 using StardewValley.Objects;
 using StardewValley.TerrainFeatures;
 using StardewValley.Tools;
@@ -53,6 +55,7 @@ namespace StardewArchipelago.Items.Traps
         public readonly InventoryShuffler InventoryShuffler;
         public readonly BuffApplier DebuffApplier;
         public readonly ObjectNudger Nudger;
+        public readonly OutfitChanger _outfitChanger;
         private readonly string[] _availableSoundCues;
 
         public TrapExecutor(ILogger logger, IModHelper modHelper, StardewArchipelagoClient archipelago, IGiftHandler giftHandler, ArchipelagoStateDto state)
@@ -71,6 +74,7 @@ namespace StardewArchipelago.Items.Traps
             InventoryShuffler = new InventoryShuffler(_logger, giftHandler);
             DebuffApplier = new BuffApplier(_permanentState);
             Nudger = new ObjectNudger(_logger, _helper, _archipelago);
+            _outfitChanger = new OutfitChanger(_logger, _helper);
 
             // private SoundBank soundBank;
             var soundBankField = _helper.Reflection.GetField<SoundBank>(Game1.soundBank, "soundBank");
@@ -90,6 +94,30 @@ namespace StardewArchipelago.Items.Traps
             var isInMenu = Game1.activeClickableMenu != null || Game1.nextClickableMenu.Any();
 
             return !isSafeLocation && !isSleepTime && !isFestival && !isInFade && !isInMenu;
+        }
+
+        public void PerformTrapManyTimes(int iterations, int delayInSeconds, Func<bool> trapMethod)
+        {
+            PerformTrapManyTimesAsync(iterations, delayInSeconds, trapMethod).FireAndForget();
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="iterations">Number of times to run the trap code</param>
+        /// <param name="delayInSeconds">Delay between iterations</param>
+        /// <param name="trapMethod">Method to try to run the trap code. If it returns true, then it has run successfully and counts as an iteration. If it returns false, then it has been skipped and should not count.</param>
+        /// <returns></returns>
+        private async Task PerformTrapManyTimesAsync(int iterations, int delayInSeconds, Func<bool> trapMethod)
+        {
+            while (iterations > 0)
+            {
+                await Task.Run(() => Thread.Sleep(delayInSeconds * 1000));
+                if (trapMethod())
+                {
+                    iterations--;
+                }
+            }
         }
 
         public void AddBurntDebuff()
@@ -1631,28 +1659,270 @@ namespace StardewArchipelago.Items.Traps
             return false;
         }
 
-        public void PerformTrapManyTimes(int iterations, int delayInSeconds, Func<bool> trapMethod)
+        public void OpenMenus()
         {
-            PerformTrapManyTimesAsync(iterations, delayInSeconds, trapMethod).FireAndForget();
+            var difficulty = _archipelago.SlotData.TrapItemsDifficulty;
+            var numberOfMenus = _difficultyBalancer.NumberOfMenus[difficulty];
+            PerformTrapManyTimes(numberOfMenus, 2, OpenMenuOnce);
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="iterations">Number of times to run the trap code</param>
-        /// <param name="delayInSeconds">Delay between iterations</param>
-        /// <param name="trapMethod">Method to try to run the trap code. If it returns true, then it has run successfully and counts as an iteration. If it returns false, then it has been skipped and should not count.</param>
-        /// <returns></returns>
-        private async Task PerformTrapManyTimesAsync(int iterations, int delayInSeconds, Func<bool> trapMethod)
+        public bool OpenMenuOnce()
         {
-            while (iterations > 0)
+            if (Game1.activeClickableMenu != null)
             {
-                await Task.Run(() => Thread.Sleep(delayInSeconds * 1000));
-                if (trapMethod())
+                return false;
+            }
+
+            var chosenMenuType = Game1.random.Next(11);
+
+            Game1.PushUIMode();
+            switch (chosenMenuType)
+            {
+                case 0:
+                    Game1.activeClickableMenu = new GameMenu(GameMenu.inventoryTab);
+                    break;
+                case 1:
+                    Game1.activeClickableMenu = new GameMenu(GameMenu.skillsTab);
+                    break;
+                case 2:
+                    Game1.activeClickableMenu = new GameMenu(GameMenu.socialTab);
+                    break;
+                case 3:
+                    Game1.activeClickableMenu = new GameMenu(GameMenu.mapTab);
+                    break;
+                case 4:
+                    Game1.activeClickableMenu = new GameMenu(GameMenu.craftingTab);
+                    break;
+                case 5:
+                    Game1.activeClickableMenu = new GameMenu(GameMenu.collectionsTab);
+                    break;
+                case 6:
+                    Game1.activeClickableMenu = new GameMenu(GameMenu.optionsTab);
+                    break;
+                case 7:
+                    Game1.activeClickableMenu = new GameMenu(GameMenu.animalsTab);
+                    break;
+                case 8:
+                    Game1.activeClickableMenu = new GameMenu(GameMenu.powersTab);
+                    break;
+                case 9:
+                    Game1.activeClickableMenu = new GameMenu(GameMenu.exitTab);
+                    break;
+                case 10:
+                    Game1.activeClickableMenu = new QuestLog();
+                    break;
+            }
+            Game1.PopUIMode();
+            return true;
+        }
+
+        public void PerformEmotes()
+        {
+            var difficulty = _archipelago.SlotData.TrapItemsDifficulty;
+            var numberOfMenus = _difficultyBalancer.NumberOfEmotes[difficulty];
+            PerformTrapManyTimes(numberOfMenus, 2, PerformOneEmote);
+        }
+
+        public bool PerformOneEmote()
+        {
+            if (Game1.eventUp || Game1.player.isEmoting || !Game1.player.CanEmote() || Game1.player.isEmoteAnimating)
+            {
+                return false;
+            }
+
+            var emotes = Farmer.EMOTES;
+            var emote = emotes[Game1.random.Next(emotes.Length)];
+            var emoteName = emote.emoteString;
+            Game1.player.performPlayerEmote(emoteName);
+
+            return true;
+        }
+
+        public void PerformMakeover()
+        {
+            var difficulty = _archipelago.SlotData.TrapItemsDifficulty;
+            var makeoverTargets = _difficultyBalancer.MakeoverTargets[difficulty];
+
+            MakeoverOutfit makeoverOutfit = null;
+            if (makeoverTargets.HasFlag(MakeoverTargets.FollowTheme))
+            {
+                _outfitChanger.TryGetMakeoverOutfit(out makeoverOutfit);
+            }
+
+            var includeHat = makeoverTargets.HasFlag(MakeoverTargets.Hat);
+            var includeShirt = makeoverTargets.HasFlag(MakeoverTargets.Shirt);
+            var includePants = makeoverTargets.HasFlag(MakeoverTargets.Pants);
+
+            if (makeoverOutfit != null)
+            {
+                _outfitChanger.EquipMakeoverOutfit(makeoverOutfit, includeHat, includeShirt, includePants);
+            }
+            else
+            {
+                if (includeHat)
                 {
-                    iterations--;
+                    _outfitChanger.RandomizeHat();
+                }
+                if (includeShirt)
+                {
+                    _outfitChanger.RandomizeShirt();
+                }
+                if (includePants)
+                {
+                    _outfitChanger.RandomizePants();
                 }
             }
+
+            if (makeoverTargets.HasFlag(MakeoverTargets.Hair))
+            {
+                _outfitChanger.RandomizeHair();
+            }
+
+            if (makeoverTargets.HasFlag(MakeoverTargets.Eyes))
+            {
+                _outfitChanger.RandomizeEyes();
+            }
+
+            if (makeoverTargets.HasFlag(MakeoverTargets.Gender))
+            {
+                _outfitChanger.RandomizeGender();
+            }
+        }
+
+        public void RandomizeProfessions()
+        {
+            var hasProfessions = Game1.player.professions.Any() &&
+                                 (Game1.player.FarmingLevel >= 5 ||
+                                  Game1.player.FishingLevel >= 5 ||
+                                  Game1.player.ForagingLevel >= 5 ||
+                                  Game1.player.MiningLevel >= 5 ||
+                                  Game1.player.CombatLevel >= 5);
+            if (!hasProfessions)
+            {
+                return;
+            }
+
+            RandomizeFarmingProfessions();
+            RandomizeForagingProfessions();
+            RandomizeFishingProfessions();
+            RandomizeMiningProfessions();
+            RandomizeCombatProfessions();
+        }
+
+        private void RandomizeFarmingProfessions()
+        {
+            //SkillType.Farming = 0;
+            var level = Game1.player.FarmingLevel;
+            RandomizeSkillProfessions(level, new[] { 0, 1 }, new[] { 2, 3 }, new[] { 4, 5 });
+        }
+
+        private void RandomizeForagingProfessions()
+        {
+            //SkillType.Foraging = 2;
+            var level = Game1.player.ForagingLevel;
+            RandomizeSkillProfessions(level, new[] { 12, 13 }, new[] { 14, 15 }, new[] { 16, 17 });
+        }
+
+        private void RandomizeFishingProfessions()
+        {
+            //SkillType.Fishing = 1;
+            var level = Game1.player.FishingLevel;
+            RandomizeSkillProfessions(level, new[] { 6, 7 }, new[] { 8, 9 }, new[] { 10, 11 });
+        }
+
+        private void RandomizeMiningProfessions()
+        {
+            //SkillType.Mining = 3;
+            var level = Game1.player.MiningLevel;
+            RandomizeSkillProfessions(level, new[] { 18, 19 }, new[] { 20, 21 }, new[] { 22, 23 });
+        }
+
+        private void RandomizeCombatProfessions()
+        {
+            //SkillType.Combat = 4;
+            var level = Game1.player.CombatLevel;
+            RandomizeSkillProfessions(level, new[] { 24, 25 }, new[] { 26, 27 }, new[] { 28, 29 });
+        }
+
+        private static void RandomizeSkillProfessions(int level, int[] level5Professions, int[] level10Professions1, int[] level10Professions2)
+        {
+            if (level < 5)
+            {
+                return;
+            }
+
+            foreach (var profession in level5Professions)
+            {
+                Game1.player.professions.Remove(profession);
+            }
+
+            var level5Profession = level5Professions[Game1.random.Next(level5Professions.Length)];
+            Game1.player.professions.Add(level5Profession);
+
+            if (level < 10)
+            {
+                return;
+            }
+
+            var level10Professions = level5Profession == level5Professions.First() ? level10Professions1 : level10Professions2;
+
+            foreach (var profession in level10Professions)
+            {
+                Game1.player.professions.Remove(profession);
+            }
+
+            var level10Profession = level10Professions[Game1.random.Next(level10Professions.Length)];
+            Game1.player.professions.Add(level10Profession);
+        }
+
+        public void Tired()
+        {
+            var difficulty = _archipelago.SlotData.TrapItemsDifficulty;
+            var energyToRemove = _difficultyBalancer.EnergyToRemove[difficulty];
+            var energyToRemoveOverTime = 0f;
+            if (energyToRemove > Game1.player.Stamina)
+            {
+                energyToRemoveOverTime = energyToRemove - Game1.player.Stamina;
+                energyToRemove = Game1.player.Stamina;
+            }
+            Game1.player.Stamina -= energyToRemove;
+            PerformTrapManyTimes((int)Math.Ceiling(energyToRemoveOverTime), 1, LittleBitTired);
+        }
+
+        private bool LittleBitTired()
+        {
+            if (Game1.player.Stamina > 0)
+            {
+                Game1.player.Stamina -= 1;
+                return true;
+            }
+
+            return false;
+        }
+
+        public void Injury()
+        {
+            var difficulty = _archipelago.SlotData.TrapItemsDifficulty;
+            var healthToRemove = _difficultyBalancer.HealthToRemove[difficulty];
+            var healthToRemoveOverTime = 0f;
+            if (healthToRemove > Game1.player.health)
+            {
+                healthToRemoveOverTime = healthToRemove - Game1.player.health;
+                healthToRemove = Game1.player.health;
+            }
+            Game1.player.health -= healthToRemove;
+            PerformTrapManyTimes((int)Math.Ceiling(healthToRemoveOverTime), 1, LittleBitInjured);
+        }
+
+        private bool LittleBitInjured()
+        {
+            if (Game1.player.health > 0)
+            {
+                Game1.player.health -= 1;
+                return true;
+            }
+
+            return false;
         }
     }
 }
