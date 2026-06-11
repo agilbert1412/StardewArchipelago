@@ -36,7 +36,7 @@ namespace StardewArchipelago.Items.Traps
             var expectedInterests = Ceiling(_permanentState.CurrentDebt * INTEREST_RATE);
             var maximumPayment = Math.Min(_permanentState.CurrentDebt, Ceiling(Math.Max(ALWAYS_ALLOWED_PAYMENT, _permanentState.CurrentDebt * MAXIMUM_PAYMENT_RATE)) + expectedInterests);
 
-            await AddMessageAndWait($"Current Debt: {_permanentState.CurrentDebt}g (Interest Rate: {INTEREST_RATE*100}%)");
+            await AddMessageAndWait($"[50] Current Debt: {_permanentState.CurrentDebt}g (Interest Rate: {INTEREST_RATE*100}%)");
             await AddMessageAndWait($"Minimum Payment: {minimumPayment}g");
             await AddMessageAndWait($"Maximum Payment: {maximumPayment}g");
 
@@ -55,12 +55,12 @@ namespace StardewArchipelago.Items.Traps
             var interests = Ceiling(_permanentState.CurrentDebt * INTEREST_RATE);
             await AddMessageAndWait($"Interests Added: {interests}g");
             _permanentState.CurrentDebt += interests;
-            await AddMessageAndWait($"Remaining Debt: {_permanentState.CurrentDebt}g");
+            await AddMessageAndWait($"Remaining Debt: {_permanentState.CurrentDebt}g. Thank you for financing with [50]oja Capital");
         }
 
         private async Task AddMessageAndWait(string message, double delayInSeconds = 0.5)
         {
-            Game1.chatBox.addMessage(message, Color.Blue);
+            Game1.chatBox.addMessage(message, new Color(61, 105, 168)); // Joja color
             await Task.Run(() => Thread.Sleep(Round(delayInSeconds * 1000)));
         }
 
