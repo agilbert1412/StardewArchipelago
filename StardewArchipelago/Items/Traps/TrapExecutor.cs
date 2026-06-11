@@ -46,6 +46,7 @@ namespace StardewArchipelago.Items.Traps
         private static TrapsStateDto _permanentState;
         public static TrapDifficultyBalancer _difficultyBalancer;
 
+        private readonly DebtManager _debtManager;
         public readonly BombSpawner BombSpawner;
         public readonly TileChooser TileChooser;
         public readonly MonsterSpawner MonsterSpawner;
@@ -65,6 +66,7 @@ namespace StardewArchipelago.Items.Traps
             _archipelago = archipelago;
             _permanentState = state.TrapsState;
             _difficultyBalancer = new TrapDifficultyBalancer();
+            _debtManager = new DebtManager(_permanentState);
             BombSpawner = new BombSpawner(_helper);
             TileChooser = new TileChooser();
             MonsterSpawner = new MonsterSpawner(TileChooser);
@@ -309,6 +311,13 @@ namespace StardewArchipelago.Items.Traps
             var player = Game1.player;
             var currentMoney = player.Money;
             var tax = (int)(currentMoney * taxRate);
+            var maxSpend = (int)Math.Round(currentMoney * 0.9);
+            if (tax > maxSpend)
+            {
+                var debt = tax - maxSpend;
+                tax = maxSpend;
+                _permanentState.CurrentDebt += debt;
+            }
             Game1.player.addUnearnedMoney(tax * -1);
             if (difficulty >= TrapItemsDifficulty.Nightmare)
             {
@@ -327,6 +336,11 @@ namespace StardewArchipelago.Items.Traps
 
             var divisor = difficulty == TrapItemsDifficulty.Eldritch ? 10 : 2;
             _archipelago.DivideBigIntegerDataStorage(Scope.Global, bankingKey, divisor);
+        }
+
+        public void DayUpdateDebt()
+        {
+            _debtManager.DayUpdateDebt().FireAndForget();
         }
 
         public void SendCrows()
