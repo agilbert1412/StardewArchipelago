@@ -18,10 +18,30 @@ namespace StardewArchipelago.Items
 
         public void SpawnInvisibleCow()
         {
+            SpawnInvisibleCowOnMap(Game1.currentLocation);
+            SpawnInvisibleCowOnMap(Game1.getFarm());
+            SpawnInvisibleCowOnMap(Game1.getLocationFromName("Town"));
+            SpawnInvisibleCowOnMap(Game1.getLocationFromName("Forest"));
+            SpawnInvisibleCowOnMap(Game1.getLocationFromName("Mountain"));
+            var rand = Game1.random.Next(3);
+            switch (rand)
+            {
+                case 0:
+                    SpawnInvisibleCowOnMap(Game1.getLocationFromName("BusStop"));
+                    break;
+                case 1:
+                    SpawnInvisibleCowOnMap(Game1.getLocationFromName("Backwoods"));
+                    break;
+                case 2:
+                    SpawnInvisibleCowOnMap(Game1.getLocationFromName("Beach"));
+                    break;
+            }
+        }
+
+        private void SpawnInvisibleCowOnMap(GameLocation currentMap)
+        {
             var cowType = Game1.random.NextDouble() < 0.5 ? "White Cow" : "Brown Cow";
             var cowName = ChooseCowName(Game1.random, Community.AllNames);
-
-            var currentMap = Game1.currentLocation;
             var tile = currentMap.getRandomTile() * 64f;
             var cow = new FarmAnimal(cowType, Game1.random.NextInt64(), Game1.player.UniqueMultiplayerID)
             {
