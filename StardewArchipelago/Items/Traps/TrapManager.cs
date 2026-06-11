@@ -268,6 +268,11 @@ namespace StardewArchipelago.Items.Traps
                 {
                     _traps.Add(differentSpacedTrapName, _traps[trapName]);
                 }
+                differentSpacedTrapName = trapName.Replace(" ", "");
+                if (differentSpacedTrapName != trapName)
+                {
+                    _traps.Add(differentSpacedTrapName, _traps[trapName]);
+                }
             }
         }
 

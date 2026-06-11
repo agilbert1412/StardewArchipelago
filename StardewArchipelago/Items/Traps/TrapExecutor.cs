@@ -112,11 +112,11 @@ namespace StardewArchipelago.Items.Traps
         {
             while (iterations > 0)
             {
-                await Task.Run(() => Thread.Sleep(delayInSeconds * 1000));
                 if (trapMethod())
                 {
                     iterations--;
                 }
+                await Task.Run(() => Thread.Sleep(delayInSeconds * 1000));
             }
         }
 
@@ -226,7 +226,7 @@ namespace StardewArchipelago.Items.Traps
 
         private bool TeleportRandomly(List<GameLocation> validMaps, TeleportDestination destination)
         {
-            if (CanGetTrappedRightNow())
+            if (!CanGetTrappedRightNow())
             {
                 return false;
             }
@@ -1719,8 +1719,8 @@ namespace StardewArchipelago.Items.Traps
         public void PerformEmotes()
         {
             var difficulty = _archipelago.SlotData.TrapItemsDifficulty;
-            var numberOfMenus = _difficultyBalancer.NumberOfEmotes[difficulty];
-            PerformTrapManyTimes(numberOfMenus, 2, PerformOneEmote);
+            var numberOfEmotes = _difficultyBalancer.NumberOfEmotes[difficulty];
+            PerformTrapManyTimes(numberOfEmotes, 2, PerformOneEmote);
         }
 
         public bool PerformOneEmote()
