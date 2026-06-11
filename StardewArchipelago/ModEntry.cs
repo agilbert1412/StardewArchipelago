@@ -505,7 +505,7 @@ namespace StardewArchipelago
             _giftHandler.ReceiveAllGiftsTomorrow();
             _villagerEvents.CheckJunaHearts(_archipelago);
             _shippingBehaviors?.CheckShipsanityLocationsBeforeSleep();
-            _itemManager.TrapManager.TrapExecutor.DebuffApplier.SaveBuffs();
+            _itemManager?.TrapManager.TrapExecutor.DebuffApplier.SaveBuffs();
             ArchipelagoJunimoNoteMenu.OnDayEnded();
         }
 
