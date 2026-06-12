@@ -3,27 +3,35 @@ using KaitoKid.ArchipelagoUtilities.Net.Constants;
 using KaitoKid.ArchipelagoUtilities.Net.Extensions;
 using KaitoKid.Utilities.Interfaces;
 using Microsoft.Xna.Framework;
-using Newtonsoft.Json.Linq;
+using Microsoft.Xna.Framework.Audio;
 using StardewArchipelago.Archipelago;
 using StardewArchipelago.Archipelago.Gifting;
 using StardewArchipelago.Archipelago.SlotData.SlotEnums;
+using StardewArchipelago.Constants.Vanilla;
 using StardewArchipelago.GameModifications.MultiSleep;
 using StardewArchipelago.Items.Traps.Shuffle;
+using StardewArchipelago.Serialization;
 using StardewArchipelago.Stardew;
 using StardewModdingAPI;
 using StardewValley;
 using StardewValley.BellsAndWhistles;
+using StardewValley.Buildings;
 using StardewValley.Characters;
+using StardewValley.GameData.MakeoverOutfits;
+using StardewValley.Internal;
 using StardewValley.Locations;
-using StardewValley.Network.ChestHit;
+using StardewValley.Menus;
 using StardewValley.Objects;
 using StardewValley.TerrainFeatures;
 using StardewValley.Tools;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Numerics;
+using System.Security.Cryptography.X509Certificates;
 using System.Threading;
+using System.Threading.Channels;
 using System.Threading.Tasks;
 using Object = StardewValley.Object;
 using Vector2 = Microsoft.Xna.Framework.Vector2;
@@ -32,32 +40,91 @@ namespace StardewArchipelago.Items.Traps
 {
     public class TrapExecutor
     {
-        private static StardewArchipelagoClient _archipelago;
         private static ILogger _logger;
-        private readonly IModHelper _helper;
+        private static IModHelper _helper;
+        private static StardewArchipelagoClient _archipelago;
+        private static TrapsStateDto _permanentState;
         public static TrapDifficultyBalancer _difficultyBalancer;
 
+        private readonly DebtManager _debtManager;
         public readonly BombSpawner BombSpawner;
         public readonly TileChooser TileChooser;
         public readonly MonsterSpawner MonsterSpawner;
         public readonly BabyBirther BabyBirther;
+        public readonly CowSpawner CowSpawner;
         public readonly DebrisSpawner DebrisSpawner;
         public readonly InventoryShuffler InventoryShuffler;
         public readonly BuffApplier DebuffApplier;
+        public readonly ObjectNudger Nudger;
+        public readonly OutfitChanger _outfitChanger;
+        private readonly string[] _availableSoundCues;
 
-        public TrapExecutor(ILogger logger, IModHelper modHelper, StardewArchipelagoClient archipelago, IGiftHandler giftHandler)
+        public TrapExecutor(ILogger logger, IModHelper modHelper, StardewArchipelagoClient archipelago, IGiftHandler giftHandler, ArchipelagoStateDto state)
         {
             _logger = logger;
             _helper = modHelper;
             _archipelago = archipelago;
+            _permanentState = state.TrapsState;
             _difficultyBalancer = new TrapDifficultyBalancer();
+            _debtManager = new DebtManager(_permanentState);
             BombSpawner = new BombSpawner(_helper);
             TileChooser = new TileChooser();
             MonsterSpawner = new MonsterSpawner(TileChooser);
             BabyBirther = new BabyBirther();
+            CowSpawner = new CowSpawner();
             DebrisSpawner = new DebrisSpawner(_logger);
             InventoryShuffler = new InventoryShuffler(_logger, giftHandler);
-            DebuffApplier = new BuffApplier();
+            DebuffApplier = new BuffApplier(_permanentState);
+            Nudger = new ObjectNudger(_logger, _helper, _archipelago);
+            _outfitChanger = new OutfitChanger(_logger, _helper);
+
+            // private SoundBank soundBank;
+            var soundBankField = _helper.Reflection.GetField<SoundBank>(Game1.soundBank, "soundBank");
+            var soundBank = soundBankField.GetValue();
+
+            // private readonly Dictionary<string, CueDefinition> _cues = new Dictionary<string, CueDefinition>();
+            var cuesField = _helper.Reflection.GetField<Dictionary<string, CueDefinition>>(soundBank, "_cues");
+            _availableSoundCues = cuesField.GetValue().Keys.ToArray();
+        }
+
+        public bool CanGetTrappedRightNow()
+        {
+            var isSafeLocation = Game1.player.currentLocation is (FarmHouse or IslandFarmHouse);
+            var isSleepTime = Game1.player.isInBed.Value || Game1.player.FarmerSprite.isPassingOut() || Game1.player.passedOut;
+            var isFestival = Game1.CurrentEvent != null && Game1.CurrentEvent.isFestival;
+            var isInFade = Game1.fadeIn || Game1.fadeToBlack || Game1.globalFade || Game1.nonWarpFade;
+            var isInMenu = Game1.activeClickableMenu != null || Game1.nextClickableMenu.Any();
+
+            return !isSafeLocation && !isSleepTime && !isFestival && !isInFade && !isInMenu;
+        }
+
+        public void PerformTrapManyTimes(int iterations, int delayInSeconds, Func<bool> trapMethod, int delayVariance)
+        {
+            PerformTrapManyTimesAsync(iterations, delayInSeconds, trapMethod, delayVariance).FireAndForget();
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="iterations">Number of times to run the trap code</param>
+        /// <param name="delayInSeconds">Delay between iterations</param>
+        /// <param name="trapMethod">Method to try to run the trap code. If it returns true, then it has run successfully and counts as an iteration. If it returns false, then it has been skipped and should not count.</param>
+        /// <returns></returns>
+        private async Task PerformTrapManyTimesAsync(int iterations, int delayInSeconds, Func<bool> trapMethod, int delayVariance)
+        {
+            while (iterations > 0)
+            {
+                if (trapMethod())
+                {
+                    iterations--;
+                }
+
+                var minDelay = Math.Max(1, delayInSeconds - delayVariance);
+                var maxDelay = Math.Max(1, delayInSeconds + delayVariance);
+                var delayRange = maxDelay - minDelay;
+                var delay = Game1.random.NextDouble() * delayRange + minDelay;
+                await Task.Run(() => Thread.Sleep((int)(delay * 1000)));
+            }
         }
 
         public void AddBurntDebuff()
@@ -108,14 +175,20 @@ namespace StardewArchipelago.Items.Traps
             DebrisSpawner.CreateDebris(amountOfDebris);
         }
 
+        public void GrowTrees()
+        {
+            var amountOfTrees = _difficultyBalancer.AmountOfTrees[_archipelago.SlotData.TrapItemsDifficulty];
+            DebrisSpawner.CreateTrees(amountOfTrees);
+        }
+
         public void TeleportRandomly()
         {
             var difficulty = _archipelago.SlotData.TrapItemsDifficulty;
             var destination = _difficultyBalancer.TeleportDestinations[difficulty];
-            TeleportRandomly(destination);
+            TeleportRandomly(destination, difficulty == TrapItemsDifficulty.Eldritch ? 20 : 1);
         }
 
-        public void TeleportRandomly(TeleportDestination destination)
+        public void TeleportRandomly(TeleportDestination destination, int numberOfTeleports = 1)
         {
             var validMaps = new List<GameLocation>();
             switch (destination)
@@ -145,11 +218,26 @@ namespace StardewArchipelago.Items.Traps
                     throw new ArgumentOutOfRangeException();
             }
 
-            TeleportRandomly(validMaps, destination);
+            TeleportRandomly(validMaps, destination, numberOfTeleports);
         }
 
-        private void TeleportRandomly(List<GameLocation> validMaps, TeleportDestination destination)
+        private void TeleportRandomly(List<GameLocation> validMaps, TeleportDestination destination, int numberOfTeleports)
         {
+            if (numberOfTeleports <= 0)
+            {
+                return;
+            }
+
+            PerformTrapManyTimes(numberOfTeleports, 4, () => TeleportRandomly(validMaps, destination), 1);
+        }
+
+        private bool TeleportRandomly(List<GameLocation> validMaps, TeleportDestination destination)
+        {
+            if (!CanGetTrappedRightNow())
+            {
+                return false;
+            }
+
             GameLocation chosenLocation = null;
             Vector2? chosenTile = null;
             while (chosenLocation == null || chosenTile == null)
@@ -166,32 +254,7 @@ namespace StardewArchipelago.Items.Traps
             }
 
             TeleportFarmerTo(chosenLocation.Name, chosenTile.Value);
-        }
-
-        public void ChargeTaxes()
-        {
-            var difficulty = _archipelago.SlotData.TrapItemsDifficulty;
-            var taxRate = _difficultyBalancer.TaxRates[difficulty];
-            var player = Game1.player;
-            var currentMoney = player.Money;
-            var tax = (int)(currentMoney * taxRate);
-            Game1.player.addUnearnedMoney(tax * -1);
-            if (difficulty == TrapItemsDifficulty.Nightmare)
-            {
-                RemoveTaxTrapFromBankAsync().FireAndForget();
-            }
-        }
-
-        public async Task RemoveTaxTrapFromBankAsync()
-        {
-            var bankingKey = string.Format(BankHandler.BANKING_TEAM_KEY, _archipelago.GetTeam());
-            var currentAmountJoules = await _archipelago.ReadBigIntegerFromDataStorageAsync(Scope.Global, bankingKey);
-            if (currentAmountJoules == null || currentAmountJoules <= 0)
-            {
-                return;
-            }
-
-            _archipelago.DivideBigIntegerDataStorage(Scope.Global, bankingKey, 2);
+            return true;
         }
 
         private void TeleportFarmerTo(string locationName, Vector2 tile)
@@ -246,6 +309,45 @@ namespace StardewArchipelago.Items.Traps
             farmer.CanMove = true;
         }
 
+        public void ChargeTaxes()
+        {
+            var difficulty = _archipelago.SlotData.TrapItemsDifficulty;
+            var taxRate = _difficultyBalancer.TaxRates[difficulty];
+            var player = Game1.player;
+            var currentMoney = player.Money;
+            var tax = (int)(currentMoney * taxRate);
+            var maxSpend = (int)Math.Round(currentMoney * 0.9);
+            if (tax > maxSpend)
+            {
+                var debt = tax - maxSpend;
+                tax = maxSpend;
+                _permanentState.CurrentDebt += debt;
+            }
+            Game1.player.addUnearnedMoney(tax * -1);
+            if (difficulty >= TrapItemsDifficulty.Nightmare)
+            {
+                RemoveTaxTrapFromBankAsync(difficulty).FireAndForget();
+            }
+        }
+
+        public async Task RemoveTaxTrapFromBankAsync(TrapItemsDifficulty difficulty)
+        {
+            var bankingKey = string.Format(BankHandler.BANKING_TEAM_KEY, _archipelago.GetTeam());
+            var currentAmountJoules = await _archipelago.ReadBigIntegerFromDataStorageAsync(Scope.Global, bankingKey);
+            if (currentAmountJoules == null || currentAmountJoules <= 0)
+            {
+                return;
+            }
+
+            var divisor = difficulty == TrapItemsDifficulty.Eldritch ? 10 : 2;
+            _archipelago.DivideBigIntegerDataStorage(Scope.Global, bankingKey, divisor);
+        }
+
+        public void DayUpdateDebt()
+        {
+            _debtManager.DayUpdateDebt().FireAndForget();
+        }
+
         public void SendCrows()
         {
             var crowRate = _difficultyBalancer.CrowAttackRate[_archipelago.SlotData.TrapItemsDifficulty];
@@ -255,10 +357,12 @@ namespace StardewArchipelago.Items.Traps
                 return;
             }
 
+            var scarecrowEfficiency = _difficultyBalancer.ScarecrowEfficiency[_archipelago.SlotData.TrapItemsDifficulty];
+
             if (crowTargets == CrowTargets.Farm)
             {
                 var farm = Game1.getFarm();
-                SendCrowsForLocation(farm, crowRate);
+                SendCrowsForLocation(farm, crowRate, scarecrowEfficiency);
                 return;
             }
 
@@ -271,18 +375,18 @@ namespace StardewArchipelago.Items.Traps
                         continue;
                     }
 
-                    SendCrowsForLocation(gameLocation, crowRate);
+                    SendCrowsForLocation(gameLocation, crowRate, scarecrowEfficiency);
                 }
                 return;
             }
 
             foreach (var gameLocation in Game1.locations)
             {
-                SendCrowsForLocation(gameLocation, crowRate);
+                SendCrowsForLocation(gameLocation, crowRate, scarecrowEfficiency);
             }
         }
 
-        private static void SendCrowsForLocation(GameLocation map, double crowRate)
+        private static void SendCrowsForLocation(GameLocation map, double crowRate, double scarecrowEfficiency)
         {
             var scarecrowPositions = GetScarecrowPositions(map);
             var crops = GetAllCrops(map);
@@ -295,7 +399,7 @@ namespace StardewArchipelago.Items.Traps
                     continue;
                 }
 
-                if (IsCropDefended(map, scarecrowPositions, cropPosition))
+                if (IsCropDefended(map, scarecrowPositions, cropPosition, scarecrowEfficiency))
                 {
                     continue;
                 }
@@ -305,12 +409,12 @@ namespace StardewArchipelago.Items.Traps
             }
         }
 
-        private static bool IsCropDefended(GameLocation map, List<Vector2> scarecrowPositions, Vector2 cropPosition)
+        private static bool IsCropDefended(GameLocation map, List<Vector2> scarecrowPositions, Vector2 cropPosition, double scarecrowEfficiency)
         {
-            var vulnerability = GetCropVulnerability(map, scarecrowPositions, cropPosition);
-            for (var i = 0; i < vulnerability; i++)
+            var defendingScarecrows = GetCropDefense(map, scarecrowPositions, cropPosition);
+            for (var i = 0; i < defendingScarecrows; i++)
             {
-                if (Game1.random.NextDouble() < TrapDifficultyBalancer.SCARECROW_EFFICIENCY)
+                if (Game1.random.NextDouble() < scarecrowEfficiency)
                 {
                     return true;
                 }
@@ -356,7 +460,7 @@ namespace StardewArchipelago.Items.Traps
             }
         }
 
-        private static int GetCropVulnerability(GameLocation farm, List<Vector2> scarecrowPositions, Vector2 cropPosition)
+        private static int GetCropDefense(GameLocation farm, List<Vector2> scarecrowPositions, Vector2 cropPosition)
         {
             var numberOfDefendingScarecrows = 0;
             foreach (var scarecrowPosition in scarecrowPositions)
@@ -380,18 +484,35 @@ namespace StardewArchipelago.Items.Traps
             }
         }
 
-        public void ShuffleInventory()
+        public void SpawnSuperMonsters()
         {
-            var targets = _difficultyBalancer.ShuffleTargets[_archipelago.SlotData.TrapItemsDifficulty];
-            var rate = _difficultyBalancer.ShuffleRate[_archipelago.SlotData.TrapItemsDifficulty];
-            var rateToFriends = _difficultyBalancer.ShuffleRateToFriends[_archipelago.SlotData.TrapItemsDifficulty];
-            InventoryShuffler.ShuffleInventories(targets, rate, rateToFriends);
+            var numberMonsters = _difficultyBalancer.NumberOfSuperMonsters[_archipelago.SlotData.TrapItemsDifficulty];
+            var monsterPower = _difficultyBalancer.SuperMonsterStrength[_archipelago.SlotData.TrapItemsDifficulty];
+            for (var i = 0; i < numberMonsters; i++)
+            {
+                MonsterSpawner.SpawnOneBoostedMonster(Game1.player.currentLocation, _archipelago.SlotData.TrapItemsDifficulty, monsterPower);
+            }
         }
 
-        public void SendDislikedGiftToEveryone()
+        public void ShuffleInventory()
+        {
+            var difficulty = _archipelago.SlotData.TrapItemsDifficulty;
+            var targets = _difficultyBalancer.ShuffleTargets[difficulty];
+            var rate = _difficultyBalancer.ShuffleRate[difficulty];
+            var rateToFriends = _difficultyBalancer.ShuffleRateToFriends[difficulty];
+            InventoryShuffler.ShuffleInventories(targets, rate, rateToFriends);
+            var extraSwaps = _difficultyBalancer.ExtraSwapsAfterShuffle[difficulty];
+            if (extraSwaps > 0)
+            {
+                InventoryShuffler.InitiateExtraSwaps(this, extraSwaps);
+            }
+        }
+
+        public void BecomePariah()
         {
             var player = Game1.player;
             var friendshipLoss = _difficultyBalancer.PariahFriendshipLoss[_archipelago.SlotData.TrapItemsDifficulty];
+            var shunningDays = _difficultyBalancer.PariahShunningDays[_archipelago.SlotData.TrapItemsDifficulty];
             foreach (var name in player.friendshipData.Keys)
             {
                 var npc = Game1.getCharacterFromName(name) ?? Game1.getCharacterFromName<Child>(name, false);
@@ -406,12 +527,131 @@ namespace StardewArchipelago.Items.Traps
                 ++player.friendshipData[name].GiftsThisWeek;
                 player.friendshipData[name].LastGiftDate = new WorldDate(Game1.Date);
                 Game1.player.changeFriendship(friendshipLoss, npc);
+                _permanentState.DaysShunRemaining += shunningDays;
             }
+        }
+
+        private static bool _isShunMovement = false;
+
+        // public override void MovePosition(GameTime time, xTile.Dimensions.Rectangle viewport, GameLocation currentLocation)
+        public static bool MovePosition_SkipIfShunningPlayer_Prefix(NPC __instance, GameTime time, xTile.Dimensions.Rectangle viewport, GameLocation currentLocation)
+        {
+            try
+            {
+                if (ShouldShun(__instance) && !_isShunMovement)
+                {
+                    return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
+                }
+
+                return MethodPrefix.RUN_ORIGINAL_METHOD;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Failed in {nameof(MovePosition_SkipIfShunningPlayer_Prefix)}:\n{ex}");
+                return MethodPrefix.RUN_ORIGINAL_METHOD;
+            }
+        }
+
+        // public override void update(GameTime time, GameLocation location)
+        public static void Update_ShunPlayer_Postfix(NPC __instance, GameTime time, GameLocation location)
+        {
+            try
+            {
+                if (ShouldShun(__instance))
+                {
+                    ShunPlayer(__instance, time, location);
+                }
+
+                return;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Failed in {nameof(Update_ShunPlayer_Postfix)}:\n{ex}");
+                return;
+            }
+        }
+
+        private static bool ShouldShun(NPC npc)
+        {
+            if (_permanentState.DaysShunRemaining <= 0)
+            {
+                return false;
+            }
+
+            if (!npc.IsVillager || !Game1.player.friendshipData.ContainsKey(npc.Name))
+            {
+                return false;
+            }
+
+            if (IsInShunDistance(npc))
+            {
+                return true;
+            }
+
+            return false;
+        }
+
+        private static bool IsInShunDistance(NPC npc)
+        {
+            return npc.withinPlayerThreshold(_difficultyBalancer.PariahShunningDistance[_archipelago.SlotData.TrapItemsDifficulty]);
+        }
+
+        private static void ShunPlayer(NPC npc, GameTime time, GameLocation location)
+        {
+            npc.faceDirection(Game1.player.FacingDirection);
+
+            var playerPosition = Game1.player.Position;
+            var npcPosition = npc.Position;
+
+            var deltaX = npcPosition.X - playerPosition.X;
+            var deltaY = npcPosition.Y - playerPosition.Y;
+            var totalDelta = Math.Abs(deltaX) + Math.Abs(deltaY);
+
+            //protected bool moveUp;
+            //protected bool moveRight;
+            //protected bool moveDown;
+            //protected bool moveLeft;
+
+            var moveUpField = _helper.Reflection.GetField<bool>(npc, "moveUp");
+            var moveRightField = _helper.Reflection.GetField<bool>(npc, "moveRight");
+            var moveDownField = _helper.Reflection.GetField<bool>(npc, "moveDown");
+            var moveLeftField = _helper.Reflection.GetField<bool>(npc, "moveLeft");
+
+            moveUpField.SetValue(deltaY < 0 && deltaY < (Math.Abs(deltaX) * -1));
+            moveRightField.SetValue(deltaX > 0 && deltaX > (Math.Abs(deltaY)));
+            moveDownField.SetValue(deltaY > 0 && deltaY > (Math.Abs(deltaX)));
+            moveLeftField.SetValue(deltaX < 0 && deltaX < (Math.Abs(deltaY) * -1));
+
+            var usualSpeed = npc.Speed;
+
+            if (totalDelta < 1.5 * 64)
+            {
+                npc.Speed = Math.Max((int)Math.Round(usualSpeed * 6.0), (int)Math.Round(Game1.player.Speed * 1.2));
+            }
+            else if (totalDelta < 2.5 * 64)
+            {
+                npc.Speed = Math.Max((int)Math.Round(usualSpeed * 4.0), (int)Math.Round(Game1.player.Speed * 1.1));
+            }
+            else if (totalDelta < 5 * 64)
+            {
+                npc.Speed = Math.Max((int)Math.Round(usualSpeed * 2.0), (int)Math.Round(Game1.player.Speed * 0.8));
+            }
+            else if (totalDelta < 12 * 64)
+            {
+                npc.Speed = Math.Max((int)Math.Round(usualSpeed * 1.5), (int)Math.Round(Game1.player.Speed * 0.6));
+            }
+
+            _isShunMovement = true;
+            npc.MovePosition(time, Game1.viewport, location);
+            _isShunMovement = false;
+
+            npc.Speed = usualSpeed;
         }
 
         public void PerformDroughtTrap()
         {
-            var droughtTargets = _difficultyBalancer.DroughtTargets[_archipelago.SlotData.TrapItemsDifficulty];
+            var difficulty = _archipelago.SlotData.TrapItemsDifficulty;
+            var droughtTargets = _difficultyBalancer.DroughtTargets[difficulty];
             var hoeDirts = GetAllHoeDirt(droughtTargets);
             foreach (var hoeDirt in hoeDirts)
             {
@@ -421,7 +661,7 @@ namespace StardewArchipelago.Items.Traps
                 }
             }
 
-            if (droughtTargets != DroughtTarget.CropsIncludingWateringCan)
+            if (droughtTargets < DroughtTarget.CropsAndWateringCan)
             {
                 return;
             }
@@ -430,6 +670,32 @@ namespace StardewArchipelago.Items.Traps
             {
                 wateringCan.WaterLeft = 0;
             }
+
+            if (droughtTargets == DroughtTarget.All)
+            {
+                DryFishPonds(difficulty);
+            }
+        }
+
+        private static void DryFishPonds(TrapItemsDifficulty difficulty)
+        {
+            Utility.ForEachBuilding(building =>
+            {
+                if (building is FishPond fishPond && fishPond.FishCount > 1)
+                {
+                    if (difficulty >= TrapItemsDifficulty.Eldritch)
+                    {
+                        fishPond.currentOccupants.Set(1);
+                    }
+                    else if (difficulty >= TrapItemsDifficulty.Nightmare)
+                    {
+                        fishPond.currentOccupants.Set(fishPond.FishCount - 1);
+                    }
+
+                    fishPond.ClearPond();
+                }
+                return true;
+            });
         }
 
         private IEnumerable<HoeDirt> GetAllHoeDirt(DroughtTarget validTargets)
@@ -537,22 +803,49 @@ namespace StardewArchipelago.Items.Traps
         public void PlayMeows()
         {
             var numberOfMeows = _difficultyBalancer.MeowBarkNumber[_archipelago.SlotData.TrapItemsDifficulty];
-            PlaySoundsAsync(numberOfMeows, "cat").FireAndForget();
+            PerformTrapManyTimes(numberOfMeows, 2, () => PlaySound("cat"), 1);
         }
 
         public void PlayBarks()
         {
-            var numberOfMeows = _difficultyBalancer.MeowBarkNumber[_archipelago.SlotData.TrapItemsDifficulty];
-            PlaySoundsAsync(numberOfMeows, "dog_bark").FireAndForget();
+            var numberOfBarks = _difficultyBalancer.MeowBarkNumber[_archipelago.SlotData.TrapItemsDifficulty];
+            PerformTrapManyTimes(numberOfBarks, 2, () => PlaySound("dog_bark"), 1);
         }
 
-        private async Task PlaySoundsAsync(int numberOfSounds, string sound)
+        public void PlayNoises()
         {
-            for (var i = 0; i < numberOfSounds; i++)
+            var numberOfNoises = _difficultyBalancer.NoiseNumber[_archipelago.SlotData.TrapItemsDifficulty];
+            PerformTrapManyTimes(numberOfNoises, 2, () => PlaySound("random"), 1);
+        }
+
+        private string GetRandomSoundCue()
+        {
+            var soundCue = _availableSoundCues[Game1.random.Next(_availableSoundCues.Length)];
+            return soundCue;
+        }
+
+        private (int?, int?) GetPitchBounds()
+        {
+            if (_archipelago.SlotData.TrapItemsDifficulty == TrapItemsDifficulty.Eldritch)
             {
-                await Task.Run(() => Thread.Sleep(2000));
-                Game1.playSound(sound);
+                return (20, 3500);
             }
+
+            return (null, null);
+        }
+
+        private bool PlaySound(string sound)
+        {
+            var (minPitch, maxPitch) = GetPitchBounds();
+            return PlaySound(sound, minPitch, maxPitch);
+        }
+
+        private bool PlaySound(string sound, int? minPitch, int? maxPitch)
+        {
+            var soundToPlay = sound == "random" ? GetRandomSoundCue() : sound;
+            int? pitch = minPitch == null || maxPitch == null ? null : Game1.random.Next(minPitch.Value, maxPitch.Value + 1);
+            Game1.playSound(soundToPlay, pitch);
+            return true;
         }
 
         public void ForceNextMultisleep()
@@ -561,7 +854,14 @@ namespace StardewArchipelago.Items.Traps
             MultiSleepManager.SetDaysToSkip(daysToSkip);
         }
 
-        public void UngrowCrops()
+        public void UngrowThings()
+        {
+            UngrowCrops();
+            UngrowFruitTrees();
+            UngrowItems();
+        }
+
+        private void UngrowCrops()
         {
             var ungrowthDays = _difficultyBalancer.UngrowthDays[_archipelago.SlotData.TrapItemsDifficulty];
             var hoeDirts = GetAllHoeDirt(DroughtTarget.CropsIncludingInside);
@@ -569,13 +869,63 @@ namespace StardewArchipelago.Items.Traps
             {
                 UngrowCrop(hoeDirt.crop, ungrowthDays);
             }
+        }
 
+        private void UngrowFruitTrees()
+        {
             var treeUngrowthDays = _difficultyBalancer.TreeUngrowthDays[_archipelago.SlotData.TrapItemsDifficulty];
             var fruitTrees = GetAllFruitTrees();
             foreach (var fruitTree in fruitTrees)
             {
                 UngrowFruitTree(fruitTree, treeUngrowthDays);
             }
+        }
+
+        private void UngrowItems()
+        {
+            if (_archipelago.SlotData.TrapItemsDifficulty >= TrapItemsDifficulty.Eldritch)
+            {
+                var cropsData = DataLoader.Crops(Game1.content);
+                var cropsToSeedMap = cropsData.ToDictionary(x => x.Value.HarvestItemId, x => x.Key);
+                Utility.ForEachItemContext((in ForEachItemContext x) => UngrowInventoryItem(cropsToSeedMap, in x));
+            }
+        }
+
+        private bool UngrowInventoryItem(Dictionary<string, string> cropsToSeedMap, in ForEachItemContext context)
+        {
+            if (context.Item is not Object contextObject)
+            {
+                return true;
+            }
+
+            string replacementId;
+            if (cropsToSeedMap.ContainsKey(contextObject.ItemId))
+            {
+                replacementId = cropsToSeedMap[contextObject.ItemId];
+            }
+            else if (cropsToSeedMap.ContainsKey(contextObject.QualifiedItemId))
+            {
+                replacementId = cropsToSeedMap[contextObject.QualifiedItemId];
+            }
+            else
+            {
+                return true;
+            }
+
+            var qualifiedReplacementId = QualifiedItemIds.QualifiedObjectId(replacementId);
+            var replacementItem = ItemRegistry.Create<Object>(qualifiedReplacementId);
+            if (replacementItem != null)
+            {
+                replacementItem.Stack = contextObject.Stack;
+                replacementItem.Quality = contextObject.Quality;
+                replacementItem.HasBeenInInventory = contextObject.HasBeenInInventory;
+                foreach (var pair in contextObject.modData.Pairs)
+                {
+                    replacementItem.modData[pair.Key] = pair.Value;
+                }
+                context.ReplaceItemWith(replacementItem);
+            }
+            return true;
         }
 
         private void UngrowCrop(Crop crop, int days)
@@ -718,19 +1068,20 @@ namespace StardewArchipelago.Items.Traps
 
         public static double GetInflationMultiplier(double inflationRate, int trapCount)
         {
+            var softcapMultiplier = _difficultyBalancer.InflationSoftcapThreshold[_archipelago.SlotData.TrapItemsDifficulty];
             var totalInflation = Math.Pow(inflationRate, trapCount);
             if (double.IsInfinity(totalInflation))
             {
-                totalInflation = SoftCapBigInteger(inflationRate, trapCount);
+                totalInflation = SoftCapBigInteger(inflationRate, trapCount, softcapMultiplier);
             }
             else
             {
                 var softCapTier = 2;
-                var baseSoftCap = Math.Pow(10, softCapTier - 1);
+                var baseSoftCap = Math.Pow(softcapMultiplier, softCapTier - 1);
                 while (totalInflation > baseSoftCap)
                 {
                     totalInflation = baseSoftCap + Math.Pow(totalInflation - baseSoftCap, 1.0 / softCapTier);
-                    baseSoftCap = Math.Pow(10, softCapTier);
+                    baseSoftCap = Math.Pow(softcapMultiplier, softCapTier);
                     softCapTier++;
                 }
             }
@@ -738,15 +1089,15 @@ namespace StardewArchipelago.Items.Traps
             return totalInflation;
         }
 
-        private static double SoftCapBigInteger(double inflationRate, int trapCount)
+        private static double SoftCapBigInteger(double inflationRate, int trapCount, int softcapMultiplier)
         {
             var totalInflation = BigInteger.Pow((BigInteger)inflationRate, trapCount);
             var softCapTier = 2;
-            var baseSoftCap = BigInteger.Pow(10, softCapTier - 1);
+            var baseSoftCap = BigInteger.Pow(softcapMultiplier, softCapTier - 1);
             while (totalInflation > baseSoftCap)
             {
                 totalInflation = baseSoftCap + BigIntegerRoot(totalInflation - baseSoftCap, softCapTier);
-                baseSoftCap = BigInteger.Pow(10, softCapTier);
+                baseSoftCap = BigInteger.Pow(softcapMultiplier, softCapTier);
                 softCapTier++;
             }
 
@@ -777,72 +1128,825 @@ namespace StardewArchipelago.Items.Traps
         public void NudgePlayerItems()
         {
             var baseNudgeChance = _difficultyBalancer.NudgeChance[_archipelago.SlotData.TrapItemsDifficulty];
-            var allLocations = Game1.locations.ToList();
-            allLocations.AddRange(Game1.getFarm().buildings.Where(building => building?.indoors.Value != null).Select(building => building.indoors.Value));
 
-            NudgeObjectsEverywhere(allLocations, baseNudgeChance);
-            NudgeBuildings(baseNudgeChance);
+            Nudger.NudgeObjectsEverywhere(baseNudgeChance);
+            Nudger.NudgeBuildings(baseNudgeChance);
         }
 
-        private void NudgeObjectsEverywhere(List<GameLocation> allLocations, double baseNudgeChance)
+        public void Butterfingers()
         {
-            foreach (var gameLocation in allLocations)
+            var difficulty = _archipelago.SlotData.TrapItemsDifficulty;
+            var targets = _difficultyBalancer.ButterfingersTargets[difficulty];
+            var rate = _difficultyBalancer.ButterfingersRate[difficulty];
+            var extraDrops = _difficultyBalancer.ButterfingersExtraDrops[difficulty];
+
+            Butterfingers(targets, rate);
+            if (extraDrops > 0)
             {
-                NudgeObjectsAtLocation(gameLocation, baseNudgeChance);
+                PerformTrapManyTimes(extraDrops, 10, () => ButterfingersOneRandomItem(), 4);
             }
         }
 
-        private void NudgeObjectsAtLocation(GameLocation gameLocation, double baseNudgeChance)
+        private void Butterfingers(ButterfingersTarget targets, double rate)
         {
-            foreach (var gameObject in gameLocation.Objects.Values.ToArray())
+            switch (targets)
             {
-                if (gameObject is not Chest chest)
-                {
-                    continue;
-                }
-
-                NudgeChest(chest, baseNudgeChance);
+                case ButterfingersTarget.None:
+                    return;
+                case ButterfingersTarget.ActiveItem:
+                    Butterfingers(Game1.player, Game1.player.CurrentToolIndex, rate);
+                    return;
+                case ButterfingersTarget.Hotbar:
+                    for (var i = 0; i < Math.Min(12, Game1.player.MaxItems); i++)
+                    {
+                        Butterfingers(Game1.player, i, rate);
+                    }
+                    return;
+                case ButterfingersTarget.Inventory:
+                    ButterfingersWholeInventory(rate);
+                    return;
+                case ButterfingersTarget.InventoryAndChestsOnSameMap:
+                    ButterfingersWholeInventory(rate);
+                    ButterfingerChests(InventoryShuffler.FindAllChests().Values.Where(x => x.Location == Game1.currentLocation), rate);
+                    return;
+                case ButterfingersTarget.InventoryAndAllChests:
+                    ButterfingersWholeInventory(rate);
+                    ButterfingerChests(InventoryShuffler.FindAllChests().Values, rate);
+                    return;
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(targets), targets, null);
             }
         }
 
-        private void NudgeChest(Chest chest, double baseNudgeChance)
+        private void ButterfingersWholeInventory(double rate)
         {
-            var seed = (int)Game1.stats.DaysPlayed + (int)(chest.TileLocation.X * 77) + (int)(chest.TileLocation.Y * 1933);
-            var random = new Random(seed);
-            var chestNudgeChance = baseNudgeChance;
-            while (random.NextDouble() < chestNudgeChance)
+            for (var i = 0; i < Game1.player.MaxItems; i++)
             {
-                chestNudgeChance /= 2;
-                var mutex = chest.GetMutex();
-
-                mutex.RequestLock(() =>
-                {
-                    chest.clearNulls();
-                    var chestTileBefore = chest.TileLocation;
-                    chest.TryMoveToSafePosition(random.Next(0, 4));
-
-                    // internal readonly ChestHitSynchronizer chestHit;
-                    var chestHitField = _helper.Reflection.GetField<ChestHitSynchronizer>(Game1.player.team, "chestHit");
-                    var chestHit = chestHitField.GetValue();
-
-                    chestHit.SignalMove(chest.Location, (int)chestTileBefore.X, (int)chestTileBefore.Y, (int)chest.TileLocation.X, (int)chest.TileLocation.Y);
-                    mutex.ReleaseLock();
-                });
+                Butterfingers(Game1.player, i, rate);
             }
         }
 
-        private void NudgeBuildings(double baseNudgeChance)
+        protected void Butterfingers(Farmer player, int slotToModify, double chance)
         {
-            if (_archipelago.SlotData.TrapItemsDifficulty < TrapItemsDifficulty.Hell)
+            var roll = Game1.random.NextDouble();
+            if (roll > chance)
             {
                 return;
             }
 
-            var buildingsNudgeChance = baseNudgeChance / 8;
-            foreach (var building in Game1.getFarm().buildings)
+            var item = player.Items[slotToModify];
+            if (item == null || item.Stack <= 0 || !item.canBeDropped())
             {
-                // TODO: Nudge buildings because I'm evil
+                return;
             }
+
+            for (var i = 0; i < item.Stack; i++)
+            {
+                player.dropItem(item);
+            }
+            player.removeItemFromInventory(item);
+        }
+
+        private void ButterfingerChests(IEnumerable<Chest> chests, double rate)
+        {
+            foreach (var chest in chests)
+            {
+                ButterfingerChest(chest, rate);
+            }
+        }
+
+        private void ButterfingerChest(Chest chest, double rate)
+        {
+            foreach (var item in chest.Items)
+            {
+                ButterfingerChest(chest, item, rate);
+            }
+        }
+
+        protected void ButterfingerChest(Chest chest, Item item, double chance)
+        {
+            var roll = Game1.random.NextDouble();
+            if (roll > chance)
+            {
+                return;
+            }
+
+            if (item == null || item.Stack <= 0)
+            {
+                return;
+            }
+
+            for (var i = 0; i < item.Stack; i++)
+            {
+                DropItem(chest, item);
+            }
+
+            chest.Items.Remove(item);
+        }
+
+        public void DropItem(Chest chest, Item item)
+        {
+            if (item == null || !item.canBeDropped())
+            {
+                return;
+            }
+            Game1.createItemDebris(item.getOne(), chest.TileLocation * 64, Game1.random.Next(0, 4));
+        }
+
+        private bool ButterfingersOneRandomItem()
+        {
+            var validSlots = new List<int>();
+            for (var i = 0; i < Game1.player.MaxItems; i++)
+            {
+                var item = Game1.player.Items[i];
+                if (item != null && item.Stack >= 1 && item.canBeDropped())
+                {
+                    validSlots.Add(i);
+                }
+            }
+
+            if (!validSlots.Any())
+            {
+                return false;
+            }
+
+            var chosenSlot = validSlots[Game1.random.Next(validSlots.Count)];
+            Butterfingers(Game1.player, chosenSlot, 1.0);
+            return true;
+        }
+
+        public void SellItems()
+        {
+            var difficulty = _archipelago.SlotData.TrapItemsDifficulty;
+            var sellCap = _difficultyBalancer.SellNumberCap[difficulty];
+            var rate = _difficultyBalancer.SellRate[difficulty];
+            var sellPriceMultiplier = _difficultyBalancer.SellMultiplier[difficulty];
+
+            SellItems(rate, sellCap, sellPriceMultiplier);
+        }
+
+        private void SellItems(double rate, int sellCap, double sellPriceMultiplier)
+        {
+            var chests = InventoryShuffler.FindAllChests().Values.OrderBy(x => Game1.random.NextDouble()).ToArray();
+            var salesSoFar = 0;
+
+            for (var i = 0; i < Game1.player.MaxItems; i++)
+            {
+                if (TrySellPlayerItem(rate, sellPriceMultiplier, i))
+                {
+                    salesSoFar++;
+                    if (salesSoFar >= sellCap)
+                    {
+                        return;
+                    }
+                }
+            }
+
+            foreach (var chest in chests)
+            {
+                foreach (var chestItem in chest.Items)
+                {
+                    if (TrySellChestItem(rate, sellPriceMultiplier, chest, chestItem))
+                    {
+                        salesSoFar++;
+                        if (salesSoFar >= sellCap)
+                        {
+                            return;
+                        }
+                    }
+                }
+            }
+        }
+
+        private static bool TrySellPlayerItem(double rate, double sellPriceMultiplier, int itemIndex)
+        {
+            var roll = Game1.random.NextDouble();
+            if (roll > rate)
+            {
+                return false;
+            }
+
+            var item = Game1.player.Items[itemIndex];
+            if (item == null || item.Stack <= 0 || !item.canBeTrashed() || !item.canBeDropped())
+            {
+                return false;
+            }
+
+            SellItem(item, sellPriceMultiplier);
+            Game1.player.removeItemFromInventory(item);
+            return true;
+        }
+
+        private static bool TrySellChestItem(double rate, double sellPriceMultiplier, Chest chest, Item chestItem)
+        {
+            var roll = Game1.random.NextDouble();
+            if (roll > rate)
+            {
+                return false;
+            }
+
+            if (chestItem == null || chestItem.Stack <= 0)
+            {
+                return false;
+            }
+
+            SellItem(chestItem, sellPriceMultiplier);
+            chest.Items.Remove(chestItem);
+            return true;
+        }
+
+        private static void SellItem(Item item, double sellPriceMultiplier)
+        {
+            var price = (int)Math.Round(item.sellToStorePrice() * item.Stack * sellPriceMultiplier);
+            Game1.player.Money += price;
+            Game1.playSound("sell");
+        }
+
+        public void EncumberPlayer()
+        {
+            var difficulty = _archipelago.SlotData.TrapItemsDifficulty;
+            var amountOfTrash = _difficultyBalancer.EncumberAmount[difficulty];
+            var trashRemaining = amountOfTrash;
+            for (var i = 0; i < Game1.player.MaxItems; i++)
+            {
+                if (Game1.player.Items[i] != null)
+                {
+                    continue;
+                }
+
+                GivePlayerOneTrash(i);
+                trashRemaining--;
+            }
+
+            if (trashRemaining > 0)
+            {
+                PerformTrapManyTimes(trashRemaining, 10, TryEncumberOneItem, 4);
+            }
+        }
+
+        private void GivePlayerOneTrash(int inventoryIndex)
+        {
+            var itemId = GetRandomTrashId();
+            var item = ItemRegistry.Create(itemId);
+            Game1.player.Items[inventoryIndex] = item;
+        }
+
+        private string GetRandomTrashId()
+        {
+            var trashItems = new[] { "92", "388", "390", "167", "168", "169", "170", "171", "172", "747" };
+            var chosenItemId = trashItems[Game1.random.Next(trashItems.Length)];
+            return $"(O){chosenItemId}";
+        }
+
+        private bool TryEncumberOneItem()
+        {
+            var validSlots = new List<int>();
+            for (var i = 0; i < Game1.player.MaxItems; i++)
+            {
+                if (Game1.player.Items[i] == null)
+                {
+                    validSlots.Add(i);
+                }
+            }
+
+            if (validSlots.Any())
+            {
+                var chosenSlot = validSlots[Game1.random.Next(validSlots.Count)];
+                GivePlayerOneTrash(chosenSlot);
+                return true;
+            }
+
+            return false;
+        }
+
+        public void SpoilItems()
+        {
+            var difficulty = _archipelago.SlotData.TrapItemsDifficulty;
+            var spoilsRemaining = _difficultyBalancer.SpoilsNumber[difficulty];
+
+            var allItemsWithQuality = new List<Item>();
+            Utility.ForEachItem(item =>
+            {
+                if (item.Quality > 0)
+                {
+                    allItemsWithQuality.Add(item);
+                }
+                return true;
+            });
+
+            allItemsWithQuality = FilterItemsThatCanSpoil(allItemsWithQuality, spoilsRemaining);
+
+            while (spoilsRemaining >= 0 && allItemsWithQuality.Any())
+            {
+                var itemToSpoil = allItemsWithQuality[Game1.random.Next(allItemsWithQuality.Count)];
+                itemToSpoil.Quality -= 1;
+                spoilsRemaining -= itemToSpoil.Stack;
+                allItemsWithQuality = FilterItemsThatCanSpoil(allItemsWithQuality, spoilsRemaining);
+            }
+        }
+
+        private List<Item> FilterItemsThatCanSpoil(List<Item> items, int spoilsRemaining)
+        {
+            return items.Where(x => x.Quality > 0 && x.Stack <= spoilsRemaining).ToList();
+        }
+
+        public void SpawnInvisibleCows()
+        {
+            var difficulty = _archipelago.SlotData.TrapItemsDifficulty;
+            var amount = _difficultyBalancer.NumberOfCows[difficulty];
+            CowSpawner.SpawnManyInvisibleCows(amount);
+        }
+
+        public void ChangeWeather()
+        {
+            var difficulty = _archipelago.SlotData.TrapItemsDifficulty;
+            var validWeathers = new List<string> { "Sun", "Rain", "Wind", "Snow" };
+            if (difficulty >= TrapItemsDifficulty.Medium)
+            {
+                validWeathers.Add("Storm");
+            }
+            if (difficulty >= TrapItemsDifficulty.Hard)
+            {
+                validWeathers.Add("GreenRain");
+            }
+            if (difficulty >= TrapItemsDifficulty.Nightmare)
+            {
+                validWeathers.Add("Festival");
+                validWeathers.Add("Wedding");
+            }
+            var chosenWeather = validWeathers[Game1.random.Next(validWeathers.Count)];
+
+            SetWeather(chosenWeather);
+        }
+
+        private void SetWeather(string chosenWeather)
+        {
+            LightningStrikeOnce();
+            Game1.weatherForTomorrow = chosenWeather;
+            switch (chosenWeather)
+            {
+                case "Rain":
+                    Game1.isRaining = true;
+                    break;
+                case "GreenRain":
+                    Game1.isGreenRain = true;
+                    break;
+                case "Storm":
+                    Game1.isRaining = true;
+                    Game1.isLightning = true;
+                    break;
+                case "Wind":
+                    Game1.isDebrisWeather = true;
+                    break;
+                case "Snow":
+                    Game1.isSnowing = true;
+                    break;
+            }
+
+            Game1.updateWeather(Game1.currentGameTime);
+        }
+
+        public static void LightningStrikeOnce()
+        {
+            Game1.flashAlpha = (float)(0.5 + Game1.random.NextDouble());
+            Game1.playSound("thunder");
+        }
+
+        public void CatchFish()
+        {
+            var difficulty = _archipelago.SlotData.TrapItemsDifficulty;
+            var numberFish = _difficultyBalancer.NumberOfFish[difficulty];
+            PerformTrapManyTimes(numberFish, 10, () =>
+            {
+                if (CanFishRightNow())
+                {
+                    StartFishing();
+                    return true;
+                }
+
+                return false;
+            }, 4);
+        }
+
+        private bool CanFishRightNow()
+        {
+            if (!CanGetTrappedRightNow())
+            {
+                return false;
+            }
+
+            if (!Game1.currentLocation.canFishHere() || !AnyWaterOnMap())
+            {
+                return false;
+            }
+
+            var currentFish = Game1.currentLocation.getFish(1, "", 1, Game1.player, 0, Vector2.Zero);
+            if (currentFish == null || currentFish.Category != Category.FISH || !DataLoader.Fish(Game1.content).ContainsKey(currentFish.ItemId))
+            {
+                return false;
+            }
+
+            if (!TryFindFishingRod(out _))
+            {
+                return false;
+            }
+
+            return true;
+        }
+
+        private void StartFishing()
+        {
+            if (!TryFindFishingRod(out var rod) || !TryFindNearestWater(out var waterTile))
+            {
+                return;
+            }
+
+            // rod.lastUser = Game1.player;
+            // Game1.chatBox.addMessage($"Fishy event trying to catch a {_currentFish.Name}", Color.Yellow);
+            // rod.startMinigameEndFunction(_currentFish);
+            var waterPixel = new Vector2((int)waterTile.X * 64 + 32, (int)waterTile.Y * 64 + 32);
+            rod.bobber.Set(waterPixel);
+            rod.DoFunction(Game1.currentLocation, (int)waterPixel.X, (int)waterPixel.Y, 0, Game1.player);
+            rod.timeUntilFishingBite = 0;
+            rod.isNibbling = true;
+            rod.DoFunction(Game1.currentLocation, (int)waterPixel.X, (int)waterPixel.Y, 0, Game1.player);
+        }
+
+        private bool AnyWaterOnMap()
+        {
+            var tiles = Game1.currentLocation.map.Layers[0].Tiles.Array;
+            for (var x = 0; x < tiles.GetLength(0); x += 1)
+            {
+                for (var y = 0; y < tiles.GetLength(1); y += 1)
+                {
+                    if (Game1.currentLocation.isTileFishable(x, y))
+                    {
+                        return true;
+                    }
+                }
+            }
+
+            return false;
+        }
+
+        private bool TryFindNearestWater(out Vector2 waterTile)
+        {
+            var tiles = Game1.currentLocation.map.Layers[0].Tiles.Array;
+            var fishableTiles = new List<Vector2>();
+            for (var x = 0; x < tiles.GetLength(0); x += 1)
+            {
+                for (var y = 0; y < tiles.GetLength(1); y += 1)
+                {
+                    if (Game1.currentLocation.isTileFishable(x, y))
+                    {
+                        fishableTiles.Add(new Vector2(x, y));
+                    }
+                }
+            }
+
+            if (!fishableTiles.Any())
+            {
+                waterTile = Game1.player.Tile;
+                return false;
+            }
+
+            var sortedTiles = fishableTiles.OrderBy(x => Vector2.Distance(x, Game1.player.Tile)).ToArray();
+            waterTile = sortedTiles.First();
+            return true;
+        }
+
+        private bool PlayerHasFishingRod()
+        {
+            var rodAnywhere = false;
+            Utility.ForEachItem(x =>
+            {
+                if (x is FishingRod rod)
+                {
+                    rodAnywhere = true;
+                    return false;
+                }
+
+                return true;
+            });
+
+            return rodAnywhere;
+        }
+
+        private bool TryFindFishingRod(out FishingRod rod)
+        {
+            rod = null;
+            for (var i = 0; i < Math.Min(Game1.player.MaxItems, 12); i++)
+            {
+                var item = Game1.player.Items[i];
+                if (item is FishingRod playerRod)
+                {
+                    rod = playerRod;
+                    Game1.player.CurrentToolIndex = i;
+                    return true;
+                }
+            }
+
+            if (rod == null)
+            {
+                Utility.ForEachItemContext(GiveFishingRodToPlayer);
+                if (Game1.player.CurrentTool is FishingRod playerRod)
+                {
+                    rod = playerRod;
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        private bool GiveFishingRodToPlayer(in ForEachItemContext context)
+        {
+            if (context.Item is not FishingRod fishingRod)
+            {
+                return true;
+            }
+
+            var slotToFill = 0;
+            for (var i = 0; i < Game1.player.MaxItems; i++)
+            {
+                var item = Game1.player.Items[i];
+                if (item is null)
+                {
+                    slotToFill = i;
+                    break;
+                }
+            }
+
+            context.ReplaceItemWith(Game1.player.Items[slotToFill]);
+            Game1.player.Items[slotToFill] = fishingRod;
+            Game1.player.CurrentToolIndex = slotToFill;
+            return false;
+        }
+
+        public void OpenMenus()
+        {
+            var difficulty = _archipelago.SlotData.TrapItemsDifficulty;
+            var numberOfMenus = _difficultyBalancer.NumberOfMenus[difficulty];
+            PerformTrapManyTimes(numberOfMenus, 3, OpenMenuOnce, 2);
+        }
+
+        public bool OpenMenuOnce()
+        {
+            if (Game1.activeClickableMenu != null)
+            {
+                return false;
+            }
+
+            var chosenMenuType = Game1.random.Next(11);
+
+            Game1.PushUIMode();
+            switch (chosenMenuType)
+            {
+                case 0:
+                    Game1.activeClickableMenu = new GameMenu(GameMenu.inventoryTab);
+                    break;
+                case 1:
+                    Game1.activeClickableMenu = new GameMenu(GameMenu.skillsTab);
+                    break;
+                case 2:
+                    Game1.activeClickableMenu = new GameMenu(GameMenu.socialTab);
+                    break;
+                case 3:
+                    Game1.activeClickableMenu = new GameMenu(GameMenu.mapTab);
+                    break;
+                case 4:
+                    Game1.activeClickableMenu = new GameMenu(GameMenu.craftingTab);
+                    break;
+                case 5:
+                    Game1.activeClickableMenu = new GameMenu(GameMenu.collectionsTab);
+                    break;
+                case 6:
+                    Game1.activeClickableMenu = new GameMenu(GameMenu.optionsTab);
+                    break;
+                case 7:
+                    Game1.activeClickableMenu = new GameMenu(GameMenu.animalsTab);
+                    break;
+                case 8:
+                    Game1.activeClickableMenu = new GameMenu(GameMenu.powersTab);
+                    break;
+                case 9:
+                    Game1.activeClickableMenu = new GameMenu(GameMenu.exitTab);
+                    break;
+                case 10:
+                    Game1.activeClickableMenu = new QuestLog();
+                    break;
+            }
+            Game1.PopUIMode();
+            return true;
+        }
+
+        public void PerformEmotes()
+        {
+            var difficulty = _archipelago.SlotData.TrapItemsDifficulty;
+            var numberOfEmotes = _difficultyBalancer.NumberOfEmotes[difficulty];
+            PerformTrapManyTimes(numberOfEmotes, 3, PerformOneEmote, 1);
+        }
+
+        public bool PerformOneEmote()
+        {
+            if (Game1.eventUp || Game1.player.isEmoting || !Game1.player.CanEmote() || Game1.player.isEmoteAnimating)
+            {
+                return false;
+            }
+
+            var emotes = Farmer.EMOTES;
+            var emote = emotes[Game1.random.Next(emotes.Length)];
+            var emoteName = emote.emoteString;
+            Game1.player.performPlayerEmote(emoteName);
+
+            return true;
+        }
+
+        public void PerformMakeover()
+        {
+            var difficulty = _archipelago.SlotData.TrapItemsDifficulty;
+            var makeoverTargets = _difficultyBalancer.MakeoverTargets[difficulty];
+
+            MakeoverOutfit makeoverOutfit = null;
+            if (makeoverTargets.HasFlag(MakeoverTargets.FollowTheme))
+            {
+                _outfitChanger.TryGetMakeoverOutfit(out makeoverOutfit);
+            }
+
+            var includeHat = makeoverTargets.HasFlag(MakeoverTargets.Hat);
+            var includeShirt = makeoverTargets.HasFlag(MakeoverTargets.Shirt);
+            var includePants = makeoverTargets.HasFlag(MakeoverTargets.Pants);
+
+            if (makeoverOutfit != null)
+            {
+                _outfitChanger.EquipMakeoverOutfit(makeoverOutfit, includeHat, includeShirt, includePants);
+            }
+            else
+            {
+                if (includeHat)
+                {
+                    _outfitChanger.RandomizeHat();
+                }
+                if (includeShirt)
+                {
+                    _outfitChanger.RandomizeShirt();
+                }
+                if (includePants)
+                {
+                    _outfitChanger.RandomizePants();
+                }
+            }
+
+            if (makeoverTargets.HasFlag(MakeoverTargets.Hair))
+            {
+                _outfitChanger.RandomizeHair();
+            }
+
+            if (makeoverTargets.HasFlag(MakeoverTargets.Eyes))
+            {
+                _outfitChanger.RandomizeEyes();
+            }
+
+            if (makeoverTargets.HasFlag(MakeoverTargets.Gender))
+            {
+                _outfitChanger.RandomizeGender();
+            }
+        }
+
+        public void RandomizeProfessions()
+        {
+            var hasProfessions = Game1.player.professions.Any() &&
+                                 (Game1.player.FarmingLevel >= 5 ||
+                                  Game1.player.FishingLevel >= 5 ||
+                                  Game1.player.ForagingLevel >= 5 ||
+                                  Game1.player.MiningLevel >= 5 ||
+                                  Game1.player.CombatLevel >= 5);
+            if (!hasProfessions)
+            {
+                return;
+            }
+
+            RandomizeFarmingProfessions();
+            RandomizeForagingProfessions();
+            RandomizeFishingProfessions();
+            RandomizeMiningProfessions();
+            RandomizeCombatProfessions();
+        }
+
+        private void RandomizeFarmingProfessions()
+        {
+            //SkillType.Farming = 0;
+            var level = Game1.player.FarmingLevel;
+            RandomizeSkillProfessions(level, new[] { 0, 1 }, new[] { 2, 3 }, new[] { 4, 5 });
+        }
+
+        private void RandomizeForagingProfessions()
+        {
+            //SkillType.Foraging = 2;
+            var level = Game1.player.ForagingLevel;
+            RandomizeSkillProfessions(level, new[] { 12, 13 }, new[] { 14, 15 }, new[] { 16, 17 });
+        }
+
+        private void RandomizeFishingProfessions()
+        {
+            //SkillType.Fishing = 1;
+            var level = Game1.player.FishingLevel;
+            RandomizeSkillProfessions(level, new[] { 6, 7 }, new[] { 8, 9 }, new[] { 10, 11 });
+        }
+
+        private void RandomizeMiningProfessions()
+        {
+            //SkillType.Mining = 3;
+            var level = Game1.player.MiningLevel;
+            RandomizeSkillProfessions(level, new[] { 18, 19 }, new[] { 20, 21 }, new[] { 22, 23 });
+        }
+
+        private void RandomizeCombatProfessions()
+        {
+            //SkillType.Combat = 4;
+            var level = Game1.player.CombatLevel;
+            RandomizeSkillProfessions(level, new[] { 24, 25 }, new[] { 26, 27 }, new[] { 28, 29 });
+        }
+
+        private static void RandomizeSkillProfessions(int level, int[] level5Professions, int[] level10Professions1, int[] level10Professions2)
+        {
+            if (level < 5)
+            {
+                return;
+            }
+
+            foreach (var profession in level5Professions)
+            {
+                Game1.player.professions.Remove(profession);
+            }
+
+            var level5Profession = level5Professions[Game1.random.Next(level5Professions.Length)];
+            Game1.player.professions.Add(level5Profession);
+
+            if (level < 10)
+            {
+                return;
+            }
+
+            var level10Professions = level5Profession == level5Professions.First() ? level10Professions1 : level10Professions2;
+
+            foreach (var profession in level10Professions)
+            {
+                Game1.player.professions.Remove(profession);
+            }
+
+            var level10Profession = level10Professions[Game1.random.Next(level10Professions.Length)];
+            Game1.player.professions.Add(level10Profession);
+        }
+
+        public void Tired()
+        {
+            var difficulty = _archipelago.SlotData.TrapItemsDifficulty;
+            var energyToRemove = _difficultyBalancer.EnergyToRemove[difficulty];
+            var energyToRemoveOverTime = 0f;
+            if (energyToRemove > Game1.player.Stamina)
+            {
+                energyToRemoveOverTime = energyToRemove - Game1.player.Stamina;
+                energyToRemove = Game1.player.Stamina;
+            }
+            Game1.player.Stamina -= energyToRemove;
+            PerformTrapManyTimes((int)Math.Ceiling(energyToRemoveOverTime), 1, LittleBitTired, 0);
+        }
+
+        private bool LittleBitTired()
+        {
+            if (Game1.player.Stamina > 0)
+            {
+                Game1.player.Stamina -= 1;
+                return true;
+            }
+
+            return false;
+        }
+
+        public void Injury()
+        {
+            var difficulty = _archipelago.SlotData.TrapItemsDifficulty;
+            var healthToRemove = _difficultyBalancer.HealthToRemove[difficulty];
+            var healthToRemoveOverTime = 0f;
+            if (healthToRemove > Game1.player.health)
+            {
+                healthToRemoveOverTime = healthToRemove - Game1.player.health;
+                healthToRemove = Game1.player.health;
+            }
+            Game1.player.health -= healthToRemove;
+            PerformTrapManyTimes((int)Math.Ceiling(healthToRemoveOverTime), 1, LittleBitInjured, 0);
+        }
+
+        private bool LittleBitInjured()
+        {
+            if (Game1.player.health > 0)
+            {
+                Game1.player.health -= 1;
+                return true;
+            }
+
+            return false;
         }
     }
 }

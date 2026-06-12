@@ -28,6 +28,7 @@ namespace StardewArchipelago.Serialization
         public int LastDayLookedAtStanleyBundle { get; set; }
         public int MaxJotPKLevelBeaten { get; set; }
         public int MaxJunimoKartLevelBeaten { get; set; }
+        public TrapsStateDto TrapsState { get; set; }
 
         public ArchipelagoStateDto()
         {
@@ -52,6 +53,7 @@ namespace StardewArchipelago.Serialization
             LastDayLookedAtStanleyBundle = -1;
             MaxJotPKLevelBeaten = 0;
             MaxJunimoKartLevelBeaten = 0;
+            TrapsState = new TrapsStateDto();
         }
     }
 }

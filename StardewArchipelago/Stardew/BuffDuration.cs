@@ -9,5 +9,8 @@
         TwoHours = 86000,
         FourHours = 172000,
         WholeDay = 1200000,
+        OneMinuteRealTime = 60001,
+        FiveMinutesRealTime = 300001,
+        TwentyMinutesRealTime = 1200001,
     }
 }

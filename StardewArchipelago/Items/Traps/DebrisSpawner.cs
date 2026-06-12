@@ -53,6 +53,30 @@ namespace StardewArchipelago.Items.Traps
             }
         }
 
+        public void CreateTrees(int amount)
+        {
+            var locationsToSpawnIn = new List<GameLocation>()
+            {
+                Game1.getFarm(),
+                Game1.getLocationFromName("Forest"),
+                Game1.getLocationFromName("Backwoods"),
+                Game1.getLocationFromName("BusStop"),
+                Game1.getLocationFromName("Woods"),
+                Game1.getLocationFromName("Mountain"),
+            };
+            var currentLocation = Game1.player.currentLocation;
+            if (!locationsToSpawnIn.Contains(currentLocation))
+            {
+                locationsToSpawnIn.Add(currentLocation);
+            }
+
+            var amountOfDebrisPerLocation = amount / locationsToSpawnIn.Count;
+            foreach (var gameLocation in locationsToSpawnIn)
+            {
+                SpawnTrees(gameLocation, amountOfDebrisPerLocation);
+            }
+        }
+
         public void SpawnDebris(GameLocation location, int amount)
         {
             for (var i = 0; i < amount; ++i)
@@ -66,20 +90,32 @@ namespace StardewArchipelago.Items.Traps
                     continue;
                 }
 
-                if (Game1.random.NextDouble() < 0.05)
-                {
-                    SpawnRandomTree(location, tile);
-                    continue;
-                }
-
                 var itemToSpawn = ChooseRandomDebris(location);
                 location.objects.Add(tile, new Object(itemToSpawn, 1));
             }
         }
 
+        public void SpawnTrees(GameLocation location, int amount)
+        {
+            for (var i = 0; i < amount; ++i)
+            {
+                var tile = new Vector2(Game1.random.Next(location.map.Layers[0].LayerWidth), Game1.random.Next(location.map.Layers[0].LayerHeight));
+                var noSpawn = location.doesTileHaveProperty((int)tile.X, (int)tile.Y, "NoSpawn", "Back") != null;
+                var wood = location.doesTileHaveProperty((int)tile.X, (int)tile.Y, "Type", "Back") == "Wood";
+                var tileIsClear = location.CanItemBePlacedHere(tile) && !location.objects.ContainsKey(tile) && !location.terrainFeatures.ContainsKey(tile);
+                if (noSpawn || wood || !tileIsClear)
+                {
+                    continue;
+                }
+
+                SpawnRandomTree(location, tile);
+            }
+        }
+
         private static void SpawnRandomTree(GameLocation location, Vector2 tile)
         {
-            location.terrainFeatures.Add(tile, new Tree((Game1.random.Next(3) + 1).ToString(), Game1.random.Next(3)));
+            var growthStage = Game1.random.Next(4);
+            location.terrainFeatures.Add(tile, new Tree((Game1.random.Next(3) + 1).ToString(), growthStage));
         }
 
         private static string ChooseRandomDebris(GameLocation location)

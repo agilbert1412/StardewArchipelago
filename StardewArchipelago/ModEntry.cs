@@ -306,7 +306,7 @@ namespace StardewArchipelago
             _seasonsRandomizer = new SeasonsRandomizer(_logger, _helper, _archipelago, State);
             _appearanceRandomizer = new AppearanceRandomizer(_logger, _helper, _archipelago, _harmony);
 
-            var trapExecutor = new TrapExecutor(_logger, Helper, _archipelago, _giftHandler);
+            var trapExecutor = new TrapExecutor(_logger, Helper, _archipelago, _giftHandler, State);
             var giftTrapManager = new GiftTrapManager(_logger, trapExecutor);
             _giftHandler.Initialize(_logger, _archipelago, _stardewItemManager, _mail, giftTrapManager);
 
@@ -319,7 +319,7 @@ namespace StardewArchipelago
             _itemManager = new APItemManager(_logger, _helper, _harmony, _archipelago, _locationChecker, _stardewItemManager, _mail, trapExecutor, giftTrapManager, State.ItemsReceived);
             _weaponsManager = new WeaponsManager(_archipelago, _stardewItemManager, _archipelago.SlotData.Mods);
 
-            _registry.Initialize(_archipelago, _stardewItemManager, _locationChecker, _giftHandler, _weaponsManager, State);
+            _registry.Initialize(_archipelago, _stardewItemManager, _locationChecker, _giftHandler, _weaponsManager, State, _itemManager.TrapManager);
 
             _mailPatcher = new MailPatcher(_logger, _harmony, _archipelago, _locationChecker, State, new LetterActions(_logger, _helper, _mail, _archipelago, _weaponsManager, _itemManager.TrapManager, trapExecutor.BabyBirther, _stardewItemManager));
             _bundlesManager = new BundlesManager(_logger, _helper, _archipelago, _stardewItemManager);
@@ -453,6 +453,9 @@ namespace StardewArchipelago
             SeasonsRandomizer.ChangeMailKeysBasedOnSeasonsToDaysElapsed();
             SeasonsRandomizer.SendMailHardcodedForToday();
             ArchipelagoJunimoNoteMenu.OnDayStarted(_giftHandler.Receiver);
+            _itemManager.TrapManager.TrapExecutor.DayUpdateDebt();
+            _itemManager.TrapManager.TrapExecutor.DebuffApplier.LoadBuffs();
+            State.TrapsState.DaysShunRemaining = Math.Max(0, State.TrapsState.DaysShunRemaining-1);
 
             if (MultiSleepManager.TryDoMultiSleepOnDayStarted())
             {
@@ -503,6 +506,7 @@ namespace StardewArchipelago
             _giftHandler.ReceiveAllGiftsTomorrow();
             _villagerEvents.CheckJunaHearts(_archipelago);
             _shippingBehaviors?.CheckShipsanityLocationsBeforeSleep();
+            _itemManager?.TrapManager.TrapExecutor.DebuffApplier.SaveBuffs();
             ArchipelagoJunimoNoteMenu.OnDayEnded();
         }
 

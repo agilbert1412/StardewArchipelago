@@ -58,10 +58,25 @@ namespace StardewArchipelago.GameModifications.RandomizedData
                 {
                     _datesMapping.Clear();
                     var festivalDatesData = asset.AsDictionary<string, string>().Data;
+                    var oldFestivalDatesKeysToRemove = new List<string>();
+                    var newFestivalDatesData = new Dictionary<string, string>();
 
                     foreach (var festivalDateKey in festivalDatesData.Keys.ToArray())
                     {
-                        ModifyFestivalDateData(festivalDatesData, festivalDateKey);
+                        if (ModifyFestivalDateData(festivalDatesData, festivalDateKey, out var newKey, out var newValue))
+                        {
+                            oldFestivalDatesKeysToRemove.Add(festivalDateKey);
+                            newFestivalDatesData.Add(newKey, newValue);
+                        }
+                    }
+
+                    foreach (var oldKey in oldFestivalDatesKeysToRemove)
+                    {
+                        festivalDatesData.Remove(oldKey);
+                    }
+                    foreach (var (newKey, newValue) in newFestivalDatesData)
+                    {
+                        festivalDatesData.Add(newKey, newValue);
                     }
                 },
                 AssetEditPriority.Late
@@ -88,13 +103,15 @@ namespace StardewArchipelago.GameModifications.RandomizedData
         //    );
         //}
 
-        private void ModifyFestivalDateData(IDictionary<string, string> allFestivalDatesData, string festivalDateKey)
+        private bool ModifyFestivalDateData(IDictionary<string, string> allFestivalDatesData, string festivalDateKey, out string newKey, out string newValue)
         {
             var festivalName = allFestivalDatesData[festivalDateKey];
+            newKey = string.Empty;
+            newValue = string.Empty;
 
             if (!_dataRandomization.FestivalData.TryGetValue(festivalName, out var randomizedFestivalData))
             {
-                return;
+                return false;
             }
 
             var numbers = "0123456789".ToCharArray();
@@ -112,12 +129,13 @@ namespace StardewArchipelago.GameModifications.RandomizedData
             var newDateKey = season.ToLower() + day;
             if (newDateKey.Equals(festivalDateKey, StringComparison.InvariantCultureIgnoreCase))
             {
-                return;
+                return false;
             }
 
-            allFestivalDatesData.Remove(festivalDateKey);
-            allFestivalDatesData.Add(newDateKey, festivalName);
+            newKey = newDateKey;
+            newValue = festivalName;
             _datesMapping.Add(newDateKey, festivalDateKey);
+            return true;
         }
 
         //private void ModifyPassiveFestivalData(IDictionary<string, PassiveFestivalData> passiveFestivalsData, string passiveFestivalKey)

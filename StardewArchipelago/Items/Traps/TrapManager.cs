@@ -1,17 +1,21 @@
-﻿using System;
-using System.Collections.Concurrent;
-using System.Collections.Generic;
-using System.Linq;
-using HarmonyLib;
+﻿using HarmonyLib;
 using KaitoKid.ArchipelagoUtilities.Net.Client;
 using KaitoKid.Utilities.Interfaces;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+using Newtonsoft.Json.Linq;
 using StardewArchipelago.Archipelago;
 using StardewArchipelago.Items.Mail;
 using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Characters;
 using StardewValley.Locations;
+using StardewValley.Monsters;
+using System;
+using System.Collections.Concurrent;
+using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
 using Object = StardewValley.Object;
 
 namespace StardewArchipelago.Items.Traps
@@ -45,6 +49,27 @@ namespace StardewArchipelago.Items.Traps
         private const string BOMB = "Bomb";
         private const string NUDGE = "Nudge";
 
+        private const string BUTTERFINGERS = "Butterfingers";
+        private const string SALE = "Sale";
+        private const string EXOTIC = "Exotic";
+        private const string ENCUMBERED = "Encumbered";
+        private const string SPOILED = "Spoiled";
+        private const string SUPER_MONSTER = "Super Monster";
+        private const string WE_MOO_UNSEEN = "We Moo Unseen";
+        private const string CONSTRUCTION = "Construction";
+        private const string ERROR = "Error";
+        private const string CUTSCENE = "Cutscene";
+        private const string LORAX = "Lorax";
+        private const string CLIMATE_CHANGE = "Climate Change";
+        private const string NOISE = "Noise";
+        private const string FISHING = "Fishing";
+        private const string MENU = "Menu";
+        private const string EMOTE = "Emote";
+        private const string MAKEOVER = "Makeover";
+        private const string BACK_TO_SCHOOL = "Back To School";
+        private const string TIRED = "Tired";
+        private const string INJURY = "Injury";
+
         private static ILogger _logger;
         private readonly IModHelper _helper;
         private readonly Harmony _harmony;
@@ -71,22 +96,61 @@ namespace StardewArchipelago.Items.Traps
             _giftTrapManager.AssignTrapQueue(_queuedTraps);
 
             _harmony.Patch(
+                original: AccessTools.Method(typeof(NPC), nameof(NPC.update), new[] { typeof(GameTime), typeof(GameLocation) }),
+                postfix: new HarmonyMethod(typeof(TrapExecutor), nameof(TrapExecutor.Update_ShunPlayer_Postfix))
+            );
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(NPC), nameof(NPC.MovePosition)),
+                prefix: new HarmonyMethod(typeof(TrapExecutor), nameof(TrapExecutor.MovePosition_SkipIfShunningPlayer_Prefix))
+            );
+            _harmony.Patch(
                 original: AccessTools.Method(typeof(Object), nameof(Object.salePrice)),
                 prefix: new HarmonyMethod(typeof(TrapExecutor), nameof(TrapExecutor.SalePrice_GetCorrectInflation_Prefix))
             );
-            InitializeTemporaryBaby(logger, helper, harmony);
+
+            InitializeTemporaryBaby(logger, helper, harmony, archipelago);
+            InitializeInvisibleCows(logger, helper, harmony, archipelago);
         }
 
-        private void InitializeTemporaryBaby(ILogger logger, IModHelper helper, Harmony harmony)
+        private void InitializeTemporaryBaby(ILogger logger, IModHelper helper, Harmony harmony, StardewArchipelagoClient archipelago)
         {
-            TemporaryBaby.Initialize(logger, helper);
+            TemporaryBabyInjections.Initialize(logger, helper, archipelago);
+            harmony.Patch(
+                original: AccessTools.Method(typeof(Child), nameof(Child.dayUpdate)),
+                prefix: new HarmonyMethod(typeof(TemporaryBabyInjections), nameof(TemporaryBabyInjections.DayUpdate_TemporaryBaby_Prefix))
+            );
             harmony.Patch(
                 original: AccessTools.Method(typeof(Child), nameof(Child.tenMinuteUpdate)),
-                prefix: new HarmonyMethod(typeof(TemporaryBaby), nameof(TemporaryBaby.ChildTenMinuteUpdate_MoveBabiesAnywhere_Prefix))
+                prefix: new HarmonyMethod(typeof(TemporaryBabyInjections), nameof(TemporaryBabyInjections.TenMinuteUpdate_TemporaryBaby_Prefix))
             );
             harmony.Patch(
                 original: AccessTools.Method(typeof(GameLocation), nameof(GameLocation.performTenMinuteUpdate)),
-                prefix: new HarmonyMethod(typeof(TemporaryBaby), nameof(TemporaryBaby.GameLocationPerformTenMinuteUpdate_MoveBabiesAnywhere_Prefix))
+                prefix: new HarmonyMethod(typeof(TemporaryBabyInjections), nameof(TemporaryBabyInjections.GameLocationPerformTenMinuteUpdate_MoveBabiesAnywhere_Prefix))
+            );
+        }
+
+        private void InitializeInvisibleCows(ILogger logger, IModHelper helper, Harmony harmony, StardewArchipelagoClient archipelago)
+        {
+            CowInjections.Initialize(logger, helper, archipelago);
+
+            harmony.Patch(
+                original: AccessTools.Method(typeof(FarmAnimal), nameof(FarmAnimal.draw), new[] { typeof(SpriteBatch) }),
+                prefix: new HarmonyMethod(typeof(CowInjections), nameof(CowInjections.Draw_InvisibleCow_Prefix))
+            );
+
+            harmony.Patch(
+                original: AccessTools.Method(typeof(FarmAnimal), nameof(FarmAnimal.dayUpdate)),
+                prefix: new HarmonyMethod(typeof(CowInjections), nameof(CowInjections.DayUpdate_InvisibleCow_Prefix))
+            );
+
+            harmony.Patch(
+                original: AccessTools.Method(typeof(FarmAnimal), nameof(FarmAnimal.farmerPushing)),
+                prefix: new HarmonyMethod(typeof(CowInjections), nameof(CowInjections.FarmerPushing_TakeLongerToReact_Prefix))
+            );
+
+            harmony.Patch(
+                original: AccessTools.Method(typeof(FarmAnimal), nameof(FarmAnimal.setRandomPosition)),
+                prefix: new HarmonyMethod(typeof(CowInjections), nameof(CowInjections.SetRandomPosition_DontLookForProduceArea_Prefix))
             );
         }
 
@@ -98,16 +162,6 @@ namespace StardewArchipelago.Items.Traps
         public LetterAttachment GenerateTrapLetter(ReceivedItem unlock)
         {
             return new LetterTrapAttachment(unlock, unlock.ItemName);
-        }
-
-        public bool CanGetTrappedRightNow()
-        {
-            var isSafeLocation = Game1.player.currentLocation is (FarmHouse or IslandFarmHouse);
-            var isSleepTime = Game1.player.isInBed.Value || Game1.player.FarmerSprite.isPassingOut() || Game1.player.passedOut;
-            var isFestival = Game1.CurrentEvent != null && Game1.CurrentEvent.isFestival;
-            // || Game1.eventUp || Game1.fadeToBlack || Game1.currentMinigame != null || Game1.isWarping || Game1.killScreen;
-
-            return !isSafeLocation && !isSleepTime && !isFestival;
         }
 
         public string ExecuteRandomTrapImmediately(int seed)
@@ -128,12 +182,18 @@ namespace StardewArchipelago.Items.Traps
 
         public void ExecuteTrapImmediately(string trapName)
         {
+            if (!_traps.ContainsKey(trapName))
+            {
+                _logger.LogError($"Trap {trapName} Not found");
+                return;
+            }
+
             _queuedTraps.Enqueue(new QueuedItemTrap(trapName, _traps[trapName]));
         }
 
         public void DequeueTrap()
         {
-            if (!CanGetTrappedRightNow())
+            if (!TrapExecutor.CanGetTrappedRightNow())
             {
                 return;
             }
@@ -172,20 +232,42 @@ namespace StardewArchipelago.Items.Traps
             _traps.Add(DEBRIS, TrapExecutor.CreateDebris);
             _traps.Add(SHUFFLE, TrapExecutor.ShuffleInventory);
             // _traps.Add(WINTER, );
-            _traps.Add(PARIAH, TrapExecutor.SendDislikedGiftToEveryone);
+            _traps.Add(PARIAH, TrapExecutor.BecomePariah);
             _traps.Add(DROUGHT, TrapExecutor.PerformDroughtTrap);
             _traps.Add(TIME_FLIES, TrapExecutor.SkipTimeForward);
             _traps.Add(BABIES, TrapExecutor.SpawnTemporaryBabies);
             _traps.Add(MEOW, TrapExecutor.PlayMeows);
             _traps.Add(BARK, TrapExecutor.PlayBarks);
             // _traps.Add(DEPRESSION, TrapExecutor.ForceNextMultisleep);
-            _traps.Add(UNGROWTH, TrapExecutor.UngrowCrops);
+            _traps.Add(UNGROWTH, TrapExecutor.UngrowThings);
             _traps.Add(INFLATION, TrapExecutor.ActivateInflation);
             _traps.Add(BOMB, TrapExecutor.Explode);
             _traps.Add(NUDGE, TrapExecutor.NudgePlayerItems);
 
+            _traps.Add(BUTTERFINGERS, TrapExecutor.Butterfingers);
+            _traps.Add(SALE, TrapExecutor.SellItems);
+            // _traps.Add(EXOTIC, TrapExecutor.Exotic);
+            _traps.Add(ENCUMBERED, TrapExecutor.EncumberPlayer);
+            _traps.Add(SPOILED, TrapExecutor.SpoilItems);
+            _traps.Add(SUPER_MONSTER, TrapExecutor.SpawnSuperMonsters);
+            _traps.Add(WE_MOO_UNSEEN, TrapExecutor.SpawnInvisibleCows);
+            //_traps.Add(CONSTRUCTION, TrapExecutor.Construction);
+            //_traps.Add(ERROR, TrapExecutor.Error);
+            //_traps.Add(CUTSCENE, TrapExecutor.PlayCutscene);
+            _traps.Add(LORAX, TrapExecutor.GrowTrees);
+            _traps.Add(CLIMATE_CHANGE, TrapExecutor.ChangeWeather);
+            _traps.Add(NOISE, TrapExecutor.PlayNoises);
+            _traps.Add(FISHING, TrapExecutor.CatchFish);
+            _traps.Add(MENU, TrapExecutor.OpenMenus);
+            _traps.Add(EMOTE, TrapExecutor.PerformEmotes);
+            _traps.Add(MAKEOVER, TrapExecutor.PerformMakeover);
+            _traps.Add(BACK_TO_SCHOOL, TrapExecutor.RandomizeProfessions);
+            _traps.Add(TIRED, TrapExecutor.Tired);
+            _traps.Add(INJURY, TrapExecutor.Injury);
+
             RegisterTrapsWithTrapSuffix();
             RegisterTrapsWithDifferentSpace();
+            RegisterTrapsWithDifferentCasing();
         }
 
         private void RegisterTrapsWithDifferentSpace()
@@ -193,6 +275,11 @@ namespace StardewArchipelago.Items.Traps
             foreach (var trapName in _traps.Keys.ToArray())
             {
                 var differentSpacedTrapName = trapName.Replace(" ", "_");
+                if (differentSpacedTrapName != trapName)
+                {
+                    _traps.Add(differentSpacedTrapName, _traps[trapName]);
+                }
+                differentSpacedTrapName = trapName.Replace(" ", "");
                 if (differentSpacedTrapName != trapName)
                 {
                     _traps.Add(differentSpacedTrapName, _traps[trapName]);
@@ -206,6 +293,23 @@ namespace StardewArchipelago.Items.Traps
             {
                 var trapWithSuffix = $"{trapName} Trap";
                 _traps.Add(trapWithSuffix, _traps[trapName]);
+            }
+        }
+
+        private void RegisterTrapsWithDifferentCasing()
+        {
+            foreach (var trapName in _traps.Keys.ToArray())
+            {
+                var trapLower = trapName.ToLower();
+                var trapUpper = trapName.ToUpper();
+                if (!_traps.ContainsKey(trapLower))
+                {
+                    _traps.Add(trapLower, _traps[trapName]);
+                }
+                if (!_traps.ContainsKey(trapUpper))
+                {
+                    _traps.Add(trapUpper, _traps[trapName]);
+                }
             }
         }
     }

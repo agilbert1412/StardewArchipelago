@@ -1,5 +1,6 @@
 ﻿using StardewArchipelago.Archipelago;
 using StardewArchipelago.Archipelago.Gifting;
+using StardewArchipelago.Items.Traps;
 using StardewArchipelago.Locations;
 using StardewArchipelago.Locations.CodeInjections.Vanilla.MonsterSlayer;
 using StardewArchipelago.Serialization;
@@ -9,7 +10,8 @@ namespace StardewArchipelago.Registry
 {
     public interface IRegistry
     {
-        void Initialize(StardewArchipelagoClient archipelago, StardewItemManager stardewItemManager, StardewLocationChecker locationChecker, IGiftHandler _giftHandler, WeaponsManager weaponsManager, ArchipelagoStateDto state);
+        void Initialize(StardewArchipelagoClient archipelago, StardewItemManager stardewItemManager, StardewLocationChecker locationChecker, IGiftHandler _giftHandler, WeaponsManager weaponsManager, ArchipelagoStateDto state,
+            TrapManager trapManager);
         void RegisterOnModEntry();
     }
 }

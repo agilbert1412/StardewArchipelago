@@ -49,11 +49,26 @@ namespace StardewArchipelago.Items
 
             var currentMap = Game1.currentLocation;
             var tile = currentMap.getRandomTile() * 64f;
-            var age = random.Next(4);
-            var baby = new TemporaryBaby(babyName, babyGender, babyColor, Game1.player, age)
+            var age = random.Next(60);
+            var baby = new Child(babyName, babyGender, babyColor, Game1.player)
             {
                 Position = tile,
             };
+            baby.daysOld.Set(age);
+            if (age >= 55)
+            {
+                baby.Age = 3;
+                baby.speed = 4;
+            }
+            else if (age >= 27)
+            {
+                baby.Age = 2;
+            }
+            else if (age >= 13)
+            {
+                baby.Age = 1;
+            }
+            baby.modData.Add(TemporaryBabyInjections.TEMPORARY_BABY_KEY, true.ToString());
             Game1.currentLocation.characters.Add(baby);
         }
 

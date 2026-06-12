@@ -18,6 +18,7 @@ using StardewArchipelago.GameModifications;
 using StardewArchipelago.Stardew;
 using System.Linq;
 using Microsoft.Xna.Framework;
+using StardewArchipelago.Items.Traps;
 using StardewArchipelago.Serialization;
 using StardewArchipelago.Locations;
 
@@ -37,6 +38,7 @@ namespace StardewArchipelago.Registry
         private IGiftHandler _giftHandler;
         private WeaponsManager _weaponsManager;
         private ArchipelagoStateDto _state;
+        private TrapManager _trapManager;
 
         public ConsoleCommandsRegistry(LogHandler logger, IModHelper modHelper, ModEntry mod)
         {
@@ -45,7 +47,9 @@ namespace StardewArchipelago.Registry
             _mod = mod;
         }
 
-        public void Initialize(StardewArchipelagoClient archipelago, StardewItemManager stardewItemManager, StardewLocationChecker locationChecker, IGiftHandler giftHandler, WeaponsManager weaponsManager, ArchipelagoStateDto state)
+        public void Initialize(StardewArchipelagoClient archipelago, StardewItemManager stardewItemManager, 
+            StardewLocationChecker locationChecker, IGiftHandler giftHandler, WeaponsManager weaponsManager, 
+            ArchipelagoStateDto state, TrapManager trapManager)
         {
             _archipelago = archipelago;
             _stardewItemManager = stardewItemManager;
@@ -53,6 +57,7 @@ namespace StardewArchipelago.Registry
             _giftHandler = giftHandler;
             _weaponsManager = weaponsManager;
             _state = state;
+            _trapManager = trapManager;
         }
 
         public void RegisterOnModEntry()
@@ -90,6 +95,7 @@ namespace StardewArchipelago.Registry
             _modHelper.ConsoleCommands.Add("export_shippables", "Export all currently loaded shippable items", ExportShippables);
             _modHelper.ConsoleCommands.Add("export_mismatches", "Export all items where Name and DisplayName mismatch which can be shipped", ExportMismatchedItems);
             _modHelper.ConsoleCommands.Add("export_weapons", "Export all weapons by category and tier", ExportWeapons);
+            _modHelper.ConsoleCommands.Add("trap", "Execute the given trap immediately", ExecuteTrap);
             //_modHelper.ConsoleCommands.Add("release_slot", "Release the current slot completely", ReleaseSlot);
             //_modHelper.ConsoleCommands.Add("debug_method", "Runs whatever is currently in the debug method", DebugMethod);
             // _modHelper.ConsoleCommands.Add("set_next_season", "Sets the next season to a chosen value", SetNextSeason);
@@ -172,6 +178,7 @@ namespace StardewArchipelago.Registry
             if (arg2.Length < 1)
             {
                 _logger.Log($"Choose one of the following difficulties: [NoTraps, Easy, Medium, Hard, Hell, Nightmare].", LogLevel.Info);
+                _logger.Log($"Current Difficulty: {_state.TrapDifficultyOverride ?? _archipelago.SlotData.TrapItemsDifficulty}", LogLevel.Info);
                 return;
             }
 
@@ -292,6 +299,18 @@ namespace StardewArchipelago.Registry
             weapons.Add("Slingshots", _weaponsManager.SlingshotsByTier);
             var weaponsAsJson = JsonConvert.SerializeObject(weapons);
             File.WriteAllText("weapons.json", weaponsAsJson);
+        }
+
+        private void ExecuteTrap(string arg1, string[] arg2)
+        {
+            if (arg2.Length < 1)
+            {
+                _logger.Log($"You must specify a trap to execute", LogLevel.Info);
+                return;
+            }
+
+            var trap = arg2[0];
+            _trapManager.ExecuteTrapImmediately(trap);
         }
 
         private void ReleaseSlot(string arg1, string[] arg2)
