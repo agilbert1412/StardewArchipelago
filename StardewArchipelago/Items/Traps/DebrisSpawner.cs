@@ -61,7 +61,7 @@ namespace StardewArchipelago.Items.Traps
                 Game1.getLocationFromName("Forest"),
                 Game1.getLocationFromName("Backwoods"),
                 Game1.getLocationFromName("BusStop"),
-                Game1.getLocationFromName("SecretWoods"),
+                Game1.getLocationFromName("Woods"),
                 Game1.getLocationFromName("Mountain"),
             };
             var currentLocation = Game1.player.currentLocation;
@@ -114,7 +114,8 @@ namespace StardewArchipelago.Items.Traps
 
         private static void SpawnRandomTree(GameLocation location, Vector2 tile)
         {
-            location.terrainFeatures.Add(tile, new Tree((Game1.random.Next(3) + 1).ToString(), Game1.random.Next(3)));
+            var growthStage = Game1.random.Next(4);
+            location.terrainFeatures.Add(tile, new Tree((Game1.random.Next(3) + 1).ToString(), growthStage));
         }
 
         private static string ChooseRandomDebris(GameLocation location)
