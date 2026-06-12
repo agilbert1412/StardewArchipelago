@@ -1929,10 +1929,10 @@ namespace StardewArchipelago.Items.Traps
             var difficulty = _archipelago.SlotData.TrapItemsDifficulty;
             var healthToRemove = _difficultyBalancer.HealthToRemove[difficulty];
             var healthToRemoveOverTime = 0f;
-            if (healthToRemove > Game1.player.health)
+            if (healthToRemove >= Game1.player.health)
             {
-                healthToRemoveOverTime = healthToRemove - Game1.player.health;
-                healthToRemove = Game1.player.health;
+                healthToRemoveOverTime = healthToRemove - Game1.player.health - 1;
+                healthToRemove = Game1.player.health - 1;
             }
             Game1.player.health -= healthToRemove;
             PerformTrapManyTimes((int)Math.Ceiling(healthToRemoveOverTime), 1, LittleBitInjured, 0);
@@ -1940,7 +1940,7 @@ namespace StardewArchipelago.Items.Traps
 
         private bool LittleBitInjured()
         {
-            if (Game1.player.health > 0)
+            if (Game1.player.health > 1)
             {
                 Game1.player.health -= 1;
                 return true;
