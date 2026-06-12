@@ -182,6 +182,12 @@ namespace StardewArchipelago.Items.Traps
 
         public void ExecuteTrapImmediately(string trapName)
         {
+            if (!_traps.ContainsKey(trapName))
+            {
+                _logger.LogError($"Trap {trapName} Not found");
+                return;
+            }
+
             _queuedTraps.Enqueue(new QueuedItemTrap(trapName, _traps[trapName]));
         }
 

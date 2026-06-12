@@ -98,9 +98,9 @@ namespace StardewArchipelago.Items.Traps
             return !isSafeLocation && !isSleepTime && !isFestival && !isInFade && !isInMenu;
         }
 
-        public void PerformTrapManyTimes(int iterations, int delayInSeconds, Func<bool> trapMethod)
+        public void PerformTrapManyTimes(int iterations, int delayInSeconds, Func<bool> trapMethod, int delayVariance)
         {
-            PerformTrapManyTimesAsync(iterations, delayInSeconds, trapMethod).FireAndForget();
+            PerformTrapManyTimesAsync(iterations, delayInSeconds, trapMethod, delayVariance).FireAndForget();
         }
 
         /// <summary>
@@ -110,7 +110,7 @@ namespace StardewArchipelago.Items.Traps
         /// <param name="delayInSeconds">Delay between iterations</param>
         /// <param name="trapMethod">Method to try to run the trap code. If it returns true, then it has run successfully and counts as an iteration. If it returns false, then it has been skipped and should not count.</param>
         /// <returns></returns>
-        private async Task PerformTrapManyTimesAsync(int iterations, int delayInSeconds, Func<bool> trapMethod)
+        private async Task PerformTrapManyTimesAsync(int iterations, int delayInSeconds, Func<bool> trapMethod, int delayVariance)
         {
             while (iterations > 0)
             {
@@ -118,7 +118,12 @@ namespace StardewArchipelago.Items.Traps
                 {
                     iterations--;
                 }
-                await Task.Run(() => Thread.Sleep(delayInSeconds * 1000));
+
+                var minDelay = Math.Max(1, delayInSeconds - delayVariance);
+                var maxDelay = Math.Max(1, delayInSeconds + delayVariance);
+                var delayRange = maxDelay - minDelay;
+                var delay = Game1.random.NextDouble() * delayRange + minDelay;
+                await Task.Run(() => Thread.Sleep((int)(delay * 1000)));
             }
         }
 
@@ -223,7 +228,7 @@ namespace StardewArchipelago.Items.Traps
                 return;
             }
 
-            PerformTrapManyTimes(numberOfTeleports, 4, () => TeleportRandomly(validMaps, destination));
+            PerformTrapManyTimes(numberOfTeleports, 4, () => TeleportRandomly(validMaps, destination), 1);
         }
 
         private bool TeleportRandomly(List<GameLocation> validMaps, TeleportDestination destination)
@@ -798,19 +803,19 @@ namespace StardewArchipelago.Items.Traps
         public void PlayMeows()
         {
             var numberOfMeows = _difficultyBalancer.MeowBarkNumber[_archipelago.SlotData.TrapItemsDifficulty];
-            PerformTrapManyTimes(numberOfMeows, 2, () => PlaySound("cat"));
+            PerformTrapManyTimes(numberOfMeows, 2, () => PlaySound("cat"), 1);
         }
 
         public void PlayBarks()
         {
             var numberOfBarks = _difficultyBalancer.MeowBarkNumber[_archipelago.SlotData.TrapItemsDifficulty];
-            PerformTrapManyTimes(numberOfBarks, 2, () => PlaySound("dog_bark"));
+            PerformTrapManyTimes(numberOfBarks, 2, () => PlaySound("dog_bark"), 1);
         }
 
         public void PlayNoises()
         {
             var numberOfNoises = _difficultyBalancer.NoiseNumber[_archipelago.SlotData.TrapItemsDifficulty];
-            PerformTrapManyTimes(numberOfNoises, 2, () => PlaySound("random"));
+            PerformTrapManyTimes(numberOfNoises, 2, () => PlaySound("random"), 1);
         }
 
         private string GetRandomSoundCue()
@@ -1138,7 +1143,7 @@ namespace StardewArchipelago.Items.Traps
             Butterfingers(targets, rate);
             if (extraDrops > 0)
             {
-                PerformTrapManyTimes(extraDrops, 10, () => ButterfingersOneRandomItem());
+                PerformTrapManyTimes(extraDrops, 10, () => ButterfingersOneRandomItem(), 4);
             }
         }
 
@@ -1322,7 +1327,7 @@ namespace StardewArchipelago.Items.Traps
             }
 
             var item = Game1.player.Items[itemIndex];
-            if (item == null || item.Stack <= 0)
+            if (item == null || item.Stack <= 0 || !item.canBeTrashed() || !item.canBeDropped())
             {
                 return false;
             }
@@ -1375,7 +1380,7 @@ namespace StardewArchipelago.Items.Traps
 
             if (trashRemaining > 0)
             {
-                PerformTrapManyTimes(trashRemaining, 10, TryEncumberOneItem);
+                PerformTrapManyTimes(trashRemaining, 10, TryEncumberOneItem, 4);
             }
         }
 
@@ -1520,7 +1525,7 @@ namespace StardewArchipelago.Items.Traps
                 }
 
                 return false;
-            });
+            }, 4);
         }
 
         private bool CanFishRightNow()
@@ -1682,7 +1687,7 @@ namespace StardewArchipelago.Items.Traps
         {
             var difficulty = _archipelago.SlotData.TrapItemsDifficulty;
             var numberOfMenus = _difficultyBalancer.NumberOfMenus[difficulty];
-            PerformTrapManyTimes(numberOfMenus, 2, OpenMenuOnce);
+            PerformTrapManyTimes(numberOfMenus, 3, OpenMenuOnce, 2);
         }
 
         public bool OpenMenuOnce()
@@ -1739,7 +1744,7 @@ namespace StardewArchipelago.Items.Traps
         {
             var difficulty = _archipelago.SlotData.TrapItemsDifficulty;
             var numberOfEmotes = _difficultyBalancer.NumberOfEmotes[difficulty];
-            PerformTrapManyTimes(numberOfEmotes, 2, PerformOneEmote);
+            PerformTrapManyTimes(numberOfEmotes, 3, PerformOneEmote, 1);
         }
 
         public bool PerformOneEmote()
@@ -1905,7 +1910,7 @@ namespace StardewArchipelago.Items.Traps
                 energyToRemove = Game1.player.Stamina;
             }
             Game1.player.Stamina -= energyToRemove;
-            PerformTrapManyTimes((int)Math.Ceiling(energyToRemoveOverTime), 1, LittleBitTired);
+            PerformTrapManyTimes((int)Math.Ceiling(energyToRemoveOverTime), 1, LittleBitTired, 0);
         }
 
         private bool LittleBitTired()
@@ -1930,7 +1935,7 @@ namespace StardewArchipelago.Items.Traps
                 healthToRemove = Game1.player.health;
             }
             Game1.player.health -= healthToRemove;
-            PerformTrapManyTimes((int)Math.Ceiling(healthToRemoveOverTime), 1, LittleBitInjured);
+            PerformTrapManyTimes((int)Math.Ceiling(healthToRemoveOverTime), 1, LittleBitInjured, 0);
         }
 
         private bool LittleBitInjured()

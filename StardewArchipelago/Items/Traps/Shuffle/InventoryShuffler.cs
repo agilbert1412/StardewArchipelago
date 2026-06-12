@@ -456,7 +456,7 @@ namespace StardewArchipelago.Items.Traps.Shuffle
         {
             var inventories = GetAllInventoriesWithItems();
             var itemMap = GenerateItemMap(inventories);
-            executor.PerformTrapManyTimes(extraSwaps, 10, () => SwapTwoItems(itemMap));
+            executor.PerformTrapManyTimes(extraSwaps, 10, () => SwapTwoItems(itemMap), 4);
         }
 
         private bool SwapTwoItems(Dictionary<Item, Tuple<StardewValley.Inventories.Inventory, int>> itemMap)
