@@ -59,7 +59,7 @@ namespace StardewArchipelago.Items
             cow.currentLocation = Game1.currentLocation;
             // Game1.currentLocation.Animals.Add(cow.myID.Value);
             cow.homeInterior = Game1.currentLocation;
-            cow.setRandomPosition(Game1.currentLocation);
+            CowInjections.SetRandomPosition(cow, Game1.currentLocation);
         }
 
         private string ChooseCowName(Random random, string[] allValidNames)

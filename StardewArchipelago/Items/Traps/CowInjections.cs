@@ -210,7 +210,7 @@ namespace StardewArchipelago.Items.Traps
 
         // public void doFarmerPush(int direction)
 
-        private static void SetRandomPosition(FarmAnimal cow, GameLocation location)
+        public static void SetRandomPosition(FarmAnimal cow, GameLocation location)
         {
             cow.StopAllActions();
             Rectangle parsed;
