@@ -823,7 +823,7 @@ namespace StardewArchipelago.Items.Traps
         {
             if (_archipelago.SlotData.TrapItemsDifficulty == TrapItemsDifficulty.Eldritch)
             {
-                return (100, 2300);
+                return (20, 3500);
             }
 
             return (null, null);
@@ -1258,6 +1258,11 @@ namespace StardewArchipelago.Items.Traps
                 {
                     validSlots.Add(i);
                 }
+            }
+
+            if (!validSlots.Any())
+            {
+                return false;
             }
 
             var chosenSlot = validSlots[Game1.random.Next(validSlots.Count)];
