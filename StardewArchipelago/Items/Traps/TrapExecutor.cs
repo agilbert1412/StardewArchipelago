@@ -656,7 +656,7 @@ namespace StardewArchipelago.Items.Traps
                 }
             }
 
-            if (droughtTargets != DroughtTarget.CropsAndWateringCan)
+            if (droughtTargets < DroughtTarget.CropsAndWateringCan)
             {
                 return;
             }
@@ -666,7 +666,7 @@ namespace StardewArchipelago.Items.Traps
                 wateringCan.WaterLeft = 0;
             }
 
-            if (droughtTargets != DroughtTarget.All)
+            if (droughtTargets == DroughtTarget.All)
             {
                 DryFishPonds(difficulty);
             }

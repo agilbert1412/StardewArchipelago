@@ -210,10 +210,31 @@ namespace StardewArchipelago.Items.Traps
 
         // public void doFarmerPush(int direction)
 
-        public static void SetRandomPosition(FarmAnimal cow, GameLocation location)
+        // public void setRandomPosition(GameLocation location)
+        public static bool SetRandomPosition_DontLookForProduceArea_Prefix(FarmAnimal __instance, GameLocation location)
+        {
+            try
+            {
+                if (!__instance.modData.ContainsKey(INVISIBLE_COW_KEY))
+                {
+                    return MethodPrefix.RUN_ORIGINAL_METHOD;
+                }
+
+                SetRandomPosition(__instance, location);
+                return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Failed in {nameof(SetRandomPosition_DontLookForProduceArea_Prefix)}:\n{ex}");
+                return MethodPrefix.RUN_ORIGINAL_METHOD;
+            }
+
+        }
+
+        private static void SetRandomPosition(FarmAnimal cow, GameLocation location)
         {
             cow.StopAllActions();
-            Rectangle parsed;
+            // Rectangle parsed;
             //if (!location.TryGetMapPropertyAs("ProduceArea", out parsed, true))
             //    return;
             var tile = location.getRandomTile();
@@ -228,7 +249,8 @@ namespace StardewArchipelago.Items.Traps
                     break;
                 }
             }
-            // cow.SleepIfNecessary();
+
+            cow.SleepIfNecessary();
         }
     }
 }
