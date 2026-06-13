@@ -272,6 +272,7 @@ namespace StardewArchipelago
 
                 Game1.player.team.returnedDonations.Clear();
                 Game1.player.team.newLostAndFoundItems.Value = false;
+                Game1.AddNPCs();
             }
             catch (Exception)
             {

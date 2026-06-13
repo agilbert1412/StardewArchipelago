@@ -436,7 +436,6 @@ namespace StardewArchipelago.GameModifications.EntranceRandomizer
         {
             { "Mayor's Manor", "ManorHouse" },
             { "Pierre's General Store", "SeedShop" },
-            { "Clint's Blacksmith", "Blacksmith" },
             { "Alex's House", "JoshHouse" },
             { "Tunnel Entrance", "Backwoods" },
             { "Marnie's Ranch", "AnimalShop" },
@@ -444,10 +443,10 @@ namespace StardewArchipelago.GameModifications.EntranceRandomizer
             { "Wizard Tower", "WizardHouse" },
             { "Sewers", "Sewer" },
             { "Bus Tunnel", "Tunnel" },
-            { "Carpenter Shop", "ScienceHouse|6|24" }, // LockedDoorWarp 6 24 ScienceHouse 900 2000S–
+            { "Carpenter House", "ScienceHouse|6|24" }, // LockedDoorWarp 6 24 ScienceHouse 900 2000S–
             { "Maru's Room", "ScienceHouse|3|8" }, // LockedDoorWarp 3 8 ScienceHouse 900 2000 Maru 500N
             { "Adventurer's Guild", "AdventureGuild" },
-            { "Willy's Fish Shop", "FishShop" },
+            { "Willy's Fish Cabin", "FishShop" },
             { "Museum", "ArchaeologyHouse" },
             { "Wizard Basement", "WizardHouseBasement" },
             { "The Mines", "Mine|18|13" }, // 54 4 Mine 18 13

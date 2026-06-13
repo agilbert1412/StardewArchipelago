@@ -2,10 +2,10 @@
 {
     public class ShopNames
     {
-        public const string PIERRES_GENERAL_STORE = "Pierre's General Store";
+        public const string PIERRES_GENERAL_STORE = "Pierre's General Store - Shop";
         public const string EGG_FESTIVAL = "Egg Festival";
         public const string TRAVELING_CART = "Traveling Cart";
-        public const string SALOON = "Saloon";
+        public const string SALOON = "Saloon - Shop";
         public const string BOOKSELLER_RARE_BOOKS = "Bookseller Rare Books";
         public const string MARNIES_RANCH = "Marnie's Ranch";
         public const string MINES_DWARF_SHOP = "Mines Dwarf Shop";
@@ -33,7 +33,7 @@
         public const string DESERT_FESTIVAL = "Desert Festival";
         public const string ADVENTURERS_GUILD = "Adventurer's Guild";
         public const string CLINT_SHOP = "Clint's Shop";
-        public const string CLINTS_BLACKSMITH = "Clint's Blacksmith";
+        public const string CLINTS_BLACKSMITH = "Blacksmith - Shop";
         public const string RACCOON_SHOP_AFTER_1_REQUEST = "Raccoon Shop After 1 Request";
         public const string RACCOON_SHOP_AFTER_2_REQUESTS = "Raccoon Shop After 2 Requests";
         public const string ISLAND_TRADER = "Island Trader";

@@ -40,6 +40,7 @@ using StardewValley.Tools;
 using StardewArchipelago.GameModifications.RandomizedData;
 using StardewArchipelago.GameModifications.Shops;
 using xTile.Dimensions;
+using Rectangle = Microsoft.Xna.Framework.Rectangle;
 
 namespace StardewArchipelago.GameModifications
 {
@@ -84,7 +85,7 @@ namespace StardewArchipelago.GameModifications
             QuestLogInjections.Initialize(logger, archipelago, locationChecker);
             WorldChangeEventInjections.Initialize(logger);
             CropInjections.Initialize(logger, archipelago, stardewItemManager, state.Wallet);
-            KentInjections.Initialize(logger, archipelago);
+            VillagerExistenceInjections.Initialize(logger, archipelago);
             GoldenClockInjections.Initialize(logger, archipelago);
             ZeldaAnimationInjections.Initialize(logger, archipelago);
             ItemTooltipInjections.Initialize(logger, modHelper, config, archipelago, locationChecker, nameSimplifier);
@@ -136,7 +137,7 @@ namespace StardewArchipelago.GameModifications
             PatchTvChannels();
             PatchCleanupBeforeSave();
             PatchProfitMargin();
-            PatchKent();
+            PatchVillagers();
             PatchPowers();
             PatchGoldenClock();
             PatchZeldaAnimations();
@@ -666,11 +667,36 @@ namespace StardewArchipelago.GameModifications
             );
         }
 
-        private void PatchKent()
+        private void PatchVillagers()
         {
             _harmony.Patch(
                 original: AccessTools.Method(typeof(Game1), nameof(Game1.AddCharacterIfNecessary)),
-                prefix: new HarmonyMethod(typeof(KentInjections), nameof(KentInjections.AddCharacterIfNecessary_ConsiderSeasonsRandomizerForKent_Prefix))
+                prefix: new HarmonyMethod(typeof(VillagerExistenceInjections), nameof(VillagerExistenceInjections.AddCharacterIfNecessary_ConsiderArrivals_Prefix))
+            );
+
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(Game1), nameof(Game1.AddNPCs)),
+                prefix: new HarmonyMethod(typeof(VillagerExistenceInjections), nameof(VillagerExistenceInjections.AddNPCs_RemoveNPCsThatDontExistYet_Prefix))
+            );
+
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(Game1), nameof(Game1.PlayEvent), new[] { typeof(string), typeof(bool), typeof(bool) }),
+                prefix: new HarmonyMethod(typeof(VillagerExistenceInjections), nameof(VillagerExistenceInjections.PlayEvent_DontPlayEventsWithNPCsThatDontExistYet_Prefix))
+            );
+
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(Event), nameof(Event.CheckPrecondition)),
+                prefix: new HarmonyMethod(typeof(VillagerExistenceInjections), nameof(VillagerExistenceInjections.CheckPrecondition_DontPlayEventsWithNPCsThatDontExistYet_Prefix))
+            );
+
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(Utility), nameof(Utility.TryOpenShopMenu), new []{typeof(string), typeof(string), typeof(bool) }),
+                prefix: new HarmonyMethod(typeof(VillagerExistenceInjections), nameof(VillagerExistenceInjections.TryOpenShopMenuSimple_NoShopsWithoutOwnerExisting_Prefix))
+            );
+
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(Utility), nameof(Utility.TryOpenShopMenu), new[] { typeof(string), typeof(GameLocation), typeof(Rectangle?), typeof(int?), typeof(bool), typeof(bool), typeof(bool), typeof(Action<string>) }),
+                prefix: new HarmonyMethod(typeof(VillagerExistenceInjections), nameof(VillagerExistenceInjections.TryOpenShopMenuComplex_NoShopsWithoutOwnerExisting_Prefix))
             );
         }
 
