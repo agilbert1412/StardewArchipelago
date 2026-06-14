@@ -29,6 +29,7 @@ namespace StardewArchipelago.Serialization
         public int MaxJotPKLevelBeaten { get; set; }
         public int MaxJunimoKartLevelBeaten { get; set; }
         public TrapsStateDto TrapsState { get; set; }
+        public bool HasFoundFarmhouseBed { get; set; }
 
         public ArchipelagoStateDto()
         {
@@ -54,6 +55,7 @@ namespace StardewArchipelago.Serialization
             MaxJotPKLevelBeaten = 0;
             MaxJunimoKartLevelBeaten = 0;
             TrapsState = new TrapsStateDto();
+            HasFoundFarmhouseBed = false;
         }
     }
 }

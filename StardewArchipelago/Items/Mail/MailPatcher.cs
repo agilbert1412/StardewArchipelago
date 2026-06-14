@@ -1,17 +1,20 @@
 ﻿using HarmonyLib;
 using KaitoKid.ArchipelagoUtilities.Net;
 using KaitoKid.ArchipelagoUtilities.Net.Constants;
+using KaitoKid.Utilities.Interfaces;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using StardewArchipelago.Archipelago;
 using StardewArchipelago.Archipelago.SlotData.SlotEnums;
 using StardewArchipelago.Goals;
+using StardewArchipelago.Locations.CodeInjections.Vanilla;
 using StardewArchipelago.Serialization;
 using StardewValley;
 using StardewValley.Menus;
 using System;
 using System.Linq;
-using KaitoKid.Utilities.Interfaces;
+using xTile.Dimensions;
+using Rectangle = Microsoft.Xna.Framework.Rectangle;
 
 namespace StardewArchipelago.Items.Mail
 {
@@ -41,42 +44,20 @@ namespace StardewArchipelago.Items.Mail
                 postfix: new HarmonyMethod(typeof(MailPatcher), nameof(ExitThisMenu_ApplyLetterAction_Postfix))
             );
 
-            if (ModEntry.Instance.Config.HideEmptyArchipelagoLetters)
-            {
-                _harmony.Patch(
-                    original: AccessTools.Method(typeof(GameLocation), nameof(GameLocation.mailbox)),
-                    prefix: new HarmonyMethod(typeof(MailPatcher), nameof(Mailbox_HideEmptyApLetters_Prefix))
-                );
-            }
-
-            if (ModEntry.Instance.Config.HideNpcGiftMail)
-            {
-                _harmony.Patch(
-                    original: AccessTools.Method(typeof(GameLocation), nameof(GameLocation.mailbox)),
-                    prefix: new HarmonyMethod(typeof(MailPatcher), nameof(Mailbox_HideNpcGiftMail_Prefix))
-                );
-            }
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(GameLocation), nameof(GameLocation.mailbox)),
+                prefix: new HarmonyMethod(typeof(MailPatcher), nameof(Mailbox_RemoveAndReplaceLetters_Prefix))
+            );
 
             _harmony.Patch(
                 original: AccessTools.Method(typeof(Farm), nameof(Farm.draw)),
                 postfix: new HarmonyMethod(typeof(MailPatcher), nameof(Draw_AddMailNumber_Postfix))
             );
 
-            if (_archipelago.SlotData.Fishsanity != Fishsanity.None)
-            {
-                _harmony.Patch(
-                    original: AccessTools.Method(typeof(GameLocation), nameof(GameLocation.mailbox)),
-                    prefix: new HarmonyMethod(typeof(MailPatcher), nameof(Mailbox_RemoveMasterAnglerStardropOnFishsanity_Prefix))
-                );
-            }
-
-            if (_archipelago.SlotData.FestivalLocations != FestivalLocations.Vanilla)
-            {
-                _harmony.Patch(
-                    original: AccessTools.Method(typeof(GameLocation), nameof(GameLocation.mailbox)),
-                    prefix: new HarmonyMethod(typeof(MailPatcher), nameof(Mailbox_RemoveRarecrowSocietyRecipeOnFestivals_Prefix))
-                );
-            }
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(GameLocation), nameof(GameLocation.checkAction)),
+                postfix: new HarmonyMethod(typeof(MailPatcher), nameof(CheckAction_ClickGhostMailbox_Postfix))
+            );
         }
 
         public static void ExitThisMenu_ApplyLetterAction_Postfix(IClickableMenu __instance, bool playSound)
@@ -112,22 +93,44 @@ namespace StardewArchipelago.Items.Mail
         }
 
         // public void mailbox()
-        public static bool Mailbox_HideEmptyApLetters_Prefix(GameLocation __instance)
+        public static bool Mailbox_RemoveAndReplaceLetters_Prefix(GameLocation __instance)
         {
             try
             {
+                MailboxHideEmptyApLetters();
+                MailboxHideNpcGiftMail();
+                MailboxRemoveMasterAnglerStardropOnFishsanity();
+                MailboxRemoveRarecrowSocietyRecipeOnFestivals();
+                return MethodPrefix.RUN_ORIGINAL_METHOD;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Failed in {nameof(Mailbox_RemoveAndReplaceLetters_Prefix)}:\n{ex}");
+                return MethodPrefix.RUN_ORIGINAL_METHOD;
+            }
+        }
+
+        public static void MailboxHideEmptyApLetters()
+        {
+            try
+            {
+                if (!ModEntry.Instance.Config.HideEmptyArchipelagoLetters)
+                {
+                    return;
+                }
+
                 CleanMailboxUntilNonEmptyLetter();
                 var mailbox = Game1.mailbox;
                 if (mailbox == null || !mailbox.Any())
                 {
-                    return MethodPrefix.RUN_ORIGINAL_METHOD;
+                    return;
                 }
 
                 var nextLetter = mailbox.First();
 
                 if (!MailKey.TryParse(nextLetter, out _))
                 {
-                    return MethodPrefix.RUN_ORIGINAL_METHOD;
+                    return;
                 }
 
                 var mailData = DataLoader.Mail(Game1.content);
@@ -139,13 +142,11 @@ namespace StardewArchipelago.Items.Mail
                 // We force add the letter because it can contain custom content that can be then considered "to not be remembered" by the base game.
                 // So if it's an ap letter, always remember it
                 Game1.player.mailReceived.Add(nextLetter);
-
-                return MethodPrefix.RUN_ORIGINAL_METHOD;
             }
             catch (Exception ex)
             {
-                _logger.LogError($"Failed in {nameof(Mailbox_HideEmptyApLetters_Prefix)}:\n{ex}");
-                return MethodPrefix.RUN_ORIGINAL_METHOD;
+                _logger.LogError($"Failed in {nameof(MailboxHideEmptyApLetters)}:\n{ex}");
+                return;
             }
         }
 
@@ -171,30 +172,33 @@ namespace StardewArchipelago.Items.Mail
             }
         }
 
-        // public void mailbox()
-        public static bool Mailbox_RemoveMasterAnglerStardropOnFishsanity_Prefix(GameLocation __instance)
+        public static void MailboxRemoveMasterAnglerStardropOnFishsanity()
         {
             try
             {
+                if (_archipelago.SlotData.Fishsanity == Fishsanity.None)
+                {
+                    return;
+                }
+
                 var mailbox = Game1.mailbox;
                 if (mailbox == null || !mailbox.Any())
                 {
-                    return MethodPrefix.RUN_ORIGINAL_METHOD;
+                    return;
                 }
 
                 var nextLetter = mailbox.First();
                 if (!nextLetter.Equals(GoalCodeInjection.MASTER_ANGLER_LETTER))
                 {
-                    return MethodPrefix.RUN_ORIGINAL_METHOD;
+                    return;
                 }
 
                 ReplaceStardropWithSeafoamPudding();
-                return MethodPrefix.RUN_ORIGINAL_METHOD;
             }
             catch (Exception ex)
             {
-                _logger.LogError($"Failed in {nameof(Mailbox_RemoveMasterAnglerStardropOnFishsanity_Prefix)}:\n{ex}");
-                return MethodPrefix.RUN_ORIGINAL_METHOD;
+                _logger.LogError($"Failed in {nameof(MailboxRemoveMasterAnglerStardropOnFishsanity)}:\n{ex}");
+                return;
             }
         }
 
@@ -215,31 +219,34 @@ namespace StardewArchipelago.Items.Mail
         private const string RARECROW_SOCIETY_LETTER = "RarecrowSociety";
         private const string RARECROW_SOCIETY_AP_LOCATION = "Collect All Rarecrows";
 
-        // public void mailbox()
-        public static bool Mailbox_RemoveRarecrowSocietyRecipeOnFestivals_Prefix(GameLocation __instance)
+        public static void MailboxRemoveRarecrowSocietyRecipeOnFestivals()
         {
             try
             {
+                if (_archipelago.SlotData.FestivalLocations == FestivalLocations.Vanilla)
+                {
+                    return;
+                }
+
                 var mailbox = Game1.mailbox;
                 if (mailbox == null || !mailbox.Any())
                 {
-                    return MethodPrefix.RUN_ORIGINAL_METHOD;
+                    return;
                 }
 
                 var nextLetter = mailbox.First();
                 if (!nextLetter.Equals(RARECROW_SOCIETY_LETTER))
                 {
-                    return MethodPrefix.RUN_ORIGINAL_METHOD;
+                    return;
                 }
 
                 RemoveDeluxeScarecrowRecipe();
                 _locationChecker.AddCheckedLocation(RARECROW_SOCIETY_AP_LOCATION);
-                return MethodPrefix.RUN_ORIGINAL_METHOD;
             }
             catch (Exception ex)
             {
-                _logger.LogError($"Failed in {nameof(Mailbox_RemoveRarecrowSocietyRecipeOnFestivals_Prefix)}:\n{ex}");
-                return MethodPrefix.RUN_ORIGINAL_METHOD;
+                _logger.LogError($"Failed in {nameof(MailboxRemoveRarecrowSocietyRecipeOnFestivals)}:\n{ex}");
+                return;
             }
         }
 
@@ -280,15 +287,12 @@ namespace StardewArchipelago.Items.Mail
                 const float scale = 1f;
                 Utility.drawTinyDigits(numLetters, b, localPosition + new Vector2(64 - Utility.getWidthOfTinyDigitString(numLetters, 3f * scale) + 3f * scale, (float)(64.0 - 18.0 * scale + 1.0)), 3f * scale, 1f, Color.Red);
 
-                //var layerDepth = (float)((mailboxPositionTile.X + 1) * 64 / 10000.0 + mailboxPositionTile.Y * 64 / 10000.0);
-                //var bubblePositionGlobal = new Vector2(mailboxPositionTile.X * 64, mailboxPositionTile.Y * 64 - 96 - 48 + animationOffsetY);
-                //var mailPositionGlobal = new Vector2(mailboxPositionTile.X * 64 + 32 + 4, mailboxPositionTile.Y * 64 - 64 - 24 - 8 + animationOffsetY);
-                //var bubblePosition = Game1.GlobalToLocal(Game1.viewport, bubblePositionGlobal);
-                //var mailPosition = Game1.GlobalToLocal(Game1.viewport, mailPositionGlobal);
-                //var bubbleRect = new Rectangle(141, 465, 20, 24);
-                //var mailRect = new Rectangle(189, 423, 15, 13);
-                //b.Draw(Game1.mouseCursors, bubblePosition, bubbleRect, Color.White * 0.75f, 0.0f, Vector2.Zero, 4f, SpriteEffects.None, layerDepth + 1E-06f);
-                //b.Draw(Game1.mouseCursors, mailPosition, mailRect, Color.White, 0.0f, new Vector2(7f, 6f), 4f, SpriteEffects.None, layerDepth + 1E-05f);
+                if (_archipelago.HasReceivedItem(CarpenterInjections.BUILDING_PROGRESSIVE_HOUSE))
+                {
+                    return;
+                }
+
+                DrawGhostMailbox(__instance, b);
 
                 return;
             }
@@ -299,15 +303,31 @@ namespace StardewArchipelago.Items.Mail
             }
         }
 
-        // public void mailbox()
-        public static bool Mailbox_HideNpcGiftMail_Prefix(GameLocation __instance)
+        private static void DrawGhostMailbox(Farm farm, SpriteBatch spriteBatch)
+        {
+            var texture = Game1.content.Load<Texture2D>("Buildings\\Mailbox");
+            var mailboxPositionTile = Game1.player.getMailboxPosition();
+            var position = Game1.GlobalToLocal(Game1.viewport, new Vector2(mailboxPositionTile.X * 64 + 8, mailboxPositionTile.Y * 64 - 64));
+            var sourceRect = new Rectangle(0, 0, 16, 32);
+            var alpha = 0.5f;
+            var color = Color.White * alpha;
+            var layerDepth = (((mailboxPositionTile.Y + 2) * 64) - 1) / 10000f;
+            spriteBatch.Draw(texture, position, sourceRect, color, 0.0f, new Vector2(0.0f, 0.0f), 4f, SpriteEffects.None, layerDepth);
+        }
+
+        public static void MailboxHideNpcGiftMail()
         {
             try
             {
+                if (!ModEntry.Instance.Config.HideNpcGiftMail)
+                {
+                    return;
+                }
+
                 var mailbox = Game1.mailbox;
                 if (mailbox == null | !mailbox.Any())
                 {
-                    return MethodPrefix.RUN_ORIGINAL_METHOD;
+                    return;
                 }
 
                 while (mailbox.Count > 1)
@@ -315,18 +335,16 @@ namespace StardewArchipelago.Items.Mail
                     var nextLetter = Game1.mailbox[1]; //Check starting from the second letter, attempting to remove the first letter causes the entire mailbox to be emptied, including received items and quests
                     if (!Game1.player.friendshipData.Keys.Contains(nextLetter))
                     {
-                        return MethodPrefix.RUN_ORIGINAL_METHOD;
+                        return;
                     }
                     Game1.player.mailReceived.Add(nextLetter);
                     mailbox.RemoveAt(1);
                 }
-
-                return MethodPrefix.RUN_ORIGINAL_METHOD;
             }
             catch (Exception ex)
             {
-                _logger.LogError($"Failed in {nameof(Mailbox_HideNpcGiftMail_Prefix)}:\n{ex}");
-                return MethodPrefix.RUN_ORIGINAL_METHOD;
+                _logger.LogError($"Failed in {nameof(MailboxHideNpcGiftMail)}:\n{ex}");
+                return;
             }
         }
 
@@ -359,6 +377,43 @@ namespace StardewArchipelago.Items.Mail
             }
 
             return false;
+        }
+
+        // public virtual bool checkAction(Location tileLocation, xTile.Dimensions.Rectangle viewport, Farmer who)
+        public static void CheckAction_ClickGhostMailbox_Postfix(GameLocation __instance, Location tileLocation, xTile.Dimensions.Rectangle viewport, Farmer who, ref bool __result)
+        {
+            try
+            {
+                if (__result || __instance is not Farm farm)
+                {
+                    return;
+                }
+
+                if (!_archipelago.SlotData.StartWithout.HasFlag(StartWithout.House) || _archipelago.HasReceivedItem(CarpenterInjections.BUILDING_PROGRESSIVE_HOUSE))
+                {
+                    return;
+                }
+
+                if (Game1.mailbox.Count <= 0)
+                {
+                    return;
+                }
+
+                var mailboxPositionTile = Game1.player.getMailboxPosition();
+                if (tileLocation.X == mailboxPositionTile.X && tileLocation.Y == mailboxPositionTile.Y)
+                {
+                    farm.mailbox();
+                    __result = true;
+                    return;
+                }
+
+                return;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Failed in {nameof(CheckAction_ClickGhostMailbox_Postfix)}:\n{ex}");
+                return;
+            }
         }
     }
 }

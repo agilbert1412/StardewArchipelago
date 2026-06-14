@@ -11,8 +11,10 @@ using StardewArchipelago.Archipelago.SlotData;
 using StardewArchipelago.Constants;
 using StardewArchipelago.Locations.CodeInjections.Vanilla;
 using StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles;
+using StardewArchipelago.Serialization;
 using StardewModdingAPI;
 using StardewValley;
+using StardewValley.Locations;
 
 namespace StardewArchipelago.GameModifications.MultiSleep
 {
@@ -58,18 +60,18 @@ namespace StardewArchipelago.GameModifications.MultiSleep
 
         public void InjectMultiSleepOption(SlotData slotData)
         {
+            var performTouchActionParameters = new[] { typeof(string[]), typeof(Vector2) };
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(GameLocation), nameof(GameLocation.performTouchAction), performTouchActionParameters),
+                prefix: new HarmonyMethod(typeof(MultiSleepManager), nameof(PerformTouchAction_Sleep_Prefix))
+            );
+
             if (!slotData.EnableMultiSleep)
             {
                 return;
             }
 
             _multiSleepPrice = slotData.MultiSleepCostPerDay;
-
-            var performTouchActionParameters = new[] { typeof(string[]), typeof(Vector2) };
-            _harmony.Patch(
-                original: AccessTools.Method(typeof(GameLocation), nameof(GameLocation.performTouchAction), performTouchActionParameters),
-                prefix: new HarmonyMethod(typeof(MultiSleepManager), nameof(PerformTouchAction_Sleep_Prefix))
-            );
 
             _harmony.Patch(
                 original: AccessTools.Method(typeof(GameLocation), nameof(GameLocation.answerDialogueAction)),
@@ -82,6 +84,16 @@ namespace StardewArchipelago.GameModifications.MultiSleep
         {
             try
             {
+                if (__instance is FarmHouse)
+                {
+                    ModEntry.Instance.State.HasFoundFarmhouseBed = true;
+                }
+
+                if (!_archipelago.SlotData.EnableMultiSleep)
+                {
+                    return MethodPrefix.RUN_ORIGINAL_METHOD;
+                }
+
                 var actionStringFirstWord = action[0];
 
                 if (Game1.eventUp || actionStringFirstWord != "Sleep" || Game1.newDay || !Game1.shouldTimePass() || !Game1.player.hasMoved || Game1.player.passedOut)

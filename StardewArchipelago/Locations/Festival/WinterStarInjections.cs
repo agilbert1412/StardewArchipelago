@@ -22,6 +22,23 @@ namespace StardewArchipelago.Locations.Festival
         // private static Random _lastProvidedRandom;
         // private static Random _random = null;
 
+        private static NPC _fakeNpcNobody;
+
+        private static NPC Nobody
+        {
+            get
+            {
+                if (_fakeNpcNobody == null)
+                {
+                    _fakeNpcNobody = new NPC
+                    {
+                        displayName = "nobody",
+                    };
+                }
+                return _fakeNpcNobody;
+            }
+        }
+
         public static void Initialize(ILogger logger, IModHelper modHelper, StardewArchipelagoClient archipelago, LocationChecker locationChecker)
         {
             _logger = logger;
@@ -64,6 +81,11 @@ namespace StardewArchipelago.Locations.Festival
             {
                 var random = Utility.CreateRandom((int)(Game1.uniqueIDForThisGame / 2UL), (int)(Game1.stats.DaysPlayed / 28), (double)Game1.player.UniqueMultiplayerID);
                 __result = Utility.GetRandomNpc((name, data) => IsWinterStarParticipant(name, data, ignoreNpc), random);
+
+                if (__result == null)
+                {
+                    __result = Nobody;
+                }
 
                 return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
             }

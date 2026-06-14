@@ -85,6 +85,7 @@ namespace StardewArchipelago.GameModifications
             QuestLogInjections.Initialize(logger, archipelago, locationChecker);
             WorldChangeEventInjections.Initialize(logger);
             CropInjections.Initialize(logger, archipelago, stardewItemManager, state.Wallet);
+            NoHouseInjections.Initialize(logger, archipelago, state);
             VillagerExistenceInjections.Initialize(logger, archipelago);
             GoldenClockInjections.Initialize(logger, archipelago);
             ZeldaAnimationInjections.Initialize(logger, archipelago);
@@ -695,7 +696,7 @@ namespace StardewArchipelago.GameModifications
             );
 
             _harmony.Patch(
-                original: AccessTools.Method(typeof(Utility), nameof(Utility.TryOpenShopMenu), new[] { typeof(string), typeof(GameLocation), typeof(Rectangle?), typeof(int?), typeof(bool), typeof(bool), typeof(bool), typeof(Action<string>) }),
+                original: AccessTools.Method(typeof(Utility), nameof(Utility.TryOpenShopMenu), new[] { typeof(string), typeof(GameLocation), typeof(Rectangle?), typeof(int?), typeof(bool), typeof(bool), typeof(Action<string>) }),
                 prefix: new HarmonyMethod(typeof(VillagerExistenceInjections), nameof(VillagerExistenceInjections.TryOpenShopMenuComplex_NoShopsWithoutOwnerExisting_Prefix))
             );
         }

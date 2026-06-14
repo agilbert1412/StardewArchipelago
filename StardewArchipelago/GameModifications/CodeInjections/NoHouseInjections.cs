@@ -12,7 +12,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using StardewArchipelago.Locations.CodeInjections.Vanilla;
+using StardewArchipelago.Serialization;
 using StardewValley.Buildings;
+using StardewValley.Locations;
 
 namespace StardewArchipelago.GameModifications.CodeInjections
 {
@@ -20,27 +22,34 @@ namespace StardewArchipelago.GameModifications.CodeInjections
     {
         private static ILogger _logger;
         private static StardewArchipelagoClient _archipelago;
+        private static ArchipelagoStateDto _state;
 
-        public static void Initialize(ILogger logger, StardewArchipelagoClient archipelago)
+        public static void Initialize(ILogger logger, StardewArchipelagoClient archipelago, ArchipelagoStateDto state)
         {
             _logger = logger;
             _archipelago = archipelago;
+            _state = state;
         }
 
         public static void BeHomelessIfNeeded()
         {
             if (!_archipelago.SlotData.StartWithout.HasFlag(StartWithout.House))
             {
-                return;
+                _state.HasFoundFarmhouseBed = true;
             }
 
-            if (_archipelago.HasReceivedItem(CarpenterInjections.BUILDING_PROGRESSIVE_HOUSE))
+            if (_state.HasFoundFarmhouseBed)
             {
                 return;
             }
 
-            Game1.player.currentLocation = Game1.RequireLocation("Farm");
-            Game1.currentLocation = Game1.player.currentLocation;
+            if (Game1.player.currentLocation is FarmHouse)
+            {
+                var farm = Game1.RequireLocation("Farm") as Farm;
+                Game1.player.currentLocation = farm;
+                Game1.player.Position = Utility.PointToVector2(farm.GetMainFarmHouseEntry()) * 64f;
+                Game1.currentLocation = Game1.player.currentLocation;
+            }
         }
 
         private static void ConstructHouseIfNeeded()
