@@ -83,6 +83,7 @@ namespace StardewArchipelago.Registry
             _modHelper.ConsoleCommands.Add("trap_difficulty", "Override the trap difficulty setting", OverrideTrapDifficulty);
             _modHelper.ConsoleCommands.Add("override_entrance_randomizer", "Override the Entrance Randomizer to force it off. Does not work for values that change the logic.", OverrideEntranceRandomizer);
             _modHelper.ConsoleCommands.Add("export_bundles", "Exports the entirety of the current bundles for the slot, to a json file in the game folder. Contains spoilers!", ExportBundles);
+            _modHelper.ConsoleCommands.Add("forget_bed", "If you started without a house but slept in your bed once, this command will forget about it and spawn you outside again.", ForgetBed);
         }
 
         private void RegisterDebugCommands()
@@ -475,6 +476,18 @@ namespace StardewArchipelago.Registry
 
             _logger.Log($"Sending '{locationName}'...", LogLevel.Info);
             _locationChecker.AddCheckedLocation(locationName);
+        }
+
+        private void ForgetBed(string arg1, string[] arg2)
+        {
+            if (_archipelago == null || _state == null || _archipelago.SlotData == null)
+            {
+                _logger.Log($"This command can only be used from in-game, when connected to Archipelago", LogLevel.Info);
+                return;
+            }
+
+            _state.HasFoundFarmhouseBed = false;
+            _logger.Log($"Forgot your bed!", LogLevel.Info);
         }
     }
 }

@@ -66,17 +66,20 @@ namespace StardewArchipelago.GameModifications
             }
 
             RemoveGiftBoxes(farmhouse);
+
+            var (location, originalTile) = GetGiftboxPlacement(farmhouse);
+
             var startCrop = _stardewItemManager.GetItemByName(GetStartingCropForThisSeason()).PrepareForGivingToFarmer(15);
-            CreateGiftBoxItemInEmptySpot(farmhouse, startCrop);
+            CreateGiftBoxItemInEmptySpot(location, originalTile, startCrop);
             var telephone = _stardewItemManager.GetItemByName("Telephone").PrepareForGivingToFarmer();
-            CreateGiftBoxItemInEmptySpot(farmhouse, telephone);
+            CreateGiftBoxItemInEmptySpot(location, originalTile, telephone);
             var calendar = _stardewItemManager.GetItemByName("Calendar").PrepareForGivingToFarmer();
-            CreateGiftBoxItemInEmptySpot(farmhouse, calendar);
+            CreateGiftBoxItemInEmptySpot(location, originalTile, calendar);
 
             if (!_archipelago.SlotData.QuickStart)
             {
                 var chest = _stardewItemManager.GetItemByName("Chest").PrepareForGivingToFarmer(1);
-                CreateGiftBoxItemInEmptySpot(farmhouse, chest);
+                CreateGiftBoxItemInEmptySpot(location, originalTile, chest);
                 return;
             }
 
@@ -86,11 +89,11 @@ namespace StardewArchipelago.GameModifications
             var autoPetters = _stardewItemManager.GetItemByName("Auto-Petter").PrepareForGivingToFarmer(2);
             var autoGrabbers = _stardewItemManager.GetItemByName("Auto-Grabber").PrepareForGivingToFarmer(2);
 
-            CreateGiftBoxItemInEmptySpot(farmhouse, chests);
-            CreateGiftBoxItemInEmptySpot(farmhouse, iridiumBand);
-            CreateGiftBoxItemInEmptySpot(farmhouse, qualitySprinklers);
-            CreateGiftBoxItemInEmptySpot(farmhouse, autoPetters);
-            CreateGiftBoxItemInEmptySpot(farmhouse, autoGrabbers);
+            CreateGiftBoxItemInEmptySpot(location, originalTile, chests);
+            CreateGiftBoxItemInEmptySpot(location, originalTile, iridiumBand);
+            CreateGiftBoxItemInEmptySpot(location, originalTile, qualitySprinklers);
+            CreateGiftBoxItemInEmptySpot(location, originalTile, autoPetters);
+            CreateGiftBoxItemInEmptySpot(location, originalTile, autoGrabbers);
 
 #if TILESANITY
             var paths = _stardewItemManager.GetItemByName("Crystal Path").PrepareForGivingToFarmer(100);
@@ -99,7 +102,22 @@ namespace StardewArchipelago.GameModifications
             CreateGiftBoxItemInEmptySpot(farmhouse, seed_maker);
 #endif
         }
-        
+
+        private (GameLocation, Vector2) GetGiftboxPlacement(FarmHouse farmhouse)
+        {
+            GameLocation location = farmhouse;
+            var originalTile = new Vector2(3f, 7f);
+
+            if (_archipelago.SlotData.StartWithout.HasFlag(StartWithout.House))
+            {
+                var farm = (Farm)Game1.RequireLocation("Farm");
+                location = farm;
+                var startingTile = farm.GetMainFarmHouseEntry();
+                originalTile = new Vector2(startingTile.X - 2, startingTile.Y + 3);
+            }
+            return (location, originalTile);
+        }
+
         private void RemoveStartingTools()
         {
             if (!_archipelago.SlotData.StartWithout.HasFlag(StartWithout.Tools))
@@ -121,12 +139,13 @@ namespace StardewArchipelago.GameModifications
             {
                 Game1.player.MaxItems = 0;
                 var farmhouse = Game1.getLocationFromName("FarmHouse") as FarmHouse;
+                var (location, originalTile) = GetGiftboxPlacement(farmhouse);
                 while (Game1.player.Items.Count > Game1.player.MaxItems)
                 {
                     var item = Game1.player.Items[0];
                     if (item != null)
                     {
-                        CreateGiftBoxItemInEmptySpot(farmhouse, item);
+                        CreateGiftBoxItemInEmptySpot(location, originalTile, item);
                         Game1.player.Items[0] = null;
                     }
                     Game1.player.Items.RemoveAt(0);
@@ -169,27 +188,26 @@ namespace StardewArchipelago.GameModifications
             };
         }
 
-        private void CreateGiftBoxItemInEmptySpot(FarmHouse farmhouse, Item itemToGift)
+        private void CreateGiftBoxItemInEmptySpot(GameLocation map, Vector2 originTile, Item itemToGift)
         {
-            var origSpot = new Vector2(3f, 7f);
-            var emptySpot = origSpot;
+            var emptySpot = originTile;
             var maxStep = 3;
-            while (farmhouse.objects.ContainsKey(emptySpot))
+            while (map.objects.ContainsKey(emptySpot))
             {
                 emptySpot.X = emptySpot.X + 1;
-                if (emptySpot.X > origSpot.X + maxStep)
+                if (emptySpot.X > originTile.X + maxStep)
                 {
-                    emptySpot.X = origSpot.X;
+                    emptySpot.X = originTile.X;
                     emptySpot.Y += 1;
                 }
 
-                if (emptySpot.Y > origSpot.Y + maxStep)
+                if (emptySpot.Y > originTile.Y + maxStep)
                 {
-                    emptySpot.Y = origSpot.Y - maxStep;
+                    emptySpot.Y = originTile.Y - maxStep;
                 }
             }
 
-            farmhouse.objects.Add(emptySpot, new Chest(new List<Item> { itemToGift }, emptySpot, true, giftboxIsStarterGift: true));
+            map.objects.Add(emptySpot, new Chest(new List<Item> { itemToGift }, emptySpot, true, giftboxIsStarterGift: true));
         }
 
         private void RemoveHouse()
