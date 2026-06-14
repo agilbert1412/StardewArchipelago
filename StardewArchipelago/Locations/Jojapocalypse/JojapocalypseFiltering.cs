@@ -492,7 +492,12 @@ namespace StardewArchipelago.Locations.Jojapocalypse
             }
 
             var mappedName = _nameMapper.GetRecipeName(recipe);
-            return Game1.player.knowsRecipe(mappedName);
+            if (Game1.player.knowsRecipe(mappedName))
+            {
+                return true;
+            }
+
+            return false;
         }
 
         private bool ValidateMovieLocation(StardewArchipelagoLocation location)

@@ -427,35 +427,35 @@ namespace StardewArchipelago.Stardew
                 _objectsById.Add(id, stardewItem);
                 _objectsByQualifiedId.Add(stardewItem.GetQualifiedId(), stardewItem);
                 _itemsByQualifiedId.Add(stardewItem.GetQualifiedId(), stardewItem);
-                AddItemAndAliasesToNamesDictionary(stardewItem);
+                AddItemAndAliasesToNamesDictionary(stardewItem.Name, stardewItem.Id, _objectsByName, stardewItem);
             }
         }
 
-        private void AddItemAndAliasesToNamesDictionary(StardewObject stardewItem)
+        private static void AddItemAndAliasesToNamesDictionary<T>(string name, string id, Dictionary<string, T> itemsByName, T stardewItem)
         {
-            if (string.IsNullOrWhiteSpace(stardewItem.Name))
+            if (string.IsNullOrWhiteSpace(name))
             {
                 return;
             }
 
             foreach (var aliasGroup in NameAliases.ItemNameAliasGroups)
             {
-                if (!aliasGroup.Contains(stardewItem.Name) && !aliasGroup.Contains(stardewItem.Id))
+                if (!aliasGroup.Contains(name) && !aliasGroup.Contains(id))
                 {
                     continue;
                 }
 
                 foreach (var alias in aliasGroup)
                 {
-                    _objectsByName.TryAdd(alias, stardewItem);
+                    itemsByName.TryAdd(alias, stardewItem);
                 }
 
                 return;
             }
 
-            if (!_objectsByName.ContainsKey(stardewItem.Name))
+            if (!itemsByName.ContainsKey(name))
             {
-                _objectsByName.TryAdd(stardewItem.Name, stardewItem);
+                itemsByName.TryAdd(name, stardewItem);
             }
         }
 
@@ -495,6 +495,7 @@ namespace StardewArchipelago.Stardew
                 _bigCraftablesById.Add(id, bigCraftable);
                 _bigCraftablesByName.Add(bigCraftable.Name, bigCraftable);
                 _itemsByQualifiedId.Add(bigCraftable.GetQualifiedId(), bigCraftable);
+                AddItemAndAliasesToNamesDictionary(bigCraftable.Name, bigCraftable.Id, _bigCraftablesByName, bigCraftable);
             }
         }
 
