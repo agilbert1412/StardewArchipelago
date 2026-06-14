@@ -464,6 +464,8 @@ namespace StardewArchipelago
             }
 
             DoArchipelagoDayStartedProcesses();
+
+            NoHouseInjections.BeHomelessIfNeeded();
         }
 
         private void DoArchipelagoDayStartedProcesses()

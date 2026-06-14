@@ -3,7 +3,7 @@
     public class ShopNames
     {
         public const string PIERRES_GENERAL_STORE = "Pierre's General Store - Shop";
-        public const string EGG_FESTIVAL = "Egg Festival";
+        public const string EGG_FESTIVAL = "Egg Festival - Shop";
         public const string TRAVELING_CART = "Traveling Cart";
         public const string SALOON = "Saloon - Shop";
         public const string BOOKSELLER_RARE_BOOKS = "Bookseller Rare Books";
@@ -20,10 +20,10 @@
         public const string TICKET_STAND = "Ticket Stand";
         public const string TOWN = "Town";
         public const string OASIS = "Oasis";
-        public const string FLOWER_DANCE = "Flower Dance";
-        public const string DANCE_OF_THE_MOONLIGHT_JELLIES = "Dance of the Moonlight Jellies";
+        public const string FLOWER_DANCE = "Flower Dance - Shop";
+        public const string DANCE_OF_THE_MOONLIGHT_JELLIES = "Dance of the Moonlight Jellies - Shop";
         public const string STARDEW_VALLEY_FAIR = "Stardew Valley Fair";
-        public const string SPIRITS_EVE = "Spirit's Eve";
+        public const string SPIRITS_EVE = "Spirit's Eve - Shop";
         public const string FESTIVAL_OF_ICE = "Festival of Ice";
         public const string NIGHT_MARKET = "Night Market";
         public const string LOST_ITEMS_SHOP = "Lost Items Shop";

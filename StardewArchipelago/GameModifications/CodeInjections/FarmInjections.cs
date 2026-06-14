@@ -8,11 +8,13 @@ using StardewArchipelago.Archipelago;
 using StardewArchipelago.Archipelago.SlotData.SlotEnums;
 using StardewArchipelago.Goals;
 using StardewArchipelago.Items.Mail;
+using StardewArchipelago.Locations.CodeInjections.Vanilla;
 using StardewArchipelago.Locations.CodeInjections.Vanilla.Relationship;
 using StardewArchipelago.Serialization;
 using StardewValley;
 using StardewValley.Buildings;
 using StardewValley.Characters;
+using StardewValley.Locations;
 using StardewValley.Menus;
 using StardewValley.TerrainFeatures;
 using xTile.Dimensions;
@@ -206,6 +208,7 @@ namespace StardewArchipelago.GameModifications.CodeInjections
             try
             {
                 var farm = Game1.getFarm();
+                ConstructStarterHouse(farm);
                 ConstructStarterShippingBin(farm);
                 ConstructStarterPetBowl(farm);
             }
@@ -214,6 +217,17 @@ namespace StardewArchipelago.GameModifications.CodeInjections
                 _logger.LogError($"Failed in {nameof(PlaceAutoBuildings)}:\n{ex}");
                 return;
             }
+        }
+
+        private static void ConstructStarterHouse(Farm farm)
+        {
+            var item = CarpenterInjections.BUILDING_PROGRESSIVE_HOUSE;
+            if (!_archipelago.HasReceivedItem(item))
+            {
+                return;
+            }
+
+            farm.AddDefaultBuilding("Farmhouse", farm.GetStarterFarmhouseLocation());
         }
 
         private static void ConstructStarterShippingBin(Farm farm)
@@ -269,6 +283,20 @@ namespace StardewArchipelago.GameModifications.CodeInjections
             }
 
             farm.AddDefaultBuilding(blueprint, farm.GetStarterPetBowlLocation());
+        }
+
+        public static List<Building> FindHouses(Farm farm)
+        {
+            var houses = new List<Building>();
+            foreach (var building in farm.buildings)
+            {
+                if (building.buildingType.Value == "Farmhouse")
+                {
+                    houses.Add(building);
+                }
+            }
+
+            return houses;
         }
 
         public static List<ShippingBin> FindShippingBins(Farm farm)
@@ -421,6 +449,5 @@ namespace StardewArchipelago.GameModifications.CodeInjections
             Utility.drawLightningBolt(boltPosition, Game1.currentLocation);
             Game1.player.health -= 100;
         }
-
     }
 }

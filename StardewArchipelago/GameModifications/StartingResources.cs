@@ -6,6 +6,7 @@ using StardewArchipelago.Archipelago;
 using StardewArchipelago.Archipelago.SlotData.SlotEnums;
 using StardewArchipelago.Extensions;
 using StardewArchipelago.GameModifications.CodeInjections;
+using StardewArchipelago.Locations.CodeInjections.Vanilla;
 using StardewArchipelago.Stardew;
 using StardewValley;
 using StardewValley.Locations;
@@ -36,6 +37,7 @@ namespace StardewArchipelago.GameModifications
                 RemoveStartingBackpack();
             }
 
+            RemoveHouse();
             RemoveShippingBin();
             RemovePetBowls();
             SendGilTelephoneLetter();
@@ -188,6 +190,22 @@ namespace StardewArchipelago.GameModifications
             }
 
             farmhouse.objects.Add(emptySpot, new Chest(new List<Item> { itemToGift }, emptySpot, true, giftboxIsStarterGift: true));
+        }
+
+        private void RemoveHouse()
+        {
+            if (!_archipelago.SlotData.BuildingProgression.HasFlag(BuildingProgression.Progressive) || _archipelago.HasReceivedItem(CarpenterInjections.BUILDING_PROGRESSIVE_HOUSE))
+            {
+                return;
+            }
+
+            var farm = Game1.getFarm();
+            var houses = FarmInjections.FindHouses(farm);
+            foreach (var house in houses)
+            {
+                house.BeforeDemolish();
+                farm.destroyStructure(house);
+            }
         }
 
         private void RemoveShippingBin()
