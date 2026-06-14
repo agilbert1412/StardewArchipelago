@@ -442,7 +442,7 @@ namespace StardewArchipelago.Stardew
                 _objectsById.Add(id, stardewItem);
                 _objectsByQualifiedId.Add(stardewItem.GetQualifiedId(), stardewItem);
                 _itemsByQualifiedId.Add(stardewItem.GetQualifiedId(), stardewItem);
-                AddItemAndAliasesToNamesDictionary(stardewItem);
+                AddItemAndAliasesToNamesDictionary(stardewItem.Name, stardewItem.Id, _objectsByName, stardewItem);
                 if (ItemsWithStarters.Contains(id))
                 {
                     _objectsByName.TryAdd($"{stardewItem.Name}{STARTER_SUFFIX}", stardewItem);
@@ -450,36 +450,36 @@ namespace StardewArchipelago.Stardew
             }
         }
 
-        private void AddItemAndAliasesToNamesDictionary(StardewObject stardewItem)
+        private static void AddItemAndAliasesToNamesDictionary<T>(string name, string id, Dictionary<string, T> itemsByName, T stardewItem)
         {
-            if (string.IsNullOrWhiteSpace(stardewItem.Name))
+            if (string.IsNullOrWhiteSpace(name))
             {
                 return;
             }
 
             foreach (var aliasGroup in NameAliases.ItemNameAliasGroups)
             {
-                if (!aliasGroup.Contains(stardewItem.Name) && !aliasGroup.Contains(stardewItem.Id))
+                if (!aliasGroup.Contains(name) && !aliasGroup.Contains(id))
                 {
                     continue;
                 }
 
                 foreach (var alias in aliasGroup)
                 {
-                    _objectsByName.TryAdd(alias, stardewItem);
+                    itemsByName.TryAdd(alias, stardewItem);
                 }
 
                 return;
             }
 
-            if (PowerBooks.BookIdsToNames.ContainsKey(stardewItem.Id))
+            if (PowerBooks.BookIdsToNames.ContainsKey(id))
             {
-                _objectsByName.TryAdd(PowerBooks.BookIdsToNames[stardewItem.Id], stardewItem);
+                itemsByName.TryAdd(PowerBooks.BookIdsToNames[id], stardewItem);
             }
 
-            if (!_objectsByName.ContainsKey(stardewItem.Name))
+            if (!itemsByName.ContainsKey(name))
             {
-                _objectsByName.TryAdd(stardewItem.Name, stardewItem);
+                itemsByName.TryAdd(name, stardewItem);
             }
         }
 
@@ -521,6 +521,7 @@ namespace StardewArchipelago.Stardew
                     _bigCraftablesByName.TryAdd(fullName, bigCraftable);
                     _bigCraftablesByName.TryAdd(itemName, bigCraftable);
                 }
+                AddItemAndAliasesToNamesDictionary(bigCraftable.Name, bigCraftable.Id, _bigCraftablesByName, bigCraftable);
             }
         }
 

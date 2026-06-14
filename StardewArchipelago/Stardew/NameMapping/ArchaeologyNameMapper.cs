@@ -38,14 +38,14 @@ namespace StardewArchipelago.Stardew.NameMapping
             { "moonslime.Archaeology.glass_brazier", "Glass Brazier" },
             { "moonslime.Archaeology.h_preservation_chamber", "Hardwood Preservation Chamber" },
             { "moonslime.Archaeology.h_display", "Hardwood Display" },
-            { "moonslime.Archaeology.ancient_battery", "Ancient Battery" },
+            { "moonslime.Archaeology.ancient_battery", "Ancient Battery Production Station" },
             { "moonslime.Archaeology.glass_fence", "Glass Fence" },
             { "moonslime.Archaeology.lucky_ring", "Lucky Ring" },
             { "moonslime.Archaeology.water_shifter", "Water Shifter" },
             { "moonslime.Archaeology.bone_fence", "Bone Fence" },
             { "moonslime.Archaeology.totem_volcano_warp", "Dwarf Gadget: Infinite Volcano Simulation" },
             { "moonslime.Archaeology.diggers_delight", "Digger's Delight" },
-            { "moonslime.Archaeology.rocky_root", "Rocky Root" },
+            { "moonslime.Archaeology.rocky_root", "Rocky Root Coffee" },
             { "moonslime.Archaeology.ancient_jello", "Ancient Jello" },
         };
 
@@ -54,6 +54,7 @@ namespace StardewArchipelago.Stardew.NameMapping
 
         public ArchaeologyNameMapper()
         {
+            ArchaeologyEnglishNamesToCraftIdsMap.TryAdd("Water Sifter", "moonslime.Archaeology.water_shifter");
         }
 
         public string GetEnglishName(string internalName)
