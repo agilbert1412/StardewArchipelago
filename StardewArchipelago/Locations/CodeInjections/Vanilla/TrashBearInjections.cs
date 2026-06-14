@@ -145,8 +145,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
                     for (var j = 0; j < itemsRemaining.Length; j++)
                     {
                         var offsetX = offsetXBase + (offsetPerBubble * j);
-                        var item = itemsRemaining[j];
-                        var itemId = _itemManager.GetObjectByName(item).GetQualifiedId();
+                        var itemId = itemsRemaining[j];
                         DrawOneDesiredItem(__instance, b, itemId, new Point(offsetX, offsetY));
                     }
                     i++;

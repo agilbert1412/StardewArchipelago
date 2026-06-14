@@ -37,6 +37,12 @@ namespace StardewArchipelago.Stardew.NameMapping
                 _mappers.Add(binningMapper);
                 _recipeMappers.Add(binningMapper);
             }
+            if (slotData.Mods.HasMod(ModNames.LUCK))
+            {
+                var luckMapper = new LuckNameMapper();
+                _mappers.Add(luckMapper);
+                _recipeMappers.Add(luckMapper);
+            }
         }
 
         public string GetEnglishName(string internalName)

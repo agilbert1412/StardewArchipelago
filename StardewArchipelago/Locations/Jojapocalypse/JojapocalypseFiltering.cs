@@ -15,6 +15,7 @@ using StardewValley.Locations;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using StardewArchipelago.Constants.Vanilla;
 
 namespace StardewArchipelago.Locations.Jojapocalypse
 {
@@ -458,7 +459,28 @@ namespace StardewArchipelago.Locations.Jojapocalypse
             }
 
             var mappedName = _nameMapper.GetRecipeName(recipe);
-            return Game1.player.knowsRecipe(mappedName);
+            if (Game1.player.knowsRecipe(mappedName))
+            {
+                return true;
+            }
+
+            var internalName = GetInternalRecipeName(mappedName);
+            return Game1.player.knowsRecipe(internalName);
+        }
+
+        private string GetInternalRecipeName(string recipeName)
+        {
+            var internalRecipeName = recipeName;
+
+            foreach (var (internalName, realName) in NameAliases.RecipeNameAliases)
+            {
+                if (internalRecipeName.Contains(realName))
+                {
+                    internalRecipeName = internalRecipeName.Replace(realName, internalName);
+                }
+            }
+
+            return internalRecipeName;
         }
 
         private bool ValidateCraftsanityLocation(StardewArchipelagoLocation location)
