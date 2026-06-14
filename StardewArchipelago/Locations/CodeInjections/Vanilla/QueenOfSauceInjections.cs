@@ -76,9 +76,10 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
                 var recipeDetails = recipeInfo[1];
                 var tvText = GetQueenOfSauceTvText(recipeName, recipeDetails, recipeInfo);
 
-                if (_archipelago.SlotData.Chefsanity.HasFlag(Chefsanity.QueenOfSauce))
+                var chefsanityLocationName = $"{recipeName}{Suffix.CHEFSANITY}";
+                if (_locationChecker.LocationExists(chefsanityLocationName))
                 {
-                    _locationChecker.AddCheckedLocation($"{recipeName}{Suffix.CHEFSANITY}");
+                    _locationChecker.AddCheckedLocation(chefsanityLocationName);
                 }
                 else if (!Game1.player.cookingRecipes.ContainsKey(recipeName))
                 {
