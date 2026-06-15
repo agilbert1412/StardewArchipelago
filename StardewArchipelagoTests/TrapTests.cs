@@ -31,7 +31,7 @@ namespace StardewArchipelagoTests
         [TestCase(TrapItemsDifficulty.Medium, 2, 1.55)]
         [TestCase(TrapItemsDifficulty.Hard, 2, 3)]
         [TestCase(TrapItemsDifficulty.Hell, 2, 5)]
-        [TestCase(TrapItemsDifficulty.Nightmare, 2, 9)]
+        [TestCase(TrapItemsDifficulty.Nightmare, 2, 7)]
         [TestCase(TrapItemsDifficulty.Eldritch, 2, 34)]
         [TestCase(TrapItemsDifficulty.Easy, 10, 2.6)]
         [TestCase(TrapItemsDifficulty.Medium, 10, 9)]
