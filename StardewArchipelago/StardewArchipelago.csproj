@@ -36,10 +36,16 @@
 	</ItemGroup>
 
 	<ItemGroup>
+		<Reference Include="managed-doom">
+		  <HintPath>..\..\managed-doom\ManagedDoom\bin\Debug\net6.0\managed-doom.dll</HintPath>
+		</Reference>
 		<Reference Include="Newtonsoft.Json" HintPath="$(GamePath)\smapi-internal\Newtonsoft.Json.dll" private="false" />
 	</ItemGroup>
 
 	<ItemGroup>
+		<None Update="Bundles\doom\doom.wad">
+		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</None>
 		<None Update="IdTables\stardew_valley_item_table.json">
 			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
 		</None>

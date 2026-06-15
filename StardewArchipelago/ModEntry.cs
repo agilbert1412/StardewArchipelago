@@ -179,6 +179,8 @@ namespace StardewArchipelago
             ResetArchipelago();
             ResetModIntegrations();
             ArchipelagoTextures.Initialize(_logger, Helper);
+
+            var doom = new DoomLevelHandler(_logger, Helper);
         }
 
         private void OnSaveCreating(object sender, SaveCreatingEventArgs e)
