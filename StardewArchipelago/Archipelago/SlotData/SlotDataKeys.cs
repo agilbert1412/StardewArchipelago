@@ -18,7 +18,8 @@
         public const string SKILLS_PROGRESSION = "skill_progression";
         public const string BUILDING_PROGRESSION = "building_progression";
         public const string FESTIVAL_OBJECTIVES = "festival_locations";
-        public const string ARCADE_MACHINES = "arcade_machine_locations";
+        public const string JOTPK = "journey_of_the_prairie_king";
+        public const string JUNIMO_KART = "junimo_kart";
         public const string SPECIAL_ORDERS = "special_order_locations";
         public const string QUEST_LOCATIONS = "quest_locations";
         public const string FISHSANITY = "fishsanity";

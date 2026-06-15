@@ -35,7 +35,8 @@ namespace StardewArchipelago.Archipelago.SlotData
         public SkillsProgression SkillProgression { get; private set; }
         public BuildingProgression BuildingProgression { get; private set; }
         public FestivalLocations FestivalLocations { get; private set; }
-        public ArcadeLocations ArcadeMachineLocations { get; private set; }
+        public JourneyOfThePrairieKing JotPKLocations { get; private set; }
+        public JunimoKart JunimoKartLocations { get; private set; }
         public SpecialOrderLocations SpecialOrderLocations { get; private set; }
         public QuestLocations QuestLocations { get; private set; }
         public Fishsanity Fishsanity { get; private set; }
@@ -106,7 +107,8 @@ namespace StardewArchipelago.Archipelago.SlotData
             SkillProgression = slotDataReader.GetSlotSetting(SlotDataKeys.SKILLS_PROGRESSION, SkillsProgression.Progressive);
             BuildingProgression = slotDataReader.GetSlotSetting(SlotDataKeys.BUILDING_PROGRESSION, BuildingProgression.Progressive);
             FestivalLocations = slotDataReader.GetSlotSetting(SlotDataKeys.FESTIVAL_OBJECTIVES, FestivalLocations.Easy);
-            ArcadeMachineLocations = slotDataReader.GetSlotSetting(SlotDataKeys.ARCADE_MACHINES, ArcadeLocations.FullShuffling);
+            JotPKLocations = slotDataReader.GetSlotSetting(SlotDataKeys.JOTPK, JourneyOfThePrairieKing.FullShuffle);
+            JunimoKartLocations = slotDataReader.GetSlotSetting(SlotDataKeys.JUNIMO_KART, JunimoKart.FullShuffle);
             SpecialOrderLocations = slotDataReader.GetSlotSetting(SlotDataKeys.SPECIAL_ORDERS, SpecialOrderLocations.Board);
             QuestLocations = new QuestLocations(slotDataReader.GetSlotSetting(SlotDataKeys.QUEST_LOCATIONS, 0));
             Fishsanity = slotDataReader.GetSlotSetting(SlotDataKeys.FISHSANITY, Fishsanity.None);

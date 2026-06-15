@@ -166,7 +166,7 @@ namespace StardewArchipelago.GameModifications.CodeInjections.Television
 
         private static bool HasArcadeMachinesShuffled()
         {
-            return _archipelago.SlotData.ArcadeMachineLocations == ArcadeLocations.FullShuffling;
+            return _archipelago.SlotData.JotPKLocations == JourneyOfThePrairieKing.FullShuffle || _archipelago.SlotData.JunimoKartLocations == JunimoKart.FullShuffle;
         }
 
         private static bool HasEntranceRandomizer()

@@ -142,7 +142,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Arcade
         private static int GetJunimoKartExtraLives()
         {
             var numberExtraLives = 8;
-            if (_archipelago.SlotData.ArcadeMachineLocations == ArcadeLocations.FullShuffling)
+            if (_archipelago.SlotData.JunimoKartLocations == JunimoKart.FullShuffle)
             {
                 numberExtraLives = _archipelago.GetReceivedItemCount(JK_EXTRA_LIFE);
             }

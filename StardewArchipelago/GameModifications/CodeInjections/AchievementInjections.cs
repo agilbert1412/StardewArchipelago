@@ -25,7 +25,7 @@ namespace StardewArchipelago.GameModifications.CodeInjections
         {
             try
             {
-                if (_archipelago.SlotData.ArcadeMachineLocations == ArcadeLocations.FullShuffling || _archipelago.SlotData.ArcadeMachineLocations == ArcadeLocations.VictoriesEasy)
+                if (_archipelago.SlotData.JotPKLocations == JourneyOfThePrairieKing.FullShuffling || _archipelago.SlotData.JotPKLocations == JourneyOfThePrairieKing.VictoryEasy)
                 {
                     var jotpkVictory = "Achievement_PrairieKing";
                     var fector = "Achievement_FectorsChallenge";

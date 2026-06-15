@@ -343,7 +343,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
 
         private static bool ArcadeMachineFilter(KeyValuePair<string, SpecialOrderData> order)
         {
-            return _archipelago.SlotData.ArcadeMachineLocations != ArcadeLocations.Disabled || order.Key != SpecialOrders.LETS_PLAY_A_GAME;
+            return _archipelago.SlotData.JunimoKartLocations != JunimoKart.Disabled || order.Key != SpecialOrders.LETS_PLAY_A_GAME;
         }
 
         private static bool CheckTags(string requiredTags)

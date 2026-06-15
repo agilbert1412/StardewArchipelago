@@ -286,7 +286,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Arcade
                     return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
                 }
 
-                var easyMode = _archipelago.SlotData.ArcadeMachineLocations == ArcadeLocations.VictoriesEasy;
+                var easyMode = _archipelago.SlotData.JotPKLocations == JourneyOfThePrairieKing.VictoryEasy;
                 var receivedDropRate = _archipelago.HasReceivedItem(JOTPK_DROP_RATE);
                 var increasedDropRate = easyMode || receivedDropRate;
 
@@ -409,7 +409,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Arcade
                 }
 
 
-                if (_archipelago.SlotData.ArcadeMachineLocations != ArcadeLocations.FullShuffling)
+                if (_archipelago.SlotData.JotPKLocations != JourneyOfThePrairieKing.FullShuffle)
                 {
                     return;
                 }
@@ -528,7 +528,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Arcade
                     return;
                 }
 
-                var easyMode = _archipelago.SlotData.ArcadeMachineLocations == ArcadeLocations.VictoriesEasy;
+                var easyMode = _archipelago.SlotData.JotPKLocations == JourneyOfThePrairieKing.VictoryEasy;
                 var extraLives = easyMode ? 2 : _archipelago.GetReceivedItemCount(JOTPK_EXTRA_LIFE);
                 extraLives = Math.Max(0, Math.Min(2, extraLives));
                 __instance.lives += extraLives;
@@ -541,7 +541,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Arcade
 
         private static void AssignStartingEquipment(AbigailGame __instance)
         {
-            var easyMode = _archipelago.SlotData.ArcadeMachineLocations == ArcadeLocations.VictoriesEasy;
+            var easyMode = _archipelago.SlotData.JotPKLocations == JourneyOfThePrairieKing.VictoryEasy;
 
             _bootsLevel = easyMode ? 1 : _archipelago.GetReceivedItemCount(JOTPK_PROGRESSIVE_BOOTS);
             _bootsLevel = Math.Max(0, Math.Min(2, _bootsLevel));

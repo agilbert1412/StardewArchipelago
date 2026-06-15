@@ -810,7 +810,7 @@ namespace StardewArchipelago.Locations.Patcher
 
         private void PatchJourneyOfThePrairieKing()
         {
-            if (_archipelago.SlotData.ArcadeMachineLocations == ArcadeLocations.Disabled)
+            if (_archipelago.SlotData.JotPKLocations == JourneyOfThePrairieKing.Disabled)
             {
                 return;
             }
@@ -835,7 +835,7 @@ namespace StardewArchipelago.Locations.Patcher
                 postfix: new HarmonyMethod(typeof(JotPKInjections), nameof(JotPKInjections.Tick_Shopping_PostFix))
             );
 
-            if (_archipelago.SlotData.ArcadeMachineLocations == ArcadeLocations.Victories)
+            if (_archipelago.SlotData.JotPKLocations == JourneyOfThePrairieKing.Victory)
             {
                 return;
             }
@@ -851,7 +851,7 @@ namespace StardewArchipelago.Locations.Patcher
                 postfix: new HarmonyMethod(typeof(JotPKInjections), nameof(JotPKInjections.AbigailGameCtor_Equipments_Postfix))
             );
 
-            if (_archipelago.SlotData.ArcadeMachineLocations != ArcadeLocations.FullShuffling)
+            if (_archipelago.SlotData.JotPKLocations != JourneyOfThePrairieKing.FullShuffle)
             {
                 return;
             }
@@ -874,7 +874,7 @@ namespace StardewArchipelago.Locations.Patcher
                 prefix: new HarmonyMethod(typeof(JunimoKartInjections), nameof(JunimoKartInjections.SubmitHighScore_AddScoreToMultiworld_Prefix))
             );
 
-            if (_archipelago.SlotData.ArcadeMachineLocations == ArcadeLocations.Disabled)
+            if (_archipelago.SlotData.JunimoKartLocations == JunimoKart.Disabled)
             {
                 return;
             }
@@ -884,7 +884,7 @@ namespace StardewArchipelago.Locations.Patcher
                 prefix: new HarmonyMethod(typeof(JunimoKartInjections), nameof(JunimoKartInjections.EndCutscene_JunimoKartLevelComplete_Prefix))
             );
 
-            if (_archipelago.SlotData.ArcadeMachineLocations == ArcadeLocations.Victories)
+            if (_archipelago.SlotData.JunimoKartLocations == JunimoKart.Victory)
             {
                 return;
             }
