@@ -37,7 +37,6 @@ jobs:
       matrix:
         configuration:
           - Debug
-          - Debug Tiles
           - Debug Tilesanity
           - Release
           - Release Tilesanity
