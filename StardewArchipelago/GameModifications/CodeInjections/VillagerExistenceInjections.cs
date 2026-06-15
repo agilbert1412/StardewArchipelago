@@ -1,16 +1,12 @@
-﻿using KaitoKid.ArchipelagoUtilities.Net.Client;
-using KaitoKid.ArchipelagoUtilities.Net.Constants;
+﻿using KaitoKid.ArchipelagoUtilities.Net.Constants;
 using KaitoKid.Utilities.Interfaces;
 using StardewArchipelago.Archipelago;
 using StardewArchipelago.Archipelago.SlotData.SlotEnums;
 using StardewValley;
 using StardewValley.Characters;
-using StardewValley.GameData.Characters;
-using StardewValley.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.CompilerServices;
 
 namespace StardewArchipelago.GameModifications.CodeInjections
 {

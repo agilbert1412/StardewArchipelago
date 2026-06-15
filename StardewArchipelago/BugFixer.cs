@@ -3,7 +3,6 @@ using KaitoKid.Utilities.Interfaces;
 using StardewArchipelago.Archipelago;
 using StardewArchipelago.Archipelago.SlotData.SlotEnums;
 using StardewArchipelago.Constants;
-using StardewArchipelago.Items;
 using StardewArchipelago.Locations.CodeInjections.Vanilla;
 using StardewArchipelago.Serialization;
 using StardewArchipelago.Stardew;

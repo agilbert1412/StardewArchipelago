@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Microsoft.Xna.Framework.Input.Touch;
 using StardewValley;
 
 namespace StardewArchipelago.Locations.Festival

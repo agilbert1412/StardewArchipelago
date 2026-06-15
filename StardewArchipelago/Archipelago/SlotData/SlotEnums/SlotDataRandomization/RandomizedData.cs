@@ -1,9 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Runtime.Serialization;
 using Newtonsoft.Json;
-using StardewValley;
 
 namespace StardewArchipelago.Archipelago.SlotData.SlotEnums.SlotDataRandomization
 {

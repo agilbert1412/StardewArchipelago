@@ -1,5 +1,4 @@
 ﻿using System;
-using KaitoKid.ArchipelagoUtilities.Net.Client;
 using KaitoKid.ArchipelagoUtilities.Net.Constants;
 using KaitoKid.Utilities.Interfaces;
 using Microsoft.Xna.Framework;
@@ -10,7 +9,6 @@ using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Locations;
 using StardewValley.Tools;
-using HarmonyLib;
 using xTile.Dimensions;
 using Object = StardewValley.Object;
 

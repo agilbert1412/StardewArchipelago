@@ -8,9 +8,7 @@ using StardewArchipelago.Archipelago.SlotData.SlotEnums.SlotDataRandomization;
 using StardewArchipelago.Stardew;
 using StardewModdingAPI;
 using StardewModdingAPI.Events;
-using StardewValley;
 using StardewValley.GameData.Locations;
-using StardewValley.GameData.Shops;
 
 namespace StardewArchipelago.GameModifications.RandomizedData
 {

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using KaitoKid.ArchipelagoUtilities.Net.Client;
-using StardewArchipelago.Constants.Vanilla;
 using StardewArchipelago.Items.Mail;
 using StardewValley;
 

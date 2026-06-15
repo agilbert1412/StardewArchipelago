@@ -1,10 +1,8 @@
-﻿using StardewArchipelago.Constants.Vanilla;
-using StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles;
+﻿using StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles;
 using StardewArchipelago.Stardew;
 using StardewValley;
 using System;
 using System.Collections.Generic;
-using System.Data.SqlTypes;
 using System.Linq;
 
 namespace StardewArchipelago.Bundles

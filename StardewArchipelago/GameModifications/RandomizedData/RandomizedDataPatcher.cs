@@ -2,7 +2,6 @@
 using HarmonyLib;
 using StardewArchipelago.Archipelago;
 using StardewArchipelago.Archipelago.SlotData.SlotEnums.SlotDataRandomization;
-using StardewArchipelago.Locations.InGameLocations;
 using StardewArchipelago.Logging;
 using StardewArchipelago.Stardew;
 using StardewModdingAPI;

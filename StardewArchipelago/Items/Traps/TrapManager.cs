@@ -3,19 +3,15 @@ using KaitoKid.ArchipelagoUtilities.Net.Client;
 using KaitoKid.Utilities.Interfaces;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Newtonsoft.Json.Linq;
 using StardewArchipelago.Archipelago;
 using StardewArchipelago.Items.Mail;
 using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Characters;
-using StardewValley.Locations;
-using StardewValley.Monsters;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
 using Object = StardewValley.Object;
 
 namespace StardewArchipelago.Items.Traps

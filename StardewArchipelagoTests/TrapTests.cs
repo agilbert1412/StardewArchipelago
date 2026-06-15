@@ -1,6 +1,5 @@
 using FluentAssertions;
 using StardewArchipelago.Archipelago.SlotData.SlotEnums;
-using StardewArchipelago.GameModifications.CodeInjections.Television;
 using StardewArchipelago.Items.Traps;
 
 namespace StardewArchipelagoTests

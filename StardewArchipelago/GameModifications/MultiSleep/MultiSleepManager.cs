@@ -11,7 +11,6 @@ using StardewArchipelago.Archipelago.SlotData;
 using StardewArchipelago.Constants;
 using StardewArchipelago.Locations.CodeInjections.Vanilla;
 using StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles;
-using StardewArchipelago.Serialization;
 using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Locations;

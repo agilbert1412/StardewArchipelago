@@ -1,9 +1,4 @@
-﻿using StardewValley;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading;
-using StardewArchipelago.Bundles;
+﻿using System.Collections.Generic;
 
 namespace StardewArchipelago.Archipelago.SlotData.SlotEnums.SlotDataRandomization
 {

@@ -8,9 +8,6 @@ using StardewValley.Tools;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
-using KaitoKid.ArchipelagoUtilities.Net.Extensions;
 using Object = StardewValley.Object;
 
 namespace StardewArchipelago.Items.Traps.Shuffle

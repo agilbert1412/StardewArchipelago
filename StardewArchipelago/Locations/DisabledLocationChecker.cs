@@ -2,7 +2,6 @@
 using System.Linq;
 using System.Threading.Tasks;
 using KaitoKid.ArchipelagoUtilities.AssetDownloader.Extensions;
-using KaitoKid.ArchipelagoUtilities.Net.Client;
 using KaitoKid.Utilities.Interfaces;
 using StardewArchipelago.Archipelago;
 using StardewArchipelago.Locations.Jojapocalypse;

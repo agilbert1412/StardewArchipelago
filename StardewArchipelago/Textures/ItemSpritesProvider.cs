@@ -4,7 +4,6 @@ using KaitoKid.ArchipelagoUtilities.AssetDownloader.ItemSprites;
 using KaitoKid.ArchipelagoUtilities.Net.Client;
 using Microsoft.Xna.Framework.Graphics;
 using StardewArchipelago.Archipelago;
-using StardewArchipelago.Logging;
 using StardewModdingAPI;
 using System;
 using System.Text.Json;

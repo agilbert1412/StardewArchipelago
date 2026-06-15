@@ -2,7 +2,6 @@
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using StardewArchipelago.Bundles;
-using StardewArchipelago.Constants.Vanilla;
 using StardewValley;
 using StardewValley.BellsAndWhistles;
 using StardewValley.Extensions;
@@ -10,10 +9,9 @@ using StardewValley.ItemTypeDefinitions;
 using StardewValley.Locations;
 using StardewValley.Menus;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
+
 // ReSharper disable PossibleLossOfFraction
 
 #nullable disable

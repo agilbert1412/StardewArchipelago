@@ -8,7 +8,6 @@ using StardewArchipelago.Constants;
 using StardewArchipelago.Constants.Modded;
 using StardewArchipelago.Constants.Vanilla;
 using StardewArchipelago.GameModifications.Shops;
-using StardewArchipelago.Locations.InGameLocations;
 using StardewArchipelago.Stardew;
 using StardewArchipelago.Stardew.NameMapping;
 using StardewModdingAPI;

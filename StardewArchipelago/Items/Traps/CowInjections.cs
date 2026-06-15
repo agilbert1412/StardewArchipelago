@@ -5,11 +5,7 @@ using Microsoft.Xna.Framework.Graphics;
 using StardewArchipelago.Archipelago;
 using StardewModdingAPI;
 using StardewValley;
-using StardewValley.Characters;
-using StardewValley.Locations;
-using StardewValley.Pathfinding;
 using System;
-using System.Linq;
 
 namespace StardewArchipelago.Items.Traps
 {

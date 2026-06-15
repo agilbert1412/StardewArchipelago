@@ -7,7 +7,6 @@ using StardewValley.GameData.Objects;
 using StardewValley.GameData.Shirts;
 using StardewValley.GameData.Weapons;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;

@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using Microsoft.Xna.Framework;
-using StardewArchipelago.GameModifications.EntranceRandomizer;
 
 namespace StardewArchipelago.GameModifications.MultiplayerVision.FoolVision
 {

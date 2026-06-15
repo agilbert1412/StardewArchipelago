@@ -9,12 +9,10 @@ using StardewArchipelago.Constants.Vanilla;
 using StardewArchipelago.Items.Unlocks.Vanilla;
 using StardewModdingAPI;
 using StardewValley;
-using StardewValley.Menus;
 using StardewValley.Quests;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Microsoft.Xna.Framework;
 using Object = StardewValley.Object;
 
 namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Quests

@@ -1,6 +1,4 @@
 ﻿using StardewArchipelago.Archipelago;
-using StardewModdingAPI;
-using StardewModdingAPI.Utilities;
 
 namespace StardewArchipelago
 {

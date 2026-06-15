@@ -4,7 +4,6 @@ using KaitoKid.ArchipelagoUtilities.Net.Constants;
 using KaitoKid.Utilities.Interfaces;
 using StardewArchipelago.Archipelago;
 using StardewArchipelago.Constants.Modded;
-using StardewArchipelago.Goals;
 using StardewModdingAPI;
 using StardewValley.Network;
 
