@@ -98,8 +98,8 @@ namespace StardewArchipelago.GameModifications
 #if TILESANITY
             var paths = _stardewItemManager.GetItemByName("Crystal Path").PrepareForGivingToFarmer(100);
             var seed_maker = _stardewItemManager.GetItemByName("Seed Maker").PrepareForGivingToFarmer(1);
-            CreateGiftBoxItemInEmptySpot(farmhouse, paths);
-            CreateGiftBoxItemInEmptySpot(farmhouse, seed_maker);
+            CreateGiftBoxItemInEmptySpot(location, originalTile, paths);
+            CreateGiftBoxItemInEmptySpot(location, originalTile, seed_maker);
 #endif
         }
 

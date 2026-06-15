@@ -7,7 +7,7 @@
 		<ApplicationManifest>manifest.json</ApplicationManifest>
 		<CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
 		<EnableHarmony>true</EnableHarmony>
-		<Configurations>Debug;Release;Debug Tiles;Debug Tilesanity;Release Tilesanity</Configurations>
+		<Configurations>Debug;Release;Debug Tilesanity;Release Tilesanity</Configurations>
 		<Platforms>AnyCPU</Platforms>
 	</PropertyGroup>
 
@@ -17,10 +17,6 @@
 
 	<PropertyGroup Condition=" '$(Configuration)' == 'Debug Tilesanity' ">
 		<DefineConstants>TRACE;DEBUG;TILESANITY</DefineConstants>
-	</PropertyGroup>
-
-	<PropertyGroup Condition=" '$(Configuration)' == 'Debug Tiles' ">
-		<DefineConstants>TRACE;NOWALK;DEBUG;TILESANITY</DefineConstants>
 	</PropertyGroup>
 
 	<ItemGroup>

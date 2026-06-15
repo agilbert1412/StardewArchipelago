@@ -1058,27 +1058,27 @@ namespace StardewArchipelago.Items.Traps
         private static int GetInflatedPrice(int price)
         {
             var inflationRate = _difficultyBalancer.InflationAmount[_archipelago.SlotData.TrapItemsDifficulty];
+            var softcapMultiplier = _difficultyBalancer.InflationSoftcapThreshold[_archipelago.SlotData.TrapItemsDifficulty];
             var receivedCount = _archipelago.GetReceivedItemCount("Inflation Trap");
-            var inflationMultiplier = GetInflationMultiplier(inflationRate, receivedCount);
+            var inflationMultiplier = GetInflationMultiplier(inflationRate, softcapMultiplier, receivedCount);
             return (int)(price * inflationMultiplier);
         }
 
-        public static double GetInflationMultiplier(double inflationRate, int trapCount)
+        public static double GetInflationMultiplier(double inflationRate, int softcapThreshold, int trapCount)
         {
-            var softcapMultiplier = _difficultyBalancer.InflationSoftcapThreshold[_archipelago.SlotData.TrapItemsDifficulty];
             var totalInflation = Math.Pow(inflationRate, trapCount);
             if (double.IsInfinity(totalInflation))
             {
-                totalInflation = SoftCapBigInteger(inflationRate, trapCount, softcapMultiplier);
+                totalInflation = SoftCapBigInteger(inflationRate, trapCount, softcapThreshold);
             }
             else
             {
                 var softCapTier = 2;
-                var baseSoftCap = Math.Pow(softcapMultiplier, softCapTier - 1);
+                var baseSoftCap = Math.Pow(softcapThreshold, softCapTier - 1);
                 while (totalInflation > baseSoftCap)
                 {
                     totalInflation = baseSoftCap + Math.Pow(totalInflation - baseSoftCap, 1.0 / softCapTier);
-                    baseSoftCap = Math.Pow(softcapMultiplier, softCapTier);
+                    baseSoftCap = Math.Pow(softcapThreshold, softCapTier);
                     softCapTier++;
                 }
             }

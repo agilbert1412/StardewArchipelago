@@ -323,7 +323,7 @@ namespace StardewArchipelago.Items.Traps
             { TrapItemsDifficulty.Hard, 1.75 },
             { TrapItemsDifficulty.Hell, 2.25 }, // Vanilla Inflation at Robin's after a year is equivalent to 2 traps
             { TrapItemsDifficulty.Nightmare, 3 },
-            { TrapItemsDifficulty.Eldritch, 16 },
+            { TrapItemsDifficulty.Eldritch, 7 },
         };
 
         public Dictionary<TrapItemsDifficulty, int> InflationSoftcapThreshold = new()
@@ -333,8 +333,8 @@ namespace StardewArchipelago.Items.Traps
             { TrapItemsDifficulty.Medium, 8 },
             { TrapItemsDifficulty.Hard, 10 },
             { TrapItemsDifficulty.Hell, 10 },
-            { TrapItemsDifficulty.Nightmare, 15 },
-            { TrapItemsDifficulty.Eldritch, 50 },
+            { TrapItemsDifficulty.Nightmare, 12 },
+            { TrapItemsDifficulty.Eldritch, 30 },
         };
 
         public Dictionary<TrapItemsDifficulty, int> ExplosionSize = new()
