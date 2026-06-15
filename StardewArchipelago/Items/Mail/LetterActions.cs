@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using KaitoKid.Utilities.Interfaces;
+﻿using KaitoKid.Utilities.Interfaces;
 using Microsoft.Xna.Framework;
 using Netcode;
 using StardewArchipelago.Archipelago;
@@ -17,6 +14,10 @@ using StardewValley;
 using StardewValley.Locations;
 using StardewValley.Objects;
 using StardewValley.Tools;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using static StardewValley.FarmerSprite;
 using Object = StardewValley.Object;
 
 namespace StardewArchipelago.Items.Mail
@@ -86,6 +87,7 @@ namespace StardewArchipelago.Items.Mail
             _letterActions.Add(LetterActionsKeys.Trap, ExecuteTrap);
             _letterActions.Add(LetterActionsKeys.Buff, ApplyBuff);
             _letterActions.Add(LetterActionsKeys.LearnCookingRecipe, LearnCookingRecipe);
+            _letterActions.Add(LetterActionsKeys.VillagerArrival, VillagerArrives);
             modLetterActions.AddModLetterActions(_letterActions);
         }
 
@@ -697,6 +699,48 @@ namespace StardewArchipelago.Items.Mail
                 return;
             }
             Game1.player.cookingRecipes.Add(realRecipeName, 0);
+        }
+
+        private void VillagerArrives(string characterId)
+        {
+            var characterData = Game1.characterData[characterId];
+            PlayVillagerHoldUpAnimation(characterId);
+        }
+
+        private void PlayVillagerHoldUpAnimation(string characterId)
+        {
+            if (ModEntry.Instance.Config.SkipHoldUpAnimations)
+            {
+                return;
+            }
+
+            var player = Game1.player;
+            player.completelyStopAnimatingOrDoingAction();
+            Game1.MusicDuckTimer = 2000f;
+            DelayedAction.playSoundAfterDelay("getNewSpecialItem", 750);
+            player.faceDirection(2);
+            player.freezePause = 4000;
+            var frame1 = new AnimationFrame(57, 0);
+            var frame2 = new AnimationFrame(57, 2500, false, false, who =>
+            {
+                var sourceRect = new Rectangle(0, 0, 16, 32);
+                var position = who.Position + new Vector2(0f, -182f);
+                var spriteForHoldingUp = new TemporaryAnimatedSprite($"Characters\\{characterId}", sourceRect, 2500f, 1, 0, position, false, false)
+                {
+                    motion = new Vector2(0.0f, -0.1f),
+                    scale = 4f,
+                    layerDepth = 1f
+                };
+                Game1.currentLocation.temporarySprites.Add(spriteForHoldingUp);
+            });
+            var frame3 = new AnimationFrame((int)(short)player.FarmerSprite.CurrentFrame, 500, false, false);
+            player.FarmerSprite.animateOnce(new[]
+            {
+                frame1,
+                frame2,
+                frame3,
+            });
+            player.canMove = false;
         }
     }
 }

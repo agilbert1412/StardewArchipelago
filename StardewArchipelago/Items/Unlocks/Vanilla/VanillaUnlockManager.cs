@@ -38,6 +38,7 @@ namespace StardewArchipelago.Items.Unlocks.Vanilla
                 new ToolUnlockManager(),
                 new EquipmentUnlockManager(),
                 new BookUnlockManager(),
+                new VillagerUnlockManager(),
             };
         }
 

@@ -45,5 +45,6 @@
         public const string FruitBats = "FruitBats";
         public const string MushroomBoxes = "MushroomBoxes";
         public const string DiamondWand = "Diamond Wand";
+        public const string VillagerArrival = "VillagerArrival";
     }
 }
