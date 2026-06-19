@@ -195,6 +195,7 @@ namespace StardewArchipelago.Archipelago
             if (message.StartsWith(COMMAND_PREFIX))
             {
                 Game1.chatBox?.addMessage($"Unrecognized command. Use {COMMAND_PREFIX}help for a list of commands", Color.Gold);
+                _logger.LogError($"Unrecognized chat command. Use {COMMAND_PREFIX}help in chat for a list of commands");
                 return true;
             }
 
