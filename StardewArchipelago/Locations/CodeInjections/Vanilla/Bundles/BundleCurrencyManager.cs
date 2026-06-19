@@ -564,6 +564,12 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
                 TryPurchaseCurrentBundleWithGoats(ingredient);
                 return;
             }
+
+            if (ingredient.id == MemeIDProvider.YEEHAW)
+            {
+                TryPurchaseCurrentBundleWithYeehaw(ingredient);
+                return;
+            }
         }
 
         private void TryPurchaseCurrentBundleWithQiGems(BundleIngredientDescription ingredient)
@@ -733,6 +739,11 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
 
                 _goats = GetOwnedGoats();
             });
+        }
+
+        private void TryPurchaseCurrentBundleWithYeehaw(BundleIngredientDescription ingredient)
+        {
+            TryPurchaseCurrentBundleWithWalletCurrency(ingredient, 100, _ => { });
         }
 
         private List<FarmAnimal> GetOwnedGoats()

@@ -60,5 +60,6 @@
         public const string HINT = "Hint";
         public const string RECONNECTION = "Reconnection";
         public const string DR_SEUSS = "Dr Seuss";
+        public const string YEEHAW = "Yeehaw";
     }
 }

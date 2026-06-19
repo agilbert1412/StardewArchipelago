@@ -42,6 +42,8 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
     {
         private const int REMIXED_BUNDLE_INDEX_THRESHOLD = 100;
         private const int CUSTOM_BUNDLE_INDEX_THRESHOLD = 200;
+        private const string YEEHAW_FILE = "yeehaw.wav";
+        private const string YEEHAW_CUE = "yeehaw";
 
         private static LogHandler _logger;
         private static IModHelper _modHelper;
@@ -536,6 +538,11 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
                 Game1.chatBox.addMessage($"We have received your {paymentMethod} without issue.", Color.Green);
                 Game1.chatBox.addMessage($"Thank you for investing with {company}!", Color.Green);
             }
+
+            if (CurrentPageBundle.name == MemeBundleNames.YEEHAW)
+            {
+                PlayYeehaw();
+            }
         }
 
         private void MarkAllRewardsAsAlreadyGrabbed()
@@ -796,6 +803,10 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
                 return;
             }
             if (CurrentPageBundle.name == MemeBundleNames.HUMBLE)
+            {
+                return;
+            }
+            if (CurrentPageBundle.name == MemeBundleNames.YEEHAW && !IsWearingCowboyHat())
             {
                 return;
             }
@@ -2569,6 +2580,10 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
             {
                 PerformCurrencyPurchase();
             }
+            if (bundle.name == MemeBundleNames.YEEHAW)
+            {
+                RegisterYeehawCue();
+            }
         }
 
         private void StartPlayingASMR()
@@ -2757,6 +2772,15 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
             Game1.playSound(cues[randomIndex]);
         }
 
+        private void RegisterYeehawCue()
+        {
+            var currentModFolder = _modHelper.DirectoryPath;
+            var soundsFolder = "Sounds";
+            var relativePathToSound = Path.Combine(currentModFolder, soundsFolder, YEEHAW_FILE);
+            var yeehawCueDefinition = new CueDefinition(YEEHAW_CUE, SoundEffect.FromFile(relativePathToSound), 0);
+            Game1.soundBank.AddCue(yeehawCueDefinition);
+        }
+
         public void SendHomeDistractedIngredients()
         {
             var foundDistractedIngredient = false;
@@ -2887,6 +2911,24 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
             }
 
             return false;
+        }
+
+        private void PlayYeehaw()
+        {
+            Game1.playSound(YEEHAW_CUE);
+        }
+
+        private bool IsWearingCowboyHat()
+        {
+            var hat = Game1.player.hat;
+            if (hat == null || hat.Value == null)
+            {
+                return false;
+            }
+
+            var wornHat = hat.Value;
+            var cowboyHats = new[] { QualifiedItemIds.COWBOY_HAT, QualifiedItemIds.COWGAL_HAT, QualifiedItemIds.BLUE_COWBOY_HAT, QualifiedItemIds.RED_COWBOY_HAT, QualifiedItemIds.DARK_COWBOY_HAT, QualifiedItemIds.MAGIC_COWBOY_HAT, QualifiedItemIds.COWPOKE_HAT, QualifiedItemIds.DELUXE_COWBOY_HAT };
+            return cowboyHats.Contains(wornHat.QualifiedItemId);
         }
     }
 }

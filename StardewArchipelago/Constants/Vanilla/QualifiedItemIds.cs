@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json.Linq;
+using System;
 
 namespace StardewArchipelago.Constants.Vanilla
 {
@@ -29,6 +30,14 @@ namespace StardewArchipelago.Constants.Vanilla
 
 
 
+        public static readonly string COWBOY_HAT = QualifiedHatId(HatIds.COWBOY_HAT);
+        public static readonly string COWGAL_HAT = QualifiedHatId(HatIds.COWGAL_HAT);
+        public static readonly string BLUE_COWBOY_HAT = QualifiedHatId(HatIds.BLUE_COWBOY_HAT);
+        public static readonly string RED_COWBOY_HAT = QualifiedHatId(HatIds.RED_COWBOY_HAT);
+        public static readonly string DARK_COWBOY_HAT = QualifiedHatId(HatIds.DARK_COWBOY_HAT);
+        public static readonly string MAGIC_COWBOY_HAT = QualifiedHatId(HatIds.MAGIC_COWBOY_HAT);
+        public static readonly string COWPOKE_HAT = QualifiedHatId(HatIds.COWPOKE_HAT);
+        public static readonly string DELUXE_COWBOY_HAT = QualifiedHatId(HatIds.DELUXE_COWBOY_HAT);
         public static readonly string ACORN = QualifiedObjectId(ObjectIds.ACORN);
         public static readonly string ADVANCED_TV_REMOTE = QualifiedObjectId(ObjectIds.ADVANCED_TV_REMOTE);
         public static readonly string AMARANTH_SEEDS = QualifiedObjectId(ObjectIds.AMARANTH_SEEDS);

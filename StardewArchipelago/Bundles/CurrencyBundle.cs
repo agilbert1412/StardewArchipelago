@@ -77,6 +77,7 @@ namespace StardewArchipelago.Bundles
             { "Sleep Days", MemeIDProvider.SLEEP_DAYS },
             { "DeathLinks", MemeIDProvider.DEATHLINKS },
             { "Goat", MemeIDProvider.GOATS },
+            { "YeeHaw!", MemeIDProvider.YEEHAW },
         };
     }
 }
