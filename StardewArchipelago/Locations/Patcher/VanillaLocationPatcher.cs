@@ -245,6 +245,11 @@ namespace StardewArchipelago.Locations.Patcher
             PatchFeedHorse();
             PatchThrowInWater();
             PatchJunimoHair();
+
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(Object), nameof(Object.placementAction)),
+                prefix: new HarmonyMethod(typeof(TentKitInjections), nameof(TentKitInjections.PlacementAction_AllowTentsAnywhere_Prefix))
+            );
         }
         private void PatchFeedHorse()
         {

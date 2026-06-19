@@ -28,16 +28,6 @@ namespace StardewArchipelago.Constants.Vanilla
             SHIRT_QUALIFIER, TRINKET_QUALIFIER, WALLPAPER_QUALIFIER, FLOORPAPER_QUALIFIER, PANTS_QUALIFIER, MANNEQUIN_QUALIFIER, ZERO_QUALIFIER,
         };
 
-
-
-        public static readonly string COWBOY_HAT = QualifiedHatId(HatIds.COWBOY_HAT);
-        public static readonly string COWGAL_HAT = QualifiedHatId(HatIds.COWGAL_HAT);
-        public static readonly string BLUE_COWBOY_HAT = QualifiedHatId(HatIds.BLUE_COWBOY_HAT);
-        public static readonly string RED_COWBOY_HAT = QualifiedHatId(HatIds.RED_COWBOY_HAT);
-        public static readonly string DARK_COWBOY_HAT = QualifiedHatId(HatIds.DARK_COWBOY_HAT);
-        public static readonly string MAGIC_COWBOY_HAT = QualifiedHatId(HatIds.MAGIC_COWBOY_HAT);
-        public static readonly string COWPOKE_HAT = QualifiedHatId(HatIds.COWPOKE_HAT);
-        public static readonly string DELUXE_COWBOY_HAT = QualifiedHatId(HatIds.DELUXE_COWBOY_HAT);
         public static readonly string ACORN = QualifiedObjectId(ObjectIds.ACORN);
         public static readonly string ADVANCED_TV_REMOTE = QualifiedObjectId(ObjectIds.ADVANCED_TV_REMOTE);
         public static readonly string AMARANTH_SEEDS = QualifiedObjectId(ObjectIds.AMARANTH_SEEDS);
@@ -66,6 +56,7 @@ namespace StardewArchipelago.Constants.Vanilla
         public static readonly string BEET_SEEDS = QualifiedObjectId(ObjectIds.BEET_SEEDS);
         public static readonly string BLACKBERRY = QualifiedObjectId(ObjectIds.BLACKBERRY);
         public static readonly string BLACKBERRY_COBBLER = QualifiedObjectId(ObjectIds.BLACKBERRY_COBBLER);
+        public static readonly string BLUE_COWBOY_HAT = QualifiedHatId(HatIds.BLUE_COWBOY_HAT);
         public static readonly string BLUEBERRY_SEEDS = QualifiedObjectId(ObjectIds.BLUEBERRY_SEEDS);
         public static readonly string BOAT = QualifiedFurnitureId(FurnitureIds.BOAT);
         public static readonly string BOK_CHOY_SEEDS = QualifiedObjectId(ObjectIds.BOK_CHOY_SEEDS);
@@ -100,13 +91,18 @@ namespace StardewArchipelago.Constants.Vanilla
         public static readonly string COPPER_ORE = QualifiedObjectId(ObjectIds.COPPER_ORE);
         public static readonly string COPPER_PAN_HAT = QualifiedHatId(HatIds.COPPER_PAN);
         public static readonly string CORN_SEEDS = QualifiedObjectId(ObjectIds.CORN_SEEDS);
+        public static readonly string COWBOY_HAT = QualifiedHatId(HatIds.COWBOY_HAT);
+        public static readonly string COWGAL_HAT = QualifiedHatId(HatIds.COWGAL_HAT);
+        public static readonly string COWPOKE_HAT = QualifiedHatId(HatIds.COWPOKE_HAT);
         public static readonly string CRAB_CAKES = QualifiedObjectId(ObjectIds.CRAB_CAKES);
         public static readonly string CRANBERRY_CANDY = QualifiedObjectId(ObjectIds.CRANBERRY_CANDY);
         public static readonly string CRANBERRY_SEEDS = QualifiedObjectId(ObjectIds.CRANBERRY_SEEDS);
         public static readonly string CRISPY_BASS = QualifiedObjectId(ObjectIds.CRISPY_BASS);
         public static readonly string CRYSTAL_FRUIT = QualifiedObjectId(ObjectIds.CRYSTAL_FRUIT);
+        public static readonly string DARK_COWBOY_HAT = QualifiedHatId(HatIds.DARK_COWBOY_HAT);
         public static readonly string DECORATIVE_TRASH_CAN = QualifiedFurnitureId(FurnitureIds.DECORATIVE_TRASH_CAN);
         public static readonly string DELUXE_BAIT = QualifiedObjectId(ObjectIds.DELUXE_BAIT);
+        public static readonly string DELUXE_COWBOY_HAT = QualifiedHatId(HatIds.DELUXE_COWBOY_HAT);
         public static readonly string DELUXE_FERTILIZER = QualifiedObjectId(ObjectIds.DELUXE_FERTILIZER);
         public static readonly string DELUXE_RETAINING_SOIL = QualifiedObjectId(ObjectIds.DELUXE_RETAINING_SOIL);
         public static readonly string DELUXE_SPEED_GRO = QualifiedObjectId(ObjectIds.DELUXE_SPEED_GRO);
@@ -197,6 +193,7 @@ namespace StardewArchipelago.Constants.Vanilla
         public static readonly string LUCKY_LUNCH = QualifiedObjectId(ObjectIds.LUCKY_LUNCH);
         public static readonly string LUCKY_PURPLE_SHORTS = QualifiedObjectId(ObjectIds.LUCKY_PURPLE_SHORTS);
         public static readonly string MAGIC_BAIT = QualifiedObjectId(ObjectIds.MAGIC_BAIT);
+        public static readonly string MAGIC_COWBOY_HAT = QualifiedHatId(HatIds.MAGIC_COWBOY_HAT);
         public static readonly string MAGIC_ROCK_CANDY = QualifiedObjectId(ObjectIds.MAGIC_ROCK_CANDY);
         public static readonly string MAGMA_GEODE = QualifiedObjectId(ObjectIds.MAGMA_GEODE);
         public static readonly string MAHOGANY_SEED = QualifiedObjectId(ObjectIds.MAHOGANY_SEED);
@@ -276,6 +273,7 @@ namespace StardewArchipelago.Constants.Vanilla
         public static readonly string RAIN_TOTEM = QualifiedObjectId(ObjectIds.RAIN_TOTEM);
         public static readonly string RARE_SEED = QualifiedObjectId(ObjectIds.RARE_SEED);
         public static readonly string RED_CABBAGE_SEEDS = QualifiedObjectId(ObjectIds.RED_CABBAGE_SEEDS);
+        public static readonly string RED_COWBOY_HAT = QualifiedHatId(HatIds.RED_COWBOY_HAT);
         public static readonly string RED_PLATE = QualifiedObjectId(ObjectIds.RED_PLATE);
         public static readonly string REFINED_QUARTZ = QualifiedObjectId(ObjectIds.REFINED_QUARTZ);
         public static readonly string RETRO_CATALOGUE = QualifiedFurnitureId(FurnitureIds.RETRO_CATALOGUE);
@@ -325,6 +323,7 @@ namespace StardewArchipelago.Constants.Vanilla
         public static readonly string SUNFLOWER_SEEDS = QualifiedObjectId(ObjectIds.SUNFLOWER_SEEDS);
         public static readonly string SUPER_CUCUMBER = QualifiedObjectId(ObjectIds.SUPER_CUCUMBER);
         public static readonly string TEA_SET = QualifiedObjectId(ObjectIds.TEA_SET);
+        public static readonly string TENT_KIT = QualifiedObjectId(ObjectIds.TENT_KIT);
         public static readonly string THE_ALLEYWAY_BUFFET = QualifiedObjectId(ObjectIds.THE_ALLEYWAY_BUFFET);
         public static readonly string THE_ART_O_CRABBING = QualifiedObjectId(ObjectIds.THE_ART_O_CRABBING);
         public static readonly string THE_DIAMOND_HUNTER = QualifiedObjectId(ObjectIds.THE_DIAMOND_HUNTER);

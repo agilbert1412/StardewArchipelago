@@ -773,7 +773,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
 
         protected override void SetUpPurchaseButton()
         {
-            if (CurrentPageBundle.name is MemeBundleNames.NFT or MemeBundleNames.DEATH or MemeBundleNames.HONEYWELL or MemeBundleNames.HINT or MemeBundleNames.CONNECTION or MemeBundleNames.RECONNECTION)
+            if (CurrentPageBundle.name is MemeBundleNames.NFT or MemeBundleNames.DEATH or MemeBundleNames.HONEYWELL or MemeBundleNames.HINT or MemeBundleNames.CONNECTION or MemeBundleNames.RECONNECTION or MemeBundleNames.ERROR or MemeBundleNames.CAMPING)
             {
                 return;
             }
@@ -2440,6 +2440,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
             _slidingPuzzle = null;
 
             SendMinistryOfMadnessGift(giftReceiver);
+            CompleteBundleIfExists(MemeBundleNames.CAMPING);
         }
 
         private static void SendMinistryOfMadnessGift(GiftReceiver giftReceiver)

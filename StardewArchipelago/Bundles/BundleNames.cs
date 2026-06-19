@@ -61,5 +61,7 @@
         public const string RECONNECTION = "Reconnection";
         public const string DR_SEUSS = "Dr Seuss";
         public const string YEEHAW = "Yeehaw";
+        public const string ERROR = "Error";
+        public const string CAMPING = "Camping";
     }
 }

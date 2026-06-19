@@ -1,6 +1,8 @@
-﻿using System;
-using KaitoKid.ArchipelagoUtilities.Net.Client;
+﻿using KaitoKid.ArchipelagoUtilities.Net.Client;
+using StardewArchipelago.Bundles;
+using StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles;
 using StardewModdingAPI;
+using System;
 
 namespace StardewArchipelago.Logging
 {
@@ -16,6 +18,8 @@ namespace StardewArchipelago.Logging
         public override void LogError(string message)
         {
             _logger.Log(message, LogLevel.Error);
+
+            ArchipelagoJunimoNoteMenu.CompleteBundleIfExists(MemeBundleNames.ERROR);
         }
 
         public override void LogError(string message, Exception e)
