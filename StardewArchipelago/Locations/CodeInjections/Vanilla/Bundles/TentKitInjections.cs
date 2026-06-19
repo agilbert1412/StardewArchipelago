@@ -61,39 +61,41 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
 
         private static bool TryPlaceTentIndoors(GameLocation location, int x, int y, Farmer who)
         {
-            Vector2 vector2_1 = new Vector2(x / 64, y / 64);
+            var vector2_1 = new Vector2(x / 64, y / 64);
             if (who == null)
             {
                 return false;
             }
 
-            Microsoft.Xna.Framework.Rectangle area = Microsoft.Xna.Framework.Rectangle.Empty;
+            var area = Rectangle.Empty;
             switch (Utility.getDirectionFromChange(vector2_1, who.Tile))
             {
                 case 0:
-                    area = new Microsoft.Xna.Framework.Rectangle((int)(vector2_1.X - 1.0), (int)(vector2_1.Y - 1.0), 3, 2);
+                    area = new Rectangle((int)(vector2_1.X - 1.0), (int)(vector2_1.Y - 1.0), 3, 2);
                     break;
                 case 1:
-                    area = new Microsoft.Xna.Framework.Rectangle((int)vector2_1.X, (int)(vector2_1.Y - 1.0), 3, 2);
+                    area = new Rectangle((int)vector2_1.X, (int)(vector2_1.Y - 1.0), 3, 2);
                     break;
                 case 2:
-                    area = new Microsoft.Xna.Framework.Rectangle((int)(vector2_1.X - 1.0), (int)vector2_1.Y, 3, 2);
+                    area = new Rectangle((int)(vector2_1.X - 1.0), (int)vector2_1.Y, 3, 2);
                     break;
                 case 3:
-                    area = new Microsoft.Xna.Framework.Rectangle((int)(vector2_1.X - 2.0), (int)(vector2_1.Y - 1.0), 3, 2);
+                    area = new Rectangle((int)(vector2_1.X - 2.0), (int)(vector2_1.Y - 1.0), 3, 2);
                     break;
             }
-            if (area != Microsoft.Xna.Framework.Rectangle.Empty && location.isAreaClear(area))
+
+            if (area == Rectangle.Empty || !location.isAreaClear(area))
             {
-                location.largeTerrainFeatures.Add(new Tent(new Vector2(area.X + 1, area.Y + 1)));
-                Game1.playSound("moss_cut");
-                Game1.playSound("woodyHit");
-                Microsoft.Xna.Framework.Rectangle rectangle = new Microsoft.Xna.Framework.Rectangle(area.X * 64, area.Y * 64, 192, 128);
-                Utility.addDirtPuffs(location, area.X, area.Y, 3, 2, 9);
-                return true;
+                return false;
             }
 
-            return false;
+            location.largeTerrainFeatures.Add(new Tent(new Vector2(area.X + 1, area.Y + 1)));
+            Game1.playSound("moss_cut");
+            Game1.playSound("woodyHit");
+            var rectangle = new Rectangle(area.X * 64, area.Y * 64, 192, 128);
+            Utility.addDirtPuffs(location, area.X, area.Y, 3, 2, 9);
+            return true;
+
         }
     }
 }
