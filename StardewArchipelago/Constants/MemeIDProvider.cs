@@ -22,6 +22,7 @@ namespace StardewArchipelago.Constants
         public static readonly string DEATHLINKS = IDProvider.CreateId("DeathLinks");
         public static readonly string GOATS = IDProvider.CreateId("Goat");
         public static readonly string YEEHAW = IDProvider.CreateId("YeeHaw!");
+        public static readonly string ERROR = IDProvider.CreateId("Error");
 
         public static readonly string WORN_BOOTS = IDProvider.CreateId("WornBoots");
         public static readonly string WORN_SHIRT = IDProvider.CreateId("WornShirt");

@@ -63,5 +63,7 @@
         public const string YEEHAW = "Yeehaw";
         public const string ERROR = "Error";
         public const string CAMPING = "Camping";
+        public const string LOONEY = "Looney";
+        public const string MORSHU = "Morshu";
     }
 }

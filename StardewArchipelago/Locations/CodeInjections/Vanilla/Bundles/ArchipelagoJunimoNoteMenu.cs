@@ -4,6 +4,7 @@ using KaitoKid.ArchipelagoUtilities.Net;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Graphics.PackedVector;
 using Microsoft.Xna.Framework.Input;
 using StardewArchipelago.Archipelago;
 using StardewArchipelago.Archipelago.Gifting;
@@ -33,6 +34,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using Color = Microsoft.Xna.Framework.Color;
 using Object = StardewValley.Object;
 
@@ -44,6 +46,10 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
         private const int CUSTOM_BUNDLE_INDEX_THRESHOLD = 200;
         private const string YEEHAW_FILE = "yeehaw.wav";
         private const string YEEHAW_CUE = "yeehaw";
+        private const string MORSHU_ITEMS_FILE = "Oil_Ropes_Bombs.wav";
+        private const string MORSHU_RICHER_FILE = "Little_Bit_Richer.wav";
+        private const string MORSHU_ITEMS_CUE = "oil_ropes_bombs";
+        private const string MORSHU_RICHER_CUE = "little_bit_richer";
 
         private static LogHandler _logger;
         private static IModHelper _modHelper;
@@ -1120,6 +1126,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
                 var nextPosition = GetPointTowardsSticky(0.05);
                 Game1.setMousePosition(nextPosition);
             }
+            UpdateLooneyBundle();
         }
 
         private Point GetPointTowardsSticky(double percentDistance)
@@ -1502,6 +1509,13 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
                     _wallet.CookieClicker.ClickCookie();
                 }
             }
+            if (CurrentPageBundle.name == MemeBundleNames.LOONEY)
+            {
+                if (ReceiveLeftClickInLooneyBundle(x, y))
+                {
+                    return true;
+                }
+            }
 
             return base.ReceiveLeftClickInSpecificBundlePage(x, y);
         }
@@ -1623,6 +1637,27 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
             var chosenTrap = _trapManager.ExecuteRandomTrapImmediately(ingredientIndex);
             var message = _archipelago.SendFakeItemMessage(chosenTrap, $"Trap Bundle Item {ingredientIndex}");
             Game1.chatBox?.addMessage(message, Color.Gold);
+        }
+
+        private bool ReceiveLeftClickInLooneyBundle(int x, int y)
+        {
+            if (HeldItem == null || !CurrentPageBundle.DepositsAllowed)
+            {
+                return false;
+            }
+
+            var texturePosition = new Vector2(xPositionOnScreen + 872, yPositionOnScreen + 88);
+            var textureRectangle = new Rectangle((int)texturePosition.X, (int)texturePosition.Y, 128, 128);
+            if (textureRectangle.Contains(x, y))
+            {
+                if (HeldItem.QualifiedItemId == $"(BC)Anvil")
+                {
+                    StartLooneyBundleFallDown((Object)HeldItem.getOne(), x, y);
+                    HeldItem = HeldItem.ConsumeStack(1);
+                }
+            }
+
+            return false;
         }
 
         internal override bool CheckIfAllIngredientsAreDeposited()
@@ -1869,6 +1904,30 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
                     }
                 }
             }
+
+            if (CurrentPageBundle.name == MemeBundleNames.MORSHU)
+            {
+                var ingredientIdToDraw = QualifiedItemIds.BOMB;
+                if (ingredient.stack <= 5)
+                {
+                    ingredientIdToDraw = QualifiedItemIds.OIL;
+                }
+                else if (ingredient.stack <= 10)
+                {
+                    ingredientIdToDraw = QualifiedItemIds.FIBER;
+                }
+                else
+                {
+                    ingredientIdToDraw = QualifiedItemIds.BOMB;
+                }
+
+                var ingredientToDraw = ItemRegistry.Create(ingredientIdToDraw, 3);
+                if (ingredientBox.visible)
+                {
+                    ingredientToDraw.drawInMenu(spriteBatch, new Vector2(ingredientBox.bounds.X, ingredientBox.bounds.Y), ingredientBox.scale / 4f, 1f, 0.9f, StackDrawType.Draw, Color.White * overlayTransparency, false);
+                }
+                return;
+            }
             base.DrawIngredient(spriteBatch, ingredient, ingredientBox, overlayTransparency, index);
         }
 
@@ -1942,6 +2001,11 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
                     b.Draw(sap.GetTexture(), position + new Vector2(32f, 32f), sourceRect, Color.White * 1f, 0.0f, new Vector2((float)(sourceRect.Width / 2), (float)(sourceRect.Height / 2)), 4f, SpriteEffects.None, 0.9f);
                     // sap.drawInMenu(b, position, 1.0f);
                 }
+            }
+
+            if (CurrentPageBundle.name == MemeBundleNames.LOONEY)
+            {
+                DrawLooneyBundleEffects(b);
             }
         }
 
@@ -2296,6 +2360,11 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
                 return slot.sourceRect.Y == 122;
             }
 
+            if (CurrentPageBundle != null && CurrentPageBundle.name == MemeBundleNames.LOONEY)
+            {
+                return false;
+            }
+
             return base.SlotCanReceiveItem(slot);
         }
 
@@ -2376,6 +2445,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
 
             return 0;
         }
+
         public static void CompleteBundlesFromServer()
         {
             if (!ModEntry.Instance.Config.RemoteCommunityCenter && !Game1.MasterPlayer.hasOrWillReceiveMail("JojaMember"))
@@ -2440,7 +2510,10 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
             _slidingPuzzle = null;
 
             SendMinistryOfMadnessGift(giftReceiver);
-            CompleteBundleIfExists(MemeBundleNames.CAMPING);
+            if (Game1.currentLocation is CommunityCenter)
+            {
+                CompleteBundleIfExists(MemeBundleNames.CAMPING);
+            }
         }
 
         private static void SendMinistryOfMadnessGift(GiftReceiver giftReceiver)
@@ -2584,6 +2657,10 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
             if (bundle.name == MemeBundleNames.YEEHAW)
             {
                 RegisterYeehawCue();
+            }
+            if (bundle.name == MemeBundleNames.MORSHU)
+            {
+                PlayMorshuLines();
             }
         }
 
@@ -2775,11 +2852,35 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
 
         private void RegisterYeehawCue()
         {
+            RegisterCue(YEEHAW_CUE, YEEHAW_FILE);
+        }
+
+        private void PlayMorshuLines()
+        {
+            RegisterCue(MORSHU_ITEMS_CUE, MORSHU_ITEMS_FILE);
+            RegisterCue(MORSHU_RICHER_CUE, MORSHU_RICHER_FILE);
+            if (Game1.player.Items.ContainsId(QualifiedItemIds.RUBY, 5))
+            {
+                Game1.playSound(MORSHU_ITEMS_CUE);
+            }
+            else
+            {
+                Game1.playSound(MORSHU_RICHER_CUE);
+            }
+        }
+
+        private void RegisterCue(string cue, string file)
+        {
+            if (Game1.soundBank.Exists(cue))
+            {
+                return;
+            }
+
             var currentModFolder = _modHelper.DirectoryPath;
             var soundsFolder = "Sounds";
-            var relativePathToSound = Path.Combine(currentModFolder, soundsFolder, YEEHAW_FILE);
-            var yeehawCueDefinition = new CueDefinition(YEEHAW_CUE, SoundEffect.FromFile(relativePathToSound), 0);
-            Game1.soundBank.AddCue(yeehawCueDefinition);
+            var relativePathToSound = Path.Combine(currentModFolder, soundsFolder, file);
+            var cueDefinition = new CueDefinition(cue, SoundEffect.FromFile(relativePathToSound), 0);
+            Game1.soundBank.AddCue(cueDefinition);
         }
 
         public void SendHomeDistractedIngredients()
@@ -2930,6 +3031,69 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
             var wornHat = hat.Value;
             var cowboyHats = new[] { QualifiedItemIds.COWBOY_HAT, QualifiedItemIds.COWGAL_HAT, QualifiedItemIds.BLUE_COWBOY_HAT, QualifiedItemIds.RED_COWBOY_HAT, QualifiedItemIds.DARK_COWBOY_HAT, QualifiedItemIds.MAGIC_COWBOY_HAT, QualifiedItemIds.COWPOKE_HAT, QualifiedItemIds.DELUXE_COWBOY_HAT };
             return cowboyHats.Contains(wornHat.QualifiedItemId);
+        }
+
+        private bool _looneyBundleFalling = false;
+        private Point _looneyBundleAnvilPosition = Point.Zero;
+        private Vector2 _looneyBundleChickenPosition = Vector2.Zero;
+        private Object _looneyBundleAnvil = null;
+
+        private void StartLooneyBundleFallDown(Object anvil, int x, int y)
+        {
+            _looneyBundleAnvilPosition = new Point(IngredientSlots[0].bounds.Location.X, y);
+            _looneyBundleChickenPosition = new Vector2(IngredientSlots[0].bounds.Location.X+1, IngredientSlots[0].bounds.Location.Y + 1);
+            _looneyBundleFalling = true;
+            _looneyBundleAnvil = anvil;
+        }
+
+        private void DrawLooneyBundleEffects(SpriteBatch b)
+        {
+            var chickenTexture = Game1.content.Load<Texture2D>("Animals\\Blue Chicken");
+            var chickenSourceRect = new Rectangle(32, 64, 16, 16);
+            var chickenPosition = new Vector2(IngredientSlots[0].bounds.Location.X + 1, IngredientSlots[0].bounds.Location.Y + 1);
+
+            if (_looneyBundleFalling)
+            {
+                var chickenDistance = _looneyBundleChickenPosition.Y - _looneyBundleAnvilPosition.Y;
+                if (chickenDistance < 96)
+                {
+                    var frame = ((int)(_looneyBundleChickenPosition.X / 16) % 4);
+                    var sourceRectX = (int)(frame * 16);
+                    chickenSourceRect = new Rectangle(sourceRectX, 16, 16, 16);
+                }
+                chickenPosition = _looneyBundleChickenPosition;
+                _looneyBundleAnvil.drawInMenu(b, new Vector2(_looneyBundleAnvilPosition.X, _looneyBundleAnvilPosition.Y), 1f, 1f, 0.9f);
+            }
+
+            b.Draw(chickenTexture, new Rectangle((int)chickenPosition.X, (int)chickenPosition.Y, 64, 64), chickenSourceRect, Color.White);
+        }
+
+        private void UpdateLooneyBundle()
+        {
+            if (!_looneyBundleFalling)
+            {
+                return;
+            }
+
+            _looneyBundleAnvilPosition.Y += 4;
+            var chickenDistance = _looneyBundleChickenPosition.Y - _looneyBundleAnvilPosition.Y;
+            if (chickenDistance < 128)
+            {
+                _looneyBundleChickenPosition.X += 2;
+            }
+
+            if (_looneyBundleAnvilPosition.Y > Game1.viewport.Height)
+            {
+                _looneyBundleFalling = false;
+                Game1.currentLocation.Objects.Add(Game1.player.Tile, _looneyBundleAnvil);
+                Game1.player.health -= 30;
+                _looneyBundleAnvil = null;
+                if (CurrentPageBundle != null && CurrentPageBundle.name == MemeBundleNames.LOONEY)
+                {
+                    CompleteBundleIfExists(MemeBundleNames.LOONEY);
+                    TakeDownBundleSpecificPage();
+                }
+            }
         }
     }
 }

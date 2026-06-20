@@ -78,6 +78,7 @@ namespace StardewArchipelago.Bundles
             { "DeathLinks", MemeIDProvider.DEATHLINKS },
             { "Goat", MemeIDProvider.GOATS },
             { "YeeHaw!", MemeIDProvider.YEEHAW },
+            { "Error", MemeIDProvider.ERROR },
         };
     }
 }

@@ -153,6 +153,11 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
                 }
             }
 
+            if (name == MemeBundleNames.LOONEY)
+            {
+                return false;
+            }
+
             return base.CanAcceptThisItem(item, slot, ignoreStackCount, parentMenu);
         }
 
@@ -207,7 +212,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
 
                 return bool.TryParse(item.modData[GarbageInjections.FROM_TRASH_KEY], out var fromTrash) && fromTrash;
             }
-            if (name == MemeBundleNames.COOPERATION || name == MemeBundleNames.POMNUT || name == MemeBundleNames.POLLUTION || name == MemeBundleNames.CATCH_AND_RELEASE)
+            if (name == MemeBundleNames.COOPERATION || name == MemeBundleNames.POMNUT || name == MemeBundleNames.POLLUTION || name == MemeBundleNames.CATCH_AND_RELEASE || name == MemeBundleNames.CAMPING)
             {
                 return false;
             }
@@ -381,6 +386,31 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
             if (name == MemeBundleNames.SISYPHUS)
             {
                 ArchipelagoJunimoNoteMenu.SisyphusStoneNeedsToFall = true;
+            }
+            if (name == MemeBundleNames.MORSHU)
+            {
+                var purchasedItemId = QualifiedItemIds.BOMB;
+                if (ingredientDescription1.stack <= 5)
+                {
+                    purchasedItemId = QualifiedItemIds.OIL;
+                }
+                else if (ingredientDescription1.stack <= 10)
+                {
+                    purchasedItemId = QualifiedItemIds.FIBER;
+                }
+                else
+                {
+                    purchasedItemId = QualifiedItemIds.BOMB;
+                }
+
+                var purchasedItem = ItemRegistry.Create(purchasedItemId, 3);
+                result = parentMenu.Inventory.tryToAddItem(result);
+                if (result != null && result.Stack >= 1)
+                {
+                    _logger.LogError($"Something went wrong putting the Rubies back in the player's inventory...");
+                }
+
+                result = purchasedItem;
             }
             return result;
         }
