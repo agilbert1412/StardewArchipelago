@@ -3,6 +3,7 @@ using StardewArchipelago.Bundles;
 using StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles;
 using StardewModdingAPI;
 using System;
+using System.Linq;
 
 namespace StardewArchipelago.Logging
 {
@@ -18,6 +19,12 @@ namespace StardewArchipelago.Logging
         public override void LogError(string message)
         {
             _logger.Log(message, LogLevel.Error);
+
+            var invalidErrors = new[]{"Failed to Connect", "Connection to Archipelago"};
+            if (invalidErrors.Any(x => message.Contains(x, StringComparison.InvariantCultureIgnoreCase)))
+            {
+                return;
+            }
 
             ArchipelagoJunimoNoteMenu.CompleteBundleIfExists(MemeBundleNames.ERROR);
         }

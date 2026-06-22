@@ -29,10 +29,11 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles.Remakes
         public const int REGION_PRESENT_BUTTON = 105;
         public const int BASE_WIDTH = 320;
         public const int BASE_HEIGHT = 180;
-        protected const int INGREDIENTS_CENTER_X = 932;
-        protected const int INGREDIENTS_CENTER_Y = 364;
-        protected const int INGREDIENT_SLOTS_CENTER_X = INGREDIENTS_CENTER_X;
-        protected const int INGREDIENT_SLOTS_CENTER_Y = 540;
+        public const int INGREDIENTS_CENTER_X = 932;
+        public const int INGREDIENTS_CENTER_Y = 364;
+        public const int INGREDIENT_SLOTS_CENTER_X = INGREDIENTS_CENTER_X;
+        public const int INGREDIENT_SLOTS_CENTER_Y = 540;
+        public const int INGREDIENT_SLOT_SIZE = 72;
         public const string NOTE_TEXTURE_NAME = "LooseSprites\\JunimoNote";
         public Texture2D NoteTexture;
         public bool SpecificBundlePage;
@@ -1579,9 +1580,14 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles.Remakes
             DrawCurrentPageBundle(b);
             DrawButtons(b);
             DrawTemporarySprites(b);
+            DrawIngredientsAndSlots(b);
+            DrawInventory(b);
+        }
+
+        protected virtual void DrawIngredientsAndSlots(SpriteBatch b)
+        {
             DrawIngredientSlots(b);
             DrawIngredients(b);
-            DrawInventory(b);
         }
 
         protected virtual void DrawInventory(SpriteBatch b)
@@ -1667,10 +1673,10 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles.Remakes
 
         protected virtual void DrawIngredientAndShadow(SpriteBatch spriteBatch, BundleIngredientDescription ingredientDescription, int index)
         {
-            var num3 = 1f;
+            var transparency = 1f;
             if (CurrentPartialIngredientDescriptionIndex >= 0 && CurrentPartialIngredientDescriptionIndex != index)
             {
-                num3 = 0.25f;
+                transparency = 0.25f;
             }
             var ingredient = IngredientList[index];
             var flag = false;
@@ -1681,7 +1687,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles.Remakes
             {
                 flag = true;
             }
-            DrawIngredientAndShadow(spriteBatch, ingredientDescription, !flag, ingredient, num3, index);
+            DrawIngredientAndShadow(spriteBatch, ingredientDescription, !flag, ingredient, transparency, index);
         }
 
         protected virtual void DrawIngredientAndShadow(SpriteBatch spriteBatch, BundleIngredientDescription ingredientDescription, bool drawShadow, ClickableTextureComponent ingredient, float transparency, int index)
@@ -1901,7 +1907,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles.Remakes
             snapCursorToCurrentSnappedComponent();
         }
 
-        private void SetupIngredientSlots(BundleRemake b)
+        protected virtual void SetupIngredientSlots(BundleRemake b)
         {
             var ofIngredientSlots = b.NumberOfIngredientSlots;
             var toAddTo1 = GenerateIngredientSlotsRectangles(ofIngredientSlots);
@@ -2049,50 +2055,60 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles.Remakes
             switch (numberOfItems)
             {
                 case 1:
-                    toAddTo.AddRange(CreateRowOfBoxesCenteredAt(xPositionOnScreen + centerX, yPositionOnScreen + centerY, 1, 72, 72, 12));
+                    toAddTo.AddRange(CreateRowOfBoxesCenteredAt(xPositionOnScreen + centerX, yPositionOnScreen + centerY, 1, INGREDIENT_SLOT_SIZE, 12));
                     break;
                 case 2:
-                    toAddTo.AddRange(CreateRowOfBoxesCenteredAt(xPositionOnScreen + centerX, yPositionOnScreen + centerY, 2, 72, 72, 12));
+                    toAddTo.AddRange(CreateRowOfBoxesCenteredAt(xPositionOnScreen + centerX, yPositionOnScreen + centerY, 2, INGREDIENT_SLOT_SIZE, 12));
                     break;
                 case 3:
-                    toAddTo.AddRange(CreateRowOfBoxesCenteredAt(xPositionOnScreen + centerX, yPositionOnScreen + centerY, 3, 72, 72, 12));
+                    toAddTo.AddRange(CreateRowOfBoxesCenteredAt(xPositionOnScreen + centerX, yPositionOnScreen + centerY, 3, INGREDIENT_SLOT_SIZE, 12));
                     break;
                 case 4:
-                    toAddTo.AddRange(CreateRowOfBoxesCenteredAt(xPositionOnScreen + centerX, yPositionOnScreen + centerY, 4, 72, 72, 12));
+                    toAddTo.AddRange(CreateRowOfBoxesCenteredAt(xPositionOnScreen + centerX, yPositionOnScreen + centerY, 4, INGREDIENT_SLOT_SIZE, 12));
                     break;
                 case 5:
-                    toAddTo.AddRange(CreateRowOfBoxesCenteredAt(xPositionOnScreen + centerX, yPositionOnScreen + centerY - 36, 3, 72, 72, 12));
-                    toAddTo.AddRange(CreateRowOfBoxesCenteredAt(xPositionOnScreen + centerX, yPositionOnScreen + centerY + 40, 2, 72, 72, 12));
+                    toAddTo.AddRange(CreateRowOfBoxesCenteredAt(xPositionOnScreen + centerX, yPositionOnScreen + centerY - 36, 3, INGREDIENT_SLOT_SIZE, 12));
+                    toAddTo.AddRange(CreateRowOfBoxesCenteredAt(xPositionOnScreen + centerX, yPositionOnScreen + centerY + 40, 2, INGREDIENT_SLOT_SIZE, 12));
                     break;
                 case 6:
-                    toAddTo.AddRange(CreateRowOfBoxesCenteredAt(xPositionOnScreen + centerX, yPositionOnScreen + centerY - 36, 3, 72, 72, 12));
-                    toAddTo.AddRange(CreateRowOfBoxesCenteredAt(xPositionOnScreen + centerX, yPositionOnScreen + centerY + 40, 3, 72, 72, 12));
+                    toAddTo.AddRange(CreateRowOfBoxesCenteredAt(xPositionOnScreen + centerX, yPositionOnScreen + centerY - 36, 3, INGREDIENT_SLOT_SIZE, 12));
+                    toAddTo.AddRange(CreateRowOfBoxesCenteredAt(xPositionOnScreen + centerX, yPositionOnScreen + centerY + 40, 3, INGREDIENT_SLOT_SIZE, 12));
                     break;
                 case 7:
-                    toAddTo.AddRange(CreateRowOfBoxesCenteredAt(xPositionOnScreen + centerX, yPositionOnScreen + centerY - 36, 4, 72, 72, 12));
-                    toAddTo.AddRange(CreateRowOfBoxesCenteredAt(xPositionOnScreen + centerX, yPositionOnScreen + centerY + 40, 3, 72, 72, 12));
+                    toAddTo.AddRange(CreateRowOfBoxesCenteredAt(xPositionOnScreen + centerX, yPositionOnScreen + centerY - 36, 4, INGREDIENT_SLOT_SIZE, 12));
+                    toAddTo.AddRange(CreateRowOfBoxesCenteredAt(xPositionOnScreen + centerX, yPositionOnScreen + centerY + 40, 3, INGREDIENT_SLOT_SIZE, 12));
                     break;
                 case 8:
-                    toAddTo.AddRange(CreateRowOfBoxesCenteredAt(xPositionOnScreen + centerX, yPositionOnScreen + centerY - 36, 4, 72, 72, 12));
-                    toAddTo.AddRange(CreateRowOfBoxesCenteredAt(xPositionOnScreen + centerX, yPositionOnScreen + centerY + 40, 4, 72, 72, 12));
+                    toAddTo.AddRange(CreateRowOfBoxesCenteredAt(xPositionOnScreen + centerX, yPositionOnScreen + centerY - 36, 4, INGREDIENT_SLOT_SIZE, 12));
+                    toAddTo.AddRange(CreateRowOfBoxesCenteredAt(xPositionOnScreen + centerX, yPositionOnScreen + centerY + 40, 4, INGREDIENT_SLOT_SIZE, 12));
                     break;
                 case 9:
-                    toAddTo.AddRange(CreateRowOfBoxesCenteredAt(xPositionOnScreen + centerX, yPositionOnScreen + centerY - 36, 5, 72, 72, 12));
-                    toAddTo.AddRange(CreateRowOfBoxesCenteredAt(xPositionOnScreen + centerX, yPositionOnScreen + centerY + 40, 4, 72, 72, 12));
+                    toAddTo.AddRange(CreateRowOfBoxesCenteredAt(xPositionOnScreen + centerX, yPositionOnScreen + centerY - 36, 5, INGREDIENT_SLOT_SIZE, 12));
+                    toAddTo.AddRange(CreateRowOfBoxesCenteredAt(xPositionOnScreen + centerX, yPositionOnScreen + centerY + 40, 4, INGREDIENT_SLOT_SIZE, 12));
                     break;
                 case 10:
-                    toAddTo.AddRange(CreateRowOfBoxesCenteredAt(xPositionOnScreen + centerX, yPositionOnScreen + centerY - 36, 5, 72, 72, 12));
-                    toAddTo.AddRange(CreateRowOfBoxesCenteredAt(xPositionOnScreen + centerX, yPositionOnScreen + centerY + 40, 5, 72, 72, 12));
+                    toAddTo.AddRange(CreateRowOfBoxesCenteredAt(xPositionOnScreen + centerX, yPositionOnScreen + centerY - 36, 5, INGREDIENT_SLOT_SIZE, 12));
+                    toAddTo.AddRange(CreateRowOfBoxesCenteredAt(xPositionOnScreen + centerX, yPositionOnScreen + centerY + 40, 5, INGREDIENT_SLOT_SIZE, 12));
                     break;
                 case 11:
-                    toAddTo.AddRange(CreateRowOfBoxesCenteredAt(xPositionOnScreen + centerX, yPositionOnScreen + centerY - 36, 6, 72, 72, 12));
-                    toAddTo.AddRange(CreateRowOfBoxesCenteredAt(xPositionOnScreen + centerX, yPositionOnScreen + centerY + 40, 5, 72, 72, 12));
+                    toAddTo.AddRange(CreateRowOfBoxesCenteredAt(xPositionOnScreen + centerX, yPositionOnScreen + centerY - 36, 6, INGREDIENT_SLOT_SIZE, 12));
+                    toAddTo.AddRange(CreateRowOfBoxesCenteredAt(xPositionOnScreen + centerX, yPositionOnScreen + centerY + 40, 5, INGREDIENT_SLOT_SIZE, 12));
                     break;
                 case 12:
-                    toAddTo.AddRange(CreateRowOfBoxesCenteredAt(xPositionOnScreen + centerX, yPositionOnScreen + centerY - 36, 6, 72, 72, 12));
-                    toAddTo.AddRange(CreateRowOfBoxesCenteredAt(xPositionOnScreen + centerX, yPositionOnScreen + centerY + 40, 6, 72, 72, 12));
+                    toAddTo.AddRange(CreateRowOfBoxesCenteredAt(xPositionOnScreen + centerX, yPositionOnScreen + centerY - 36, 6, INGREDIENT_SLOT_SIZE, 12));
+                    toAddTo.AddRange(CreateRowOfBoxesCenteredAt(xPositionOnScreen + centerX, yPositionOnScreen + centerY + 40, 6, INGREDIENT_SLOT_SIZE, 12));
                     break;
             }
+        }
+
+        private List<Rectangle> CreateRowOfBoxesCenteredAt(
+            int xStart,
+            int yStart,
+            int numBoxes,
+            int boxSize,
+            int horizontalGap)
+        {
+            return CreateRowOfBoxesCenteredAt(xStart, yStart, numBoxes, boxSize, boxSize, horizontalGap);
         }
 
         private List<Rectangle> CreateRowOfBoxesCenteredAt(

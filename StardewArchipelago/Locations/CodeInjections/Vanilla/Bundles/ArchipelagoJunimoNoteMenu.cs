@@ -87,6 +87,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
         private ICue _currentCue;
         private bool _isCurrentlySticky = false;
         private Point _stickyPosition = Point.Zero;
+        private LingoHandler _lingoHandler;
 
         public Texture2D MemeTexture;
         public Texture2D HumbleBundleTexture;
@@ -481,6 +482,18 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
         {
             base.draw(b);
             _currencyManager.DrawCurrency(b);
+        }
+
+        protected override void DrawCurrentPageBundle(SpriteBatch b)
+        {
+            if (CurrentPageBundle.name == MemeBundleNames.LINGO)
+            {
+                var position = new Vector2(xPositionOnScreen + INGREDIENT_SLOTS_CENTER_X - 256, yPositionOnScreen + INGREDIENT_SLOTS_CENTER_Y - 100);
+                var sourceRect = new Rectangle(490, 60, 66, 26);
+                b.Draw(NoteTexture, position, sourceRect, Color.White, 0.0f, Vector2.Zero, 8f, SpriteEffects.None, 0.09f);
+            }
+
+            base.DrawCurrentPageBundle(b);
         }
 
         protected override void DrawButtons(SpriteBatch b)
@@ -890,21 +903,21 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
             var buttonScale = 4f;
             var grandmaScale = 3f;
 
-            var cursorButtonRect = new Rectangle(xStart, y, 72, 72);
+            var cursorButtonRect = new Rectangle(xStart, y, INGREDIENT_SLOT_SIZE, INGREDIENT_SLOT_SIZE);
             var cursorBackground = new BundleButton(cursorButtonRect, NoteTexture, buttonBackgroundRectangle, buttonScale);
             var cursorTextureRect = new Rectangle(0, 0, 8, 10);
             var cursorRect = GetCenteredTexture(cursorButtonRect, cursorTextureRect, buttonScale, buttonScale);
             var cursorButton = new BundleButton(cursorRect, Game1.mouseCursors, cursorTextureRect, buttonScale);
             cursorButton.myID = 793;
 
-            var cookieButtonRect = new Rectangle(xStart + xPerButton, y, 72, 72);
+            var cookieButtonRect = new Rectangle(xStart + xPerButton, y, INGREDIENT_SLOT_SIZE, INGREDIENT_SLOT_SIZE);
             var cookieBackground = new BundleButton(cookieButtonRect, NoteTexture, buttonBackgroundRectangle, buttonScale);
             var cookieTextureRect = new Rectangle(112, 144, 16, 16);
             var cookieRect = GetCenteredTexture(cookieButtonRect, cookieTextureRect, buttonScale, buttonScale);
             var cookieButton = new BundleButton(cookieRect, Game1.objectSpriteSheet, cookieTextureRect, buttonScale);
             cookieButton.myID = 794;
 
-            var grandmaButtonRect = new Rectangle(xStart + (xPerButton*2), y, 72, 72);
+            var grandmaButtonRect = new Rectangle(xStart + (xPerButton*2), y, INGREDIENT_SLOT_SIZE, INGREDIENT_SLOT_SIZE);
             var grandmaBackground = new BundleButton(grandmaButtonRect, NoteTexture, buttonBackgroundRectangle, buttonScale);
             var grandmaTextureRect = new Rectangle(0, 168, 16, 24);
             var grandmaRect = GetCenteredTexture(grandmaButtonRect, grandmaTextureRect, buttonScale, grandmaScale);
@@ -939,7 +952,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
             var y = yPositionOnScreen + 504;
             var buttonScale = 4f;
 
-            var dangerBackgroundRect = new Rectangle(xStart + xPerButton, y, 72, 72);
+            var dangerBackgroundRect = new Rectangle(xStart + xPerButton, y, INGREDIENT_SLOT_SIZE, INGREDIENT_SLOT_SIZE);
             var dangerBackground = new BundleButton(dangerBackgroundRect, NoteTexture, buttonBackgroundRectangle, buttonScale);
             var dangerTextureRect = new Rectangle(240, 1808, 16, 16);
             var dangerRect = GetCenteredTexture(dangerBackgroundRect, dangerTextureRect, buttonScale, buttonScale);
@@ -972,7 +985,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
             var buttonScale = 4f;
             var chestsScale = 3f;
 
-            var commonButtonRect = new Rectangle(xStart, y, 72, 72);
+            var commonButtonRect = new Rectangle(xStart, y, INGREDIENT_SLOT_SIZE, INGREDIENT_SLOT_SIZE);
             var commonBackground = new BundleButton(commonButtonRect, NoteTexture, buttonBackgroundRectangle, buttonScale);
             var commonTextureRect = new Rectangle(64, 1952, 32, 32);
             var commonRect = GetCenteredTexture(commonButtonRect, commonTextureRect, buttonScale, chestsScale);
@@ -982,7 +995,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
             commonButton.SetDrawOffset(new Vector2(-2, -18));
             commonButton.SetPressAnimation(Game1.mouseCursors, commonTextureRect, new Vector2(32, 0), 4);
 
-            var rareButtonRect = new Rectangle(xStart + xPerButton, y, 72, 72);
+            var rareButtonRect = new Rectangle(xStart + xPerButton, y, INGREDIENT_SLOT_SIZE, INGREDIENT_SLOT_SIZE);
             var rareBackground = new BundleButton(rareButtonRect, NoteTexture, buttonBackgroundRectangle, buttonScale);
             var rareTextureRect = new Rectangle(64, 1920, 32, 32);
             var rareRect = GetCenteredTexture(rareButtonRect, rareTextureRect, buttonScale, chestsScale);
@@ -992,7 +1005,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
             rareButton.SetDrawOffset(new Vector2(-2, -18));
             rareButton.SetPressAnimation(Game1.mouseCursors, rareTextureRect, new Vector2(32, 0), 4);
 
-            var legendaryButtonRect = new Rectangle(xStart + (xPerButton * 2), y, 72, 72);
+            var legendaryButtonRect = new Rectangle(xStart + (xPerButton * 2), y, INGREDIENT_SLOT_SIZE, INGREDIENT_SLOT_SIZE);
             var legendaryBackground = new BundleButton(legendaryButtonRect, NoteTexture, buttonBackgroundRectangle, buttonScale);
             var legendaryTextureRect = new Rectangle(256, 75, 32, 32);
             var legendaryRect = GetCenteredTexture(legendaryButtonRect, legendaryTextureRect, buttonScale, chestsScale);
@@ -1034,21 +1047,21 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
             var iconScale = 0.5625f;
             var bundleTextureRect = new Rectangle(0, 0, 128, 128);
 
-            var cheapButtonRect = new Rectangle(xStart, y, 72, 72);
+            var cheapButtonRect = new Rectangle(xStart, y, INGREDIENT_SLOT_SIZE, INGREDIENT_SLOT_SIZE);
             var cheapBackground = new BundleButton(cheapButtonRect, NoteTexture, buttonBackgroundRectangle, buttonScale);
             var cheapRect = GetCenteredTexture(cheapButtonRect, bundleTextureRect, buttonScale, iconScale);
             var cheapButton = new BundleButton(cheapRect, HumbleBundleTexture, bundleTextureRect, iconScale);
             cheapButton.myID = 793;
             cheapButton.hoverText = "Cheap Donation";
             
-            var normalButtonRect = new Rectangle(xStart + xPerButton, y, 72, 72);
+            var normalButtonRect = new Rectangle(xStart + xPerButton, y, INGREDIENT_SLOT_SIZE, INGREDIENT_SLOT_SIZE);
             var normalBackground = new BundleButton(normalButtonRect, NoteTexture, buttonBackgroundRectangle, buttonScale);
             var normalRect = GetCenteredTexture(normalButtonRect, bundleTextureRect, buttonScale, iconScale);
             var normalButton = new BundleButton(normalRect, HumbleBundleTexture, bundleTextureRect, iconScale);
             normalButton.myID = 794;
             normalButton.hoverText = "Normal Donation";
             
-            var generousButtonRect = new Rectangle(xStart + (xPerButton * 2), y, 72, 72);
+            var generousButtonRect = new Rectangle(xStart + (xPerButton * 2), y, INGREDIENT_SLOT_SIZE, INGREDIENT_SLOT_SIZE);
             var generousBackground = new BundleButton(generousButtonRect, NoteTexture, buttonBackgroundRectangle, buttonScale);
             var generousRect = GetCenteredTexture(generousButtonRect, bundleTextureRect, buttonScale, iconScale);
             var generousButton = new BundleButton(generousRect, HumbleBundleTexture, bundleTextureRect, iconScale);
@@ -1219,6 +1232,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
             AfterUpdateIngredientSlotsSchrodinger();
             AfterUpdateIngredientSlotsIKEA();
             AfterUpdateIngredientSlotsSquareHole();
+            _lingoHandler?.UpdateIngredientSlots();
         }
 
         private void AfterUpdateIngredientSlotsIKEA()
@@ -2009,6 +2023,17 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
             }
         }
 
+        protected override void DrawIngredientsAndSlots(SpriteBatch b)
+        {
+            if (CurrentPageBundle.name == MemeBundleNames.LINGO)
+            {
+                DrawLingoIngredientsAndSlots(b);
+                return;
+            }
+
+            base.DrawIngredientsAndSlots(b);
+        }
+
         public static void OnUpdateTickedStatic(UpdateTickedEventArgs e)
         {
             if (Game1.activeClickableMenu is ArchipelagoJunimoNoteMenu junimoNoteMenu)
@@ -2232,6 +2257,10 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
                 {
                     return;
                 }
+            }
+            if (CurrentPageBundle.name == MemeBundleNames.LINGO)
+            {
+                return;
             }
             base.DrawTemporarySprites(b);
         }
@@ -2630,6 +2659,11 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
 
         protected override void SetUpBundleSpecificPage(ArchipelagoBundle bundle)
         {
+            if (bundle.name == MemeBundleNames.LINGO)
+            {
+                _lingoHandler = new LingoHandler(this, bundle);
+                bundle.LingoHandler = _lingoHandler;
+            }
             base.SetUpBundleSpecificPage(bundle);
             if (bundle.name == MemeBundleNames.PUZZLE)
             {
@@ -2758,6 +2792,11 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
                 PerformHoverIngredientSlotsSquareHole(x, y);
                 return;
             }
+            if (CurrentPageBundle != null && CurrentPageBundle.name == MemeBundleNames.LINGO)
+            {
+                PerformHoverIngredientSlotsLingo(x, y);
+                return;
+            }
             base.PerformHoverIngredientSlots(x, y);
         }
 
@@ -2777,6 +2816,24 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
                 else
                 {
                     ingredientSlot.sourceRect.X = 0;
+                }
+            }
+        }
+
+        protected void PerformHoverIngredientSlotsLingo(int x, int y)
+        {
+            if (HeldItem != null)
+            {
+                foreach (var ingredientSlot in IngredientSlots)
+                {
+                    if (ingredientSlot.bounds.Contains(x, y) && CanBePartiallyOrFullyDonated(HeldItem) && (PartialDonationItem == null || ingredientSlot.item == PartialDonationItem) || ingredientSlot.item != null)
+                    {
+                        ingredientSlot.visible = true;
+                    }
+                    else
+                    {
+                        ingredientSlot.visible = false;
+                    }
                 }
             }
         }
@@ -3094,6 +3151,58 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
                     TakeDownBundleSpecificPage();
                 }
             }
+        }
+
+        protected override void SetupIngredientSlots(BundleRemake b)
+        {
+            base.SetupIngredientSlots(b);
+        }
+
+        private void DrawLingoIngredientsAndSlots(SpriteBatch spriteBatch)
+        {
+            for (var index = GetIngredientsStartIndex(); index < GetIngredientsEndIndex(); ++index)
+            {
+                var ingredient = CurrentPageBundle.Ingredients[index];
+
+                var puzzleType = _lingoHandler.GetLingoPuzzleType(ingredient);
+                var height = _lingoHandler.GetLingoHeight(puzzleType);
+                var color = _lingoHandler.GetLingoColor(puzzleType);
+
+                DrawLingoIngredientAndSlot(spriteBatch, index, puzzleType, height, color);
+            }
+        }
+
+        private void DrawLingoIngredientAndSlot(SpriteBatch spriteBatch, int index, LingoPuzzleType puzzleType, int height, Color color)
+        {
+            var ingredientBox = IngredientList[index];
+            ingredientBox.draw(spriteBatch, color, 0.90f);
+
+            var ingredientSlot = IngredientSlots[index];
+            ingredientSlot.draw(spriteBatch, Color.White, 0.89f);
+
+            var ingredient = CurrentPageBundle.Ingredients[index];
+
+            DrawLingoItem(spriteBatch, ingredient, ingredientBox);
+            DrawLingoDonatedItem(spriteBatch, ingredient, ingredientSlot);
+
+            // ingredientBox.drawItem(spriteBatch, 4, 16);
+            // ingredientSlot.drawItem(spriteBatch, 4, 16);
+        }
+
+        private void DrawLingoItem(SpriteBatch spriteBatch, BundleIngredientDescription ingredient, ClickableTextureComponent ingredientBox)
+        {
+            var itemToDraw = _lingoHandler.GetLingoItemToDraw(ingredient);
+            itemToDraw.drawInMenu(spriteBatch, new Vector2(ingredientBox.bounds.X, ingredientBox.bounds.Y - 8), ingredientBox.scale / 6f, 1f, 0.9f, StackDrawType.Draw, Color.White, false);
+        }
+
+        private void DrawLingoDonatedItem(SpriteBatch spriteBatch, BundleIngredientDescription ingredient, ClickableTextureComponent ingredientSlot)
+        {
+            var itemToDraw = ingredientSlot.item;
+            if (itemToDraw == null)
+            {
+                return;
+            }
+            itemToDraw.drawInMenu(spriteBatch, new Vector2(ingredientSlot.bounds.X - 4, ingredientSlot.bounds.Y - 12), ingredientSlot.scale / 6f, 1f, 0.9f, StackDrawType.Draw, Color.White, false);
         }
     }
 }

@@ -33,6 +33,7 @@ namespace StardewArchipelago.Constants.Vanilla
         public static readonly string AMARANTH_SEEDS = QualifiedObjectId(ObjectIds.AMARANTH_SEEDS);
         public static readonly string AMETHYST = QualifiedObjectId(ObjectIds.AMETHYST);
         public static readonly string ANCIENT_DOLL = QualifiedObjectId(ObjectIds.ANCIENT_DOLL);
+        public static readonly string ANCIENT_SEED = QualifiedObjectId(ObjectIds.ANCIENT_SEED);
         public static readonly string ANCIENT_SEEDS = QualifiedObjectId(ObjectIds.ANCIENT_SEEDS);
         public static readonly string ANIMAL_CATALOGUE = QualifiedObjectId(ObjectIds.ANIMAL_CATALOGUE);
         public static readonly string APPLE = QualifiedObjectId(ObjectIds.APPLE);
@@ -57,7 +58,9 @@ namespace StardewArchipelago.Constants.Vanilla
         public static readonly string BLACKBERRY = QualifiedObjectId(ObjectIds.BLACKBERRY);
         public static readonly string BLACKBERRY_COBBLER = QualifiedObjectId(ObjectIds.BLACKBERRY_COBBLER);
         public static readonly string BLUE_COWBOY_HAT = QualifiedHatId(HatIds.BLUE_COWBOY_HAT);
+        public static readonly string BLUEBERRY = QualifiedObjectId(ObjectIds.BLUEBERRY);
         public static readonly string BLUEBERRY_SEEDS = QualifiedObjectId(ObjectIds.BLUEBERRY_SEEDS);
+        public static readonly string BLUEBERRY_TART = QualifiedPantsId(ObjectIds.BLUEBERRY_TART);
         public static readonly string BOAT = QualifiedFurnitureId(FurnitureIds.BOAT);
         public static readonly string BOK_CHOY_SEEDS = QualifiedObjectId(ObjectIds.BOK_CHOY_SEEDS);
         public static readonly string BOMB = QualifiedObjectId(ObjectIds.BOMB);
@@ -73,6 +76,8 @@ namespace StardewArchipelago.Constants.Vanilla
         public static readonly string CACTUS_FRUIT = QualifiedObjectId(ObjectIds.CACTUS_FRUIT);
         public static readonly string CACTUS_SEEDS = QualifiedObjectId(ObjectIds.CACTUS_SEEDS);
         public static readonly string CALICO_EGG = QualifiedObjectId(ObjectIds.CALICO_EGG);
+        public static readonly string CARP = QualifiedObjectId(ObjectIds.CARP);
+        public static readonly string CARP_SURPRISE = QualifiedPantsId(ObjectIds.CARP_SURPRISE);
         public static readonly string CARROT = QualifiedObjectId(ObjectIds.CARROT);
         public static readonly string CATALOGUE = QualifiedFurnitureId(FurnitureIds.CATALOGUE);
         public static readonly string CAULIFLOWER_SEEDS = QualifiedObjectId(ObjectIds.CAULIFLOWER_SEEDS);
@@ -90,11 +95,14 @@ namespace StardewArchipelago.Constants.Vanilla
         public static readonly string COPPER_BAR = QualifiedObjectId(ObjectIds.COPPER_BAR);
         public static readonly string COPPER_ORE = QualifiedObjectId(ObjectIds.COPPER_ORE);
         public static readonly string COPPER_PAN_HAT = QualifiedHatId(HatIds.COPPER_PAN);
+        public static readonly string CORAL = QualifiedObjectId(ObjectIds.CORAL);
+        public static readonly string CORN = QualifiedObjectId(ObjectIds.CORN);
         public static readonly string CORN_SEEDS = QualifiedObjectId(ObjectIds.CORN_SEEDS);
         public static readonly string COWBOY_HAT = QualifiedHatId(HatIds.COWBOY_HAT);
         public static readonly string COWGAL_HAT = QualifiedHatId(HatIds.COWGAL_HAT);
         public static readonly string COWPOKE_HAT = QualifiedHatId(HatIds.COWPOKE_HAT);
         public static readonly string CRAB_CAKES = QualifiedObjectId(ObjectIds.CRAB_CAKES);
+        public static readonly string CRANBERRIES = QualifiedObjectId(ObjectIds.CRANBERRIES);
         public static readonly string CRANBERRY_CANDY = QualifiedObjectId(ObjectIds.CRANBERRY_CANDY);
         public static readonly string CRANBERRY_SEEDS = QualifiedObjectId(ObjectIds.CRANBERRY_SEEDS);
         public static readonly string CRISPY_BASS = QualifiedObjectId(ObjectIds.CRISPY_BASS);
@@ -115,6 +123,7 @@ namespace StardewArchipelago.Constants.Vanilla
         public static readonly string DWARVISH_SAFETY_MANUAL = QualifiedObjectId(ObjectIds.DWARVISH_SAFETY_MANUAL);
         public static readonly string DWARVISH_TRANSLATION_GUIDE = QualifiedObjectId(ObjectIds.DWARVISH_TRANSLATION_GUIDE);
         public static readonly string EARTH_CRYSTAL = QualifiedObjectId(ObjectIds.EARTH_CRYSTAL);
+        public static readonly string EEL = QualifiedObjectId(ObjectIds.EEL);
         public static readonly string EGGPLANT_SEEDS = QualifiedObjectId(ObjectIds.EGGPLANT_SEEDS);
         public static readonly string EMERALD = QualifiedObjectId(ObjectIds.EMERALD);
         public static readonly string ENERGY_TONIC = QualifiedObjectId(ObjectIds.ENERGY_TONIC);
@@ -278,14 +287,18 @@ namespace StardewArchipelago.Constants.Vanilla
         public static readonly string REFINED_QUARTZ = QualifiedObjectId(ObjectIds.REFINED_QUARTZ);
         public static readonly string RETRO_CATALOGUE = QualifiedFurnitureId(FurnitureIds.RETRO_CATALOGUE);
         public static readonly string RETURN_SCEPTER = QualifiedToolId(ToolIds.RETURN_SCEPTER);
+        public static readonly string RHUBARB = QualifiedObjectId(ObjectIds.RHUBARB);
+        public static readonly string RHUBARB_PIE = QualifiedPantsId(ObjectIds.RHUBARB_PIE);
         public static readonly string RHUBARB_SEEDS = QualifiedObjectId(ObjectIds.RHUBARB_SEEDS);
         public static readonly string RICE = QualifiedObjectId(ObjectIds.RICE);
+        public static readonly string RICE_PUDDING = QualifiedPantsId(ObjectIds.RICE_PUDDING);
         public static readonly string RICE_SHOOT = QualifiedObjectId(ObjectIds.RICE_SHOOT);
         public static readonly string RIVER_JELLY = QualifiedObjectId(ObjectIds.RIVER_JELLY);
         public static readonly string ROASTED_HAZELNUTS = QualifiedObjectId(ObjectIds.ROASTED_HAZELNUTS);
         public static readonly string ROOTS_PLATTER = QualifiedObjectId(ObjectIds.ROOTS_PLATTER);
         public static readonly string RUBY = QualifiedObjectId(ObjectIds.RUBY);
         public static readonly string SALAD = QualifiedObjectId(ObjectIds.SALAD);
+        public static readonly string SALMON = QualifiedObjectId(ObjectIds.SALMON);
         public static readonly string SALMON_DINNER = QualifiedObjectId(ObjectIds.SALMON_DINNER);
         public static readonly string SALMONBERRY = QualifiedObjectId(ObjectIds.SALMONBERRY);
         public static readonly string SAP = QualifiedObjectId(ObjectIds.SAP);
@@ -296,6 +309,10 @@ namespace StardewArchipelago.Constants.Vanilla
         public static readonly string SEASONAL_PLANT = "(BC)196";
         public static readonly string SEAWEED = QualifiedObjectId(ObjectIds.SEAWEED);
         public static readonly string SECRET_NOTE = QualifiedObjectId(ObjectIds.SECRET_NOTE);
+        public static readonly string SHIRT = QualifiedShirtId(ShirtIds.SHIRT);
+        public static readonly string SHORTS = QualifiedPantsId(PantsIds.SHORTS);
+        public static readonly string SHRIMP = QualifiedObjectId(ObjectIds.SHRIMP);
+        public static readonly string SHRIMP_COCKTAIL = QualifiedPantsId(ObjectIds.SHRIMP_COCKTAIL);
         public static readonly string SMOKED_FISH = QualifiedObjectId(ObjectIds.SMOKED_FISH);
         public static readonly string SNAKE_SKULL = QualifiedObjectId(ObjectIds.SNAKE_SKULL);
         public static readonly string SOGGY_NEWSPAPER = QualifiedObjectId(ObjectIds.SOGGY_NEWSPAPER);
@@ -401,6 +418,16 @@ namespace StardewArchipelago.Constants.Vanilla
         public static string QualifiedToolId(string toolId)
         {
             return QualifyId(TOOLS_QUALIFIER, toolId);
+        }
+
+        public static string QualifiedPantsId(string pantsId)
+        {
+            return QualifyId(PANTS_QUALIFIER, pantsId);
+        }
+
+        public static string QualifiedShirtId(string shirtId)
+        {
+            return QualifyId(SHIRT_QUALIFIER, shirtId);
         }
 
         public static string QualifyId(string qualifier, string objectId)

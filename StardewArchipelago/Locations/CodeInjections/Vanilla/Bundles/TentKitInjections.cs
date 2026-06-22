@@ -35,7 +35,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
                     return MethodPrefix.RUN_ORIGINAL_METHOD;
                 }
 
-                if (location == null || !location.IsOutdoors)
+                if (location == null || location.IsOutdoors)
                 {
                     return MethodPrefix.RUN_ORIGINAL_METHOD;
                 }

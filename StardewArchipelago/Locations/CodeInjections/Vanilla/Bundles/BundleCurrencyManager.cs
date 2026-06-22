@@ -388,7 +388,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
 
         private void DrawGoatsCurrency()
         {
-            DrawSpecialCurrency(_goats.Count, Game1.mouseCursors, new Rectangle(70, 448, 21, 16), 3f);
+            DrawSpecialCurrency(_goats.Count, Game1.mouseCursors, new Rectangle(70, 448, 21, 16), 2.5f);
         }
 
         private void DrawBankCurrency()
@@ -452,7 +452,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
             spriteBatch.Draw(Game1.fadeToBlackRect, backgroundRectangle, Color.Black * 0.75f);
 
             var languageYOffset = LocalizedContentManager.CurrentLanguageCode == LocalizedContentManager.LanguageCode.en ? 8 : (LocalizedContentManager.CurrentLanguageLatin ? 16 : 8);
-            var textPosition = new Vector2(36f + position.X, position.Y - 11 + languageYOffset);
+            var textPosition = new Vector2(48f + position.X, position.Y - 11 + languageYOffset);
             spriteBatch.Draw(texture, position, sourceRectangle, Color.White, 0.0f, Vector2.Zero, scale, SpriteEffects.None, 1f);
             Game1.drawWithBorder(amountOwned, Color.Black, Color.White, textPosition, 0.0f, 1f, 1f, false);
 

@@ -65,5 +65,6 @@
         public const string CAMPING = "Camping";
         public const string LOONEY = "Looney";
         public const string MORSHU = "Morshu";
+        public const string LINGO = "Lingo";
     }
 }

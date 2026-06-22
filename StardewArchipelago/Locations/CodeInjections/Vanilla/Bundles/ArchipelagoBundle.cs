@@ -27,6 +27,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
         private static ArchipelagoWalletDto _wallet;
         private static LocationChecker _locationChecker;
         private static BundlesManager _bundlesManager;
+        public LingoHandler LingoHandler { get; set; }
 
         private static int[] _mermaidSequence = new[] { 1, 5, 4, 2, 3 };
         private static int[] _mermaidPitches = new[] { 300, 600, 800, 1000, 1200 };
@@ -39,7 +40,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
         {
             InitializeBundle(bundleIndex, rawBundleInfo, completedIngredientsList, textureName, menu);
         }
-
+        
         public static void InitializeArchipelago(ILogger logger, IModHelper modHelper, StardewArchipelagoClient archipelago, ArchipelagoStateDto state, LocationChecker locationChecker, BundlesManager bundlesManager)
         {
             _logger = logger;
@@ -156,6 +157,11 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
             if (name == MemeBundleNames.LOONEY)
             {
                 return false;
+            }
+
+            if (name == MemeBundleNames.LINGO)
+            {
+                return LingoHandler.CanSlotAcceptItem(slot, item);
             }
 
             return base.CanAcceptThisItem(item, slot, ignoreStackCount, parentMenu);
