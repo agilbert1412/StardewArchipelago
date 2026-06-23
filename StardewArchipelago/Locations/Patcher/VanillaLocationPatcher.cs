@@ -250,6 +250,14 @@ namespace StardewArchipelago.Locations.Patcher
                 original: AccessTools.Method(typeof(Object), nameof(Object.placementAction)),
                 prefix: new HarmonyMethod(typeof(TentKitInjections), nameof(TentKitInjections.PlacementAction_AllowTentsAnywhere_Prefix))
             );
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(CommunityCenter), nameof(CommunityCenter.cleanupBeforeSave)),
+                postfix: new HarmonyMethod(typeof(TentKitInjections), nameof(TentKitInjections.CleanupBeforeSave_CleanTentsInCC_Postfix))
+            );
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(BedFurniture), nameof(BedFurniture.ApplyWakeUpPosition)),
+                prefix: new HarmonyMethod(typeof(TentKitInjections), nameof(TentKitInjections.ApplyWakeUpPosition_AllowWakingUpInCC_Prefix))
+            );
         }
         private void PatchFeedHorse()
         {

@@ -6,6 +6,8 @@ using StardewArchipelago.Constants.Vanilla;
 using StardewArchipelago.Logging;
 using StardewModdingAPI;
 using StardewValley;
+using StardewValley.Locations;
+using StardewValley.Objects;
 using StardewValley.TerrainFeatures;
 using System;
 using Object = StardewValley.Object;
@@ -96,6 +98,51 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
             Utility.addDirtPuffs(location, area.X, area.Y, 3, 2, 9);
             return true;
 
+        }
+
+        // public override void cleanupBeforeSave()
+        public static void CleanupBeforeSave_CleanTentsInCC_Postfix(CommunityCenter __instance)
+        {
+            try
+            {
+                __instance.largeTerrainFeatures.RemoveWhere(feature => feature is Tent);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Failed in {nameof(CleanupBeforeSave_CleanTentsInCC_Postfix)}\t{ex}");
+                return;
+            }
+        }
+
+        // public static void ApplyWakeUpPosition(Farmer who)
+        public static bool ApplyWakeUpPosition_AllowWakingUpInCC_Prefix(Farmer who)
+        {
+            try
+            {
+                var lastSleepLocationName = who.lastSleepLocation.Value;
+                if (string.IsNullOrWhiteSpace(lastSleepLocationName))
+                {
+                    return MethodPrefix.RUN_ORIGINAL_METHOD;
+                }
+
+                if (Game1.isLocationAccessible(lastSleepLocationName))
+                {
+                    return MethodPrefix.RUN_ORIGINAL_METHOD;
+                }
+
+                var sleepLocation = Game1.getLocationFromName(lastSleepLocationName);
+                who.Position = Utility.PointToVector2(who.lastSleepPoint.Value) * 64f;
+                who.currentLocation = sleepLocation;
+                BedFurniture.ShiftPositionForBed(who);
+                Game1.currentLocation = who.currentLocation;
+
+                return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Failed in {nameof(ApplyWakeUpPosition_AllowWakingUpInCC_Prefix)}\t{ex}");
+                return MethodPrefix.RUN_ORIGINAL_METHOD;
+            }
         }
     }
 }
