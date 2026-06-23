@@ -1119,6 +1119,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
                 _currentCue.Dispose();
                 _currentCue = null;
             }
+            _lingoHandler = null;
 
             base.TakeDownSpecificBundleComponents();
             _isCurrentlySticky = false;
@@ -1140,6 +1141,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
                 Game1.setMousePosition(nextPosition);
             }
             UpdateLooneyBundle();
+            UpdateLingoBundle();
         }
 
         private Point GetPointTowardsSticky(double percentDistance)
@@ -2826,7 +2828,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
             {
                 foreach (var ingredientSlot in IngredientSlots)
                 {
-                    if (ingredientSlot.bounds.Contains(x, y) && CanBePartiallyOrFullyDonated(HeldItem) && (PartialDonationItem == null || ingredientSlot.item == PartialDonationItem) || ingredientSlot.item != null)
+                    if ((ingredientSlot.bounds.Contains(x, y) && CanBePartiallyOrFullyDonated(HeldItem) && (PartialDonationItem == null || ingredientSlot.item == PartialDonationItem)) || ingredientSlot.item != null)
                     {
                         ingredientSlot.visible = true;
                     }
@@ -3158,6 +3160,32 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
             base.SetupIngredientSlots(b);
         }
 
+        public override void ReturnPartialDonation(Item item, ClickableTextureComponent slot = null, bool playSound = true)
+        {
+            base.ReturnPartialDonation(item, slot, playSound);
+
+            if (slot == null)
+            {
+                return;
+            }
+
+            if (CurrentPageBundle != null && CurrentPageBundle.name == MemeBundleNames.LINGO)
+            {
+                FlashLingoSlotRed(slot);
+            }
+        }
+
+        private ClickableTextureComponent _lingoRedSlot = null;
+        private int _lingoRedSlotTicks = 0;
+
+        private void FlashLingoSlotRed(ClickableTextureComponent slot)
+        {
+            _lingoHandler.SetupLingoIngredientSlotAppearance(slot);
+            _lingoRedSlotTicks = 100;
+            _lingoRedSlot = slot;
+            _lingoRedSlot.visible = true;
+        }
+
         private void DrawLingoIngredientsAndSlots(SpriteBatch spriteBatch)
         {
             for (var index = GetIngredientsStartIndex(); index < GetIngredientsEndIndex(); ++index)
@@ -3178,7 +3206,12 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
             ingredientBox.draw(spriteBatch, color, 0.90f);
 
             var ingredientSlot = IngredientSlots[index];
-            ingredientSlot.draw(spriteBatch, Color.White, 0.89f);
+            var slotColor = Color.White;
+            if (_lingoRedSlot != null && _lingoRedSlot == ingredientSlot && _lingoRedSlotTicks > 0)
+            {
+                slotColor = Color.Red;
+            }
+            ingredientSlot.draw(spriteBatch, slotColor, 0.89f);
 
             var ingredient = CurrentPageBundle.Ingredients[index];
 
@@ -3203,6 +3236,24 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
                 return;
             }
             itemToDraw.drawInMenu(spriteBatch, new Vector2(ingredientSlot.bounds.X - 4, ingredientSlot.bounds.Y - 12), ingredientSlot.scale / 6f, 1f, 0.9f, StackDrawType.Draw, Color.White, false);
+        }
+
+        private void UpdateLingoBundle()
+        {
+            if (_lingoRedSlot == null && _lingoRedSlotTicks <= 0)
+            {
+                return;
+            }
+
+            if (_lingoRedSlotTicks <= 0)
+            {
+                _lingoRedSlot.visible = false;
+                _lingoRedSlot = null;
+                _lingoRedSlotTicks = 0;
+                return;
+            }
+
+            _lingoRedSlotTicks--;
         }
     }
 }

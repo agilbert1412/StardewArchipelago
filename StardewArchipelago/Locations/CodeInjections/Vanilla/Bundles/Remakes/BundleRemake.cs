@@ -357,6 +357,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles.Remakes
         protected virtual Item SuccessfullyDepositThisItem(Item item, ClickableTextureComponent slot, string noteTextureName, ArchipelagoJunimoNoteMenu parentMenu, BundleIngredientDescription ingredientDescription1, int index1,
             CommunityCenter communityCenter)
         {
+            var depositedItemId = item.QualifiedItemId;
             item = item.ConsumeStack(ingredientDescription1.stack);
             var ingredients = this.Ingredients;
             var index2 = index1;
@@ -371,7 +372,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles.Remakes
             }
             else
             {
-                slot.item = ItemRegistry.Create(representativeItemId, ingredientDescription1.stack, ingredientDescription1.quality);
+                slot.item = ItemRegistry.Create(depositedItemId, ingredientDescription1.stack, ingredientDescription1.quality);
             }
             PlayItemDonatedSound(parentMenu);
             ResetSlotSourceRect(slot);

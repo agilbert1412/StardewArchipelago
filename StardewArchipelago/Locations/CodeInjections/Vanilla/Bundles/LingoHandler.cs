@@ -45,7 +45,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
                 var itemId = GetLingoItemIdToDraw(ingredient);
                 _drawnItemIds.Add(itemId);
 
-                SetupLingoIngredient(ingredientBox, puzzleType, height, color);
+                SetupLingoIngredient(ingredientBox, puzzleType, height, color, GetLingoItemToDraw(itemId).Name);
                 SetupLingoIngredientSlot(ingredientSlot, puzzleType, height, color);
             }
 
@@ -81,11 +81,12 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
             throw new Exception($"Deposited item {depositedItem.Name} does not fit in any slot");
         }
 
-        private void SetupLingoIngredient(ClickableTextureComponent ingredientBox, LingoPuzzleType puzzleType, int height, Color color)
+        private void SetupLingoIngredient(ClickableTextureComponent ingredientBox, LingoPuzzleType puzzleType, int height, Color color, string hoverText)
         {
             ingredientBox.bounds.Y = _archipelagoJunimoNoteMenu.yPositionOnScreen + JunimoNoteMenuRemake.INGREDIENT_SLOTS_CENTER_Y - height;
             ingredientBox.texture = _archipelagoJunimoNoteMenu.MemeTexture;
             ingredientBox.sourceRect = new Rectangle(1, 231, 16, 24);
+            ingredientBox.hoverText = hoverText;
         }
 
         private void SetupLingoIngredientSlot(ClickableTextureComponent ingredientSlot, LingoPuzzleType puzzleType, int height, Color color)
@@ -95,6 +96,12 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
             ingredientSlot.bounds.Y = _archipelagoJunimoNoteMenu.yPositionOnScreen + JunimoNoteMenuRemake.INGREDIENT_SLOTS_CENTER_Y - height + (highlightOffset * 4) + 4;
             //ingredientSlot.bounds.Width -= 2;
             //ingredientSlot.bounds.Height -= 2;
+            SetupLingoIngredientSlotAppearance(ingredientSlot);
+        }
+
+        public void SetupLingoIngredientSlotAppearance(ClickableTextureComponent ingredientSlot)
+        {
+            var highlightOffset = 11;
             ingredientSlot.texture = _archipelagoJunimoNoteMenu.MemeTexture;
             ingredientSlot.sourceRect = new Rectangle(110, 232 + highlightOffset, 14, 22 - highlightOffset);
             ingredientSlot.visible = false;
@@ -197,14 +204,14 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
             switch (puzzleType)
             {
                 case LingoPuzzleType.Homophone:
-                    return 240; //Top
+                    return 236; //Top
                 case LingoPuzzleType.Normal:
                 case LingoPuzzleType.AddLetter:
                 case LingoPuzzleType.SubtractLetter:
-                    return 132; //Middle
+                    return 128; //Middle
                 case LingoPuzzleType.Lesser:
                 case LingoPuzzleType.Greater:
-                    return 24; //Bottom
+                    return 20; //Bottom
                 default:
                     throw new ArgumentOutOfRangeException(nameof(puzzleType), puzzleType, null);
             }
@@ -228,8 +235,18 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
             }
         }
 
+        public bool IsValidItemForThisIngredientDescription(Item item, BundleIngredientDescription ingredient, int ingredientIndex)
+        {
+            return CanSlotAcceptItem(_slots[ingredientIndex], item);
+        }
+
         public bool CanSlotAcceptItem(ClickableTextureComponent slot, Item item)
         {
+            if (item == null)
+            {
+                return false;
+            }
+
             var slotIndex = _slots.IndexOf(slot);
             var puzzleType = _puzzleTypes[slotIndex];
             var drawnItemId = _drawnItemIds[slotIndex];
@@ -246,7 +263,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
                 case LingoPuzzleType.Normal:
                     return item.QualifiedItemId == drawnItemId;
                 case LingoPuzzleType.Homophone:
-                    return item.QualifiedItemId == ingredientDescription.id;
+                    return item.QualifiedItemId == ingredientDescription.id || itemName == ingredientName || $" {itemName} ".Contains($" {ingredientName} ") ;
                 case LingoPuzzleType.AddLetter:
                     return IsSameWithExtraLetter(itemName, drawnItemName);
                 case LingoPuzzleType.SubtractLetter:

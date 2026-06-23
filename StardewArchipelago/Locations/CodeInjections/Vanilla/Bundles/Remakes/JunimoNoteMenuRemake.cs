@@ -669,7 +669,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles.Remakes
             return false;
         }
 
-        public virtual void ReturnPartialDonation(Item item, bool playSound = true)
+        public virtual void ReturnPartialDonation(Item item, ClickableTextureComponent slot = null, bool playSound = true)
         {
             var affectedItemsList = new List<Item>();
             var inventory = Game1.player.addItemToInventory(item, affectedItemsList);
@@ -703,7 +703,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles.Remakes
                     }
                     else
                     {
-                        ReturnPartialDonation(donationComponent, playSound);
+                        ReturnPartialDonation(donationComponent, playSound: playSound);
                         playSound = false;
                     }
                 }
@@ -825,7 +825,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles.Remakes
                 var partialDonationItem = this.PartialDonationItem;
                 if ((partialDonationItem != null ? partialDonationItem.Stack > 0 ? 1 : 0 : 0) != 0)
                 {
-                    ReturnPartialDonation(this.PartialDonationItem);
+                    ReturnPartialDonation(this.PartialDonationItem, slot);
                 }
                 this.PartialDonationItem = null;
                 ResetPartialDonation();

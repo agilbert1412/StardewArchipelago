@@ -226,6 +226,10 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
             {
                 return false;
             }
+            if (name == MemeBundleNames.LINGO)
+            {
+                return LingoHandler.IsValidItemForThisIngredientDescription(item, ingredient, ingredientIndex);
+            }
 
             return base.IsValidItemForThisIngredientDescription(item, ingredient, ingredientIndex, parentMenu);
         }
@@ -322,6 +326,13 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
                     Game1.isDebrisWeather = false;
                     Game1.isGreenRain = false;
                     Game1.updateWeather(Game1.currentGameTime);
+                }
+            }
+            if (name == MemeBundleNames.LINGO)
+            {
+                if (!LingoHandler.CanSlotAcceptItem(slot, item))
+                {
+                    return item;
                 }
             }
 
@@ -426,6 +437,11 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
             if (name == MemeBundleNames.SQUARE_HOLE)
             {
                 slot.sourceRect.X = 0;
+                return;
+            }
+            if (name == MemeBundleNames.LINGO)
+            {
+                slot.sourceRect.X = 110;
                 return;
             }
             base.ResetSlotSourceRect(slot);

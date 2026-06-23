@@ -8,6 +8,7 @@ using KaitoKid.ArchipelagoUtilities.Net.Constants;
 using KaitoKid.Utilities.Interfaces;
 using StardewArchipelago.Locations;
 using StardewArchipelago.Locations.CodeInjections.Vanilla;
+using StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles;
 using StardewArchipelago.Logging;
 using StardewArchipelago.Stardew.NameMapping;
 using StardewArchipelago.Textures;
@@ -335,7 +336,7 @@ namespace StardewArchipelago.GameModifications.Tooltips
         private static void ItemDrawInMenuPostfix(IEnumerable<string> itemSimplifiedNames, SpriteBatch spriteBatch, Vector2 location,
             float scaleSize, float transparency, float layerDepth, Color color, Vector2 offset, Vector2 origin, bool matchExactly = false)
         {
-            if (_config.ShowItemIndicators == ItemIndicatorPreference.False)
+            if (_config.ShowItemIndicators == ItemIndicatorPreference.False || Game1.activeClickableMenu is ArchipelagoJunimoNoteMenu)
             {
                 return;
             }
