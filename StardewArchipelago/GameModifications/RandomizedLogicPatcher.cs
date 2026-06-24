@@ -413,38 +413,10 @@ namespace StardewArchipelago.GameModifications
                 prefix: new HarmonyMethod(typeof(SeasonsRandomizer), nameof(SeasonsRandomizer.AnswerDialogueAction_SeasonChoice_Prefix))
             );
 
-            _logger.LogDebug($"Attempting to patch {nameof(SeasonsRandomizer.Game1Date_UseTotalDaysStats_Prefix)}");
-            var original = AccessTools.PropertyGetter(typeof(Game1), nameof(Game1.Date));
-            var prefix = new HarmonyMethod(typeof(SeasonsRandomizer), nameof(SeasonsRandomizer.Game1Date_UseTotalDaysStats_Prefix));
-            _logger.LogDebug($"Original: {original} ({original.Name})");
-            _logger.LogDebug($"Prefix: {prefix} ({prefix.methodName})");
             _harmony.Patch(
-                original: original,
-                prefix: prefix
+                original: AccessTools.Method(typeof(WorldDate), nameof(WorldDate.Now)),
+                prefix: new HarmonyMethod(typeof(SeasonsRandomizer), nameof(SeasonsRandomizer.WorldDateNow_UseTotalDaysStats_Prefix))
             );
-            _logger.LogDebug($"After patching {nameof(SeasonsRandomizer.Game1Date_UseTotalDaysStats_Prefix)}");
-
-            _logger.LogDebug($"Attempting to patch {nameof(SeasonsRandomizer.NetWorldStateDate_UseTotalDaysStats_Prefix)}");
-            original = AccessTools.PropertyGetter(typeof(NetWorldState), nameof(NetWorldState.Date));
-            prefix = new HarmonyMethod(typeof(SeasonsRandomizer), nameof(SeasonsRandomizer.NetWorldStateDate_UseTotalDaysStats_Prefix));
-            _logger.LogDebug($"Original: {original} ({original.Name})");
-            _logger.LogDebug($"Prefix: {prefix} ({prefix.methodName})");
-            _harmony.Patch(
-                original: original,
-                prefix: prefix
-            );
-            _logger.LogDebug($"After patching {nameof(SeasonsRandomizer.NetWorldStateDate_UseTotalDaysStats_Prefix)}");
-
-            _logger.LogDebug($"Attempting to patch {nameof(SeasonsRandomizer.WorldDateNow_UseTotalDaysStats_Prefix)}");
-            original = AccessTools.Method(typeof(WorldDate), nameof(WorldDate.Now));
-            prefix = new HarmonyMethod(typeof(SeasonsRandomizer), nameof(SeasonsRandomizer.WorldDateNow_UseTotalDaysStats_Prefix));
-            _logger.LogDebug($"Original: {original} ({original.Name})");
-            _logger.LogDebug($"Prefix: {prefix} ({prefix.methodName})");
-            _harmony.Patch(
-                original: original,
-                prefix: prefix
-            );
-            _logger.LogDebug($"After patching {nameof(SeasonsRandomizer.WorldDateNow_UseTotalDaysStats_Prefix)}");
 
             _harmony.Patch(
                 original: AccessTools.PropertyGetter(typeof(Friendship), nameof(Friendship.CountdownToWedding)),

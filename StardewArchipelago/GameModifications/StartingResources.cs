@@ -31,12 +31,11 @@ namespace StardewArchipelago.GameModifications
 
         public void GivePlayerStartingResources()
         {
-            _logger.LogDebug($"Starting {nameof(GivePlayerStartingResources)}");
+            _logger.LogDebug($"Starting {nameof(GivePlayerStartingResources)} (Game1.Date.TotalDays: {Game1.Date.TotalDays})");
             GivePlayerStartingMoney();
-            _logger.LogDebug($"Game1.Date.TotalDays: {Game1.Date.TotalDays}");
             if (Game1.Date.TotalDays == 0)
             {
-                _logger.LogDebug($"It's the first day!");
+                _logger.LogDebug($"It's the first day! Taking care of Quick Start, Tools and Backpacks!");
                 GivePlayerQuickStart();
                 RemoveStartingTools();
                 RemoveStartingBackpack();
@@ -45,7 +44,6 @@ namespace StardewArchipelago.GameModifications
             RemoveShippingBin();
             RemovePetBowls();
             SendGilTelephoneLetter();
-            _logger.LogDebug($"Ending {nameof(GivePlayerStartingResources)}");
         }
 
         private void GivePlayerStartingMoney()
@@ -65,13 +63,11 @@ namespace StardewArchipelago.GameModifications
 
         private void GivePlayerQuickStart()
         {
-            _logger.LogDebug($"Starting {nameof(GivePlayerQuickStart)}");
             if (Game1.getLocationFromName("FarmHouse") is not FarmHouse farmhouse)
             {
                 return;
             }
 
-            _logger.LogDebug($"Will remove giftboxes");
             RemoveGiftBoxes(farmhouse);
             var startCrop = _stardewItemManager.GetItemByName(GetStartingCropForThisSeason()).PrepareForGivingToFarmer(15);
             CreateGiftBoxItemInEmptySpot(farmhouse, startCrop);
@@ -87,7 +83,6 @@ namespace StardewArchipelago.GameModifications
                 return;
             }
 
-            _logger.LogDebug($"Will add quick start");
             var chests = _stardewItemManager.GetItemByName("Chest").PrepareForGivingToFarmer(5);
             var iridiumBand = _stardewItemManager.GetItemByName("Iridium Band").PrepareForGivingToFarmer();
             var qualitySprinklers = _stardewItemManager.GetItemByName("Quality Sprinkler").PrepareForGivingToFarmer(4);
@@ -106,7 +101,6 @@ namespace StardewArchipelago.GameModifications
             CreateGiftBoxItemInEmptySpot(farmhouse, paths);
             CreateGiftBoxItemInEmptySpot(farmhouse, seed_maker);
 #endif
-            _logger.LogDebug($"Ending {nameof(GivePlayerQuickStart)}");
         }
         
         private void RemoveStartingTools()

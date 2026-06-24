@@ -94,54 +94,14 @@ namespace StardewArchipelago.GameModifications.Seasons
             }
         }
 
-        // public static WorldDate Date => Game1.netWorldState.Value.Date;
-        public static bool Game1Date_UseTotalDaysStats_Prefix(ref WorldDate __result)
-        {
-            try
-            {
-                _logger.LogDebug($"Starting {nameof(Game1Date_UseTotalDaysStats_Prefix)}");
-                GetVanillaValues(out var totalDays, out var year, out var seasonNumber, out var seasonName);
-                var dayOfMonth = (totalDays % 28) + 1;
-                __result = new WorldDate(year, seasonName.ToLower(), dayOfMonth);
-                _logger.LogDebug($"Ending {nameof(Game1Date_UseTotalDaysStats_Prefix)} with result: [{__result.Season} - {__result.DayOfMonth} - {__result.TotalDays}]");
-                return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError($"Failed in {nameof(Game1Date_UseTotalDaysStats_Prefix)}:\n{ex}");
-                return MethodPrefix.RUN_ORIGINAL_METHOD;
-            }
-        }
-
-        // public WorldDate Date => WorldDate.Now();
-        public static bool NetWorldStateDate_UseTotalDaysStats_Prefix(NetWorldState __instance, ref WorldDate __result)
-        {
-            try
-            {
-                _logger.LogDebug($"Starting {nameof(NetWorldStateDate_UseTotalDaysStats_Prefix)}");
-                GetVanillaValues(out var totalDays, out var year, out var seasonNumber, out var seasonName);
-                var dayOfMonth = (totalDays % 28) + 1;
-                __result = new WorldDate(year, seasonName.ToLower(), dayOfMonth);
-                _logger.LogDebug($"Ending {nameof(NetWorldStateDate_UseTotalDaysStats_Prefix)} with result: [{__result.Season} - {__result.DayOfMonth} - {__result.TotalDays}]");
-                return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError($"Failed in {nameof(NetWorldStateDate_UseTotalDaysStats_Prefix)}:\n{ex}");
-                return MethodPrefix.RUN_ORIGINAL_METHOD;
-            }
-        }
-
         // public static WorldDate Now() => new WorldDate(Game1.year, Game1.season, Game1.dayOfMonth);
         public static bool WorldDateNow_UseTotalDaysStats_Prefix(ref WorldDate __result)
         {
             try
             {
-                _logger.LogDebug($"Starting {nameof(WorldDateNow_UseTotalDaysStats_Prefix)}");
                 GetVanillaValues(out var totalDays, out var year, out var seasonNumber, out var seasonName);
                 var dayOfMonth = (totalDays % 28) + 1;
                 __result = new WorldDate(year, seasonName.ToLower(), dayOfMonth);
-                _logger.LogDebug($"Ending {nameof(WorldDateNow_UseTotalDaysStats_Prefix)} with result: [{__result.Season} - {__result.DayOfMonth} - {__result.TotalDays}]");
                 return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
             }
             catch (Exception ex)
