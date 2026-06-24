@@ -24,6 +24,7 @@ namespace StardewArchipelago.Locations.ShopStockModifiers
     public class CarpenterShopStockModifier : ShopStockModifier
     {
         public const string BUILDING_BLUEPRINT_LOCATION_NAME = "{0} Blueprint";
+        public const string BUILDING_HOUSE_BASIC = "Farm House";
         public const string BUILDING_HOUSE_KITCHEN = "Kitchen";
         public const string BUILDING_HOUSE_KIDS_ROOM = "Kids Room";
         public const string BUILDING_HOUSE_CELLAR = "Cellar";
@@ -86,6 +87,7 @@ namespace StardewArchipelago.Locations.ShopStockModifiers
 
             var checksToAdd = new List<ShopItemData>();
 
+            AddCheckToStock(checksToAdd, BUILDING_HOUSE_BASIC, 1_000, new[] { Wood(100) });
             AddCheckToStock(checksToAdd, BUILDING_HOUSE_KITCHEN, 10_000, new[] { Wood(450) }, GetFarmhouseRequirementCondition(0));
             AddCheckToStock(checksToAdd, BUILDING_HOUSE_KIDS_ROOM, 50_000, new[] { Hardwood(150) }, GetFarmhouseRequirementCondition(1));
             AddCheckToStock(checksToAdd, BUILDING_HOUSE_CELLAR, 100_000, Array.Empty<Item>(), GetFarmhouseRequirementCondition(2));

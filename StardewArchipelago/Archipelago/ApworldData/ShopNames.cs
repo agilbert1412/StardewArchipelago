@@ -15,7 +15,7 @@
         public const string MOVIE_THEATER = "Movie Theater";
         public const string SEWER = "Sewer";
         public const string WILLYS_FISH_SHOP = "Willy's Fish Shop";
-        public const string HOSPITAL = "Hospital";
+        public const string HOSPITAL = "Hospital - Shop";
         public const string QIS_WALNUT_ROOM = "Qi's Walnut Room";
         public const string TICKET_STAND = "Ticket Stand";
         public const string TOWN = "Town";
