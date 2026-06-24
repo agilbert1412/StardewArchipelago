@@ -7,6 +7,7 @@ using KaitoKid.Utilities.Interfaces;
 using StardewArchipelago.Archipelago;
 using StardewArchipelago.Bundles;
 using StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles;
+using StardewValley.Characters;
 using Object = StardewValley.Object;
 
 namespace StardewArchipelago.Locations.CodeInjections.Vanilla
@@ -38,6 +39,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
 
                 RecipeFriendshipInjections.SendFriendshipRecipeChecks(__instance, who);
                 GetExtraTvRemote(__instance, who);
+                _locationChecker.AddCheckedLocation($"Meet {__instance.Name}");
                 return;
             }
             catch (Exception ex)
@@ -114,6 +116,21 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
             catch (Exception ex)
             {
                 _logger.LogError($"Failed in {nameof(GetExtraTvRemote)}:\n{ex}");
+                return;
+            }
+        }
+
+        //  public override bool checkAction(Farmer who, GameLocation l)
+        public static void CheckAction_MeetPet_Postfix(Pet __instance, Farmer who, GameLocation l, ref bool __result)
+        {
+            try
+            {
+                _locationChecker.AddCheckedLocation($"Meet Pet");
+                return;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Failed in {nameof(CheckAction_MeetPet_Postfix)}:\n{ex}");
                 return;
             }
         }

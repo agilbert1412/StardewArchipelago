@@ -1386,7 +1386,11 @@ namespace StardewArchipelago.Locations.Patcher
         {
             _harmony.Patch(
                 original: AccessTools.Method(typeof(NPC), nameof(NPC.grantConversationFriendship)),
-                prefix: new HarmonyMethod(typeof(ConversationFriendshipInjections), nameof(ConversationFriendshipInjections.GrantConversationFriendship_TalkEvents_Postfix))
+                postfix: new HarmonyMethod(typeof(ConversationFriendshipInjections), nameof(ConversationFriendshipInjections.GrantConversationFriendship_TalkEvents_Postfix))
+            );
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(Pet), nameof(Pet.checkAction)),
+                postfix: new HarmonyMethod(typeof(ConversationFriendshipInjections), nameof(ConversationFriendshipInjections.CheckAction_MeetPet_Postfix))
             );
         }
 
