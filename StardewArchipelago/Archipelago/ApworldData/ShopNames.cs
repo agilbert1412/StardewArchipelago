@@ -7,7 +7,7 @@
         public const string TRAVELING_CART = "Traveling Cart";
         public const string SALOON = "Saloon - Shop";
         public const string BOOKSELLER_RARE_BOOKS = "Bookseller Rare Books";
-        public const string MARNIES_RANCH = "Marnie's Ranch";
+        public const string MARNIES_RANCH = "Marnie's Ranch - Shop";
         public const string MINES_DWARF_SHOP = "Mines Dwarf Shop";
         public const string BOOKSELLER_PERMANENT_BOOKS = "Bookseller Permanent Books";
         public const string BOOKSELLER_EXPERIENCE_BOOKS = "Bookseller Experience Books";
@@ -19,7 +19,7 @@
         public const string QIS_WALNUT_ROOM = "Qi's Walnut Room";
         public const string TICKET_STAND = "Ticket Stand";
         public const string TOWN = "Town";
-        public const string OASIS = "Oasis";
+        public const string OASIS = "Oasis - Shop";
         public const string FLOWER_DANCE = "Flower Dance - Shop";
         public const string DANCE_OF_THE_MOONLIGHT_JELLIES = "Dance of the Moonlight Jellies - Shop";
         public const string STARDEW_VALLEY_FAIR = "Stardew Valley Fair";

@@ -7,6 +7,7 @@ using StardewValley.Characters;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Microsoft.Xna.Framework;
 using StardewModdingAPI;
 using StardewValley.Locations;
 
@@ -221,31 +222,107 @@ namespace StardewArchipelago.GameModifications.CodeInjections
 
         // Patch that doesn't do what I want...
         // public static NPC getCharacterFromName(string name, bool mustBeVillager = true, bool includeEventActors = false)
-        //public static void GetCharacterFromName_FakeNPCWhenNotArrivedYet_Postfix(string name, bool mustBeVillager, bool includeEventActors, ref NPC __result)
-        //{
-        //    try
-        //    {
-        //        if (__result != null)
-        //        {
-        //            return;
-        //        }
+        /*public static void GetCharacterFromName_FakeNPCWhenNotArrivedYet_Postfix(string name, bool mustBeVillager, bool includeEventActors, ref NPC __result)
+        {
+            try
+            {
+                if (__result != null)
+                {
+                    return;
+                }
 
-        //        var arrivalName = GetArrivalItem(name);
-        //        if (_archipelago.SlotData.StartWithout.HasFlag(StartWithout.Villagers) && _archipelago.LocationExists($"Meet {name}")) // This check is bullshit, until we get proper check if items exist, I check the location instead.
-        //        {
-        //            __result = Nobody;
-        //            return;
-        //        }
+                var arrivalName = GetArrivalItem(name);
+                if (_archipelago.SlotData.StartWithout.HasFlag(StartWithout.Villagers) && _archipelago.LocationExists($"Meet {name}")) // This check is bullshit, until we get proper check if items exist, I check the location instead.
+                {
+                    __result = Nobody;
+                    return;
+                }
 
-        //        return;
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        _logger.LogError($"Failed in {nameof(GetCharacterFromName_FakeNPCWhenNotArrivedYet_Postfix)}:\n{ex}");
-        //        return;
-        //    }
-        //}
+                return;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Failed in {nameof(GetCharacterFromName_FakeNPCWhenNotArrivedYet_Postfix)}:\n{ex}");
+                return;
+            }
+        }*/
 
+        // public void lockedDoorWarp(Point tile, string locationName, int openTime, int closeTime, string npcName, int minFriendship)
+        public static bool LockedDoorWarp_LockedWhenOwnerDoesntExist_Prefix(GameLocation __instance, Point tile, string locationName, int openTime, int closeTime, string npcName, int minFriendship)
+        {
+            try
+            {
+                var hasKey = Game1.player.HasTownKey;
+                if (GameLocation.AreStoresClosedForFestival() && __instance.InValleyContext())
+                {
+                    Game1.drawObjectDialogue(Game1.parseText(Game1.content.LoadString("Strings\\Locations:FestivalDay_DoorLocked")));
+                    return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
+                }
+                if (locationName == "SeedShop" && Game1.shortDayNameFromDayOfSeason(Game1.dayOfMonth).Equals("Wed") && !Utility.HasAnyPlayerSeenEvent("191393") && !hasKey)
+                {
+                    Game1.drawObjectDialogue(Game1.parseText(Game1.content.LoadString("Strings\\Locations:SeedShop_LockedWed")));
+                    return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
+                }
+                if (locationName == "FishShop" && Game1.player.mailReceived.Contains("willyHours"))
+                {
+                    openTime = 800;
+                }
+                if (hasKey)
+                {
+                    if (!__instance.InValleyContext())
+                    {
+                        hasKey = false;
+                    }
+                    if (hasKey && __instance is BeachNightMarket && locationName != "FishShop")
+                    {
+                        hasKey = false;
+                    }
+                }
+
+                var isCorrectHour = hasKey || Game1.timeOfDay >= openTime && Game1.timeOfDay < closeTime;
+                var hasEnoughFriendship = minFriendship <= 0 || __instance.IsWinterHere() || Game1.player.friendshipData.TryGetValue(npcName, out var friendship) && friendship.Points >= minFriendship;
+                var canEnter = isCorrectHour && hasEnoughFriendship;
+                if (__instance.IsGreenRainingHere() && Game1.year == 1 && __instance is not Beach && __instance is not Forest && !locationName.Equals("AdventureGuild"))
+                {
+                    canEnter = true;
+                }
+                if (canEnter)
+                {
+                    Rumble.rumble(0.15f, 200f);
+                    Game1.player.completelyStopAnimatingOrDoingAction();
+                    __instance.playSound("doorClose", Game1.player.Tile);
+                    Game1.warpFarmer(locationName, tile.X, tile.Y, false);
+                    return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
+                }
+                if (minFriendship <= 0)
+                {
+                    var sub1 = Game1.getTimeOfDayString(openTime).Replace(" ", "");
+                    if (locationName == "FishShop" && Game1.player.mailReceived.Contains("willyHours"))
+                    {
+                        sub1 = Game1.getTimeOfDayString(800).Replace(" ", "");
+                    }
+                    var sub2 = Game1.getTimeOfDayString(closeTime).Replace(" ", "");
+                    Game1.drawObjectDialogue(Game1.content.LoadString("Strings\\Locations:LockedDoor_OpenRange", (object)sub1, (object)sub2));
+                    return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
+                }
+                if (Game1.timeOfDay < openTime || Game1.timeOfDay >= closeTime)
+                {
+                    Game1.drawObjectDialogue(Game1.content.LoadString("Strings\\Locations:LockedDoor"));
+                    return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
+                }
+
+                var characterFromName = Game1.getCharacterFromName(npcName);
+                var name = characterFromName == null ? npcName : characterFromName.displayName;
+                Game1.drawObjectDialogue(Game1.content.LoadString("Strings\\Locations:LockedDoor_FriendsOnly", name));
+                return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
+
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Failed in {nameof(LockedDoorWarp_LockedWhenOwnerDoesntExist_Prefix)}:\n{ex}");
+                return MethodPrefix.RUN_ORIGINAL_METHOD;
+            }
+        }
         private static bool IsShopAllowed(string shopId)
         {
             var parts = shopId.Split("_");

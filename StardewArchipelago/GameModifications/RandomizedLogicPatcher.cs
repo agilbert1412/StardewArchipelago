@@ -706,6 +706,11 @@ namespace StardewArchipelago.GameModifications
                 prefix: new HarmonyMethod(typeof(VillagerExistenceInjections), nameof(VillagerExistenceInjections.MakeMapModifications_SewerWhenKrobusDoesntExit_Prefix))
             );
 
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(GameLocation), nameof(GameLocation.lockedDoorWarp)),
+                prefix: new HarmonyMethod(typeof(VillagerExistenceInjections), nameof(VillagerExistenceInjections.LockedDoorWarp_LockedWhenOwnerDoesntExist_Prefix))
+            );
+
             //// public static NPC getCharacterFromName(string name, bool mustBeVillager = true, bool includeEventActors = false)
             //var getCharacterFromNameMethods = typeof(Game1).GetMethods(BindingFlags.Public | BindingFlags.Static);
             //var getCharacterFromNameMethod = getCharacterFromNameMethods.Single(m => m.Name == nameof(Game1.getCharacterFromName) && !m.IsGenericMethod);
