@@ -409,7 +409,8 @@ namespace StardewArchipelago.GameModifications.CodeInjections
                 return true;
             }
             var npcCanSocialize = Game1.characterData[villagerId].CanSocialize;
-            var canSocialize = npcCanSocialize == null || npcCanSocialize.Equals(true.ToString(), StringComparison.InvariantCultureIgnoreCase);
+
+            var canSocialize = npcCanSocialize == null || !npcCanSocialize.Equals(false.ToString(), StringComparison.InvariantCultureIgnoreCase);
             needsArrival = needsArrival && canSocialize;
 
             if (!NPC.TryGetData(villagerId, out var npcData))
