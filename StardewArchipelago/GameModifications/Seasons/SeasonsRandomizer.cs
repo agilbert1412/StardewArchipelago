@@ -98,9 +98,11 @@ namespace StardewArchipelago.GameModifications.Seasons
         {
             try
             {
+                _logger.LogDebug($"Starting {nameof(Date_UseTotalDaysStats_Prefix)}");
                 GetVanillaValues(out var totalDays, out var year, out var seasonNumber, out var seasonName);
                 var dayOfMonth = (totalDays % 28) + 1;
                 __result = new WorldDate(year, seasonName.ToLower(), dayOfMonth);
+                _logger.LogDebug($"Ending {nameof(Date_UseTotalDaysStats_Prefix)} with result: [{__result.Season} - {__result.DayOfMonth} - {__result.TotalDays}]");
                 return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
             }
             catch (Exception ex)

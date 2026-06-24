@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using KaitoKid.ArchipelagoUtilities.Net;
+using KaitoKid.Utilities.Interfaces;
 using Microsoft.Xna.Framework;
 using StardewArchipelago.Archipelago;
 using StardewArchipelago.Archipelago.SlotData.SlotEnums;
@@ -17,20 +18,25 @@ namespace StardewArchipelago.GameModifications
     {
         private const int UNLIMITED_MONEY_AMOUNT = 9999999;
         private const int MINIMUM_UNLIMITED_MONEY = 1000000;
+        private readonly ILogger _logger;
         private readonly StardewArchipelagoClient _archipelago;
         private readonly StardewItemManager _stardewItemManager;
 
-        public StartingResources(StardewArchipelagoClient archipelago, LocationChecker locationChecker, StardewItemManager stardewItemManager)
+        public StartingResources(ILogger logger, StardewArchipelagoClient archipelago, LocationChecker locationChecker, StardewItemManager stardewItemManager)
         {
+            _logger = logger;
             _archipelago = archipelago;
             _stardewItemManager = stardewItemManager;
         }
 
         public void GivePlayerStartingResources()
         {
+            _logger.LogDebug($"Starting {nameof(GivePlayerStartingResources)}");
             GivePlayerStartingMoney();
+            _logger.LogDebug($"Game1.Date.TotalDays: {Game1.Date.TotalDays}");
             if (Game1.Date.TotalDays == 0)
             {
+                _logger.LogDebug($"It's the first day!");
                 GivePlayerQuickStart();
                 RemoveStartingTools();
                 RemoveStartingBackpack();
@@ -39,6 +45,7 @@ namespace StardewArchipelago.GameModifications
             RemoveShippingBin();
             RemovePetBowls();
             SendGilTelephoneLetter();
+            _logger.LogDebug($"Ending {nameof(GivePlayerStartingResources)}");
         }
 
         private void GivePlayerStartingMoney()
@@ -58,11 +65,13 @@ namespace StardewArchipelago.GameModifications
 
         private void GivePlayerQuickStart()
         {
+            _logger.LogDebug($"Starting {nameof(GivePlayerQuickStart)}");
             if (Game1.getLocationFromName("FarmHouse") is not FarmHouse farmhouse)
             {
                 return;
             }
 
+            _logger.LogDebug($"Will remove giftboxes");
             RemoveGiftBoxes(farmhouse);
             var startCrop = _stardewItemManager.GetItemByName(GetStartingCropForThisSeason()).PrepareForGivingToFarmer(15);
             CreateGiftBoxItemInEmptySpot(farmhouse, startCrop);
@@ -78,6 +87,7 @@ namespace StardewArchipelago.GameModifications
                 return;
             }
 
+            _logger.LogDebug($"Will add quick start");
             var chests = _stardewItemManager.GetItemByName("Chest").PrepareForGivingToFarmer(5);
             var iridiumBand = _stardewItemManager.GetItemByName("Iridium Band").PrepareForGivingToFarmer();
             var qualitySprinklers = _stardewItemManager.GetItemByName("Quality Sprinkler").PrepareForGivingToFarmer(4);
@@ -96,6 +106,7 @@ namespace StardewArchipelago.GameModifications
             CreateGiftBoxItemInEmptySpot(farmhouse, paths);
             CreateGiftBoxItemInEmptySpot(farmhouse, seed_maker);
 #endif
+            _logger.LogDebug($"Ending {nameof(GivePlayerQuickStart)}");
         }
         
         private void RemoveStartingTools()

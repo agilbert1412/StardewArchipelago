@@ -57,7 +57,7 @@ namespace StardewArchipelago.GameModifications
             _helper = modHelper;
             _archipelago = archipelago;
             _stardewItemManager = stardewItemManager;
-            _startingResources = new StartingResources(_archipelago, locationChecker, _stardewItemManager);
+            _startingResources = new StartingResources(logger, _archipelago, locationChecker, _stardewItemManager);
             _seedShopStockModifier = seedShopStockModifier;
             _recipeDataRemover = new RecipeDataRemover(logger, modHelper, archipelago);
             ArchipelagoLocationsInjections.Initialize(logger, modHelper, archipelago, locationChecker);
