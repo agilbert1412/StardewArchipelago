@@ -10,6 +10,7 @@ using StardewArchipelago.GameModifications.MultiSleep;
 using StardewArchipelago.Serialization;
 using StardewModdingAPI;
 using StardewValley;
+using StardewValley.Network;
 
 namespace StardewArchipelago.GameModifications.Seasons
 {
@@ -93,8 +94,8 @@ namespace StardewArchipelago.GameModifications.Seasons
             }
         }
 
-        // public static WorldDate Date => Game1.netWorldState.Value.Date;
-        public static bool Date_UseTotalDaysStats_Prefix(ref WorldDate __result)
+        // public static WorldDate Now() => new WorldDate(Game1.year, Game1.season, Game1.dayOfMonth);
+        public static bool WorldDateNow_UseTotalDaysStats_Prefix(ref WorldDate __result)
         {
             try
             {
@@ -105,7 +106,7 @@ namespace StardewArchipelago.GameModifications.Seasons
             }
             catch (Exception ex)
             {
-                _logger.LogError($"Failed in {nameof(Date_UseTotalDaysStats_Prefix)}:\n{ex}");
+                _logger.LogError($"Failed in {nameof(WorldDateNow_UseTotalDaysStats_Prefix)}:\n{ex}");
                 return MethodPrefix.RUN_ORIGINAL_METHOD;
             }
         }

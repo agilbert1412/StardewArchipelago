@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using HarmonyLib;
+using KaitoKid.Utilities.Interfaces;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using StardewArchipelago.Archipelago;
@@ -47,6 +48,7 @@ namespace StardewArchipelago.GameModifications
 {
     public class RandomizedLogicPatcher
     {
+        private readonly ILogger _logger;
         private readonly Harmony _harmony;
         private readonly IModHelper _helper;
         private readonly StardewArchipelagoClient _archipelago;
@@ -59,12 +61,13 @@ namespace StardewArchipelago.GameModifications
 
         public RandomizedLogicPatcher(LogHandler logger, IModHelper modHelper, ModConfig config, Harmony harmony, StardewArchipelagoClient archipelago, StardewLocationChecker locationChecker, StardewItemManager stardewItemManager, EntranceManager entranceManager, SeedShopStockModifier seedShopStockModifier, NameSimplifier nameSimplifier, Friends friends, ArchipelagoStateDto state, BundleReader bundleReader)
         {
+            _logger = logger;
             _harmony = harmony;
             _helper = modHelper;
             _archipelago = archipelago;
             _stardewItemManager = stardewItemManager;
             _dataPatcher = new RandomizedDataPatcher(logger, modHelper, harmony, archipelago, stardewItemManager);
-            _startingResources = new StartingResources(_archipelago, locationChecker, _stardewItemManager);
+            _startingResources = new StartingResources(logger, _archipelago, locationChecker, _stardewItemManager);
             _seedShopStockModifier = seedShopStockModifier;
             _recipeDataRemover = new RecipeDataRemover(logger, modHelper, archipelago);
             ArchipelagoLocationsInjections.Initialize(logger, modHelper, archipelago, locationChecker);
@@ -438,8 +441,8 @@ namespace StardewArchipelago.GameModifications
             );
 
             _harmony.Patch(
-                original: AccessTools.PropertyGetter(typeof(Game1), nameof(Game1.Date)),
-                prefix: new HarmonyMethod(typeof(SeasonsRandomizer), nameof(SeasonsRandomizer.Date_UseTotalDaysStats_Prefix))
+                original: AccessTools.Method(typeof(WorldDate), nameof(WorldDate.Now)),
+                prefix: new HarmonyMethod(typeof(SeasonsRandomizer), nameof(SeasonsRandomizer.WorldDateNow_UseTotalDaysStats_Prefix))
             );
 
             _harmony.Patch(

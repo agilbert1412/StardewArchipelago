@@ -19,6 +19,8 @@ namespace StardewArchipelago.Locations
             _locationChecker = locationChecker;
             _locationsCheckedByJoja = new HashSet<string>(locationsAlreadyCheckedByJoja);
             _checkedLocationsByTag = new Dictionary<string, int>();
+
+            _locationsCheckedByJoja = _locationsCheckedByJoja.Where(x => _archipelago.DataPackageCache.LocationExists(x)).ToHashSet();
         }
 
         public void AddCheckedLocations(string[] locationNames)

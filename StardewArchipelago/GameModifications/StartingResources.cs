@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using KaitoKid.ArchipelagoUtilities.Net;
+using KaitoKid.Utilities.Interfaces;
 using Microsoft.Xna.Framework;
 using StardewArchipelago.Archipelago;
 using StardewArchipelago.Archipelago.SlotData.SlotEnums;
@@ -18,20 +19,24 @@ namespace StardewArchipelago.GameModifications
     {
         private const int UNLIMITED_MONEY_AMOUNT = 9999999;
         private const int MINIMUM_UNLIMITED_MONEY = 1000000;
+        private readonly ILogger _logger;
         private readonly StardewArchipelagoClient _archipelago;
         private readonly StardewItemManager _stardewItemManager;
 
-        public StartingResources(StardewArchipelagoClient archipelago, LocationChecker locationChecker, StardewItemManager stardewItemManager)
+        public StartingResources(ILogger logger, StardewArchipelagoClient archipelago, LocationChecker locationChecker, StardewItemManager stardewItemManager)
         {
+            _logger = logger;
             _archipelago = archipelago;
             _stardewItemManager = stardewItemManager;
         }
 
         public void GivePlayerStartingResources()
         {
+            _logger.LogDebug($"Starting {nameof(GivePlayerStartingResources)} (Game1.Date.TotalDays: {Game1.Date.TotalDays})");
             GivePlayerStartingMoney();
             if (Game1.Date.TotalDays == 0)
             {
+                _logger.LogDebug($"It's the first day! Taking care of Quick Start, Tools and Backpacks!");
                 GivePlayerQuickStart();
                 RemoveStartingTools();
                 RemoveStartingBackpack();

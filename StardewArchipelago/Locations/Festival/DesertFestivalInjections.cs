@@ -351,7 +351,7 @@ namespace StardewArchipelago.Locations.Festival
             var foodName = PreprocessString(loadedString);
 
             _locationChecker.AddCheckedLocation(FestivalLocationNames.DESERT_CHEF);
-            _locationChecker.AddCheckedLocation(foodName);
+            _locationChecker.AddCheckedLocation($"Desert Chef: {foodName}");
         }
 
         // private void signalCalicoStatueActivation(int whichEffect)
