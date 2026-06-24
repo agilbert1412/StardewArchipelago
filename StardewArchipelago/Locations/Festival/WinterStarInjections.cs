@@ -10,6 +10,7 @@ using KaitoKid.ArchipelagoUtilities.Net.Constants;
 using KaitoKid.Utilities.Interfaces;
 using StardewArchipelago.Archipelago;
 using StardewArchipelago.Archipelago.SlotData.SlotEnums;
+using StardewArchipelago.GameModifications.CodeInjections;
 
 namespace StardewArchipelago.Locations.Festival
 {
@@ -21,23 +22,6 @@ namespace StardewArchipelago.Locations.Festival
         private static LocationChecker _locationChecker;
         // private static Random _lastProvidedRandom;
         // private static Random _random = null;
-
-        private static NPC _fakeNpcNobody;
-
-        private static NPC Nobody
-        {
-            get
-            {
-                if (_fakeNpcNobody == null)
-                {
-                    _fakeNpcNobody = new NPC
-                    {
-                        displayName = "nobody",
-                    };
-                }
-                return _fakeNpcNobody;
-            }
-        }
 
         public static void Initialize(ILogger logger, IModHelper modHelper, StardewArchipelagoClient archipelago, LocationChecker locationChecker)
         {
@@ -84,7 +68,7 @@ namespace StardewArchipelago.Locations.Festival
 
                 if (__result == null)
                 {
-                    __result = Nobody;
+                    __result = VillagerExistenceInjections.Nobody;
                 }
 
                 return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;

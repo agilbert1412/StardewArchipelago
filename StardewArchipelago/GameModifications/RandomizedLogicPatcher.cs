@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using HarmonyLib;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -86,7 +87,7 @@ namespace StardewArchipelago.GameModifications
             WorldChangeEventInjections.Initialize(logger);
             CropInjections.Initialize(logger, archipelago, stardewItemManager, state.Wallet);
             NoHouseInjections.Initialize(logger, archipelago, state);
-            VillagerExistenceInjections.Initialize(logger, archipelago);
+            VillagerExistenceInjections.Initialize(logger, modHelper, archipelago);
             GoldenClockInjections.Initialize(logger, archipelago);
             ZeldaAnimationInjections.Initialize(logger, archipelago);
             ItemTooltipInjections.Initialize(logger, modHelper, config, archipelago, locationChecker, nameSimplifier);
@@ -699,6 +700,19 @@ namespace StardewArchipelago.GameModifications
                 original: AccessTools.Method(typeof(Utility), nameof(Utility.TryOpenShopMenu), new[] { typeof(string), typeof(GameLocation), typeof(Rectangle?), typeof(int?), typeof(bool), typeof(bool), typeof(Action<string>) }),
                 prefix: new HarmonyMethod(typeof(VillagerExistenceInjections), nameof(VillagerExistenceInjections.TryOpenShopMenuComplex_NoShopsWithoutOwnerExisting_Prefix))
             );
+
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(Sewer), nameof(Sewer.MakeMapModifications)),
+                prefix: new HarmonyMethod(typeof(VillagerExistenceInjections), nameof(VillagerExistenceInjections.MakeMapModifications_SewerWhenKrobusDoesntExit_Prefix))
+            );
+
+            //// public static NPC getCharacterFromName(string name, bool mustBeVillager = true, bool includeEventActors = false)
+            //var getCharacterFromNameMethods = typeof(Game1).GetMethods(BindingFlags.Public | BindingFlags.Static);
+            //var getCharacterFromNameMethod = getCharacterFromNameMethods.Single(m => m.Name == nameof(Game1.getCharacterFromName) && !m.IsGenericMethod);
+            //_harmony.Patch(
+            //    original: getCharacterFromNameMethod,
+            //    postfix: new HarmonyMethod(typeof(VillagerExistenceInjections), nameof(VillagerExistenceInjections.GetCharacterFromName_FakeNPCWhenNotArrivedYet_Postfix))
+            //);
         }
 
         private void PatchPowers()

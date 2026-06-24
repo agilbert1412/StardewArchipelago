@@ -7,18 +7,39 @@ using StardewValley.Characters;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using StardewModdingAPI;
+using StardewValley.Locations;
 
 namespace StardewArchipelago.GameModifications.CodeInjections
 {
     internal class VillagerExistenceInjections
     {
         private static ILogger _logger;
+        private static IModHelper _helper;
         private static StardewArchipelagoClient _archipelago;
 
-        public static void Initialize(ILogger logger, StardewArchipelagoClient archipelago)
+        private static NPC _fakeNpcNobody;
+
+        public static NPC Nobody
+        {
+            get
+            {
+                if (_fakeNpcNobody == null)
+                {
+                    _fakeNpcNobody = new NPC
+                    {
+                        displayName = "nobody",
+                    };
+                }
+                return _fakeNpcNobody;
+            }
+        }
+
+        public static void Initialize(ILogger logger, IModHelper helper, StardewArchipelagoClient archipelago)
         {
             _logger = logger;
             _archipelago = archipelago;
+            _helper = helper;
         }
 
         // public static bool AddCharacterIfNecessary(string characterId, bool bypassConditions = false)
@@ -162,6 +183,68 @@ namespace StardewArchipelago.GameModifications.CodeInjections
                 return MethodPrefix.RUN_ORIGINAL_METHOD;
             }
         }
+
+        // public override void MakeMapModifications(bool force = false)
+        public static bool MakeMapModifications_SewerWhenKrobusDoesntExit_Prefix(Sewer __instance, bool force)
+        {
+            try
+            {
+                if (force)
+                {
+                    // protected HashSet<string> _appliedMapOverrides;
+                    var appliedMapOverridesField = _helper.Reflection.GetField<HashSet<string>>(__instance, "_appliedMapOverrides");
+                    var appliedMapOverrides = appliedMapOverridesField.GetValue();
+                    appliedMapOverrides.Clear();
+                }
+                __instance.interiorDoors.MakeMapModifications();
+
+                var krobus = Game1.getCharacterFromName("Krobus");
+                if (krobus != null && krobus.isMarried())
+                {
+                    __instance.setMapTile(31, 17, 84, "Buildings", "st");
+                    __instance.setMapTile(31, 16, 1, "Front", "st");
+                }
+                else
+                {
+                    __instance.removeMapTile(31, 17, "Buildings");
+                    __instance.removeMapTile(31, 16, "Front");
+                }
+
+                return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Failed in {nameof(MakeMapModifications_SewerWhenKrobusDoesntExit_Prefix)}:\n{ex}");
+                return MethodPrefix.RUN_ORIGINAL_METHOD;
+            }
+        }
+
+        // Patch that doesn't do what I want...
+        // public static NPC getCharacterFromName(string name, bool mustBeVillager = true, bool includeEventActors = false)
+        //public static void GetCharacterFromName_FakeNPCWhenNotArrivedYet_Postfix(string name, bool mustBeVillager, bool includeEventActors, ref NPC __result)
+        //{
+        //    try
+        //    {
+        //        if (__result != null)
+        //        {
+        //            return;
+        //        }
+
+        //        var arrivalName = GetArrivalItem(name);
+        //        if (_archipelago.SlotData.StartWithout.HasFlag(StartWithout.Villagers) && _archipelago.LocationExists($"Meet {name}")) // This check is bullshit, until we get proper check if items exist, I check the location instead.
+        //        {
+        //            __result = Nobody;
+        //            return;
+        //        }
+
+        //        return;
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        _logger.LogError($"Failed in {nameof(GetCharacterFromName_FakeNPCWhenNotArrivedYet_Postfix)}:\n{ex}");
+        //        return;
+        //    }
+        //}
 
         private static bool IsShopAllowed(string shopId)
         {
