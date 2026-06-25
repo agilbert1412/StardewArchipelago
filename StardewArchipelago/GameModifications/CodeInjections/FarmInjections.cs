@@ -6,6 +6,7 @@ using Microsoft.Xna.Framework;
 using KaitoKid.Utilities.Interfaces;
 using StardewArchipelago.Archipelago;
 using StardewArchipelago.Archipelago.SlotData.SlotEnums;
+using StardewArchipelago.Extensions;
 using StardewArchipelago.Goals;
 using StardewArchipelago.Items.Mail;
 using StardewArchipelago.Locations.CodeInjections.Vanilla;
@@ -136,28 +137,33 @@ namespace StardewArchipelago.GameModifications.CodeInjections
                     return;
                 }
 
+
                 var farm = Game1.getFarm();
                 var chanceOfStaying = GetChanceOfStaying();
+                var random = Utility.CreateDaySaveRandom(nameof(farm.resourceClumps).GetHash());
                 for (var i = farm.resourceClumps.Count - 1; i >= 0; i--)
                 {
                     var clump = farm.resourceClumps[i];
-                    if (Game1.random.NextDouble() > chanceOfStaying)
+                    if (random.NextDouble() > chanceOfStaying)
                     {
                         farm.removeEverythingFromThisTile((int)clump.Tile.X, (int)clump.Tile.Y);
                     }
                 }
 
+                random = Utility.CreateDaySaveRandom(nameof(farm.terrainFeatures).GetHash());
                 foreach (var (tile, feature) in farm.terrainFeatures.Pairs)
                 {
                     if (!(feature is Tree) && !(feature is Grass))
                     {
                         continue;
                     }
-                    if (Game1.random.NextDouble() > chanceOfStaying)
+                    if (random.NextDouble() > chanceOfStaying)
                     {
                         farm.removeEverythingFromThisTile((int)tile.X, (int)tile.Y);
                     }
                 }
+
+                random = Utility.CreateDaySaveRandom(nameof(farm.Objects).GetHash());
                 foreach (var (tile, obj) in farm.Objects.Pairs)
                 {
                     if (obj.name != "Stone" && !obj.name.StartsWith("Weed") && obj.name != "Twig")
@@ -165,7 +171,7 @@ namespace StardewArchipelago.GameModifications.CodeInjections
                         continue;
                     }
 
-                    if (Game1.random.NextDouble() > chanceOfStaying)
+                    if (random.NextDouble() > chanceOfStaying)
                     {
                         farm.removeEverythingFromThisTile((int)tile.X, (int)tile.Y);
                     }

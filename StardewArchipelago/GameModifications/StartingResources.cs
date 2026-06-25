@@ -197,7 +197,7 @@ namespace StardewArchipelago.GameModifications
         {
             var emptySpot = originTile;
             var maxStep = 3;
-            while (map.objects.ContainsKey(emptySpot))
+            while (map.objects.ContainsKey(emptySpot) || map.IsTileBlockedBy(emptySpot) || map.IsTileOccupiedBy(emptySpot))
             {
                 emptySpot.X = emptySpot.X + 1;
                 if (emptySpot.X > originTile.X + maxStep)
