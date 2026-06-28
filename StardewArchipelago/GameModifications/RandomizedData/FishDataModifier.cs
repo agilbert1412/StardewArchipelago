@@ -8,6 +8,7 @@ using StardewArchipelago.Archipelago.SlotData.SlotEnums.SlotDataRandomization;
 using StardewArchipelago.Stardew;
 using StardewModdingAPI;
 using StardewModdingAPI.Events;
+using StardewValley;
 using StardewValley.GameData.Locations;
 
 namespace StardewArchipelago.GameModifications.RandomizedData
@@ -58,14 +59,21 @@ namespace StardewArchipelago.GameModifications.RandomizedData
 
             e.Edit(asset =>
                 {
-                    var locationsData = asset.AsDictionary<string, LocationData>().Data;
-
-                    var originalFishEntries = GetOriginalFishEntries(locationsData);
-                    var modifiedFishEntries = GetModifiedFishEntries();
-
-                    foreach (var locationId in locationsData.Keys.ToArray())
+                    try
                     {
-                        ModifyFishLocationsData(locationsData, locationId, originalFishEntries, modifiedFishEntries);
+                        var locationsData = asset.AsDictionary<string, LocationData>().Data;
+
+                        var originalFishEntries = GetOriginalFishEntries(locationsData);
+                        var modifiedFishEntries = GetModifiedFishEntries(originalFishEntries);
+
+                        foreach (var locationId in locationsData.Keys.ToArray())
+                        {
+                            ModifyFishLocationsData(locationsData, locationId, originalFishEntries, modifiedFishEntries);
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        _logger.LogError($"Failed at editing fish assets. Message: {ex.Message}{Environment.NewLine}{Environment.NewLine}{ex.StackTrace}");
                     }
                 },
                 AssetEditPriority.Late
@@ -115,7 +123,12 @@ namespace StardewArchipelago.GameModifications.RandomizedData
 
         private static string[] ModifyCrabPotFishDataFields(RandomizedFishData randomizedData, bool originalIsCrabPot, string[] fishDataFields, string fishName)
         {
-
+            const int minSizeIndex = 3;
+            const int maxSizeIndex = 4;
+            if (randomizedData.Location == null)
+            {
+                return fishDataFields;
+            }
             var waterType = randomizedData.Location.Any(x => x.Contains("Freshwater", StringComparison.InvariantCultureIgnoreCase)) ? "freshwater" : "ocean";
             if (originalIsCrabPot)
             {
@@ -124,8 +137,6 @@ namespace StardewArchipelago.GameModifications.RandomizedData
             }
             else
             {
-                const int minSizeIndex = 3;
-                const int maxSizeIndex = 4;
                 fishDataFields = new[] { fishName, "trap", ".15", "684 .45", waterType, fishDataFields[minSizeIndex], fishDataFields[maxSizeIndex], "false" };
             }
             return fishDataFields;
@@ -222,8 +233,11 @@ namespace StardewArchipelago.GameModifications.RandomizedData
                                 continue;
                             }
 
-                            fishEntries.TryAdd(fish.Name, new List<SpawnFishData>());
-                            fishEntries[fish.Name].Add(spawnFishData);
+                            fishEntries.TryAdd(locationId, new List<SpawnFishData>());
+                            var newSpawnFishData = spawnFishData.DeepClone();
+                            newSpawnFishData.RandomItemId = null;
+                            newSpawnFishData.ItemId = fishId;
+                            fishEntries[locationId].Add(newSpawnFishData);
                             atLeastOne = true;
                         }
                         if (atLeastOne)
@@ -245,8 +259,8 @@ namespace StardewArchipelago.GameModifications.RandomizedData
                             continue;
                         }
 
-                        fishEntries.TryAdd(fish.Name, new List<SpawnFishData>());
-                        fishEntries[fish.Name].Add(spawnFishData);
+                        fishEntries.TryAdd(locationId, new List<SpawnFishData>());
+                        fishEntries[locationId].Add(spawnFishData);
                         locationData.Fish.RemoveAt(i);
                     }
                 }
@@ -255,12 +269,12 @@ namespace StardewArchipelago.GameModifications.RandomizedData
             return fishEntries;
         }
 
-        private Dictionary<string, List<SpawnFishData>> GetModifiedFishEntries()
+        private Dictionary<string, List<SpawnFishData>> GetModifiedFishEntries(Dictionary<string, List<SpawnFishData>> originalFishEntries)
         {
             var modifiedFishEntries = new Dictionary<string, List<SpawnFishData>>();
             foreach (var (fishName, randomizedFishData) in _dataRandomization.FishData)
             {
-                var entriesByLocation = randomizedFishData.GetSpawnFishDatas(_itemManager);
+                var entriesByLocation = randomizedFishData.GetSpawnFishDatas(_itemManager, originalFishEntries);
                 foreach (var (locationName, entries) in entriesByLocation)
                 {
                     modifiedFishEntries.TryAdd(locationName, new List<SpawnFishData>());
@@ -280,15 +294,25 @@ namespace StardewArchipelago.GameModifications.RandomizedData
                 return;
             }
 
+            var originalEntriesForLocation = originalFishEntries[locationId];
             var modifiedEntriesForLocation = modifiedFishEntries[locationId];
+
+            var originalEntriesForLocationByFish = new Dictionary<string, List<SpawnFishData>>();
+            foreach (var spawnFishData in originalEntriesForLocation)
+            {
+                var fishItem = _itemManager.GetItemByQualifiedId(spawnFishData.ItemId);
+                var fishName = fishItem.Name;
+                originalEntriesForLocationByFish.TryAdd(fishName, new List<SpawnFishData>());
+                originalEntriesForLocationByFish[fishName].Add(spawnFishData);
+            }
 
             foreach (var spawnFishData in modifiedEntriesForLocation)
             {
                 var fishItem = _itemManager.GetItemByQualifiedId(spawnFishData.ItemId);
                 var fishName = fishItem.Name;
-                if (originalFishEntries.ContainsKey(fishName))
+                if (originalEntriesForLocationByFish.ContainsKey(fishName))
                 {
-                    var originalEntriesForThisFish = originalFishEntries[fishName];
+                    var originalEntriesForThisFish = originalEntriesForLocationByFish[fishName];
                     var newSpawnFishData = originalEntriesForThisFish[0];
                     newSpawnFishData = MergeSpawnFishData(newSpawnFishData, originalEntriesForThisFish);
                     newSpawnFishData = MergeSpawnFishData(newSpawnFishData, spawnFishData);
