@@ -13,6 +13,7 @@ using System.Linq;
 using KaitoKid.Utilities.Interfaces;
 using StardewArchipelago.Locations.ShopStockModifiers;
 using StardewValley.GameData;
+using StardewValley.GameData.Pants;
 using Object = StardewValley.Object;
 
 namespace StardewArchipelago.Stardew
@@ -40,8 +41,8 @@ namespace StardewArchipelago.Stardew
         private Dictionary<string, StardewHat> _hatsByName;
         private Dictionary<string, StardewShirt> _shirtsById;
         private Dictionary<string, StardewShirt> _shirtsByName;
-        //private Dictionary<string, StardewPants> _pantsById;
-        //private Dictionary<string, StardewPants> _pantsByName;
+        private Dictionary<string, StardewPants> _pantsById;
+        private Dictionary<string, StardewPants> _pantsByName;
         private Dictionary<string, StardewWeapon> _weaponsById;
         private Dictionary<string, StardewWeapon> _weaponsByName;
         private Dictionary<string, StardewCookingRecipe> _cookingRecipesByName;
@@ -99,7 +100,7 @@ namespace StardewArchipelago.Stardew
                    _furnitureByName.ContainsKey(itemName) ||
                    _hatsByName.ContainsKey(itemName) ||
                    _shirtsByName.ContainsKey(itemName) ||
-                   //_pantsByName.ContainsKey(itemName) ||
+                   _pantsByName.ContainsKey(itemName) ||
                    _weaponsByName.ContainsKey(itemName);
         }
 
@@ -217,10 +218,10 @@ namespace StardewArchipelago.Stardew
                 return _shirtsByName[itemName];
             }
 
-            //if (_pantsByName.ContainsKey(itemName))
-            //{
-            //    return _pantsByName[itemName];
-            //}
+            if (_pantsByName.ContainsKey(itemName))
+            {
+                return _pantsByName[itemName];
+            }
 
             if (_weaponsByName.ContainsKey(itemName))
             {
@@ -631,7 +632,7 @@ namespace StardewArchipelago.Stardew
         {
             InitializeHats();
             InitializeShirts();
-            // InitializePants();
+            InitializePants();
         }
 
         private void InitializeHats()
@@ -671,6 +672,26 @@ namespace StardewArchipelago.Stardew
                 _shirtsById.Add(id, shirt);
                 _shirtsByName.TryAdd(shirt.Name, shirt);
                 _itemsByQualifiedId.Add(shirt.GetQualifiedId(), shirt);
+            }
+        }
+
+        private void InitializePants()
+        {
+            _pantsById = new Dictionary<string, StardewPants>();
+            _pantsByName = new Dictionary<string, StardewPants>();
+            var allPantsInformation = DataLoader.Pants(Game1.content);
+            foreach (var (id, pantsData) in allPantsInformation)
+            {
+                var pants = ParseStardewPantsData(id, pantsData);
+
+                if (_pantsById.ContainsKey(id) || _pantsByName.ContainsKey(pants.Name))
+                {
+                    continue;
+                }
+
+                _pantsById.Add(id, pants);
+                _pantsByName.TryAdd(pants.Name, pants);
+                _itemsByQualifiedId.Add(pants.GetQualifiedId(), pants);
             }
         }
 
@@ -971,6 +992,30 @@ namespace StardewArchipelago.Stardew
             catch (Exception ex)
             {
                 throw new Exception($"Failed at parsing Shirt data for [{id}].{Environment.NewLine}Data: {shirtData}", ex);
+            }
+        }
+
+        private static StardewPants ParseStardewPantsData(string id, PantsData pantsData)
+        {
+            try
+            {
+                var name = pantsData.Name;
+                var description = pantsData.Description;
+                var price = pantsData.Price;
+                var spriteIndex = pantsData.SpriteIndex;
+                var isPrismatic = pantsData.IsPrismatic;
+                var texture = pantsData.Texture;
+                var canBeDyed = pantsData.CanBeDyed;
+                var canChooseDuringCharacterCustomization = pantsData.CanChooseDuringCharacterCustomization;
+                var defaultColor = pantsData.DefaultColor;
+                var displayName = string.IsNullOrWhiteSpace(pantsData.DisplayName) ? name : pantsData.DisplayName;
+
+                var pants = new StardewPants(id, name, description, price, displayName);
+                return pants;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Failed at parsing Pants data for [{id}].{Environment.NewLine}Data: {pantsData}", ex);
             }
         }
 

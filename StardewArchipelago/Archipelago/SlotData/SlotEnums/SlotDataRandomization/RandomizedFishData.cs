@@ -52,7 +52,20 @@ namespace StardewArchipelago.Archipelago.SlotData.SlotEnums.SlotDataRandomizatio
 
             foreach (var regionName in fishLocations)
             {
-                var relevantOriginalEntriesForThisMap = relevantOriginalEntries.ContainsKey(regionName) ? relevantOriginalEntries[regionName] : relevantOriginalEntries.First().Value;
+                List<SpawnFishData> relevantOriginalEntriesForThisMap;
+                if (relevantOriginalEntries.ContainsKey(regionName))
+                {
+                    relevantOriginalEntriesForThisMap = relevantOriginalEntries[regionName];
+                }
+                else if (relevantOriginalEntries.Any())
+                {
+                    relevantOriginalEntriesForThisMap = relevantOriginalEntries.First().Value;
+                }
+                else
+                {
+                    relevantOriginalEntriesForThisMap = new List<SpawnFishData>() {null };
+                }
+
                 foreach (var relevantOriginalEntry in relevantOriginalEntriesForThisMap)
                 {
                     var mapName = GetMapName(regionName);
@@ -98,13 +111,13 @@ namespace StardewArchipelago.Archipelago.SlotData.SlotEnums.SlotDataRandomizatio
                         mapName = "UndergroundMine";
                     }
 
-                    var condition = Season == null ? relevantOriginalEntry.Condition : $"LOCATION_SEASON Here {string.Join(" ", Season.Select(x => x.ToLower()))}";
+                    var condition = Season == null ? relevantOriginalEntry?.Condition : $"LOCATION_SEASON Here {string.Join(" ", Season.Select(x => x.ToLower()))}";
 
                     if (isLocationUnchanged)
                     {
-                        fishAreaId ??= relevantOriginalEntry.FishAreaId;
-                        playerPosition ??= relevantOriginalEntry.PlayerPosition;
-                        bobberPosition ??= relevantOriginalEntry.BobberPosition;
+                        fishAreaId ??= relevantOriginalEntry?.FishAreaId;
+                        playerPosition ??= relevantOriginalEntry?.PlayerPosition;
+                        bobberPosition ??= relevantOriginalEntry?.BobberPosition;
                     }
 
                     var spawnData = new SpawnFishData()

@@ -20,12 +20,13 @@ namespace StardewArchipelago.Logging
         {
             _logger.Log(message, LogLevel.Error);
 
-            if (IsErrorRelatedToArchipelagoConnection(message))
-            {
-                return;
-            }
+            // No longer necessary, now the patch is in ErrorInjections.cs to catch non-Archipelago errors as well
+            //if (IsErrorRelatedToArchipelagoConnection(message))
+            //{
+            //    return;
+            //}
 
-            ArchipelagoJunimoNoteMenu.CompleteBundleIfExists(MemeBundleNames.ERROR);
+            //ArchipelagoJunimoNoteMenu.CompleteBundleIfExists(MemeBundleNames.ERROR);
         }
 
         public static bool IsErrorRelatedToArchipelagoConnection(string message)
