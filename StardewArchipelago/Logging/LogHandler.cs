@@ -20,13 +20,18 @@ namespace StardewArchipelago.Logging
         {
             _logger.Log(message, LogLevel.Error);
 
-            var invalidErrors = new[]{"Failed to Connect", "Connection to Archipelago"};
-            if (invalidErrors.Any(x => message.Contains(x, StringComparison.InvariantCultureIgnoreCase)))
+            if (IsErrorRelatedToArchipelagoConnection(message))
             {
                 return;
             }
 
             ArchipelagoJunimoNoteMenu.CompleteBundleIfExists(MemeBundleNames.ERROR);
+        }
+
+        public static bool IsErrorRelatedToArchipelagoConnection(string message)
+        {
+            var invalidErrors = new[] { "Failed to Connect", "Connection to Archipelago" };
+            return invalidErrors.Any(x => message.Contains(x, StringComparison.InvariantCultureIgnoreCase));
         }
 
         public override void LogError(string message, Exception e)

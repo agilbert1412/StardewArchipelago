@@ -47,9 +47,10 @@ namespace StardewArchipelago.Locations.Patcher
     public class VanillaLocationPatcher : ILocationPatcher
     {
         private readonly ILogger _logger;
-        private readonly StardewArchipelagoClient _archipelago;
-        private readonly Harmony _harmony;
         private readonly IModHelper _modHelper;
+        private readonly Harmony _harmony;
+        private readonly StardewArchipelagoClient _archipelago;
+        private readonly LocationChecker _locationChecker;
         private readonly GingerIslandPatcher _gingerIslandPatcher;
         private readonly ToolShopStockModifier _toolUpgradesShopStockModifier;
         private readonly FishingRodShopStockModifier _fishingRodShopStockModifier;
@@ -68,9 +69,10 @@ namespace StardewArchipelago.Locations.Patcher
         public VanillaLocationPatcher(ILogger logger, IModHelper modHelper, Harmony harmony, StardewArchipelagoClient archipelago, LocationChecker locationChecker, StardewItemManager stardewItemManager, NameSimplifier nameSimplifier)
         {
             _logger = logger;
-            _archipelago = archipelago;
-            _harmony = harmony;
             _modHelper = modHelper;
+            _harmony = harmony;
+            _archipelago = archipelago;
+            _locationChecker = locationChecker;
             _gingerIslandPatcher = new GingerIslandPatcher(logger, _modHelper, _harmony, _archipelago, locationChecker);
             _toolUpgradesShopStockModifier = new ToolShopStockModifier(logger, modHelper, archipelago, stardewItemManager, nameSimplifier);
             _fishingRodShopStockModifier = new FishingRodShopStockModifier(logger, modHelper, archipelago, stardewItemManager, nameSimplifier);
@@ -258,6 +260,15 @@ namespace StardewArchipelago.Locations.Patcher
                 original: AccessTools.Method(typeof(BedFurniture), nameof(BedFurniture.ApplyWakeUpPosition)),
                 prefix: new HarmonyMethod(typeof(TentKitInjections), nameof(TentKitInjections.ApplyWakeUpPosition_AllowWakingUpInCC_Prefix))
             );
+
+            if (_locationChecker.IsLocationMissing("Error Bundle"))
+            {
+                var monitorType = AccessTools.TypeByName("StardewModdingAPI.Framework.Monitor");
+                _harmony.Patch(
+                    original: AccessTools.Method(monitorType, "LogImpl"),
+                    postfix: new HarmonyMethod(typeof(ErrorInjections), nameof(ErrorInjections.LogImpl_CompleteErrorBundleOnError_Postfix))
+                );
+            }
         }
         private void PatchFeedHorse()
         {

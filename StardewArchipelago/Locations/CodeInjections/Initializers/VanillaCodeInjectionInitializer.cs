@@ -95,6 +95,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Initializers
             HorseInjections.Initialize(logger, modHelper, archipelago, locationChecker);
             JunimoInjections.Initialize(logger, modHelper, archipelago, state);
             TentKitInjections.Initialize(logger, modHelper, archipelago, locationChecker);
+            ErrorInjections.Initialize(logger, modHelper, archipelago, locationChecker);
         }
 
         private static void InitializeSkills(ILogger logger, IModHelper modHelper, StardewArchipelagoClient archipelago, LocationChecker locationChecker)
