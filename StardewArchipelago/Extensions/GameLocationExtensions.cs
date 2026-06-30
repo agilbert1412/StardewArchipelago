@@ -566,10 +566,18 @@ namespace StardewArchipelago.Extensions
         public static bool TryGetForcedWarp(this string warpKey, out WarpRequest warpRequest)
         {
             warpRequest = null;
+            var homeOfFarmer = Utility.getHomeOfFarmer(Game1.player);
             switch (warpKey)
             {
+                case "Farm to Farmhouse":
+                    if (homeOfFarmer == null)
+                    {
+                        return false;
+                    }
+                    var insideSpot = homeOfFarmer.getEntryLocation();
+                    warpRequest = new WarpRequest("Farmhouse", insideSpot.X, insideSpot.Y, FacingDirection.Down);
+                    return true;
                 case "UseReturnScepterExit":
-                    var homeOfFarmer = Utility.getHomeOfFarmer(Game1.player);
                     if (homeOfFarmer == null)
                     {
                         return false;
