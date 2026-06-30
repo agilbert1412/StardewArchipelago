@@ -105,10 +105,7 @@ namespace StardewArchipelago.GameModifications.RandomizedData
                 return false;
             }
 
-            var numbers = "0123456789".ToCharArray();
-            var indexSplit = festivalDateKey.IndexOfAny(numbers);
-            var season = festivalDateKey.Substring(0, indexSplit);
-            var day = int.Parse(festivalDateKey.Substring(indexSplit));
+            var (season, day) = SplitFestivalDateKey(festivalDateKey);
             if (!string.IsNullOrWhiteSpace(randomizedFestivalData.Season))
             {
                 season = randomizedFestivalData.Season;
@@ -127,6 +124,15 @@ namespace StardewArchipelago.GameModifications.RandomizedData
             newValue = festivalName;
             _datesMapping.Add(newDateKey, festivalDateKey);
             return true;
+        }
+
+        public static (string, int) SplitFestivalDateKey(string festivalDateKey)
+        {
+            var numbers = "0123456789".ToCharArray();
+            var indexSplit = festivalDateKey.IndexOfAny(numbers);
+            var season = festivalDateKey.Substring(0, indexSplit);
+            var day = int.Parse(festivalDateKey.Substring(indexSplit));
+            return (season, day);
         }
 
         //private void ModifyPassiveFestivalData(IDictionary<string, PassiveFestivalData> passiveFestivalsData, string passiveFestivalKey)

@@ -24,6 +24,7 @@ namespace StardewArchipelago.GameModifications.RandomizedData
         private readonly CropDataModifier _cropDataModifier;
         private readonly FishDataModifier _fishDataModifier;
         private readonly FestivalDataModifier _festivalDataModifier;
+        private readonly VillagerDataModifier _villagersDataModifier;
         private readonly ObjectDataModifier _objectDataModifier;
         private readonly ShopEntriesDataModifier _shopDataModifier;
         private readonly AnimalsDataModifier _animalsDataModifier;
@@ -39,6 +40,7 @@ namespace StardewArchipelago.GameModifications.RandomizedData
             _cropDataModifier = new CropDataModifier(_logger, _helper, _archipelago, _stardewItemManager, _dataRandomization);
             _fishDataModifier = new FishDataModifier(_logger, _helper, _archipelago, _stardewItemManager, _dataRandomization);
             _festivalDataModifier = new FestivalDataModifier(_logger, _helper, _archipelago, _stardewItemManager, _dataRandomization);
+            _villagersDataModifier = new VillagerDataModifier(_logger, _helper, _archipelago, _stardewItemManager, _dataRandomization);
             _objectDataModifier = new ObjectDataModifier(_logger, _helper, _archipelago, _stardewItemManager, _dataRandomization);
             _shopDataModifier = new ShopEntriesDataModifier(_logger, _helper, _archipelago, _stardewItemManager, _dataRandomization);
             _animalsDataModifier = new AnimalsDataModifier(_logger, _helper, _archipelago, _stardewItemManager, _dataRandomization);
@@ -63,6 +65,7 @@ namespace StardewArchipelago.GameModifications.RandomizedData
             );
 
             PatchRandomizedFestivalsData();
+            PatchRandomizedVillagersData();
             PatchRandomizedShopsData();
         }
 
@@ -111,6 +114,17 @@ namespace StardewArchipelago.GameModifications.RandomizedData
             );
         }
 
+        private void PatchRandomizedVillagersData()
+        {
+            if (_dataRandomization.VillagersData == null || _dataRandomization.VillagersData.Count <= 0)
+            {
+                return;
+            }
+
+            _helper.Events.Content.AssetRequested += _villagersDataModifier.OnVillagersBirthdayDataRequested;
+            _helper.GameContent.InvalidateCache("Data/Characters");
+        }
+
         private void PatchRandomizedShopsData()
         {
             if (!AreShopsDataRandomized())
@@ -137,6 +151,7 @@ namespace StardewArchipelago.GameModifications.RandomizedData
             _helper.Events.Content.AssetRequested -= _fishDataModifier.OnLocationsDataRequested;
             _helper.Events.Content.AssetRequested -= _objectDataModifier.OnObjectDataRequested;
             CleanRandomizedFestivalDataEvents();
+            CleanRandomizedVillagersDataEvents();
             CleanRandomizedShopDataEvents();
         }
 
@@ -149,6 +164,16 @@ namespace StardewArchipelago.GameModifications.RandomizedData
 
             _helper.Events.Content.AssetRequested -= _festivalDataModifier.OnFestivalDatesDataRequested;
             //_helper.Events.Content.AssetRequested -= _festivalDataModifier.OnPassiveFestivalsDataRequested;
+        }
+
+        private void CleanRandomizedVillagersDataEvents()
+        {
+            if (_dataRandomization.VillagersData == null || _dataRandomization.VillagersData.Count <= 0)
+            {
+                return;
+            }
+
+            _helper.Events.Content.AssetRequested -= _villagersDataModifier.OnVillagersBirthdayDataRequested;
         }
 
         private void CleanRandomizedShopDataEvents()

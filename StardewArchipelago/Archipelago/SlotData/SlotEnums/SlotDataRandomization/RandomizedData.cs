@@ -10,6 +10,7 @@ namespace StardewArchipelago.Archipelago.SlotData.SlotEnums.SlotDataRandomizatio
         public Dictionary<string, RandomizedCropData> Crops { get; set; }
         public Dictionary<string, RandomizedFishData> Fish { get; set; }
         public Dictionary<string, RandomizedFestivalData> Festivals { get; set; }
+        public Dictionary<string, RandomizedVillagerData> Villagers { get; set; }
         public Dictionary<string, Dictionary<string, RandomizedShopItemData>> Shops { get; set; }
 
         public RandomizedData()
@@ -17,6 +18,7 @@ namespace StardewArchipelago.Archipelago.SlotData.SlotEnums.SlotDataRandomizatio
             Crops = new Dictionary<string, RandomizedCropData>();
             Fish = new Dictionary<string, RandomizedFishData>();
             Festivals = new Dictionary<string, RandomizedFestivalData>();
+            Villagers = new Dictionary<string, RandomizedVillagerData>();
             Shops = new Dictionary<string, Dictionary<string, RandomizedShopItemData>>();
         }
 
@@ -25,6 +27,7 @@ namespace StardewArchipelago.Archipelago.SlotData.SlotEnums.SlotDataRandomizatio
             AssignCropNames();
             AssignFishNames();
             AssignFestivalNames();
+            AssignVillagerNames();
             AssignShopNames();
 
             ValidateData();
@@ -49,6 +52,14 @@ namespace StardewArchipelago.Archipelago.SlotData.SlotEnums.SlotDataRandomizatio
         private void AssignFestivalNames()
         {
             foreach (var (name, data) in Festivals)
+            {
+                data.AssignName(name);
+            }
+        }
+
+        private void AssignVillagerNames()
+        {
+            foreach (var (name, data) in Villagers)
             {
                 data.AssignName(name);
             }
