@@ -18,6 +18,7 @@ using StardewArchipelago.GameModifications;
 using StardewArchipelago.Stardew;
 using System.Linq;
 using Microsoft.Xna.Framework;
+using StardewArchipelago.Archipelago.SlotData.SlotEnums.SlotDataRandomization;
 using StardewArchipelago.Items.Traps;
 using StardewArchipelago.Serialization;
 using StardewArchipelago.Locations;
@@ -83,6 +84,7 @@ namespace StardewArchipelago.Registry
             _modHelper.ConsoleCommands.Add("trap_difficulty", "Override the trap difficulty setting", OverrideTrapDifficulty);
             _modHelper.ConsoleCommands.Add("override_entrance_randomizer", "Override the Entrance Randomizer to force it off. Does not work for values that change the logic.", OverrideEntranceRandomizer);
             _modHelper.ConsoleCommands.Add("export_bundles", "Exports the entirety of the current bundles for the slot, to a json file in the game folder. Contains spoilers!", ExportBundles);
+            _modHelper.ConsoleCommands.Add("export_randomized_data", "Exports the entirety of the current data randomization for the slot, to a json file in the game folder. Contains spoilers!", ExportRandomizedData);
             _modHelper.ConsoleCommands.Add("forget_bed", "If you started without a house but slept in your bed once, this command will forget about it and spawn you outside again.", ForgetBed);
         }
 
@@ -227,7 +229,7 @@ namespace StardewArchipelago.Registry
                 return;
             }
 
-            var bundlesFile = "exported_bundles.json";
+            var bundlesFile = "ap_exported_bundles.json";
             ExportBundlesState(_archipelago.SlotData.BundlesData, bundlesFile);
             _logger.Log($"Bundles Data exported to {bundlesFile}", LogLevel.Info);
         }
@@ -235,6 +237,25 @@ namespace StardewArchipelago.Registry
         private void ExportBundlesState(string bundlesDataJson, string bundlesFile)
         {
             File.WriteAllText(bundlesFile, bundlesDataJson);
+        }
+
+        private void ExportRandomizedData(string arg1, string[] arg2)
+        {
+            if (_archipelago == null || _state == null || _archipelago.SlotData == null || _archipelago.SlotData.DataRandomization == null || !_archipelago.MakeSureConnected(0))
+            {
+                _logger.Log($"This command can only be used from in-game, when connected to Archipelago", LogLevel.Info);
+                return;
+            }
+
+            var randomizedDataFile = "ap_exported_randomized_data.json";
+            ExportRandomizedDataState(_archipelago.SlotData.DataRandomization, randomizedDataFile);
+            _logger.Log($"Randomized Data exported to {randomizedDataFile}", LogLevel.Info);
+        }
+
+        private void ExportRandomizedDataState(DataRandomization randomizedData, string randomizedDataFile)
+        {
+            var randomizedDataJson = randomizedData.GetRandomizedDataJson();
+            File.WriteAllText(randomizedDataFile, randomizedDataJson);
         }
 
         private void DebugMethod(string arg1, string[] arg2)
