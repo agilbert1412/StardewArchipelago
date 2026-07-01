@@ -1,4 +1,5 @@
-﻿using StardewArchipelago.Locations.CodeInjections.Vanilla;
+﻿using System;
+using StardewArchipelago.Locations.CodeInjections.Vanilla;
 using StardewValley;
 using StardewValley.Buildings;
 using StardewValley.Objects;
@@ -29,45 +30,81 @@ namespace StardewArchipelago.GameModifications.MultiSleep
             _untilWhat = untilWhat;
         }
 
+        public static string CleanBehaviorName(string behavior)
+        {
+            return behavior.Replace(" ", "").Replace(",", "").Replace("_", "").Replace("-", "");
+        }
+
+        public static bool IsBehavior(string behavior, string compareBehavior)
+        {
+            return CleanBehaviorName(behavior).Equals(CleanBehaviorName(compareBehavior), StringComparison.InvariantCultureIgnoreCase);
+        }
+
         public override bool ShouldKeepSleeping()
         {
-            bool allReady;
-            switch (_untilWhat)
+            if (IsBehavior(_untilWhat, RAIN))
             {
-                case RAIN:
-                    return !Game1.isRaining && !Game1.isLightning && !Game1.isGreenRain;
-                case STORM:
-                    return !Game1.isLightning;
-                case GREAT_LUCK:
-                    return Game1.player.DailyLuck <= 0.07;
-                case FESTIVAL:
-                    return !IsFestivalDay();
-                case BIRTHDAY:
-                    NPC birthdayPerson = null;
-                    Utility.ForEachVillager(n =>
-                    {
-                        if (n.Birthday_Season == Game1.currentSeason && n.Birthday_Day == Game1.dayOfMonth)
-                        {
-                            birthdayPerson = n;
-                        }
-                        return birthdayPerson == null;
-                    });
-                    return birthdayPerson == null;
-                case TRAVELING_CART:
-                    return !TravelingMerchantInjections.IsTravelingMerchantDay(Game1.dayOfMonth);
-                case BOOKSELLER:
-                    return !Utility.getDaysOfBooksellerThisSeason().Contains(Game1.dayOfMonth);
-                case ANY_CROP_READY:
-                    CheckAllCrops(out _, out var anyReady, out allReady);
-                    return !anyReady && !allReady;
-                case ALL_CROPS_READY:
-                    CheckAllCrops(out var anyNotReady, out _, out allReady);
-                    return anyNotReady && !allReady;
-                case HIBERNATE:
-                    return ArchipelagoJunimoNoteMenu.IsBundleRemaining(MemeBundleNames.HIBERNATION);
-                default:
-                    return false;
+                return !Game1.isRaining && !Game1.isLightning && !Game1.isGreenRain;
             }
+
+            if (IsBehavior(_untilWhat, STORM))
+            {
+                return !Game1.isLightning;
+            }
+
+            if (IsBehavior(_untilWhat, GREAT_LUCK))
+            {
+                return Game1.player.DailyLuck <= 0.07;
+            }
+
+            if (IsBehavior(_untilWhat, FESTIVAL))
+            {
+                return !IsFestivalDay();
+            }
+
+            if (IsBehavior(_untilWhat, BIRTHDAY))
+            {
+                NPC birthdayPerson = null;
+                Utility.ForEachVillager(n =>
+                {
+                    if (n.Birthday_Season == Game1.currentSeason && n.Birthday_Day == Game1.dayOfMonth)
+                    {
+                        birthdayPerson = n;
+                    }
+                    return birthdayPerson == null;
+                });
+                return birthdayPerson == null;
+            }
+
+            if (IsBehavior(_untilWhat, TRAVELING_CART))
+            {
+                return !TravelingMerchantInjections.IsTravelingMerchantDay(Game1.dayOfMonth);
+            }
+
+            if (IsBehavior(_untilWhat, BOOKSELLER))
+            {
+                return !Utility.getDaysOfBooksellerThisSeason().Contains(Game1.dayOfMonth);
+            }
+
+            bool allReady;
+            if (IsBehavior(_untilWhat, ANY_CROP_READY))
+            {
+                CheckAllCrops(out _, out var anyReady, out allReady);
+                return !anyReady && !allReady;
+            }
+
+            if (IsBehavior(_untilWhat, ALL_CROPS_READY))
+            {
+                CheckAllCrops(out var anyNotReady, out _, out allReady);
+                return anyNotReady && !allReady;
+            }
+
+            if (IsBehavior(_untilWhat, HIBERNATE))
+            {
+                return ArchipelagoJunimoNoteMenu.IsBundleRemaining(MemeBundleNames.HIBERNATION);
+            }
+
+            return false;
         }
 
         private static bool IsFestivalDay()

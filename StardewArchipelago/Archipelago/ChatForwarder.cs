@@ -1,8 +1,11 @@
-﻿using HarmonyLib;
+﻿using Archipelago.MultiClient.Net.MessageLog.Parts;
+using HarmonyLib;
+using KaitoKid.Utilities.Interfaces;
 using Microsoft.Xna.Framework;
 using StardewArchipelago.Archipelago.Gifting;
 using StardewArchipelago.GameModifications;
 using StardewArchipelago.GameModifications.CodeInjections;
+using StardewArchipelago.GameModifications.MultiSleep;
 using StardewArchipelago.Goals;
 using StardewArchipelago.Items.Traps;
 using StardewArchipelago.Locations.CodeInjections.Vanilla;
@@ -15,7 +18,6 @@ using StardewValley.Menus;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using KaitoKid.Utilities.Interfaces;
 
 #if TILESANITY
 using StardewArchipelago.Archipelago.SlotData.SlotEnums;
@@ -493,19 +495,41 @@ namespace StardewArchipelago.Archipelago
 
         private static bool HandleSleepCommand(string message)
         {
-            if (message != $"{COMMAND_PREFIX}sleep")
+            if (!message.StartsWith($"{COMMAND_PREFIX}sleep"))
             {
                 return false;
             }
 
-            SleepImmediately();
+            var numberOfDays = 1;
+            var messageParts = message.Split(" ");
+
+            SleepImmediately(messageParts.Skip(1).ToArray());
             return true;
         }
 
-        public static void SleepImmediately()
+        public static void SleepImmediately(string[] messageParts)
+        {
+            SetMultisleep(messageParts);
+            Game1.player.startToPassOut();
+        }
+
+        private static void SetMultisleep(string[] messageParts)
         {
             SetLastBedToFarmhouse();
-            Game1.player.startToPassOut();
+            if (messageParts == null || messageParts.Length <= 0)
+            {
+                return;
+            }
+
+            var argument = string.Join("", messageParts);
+            argument = argument.Replace(" ", "").Replace(",", "").Replace("_", "").Replace("-", "");
+            if (int.TryParse(argument, out var numberOfDays))
+            {
+                MultiSleepManager.SetDaysToSkip(numberOfDays);
+                return;
+            }
+
+            MultiSleepManager.SetCurrentUntilBehavior(argument);
         }
 
         private static void SetLastBedToFarmhouse()

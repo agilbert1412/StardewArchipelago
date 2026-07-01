@@ -26,6 +26,7 @@ namespace StardewArchipelago.GameModifications.MultiSleep
 
         public static MultiSleepBehavior _currentMultiSleep;
         public static MultiSleepBehavior CurrentMultiSleep => _currentMultiSleep;
+        private static bool _multiSleepEnabled = false;
         private static int _multiSleepPrice = 0;
 
         public MultiSleepManager(ILogger logger, IModHelper modHelper, StardewArchipelagoClient archipelago, Harmony harmony)
@@ -39,7 +40,7 @@ namespace StardewArchipelago.GameModifications.MultiSleep
 
         public static bool TryDoMultiSleepOnDayStarted()
         {
-            if (!_currentMultiSleep.ShouldKeepSleeping())
+            if (!_multiSleepEnabled || !_currentMultiSleep.ShouldKeepSleeping())
             {
                 _currentMultiSleep = new DontMultiSleepBehavior();
                 return false;
@@ -65,7 +66,8 @@ namespace StardewArchipelago.GameModifications.MultiSleep
                 prefix: new HarmonyMethod(typeof(MultiSleepManager), nameof(PerformTouchAction_Sleep_Prefix))
             );
 
-            if (!slotData.EnableMultiSleep)
+            _multiSleepEnabled = slotData.EnableMultiSleep;
+            if (!_multiSleepEnabled)
             {
                 return;
             }
@@ -216,7 +218,7 @@ namespace StardewArchipelago.GameModifications.MultiSleep
                 case MultiSleepUntilBehavior.ANY_CROP_READY:
                 case MultiSleepUntilBehavior.ALL_CROPS_READY:
                 case MultiSleepUntilBehavior.HIBERNATE:
-                    _currentMultiSleep = new MultiSleepUntilBehavior(untilKey);
+                    SetCurrentUntilBehavior(untilKey);
                     StartSleep(instance);
                     return;
                 case MultiSleepUntilBehavior.END_OF_MONTH:
@@ -228,6 +230,16 @@ namespace StardewArchipelago.GameModifications.MultiSleep
                     _currentMultiSleep = new DontMultiSleepBehavior();
                     return;
             }
+        }
+
+        public static void SetCurrentUntilBehavior(string behaviorKey)
+        {
+            SetCurrentUntilBehavior(new MultiSleepUntilBehavior(behaviorKey));
+        }
+
+        public static void SetCurrentUntilBehavior(MultiSleepUntilBehavior behavior)
+        {
+            _currentMultiSleep = behavior;
         }
 
         public static void SleepMany(GameLocation instance, int numberOfDays)
