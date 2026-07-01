@@ -167,7 +167,7 @@ namespace StardewArchipelago.Locations.ShopStockModifiers
             {
                 var spouseLocationName = "Purchase Spouse Portrait";
                 var apSpouseShopItem = CreateArchipelagoLocation(item, spouseLocationName);
-                apSpouseShopItem.Condition = "PLAYER_HEARTS Current AnyDateable 14";
+                apSpouseShopItem.Condition = "PLAYER_HEARTS Current Any 14";
                 cartShopData.Items.Insert(i, apSpouseShopItem);
                 i++;
                 createdSpousePortrait = true;
