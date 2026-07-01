@@ -414,6 +414,11 @@ namespace StardewArchipelago.GameModifications
             );
 
             _harmony.Patch(
+                original: AccessTools.PropertyGetter(typeof(Game1), nameof(Game1.Date)),
+                prefix: new HarmonyMethod(typeof(SeasonsRandomizer), nameof(SeasonsRandomizer.Game1Date_UseTotalDaysStats_Prefix))
+            );
+
+            _harmony.Patch(
                 original: AccessTools.Method(typeof(WorldDate), nameof(WorldDate.Now)),
                 prefix: new HarmonyMethod(typeof(SeasonsRandomizer), nameof(SeasonsRandomizer.WorldDateNow_UseTotalDaysStats_Prefix))
             );
