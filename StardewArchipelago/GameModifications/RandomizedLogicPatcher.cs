@@ -77,7 +77,7 @@ namespace StardewArchipelago.GameModifications
             FarmerInjections.Initialize(logger, _archipelago);
             EventInjections.Initialize(logger, _archipelago, locationChecker);
             AchievementInjections.Initialize(logger, _archipelago);
-            EntranceInjections.Initialize(logger, _helper, _archipelago, entranceManager);
+            EntranceInjections.Initialize(logger, _helper, _archipelago, entranceManager, state);
             ForestInjections.Initialize(logger, _archipelago);
             MountainInjections.Initialize(logger, modHelper, _archipelago);
             TheaterInjections.Initialize(logger, modHelper, archipelago);
