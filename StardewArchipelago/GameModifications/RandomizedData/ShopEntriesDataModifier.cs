@@ -70,7 +70,7 @@ namespace StardewArchipelago.GameModifications.RandomizedData
 
                         foreach (var (itemName, itemData) in items)
                         {
-                            _specialCaseShops.Add(itemName, itemData);
+                            _specialCaseShops.TryAdd(itemName, itemData);
                         }
                     }
 
