@@ -61,7 +61,7 @@ namespace StardewArchipelago.GameModifications.EntranceRandomizer
                 var chosenIndex2 = random.Next(keys.Length);
                 var chosenEntrance1 = keys[chosenIndex1];
                 var chosenEntrance2 = keys[chosenIndex2];
-                SwapTwoEntrances(newModifiedEntrances, chosenEntrance1, chosenEntrance2);
+                SwapTwoEntrances(slotData, newModifiedEntrances, chosenEntrance1, chosenEntrance2);
             }
 
             ModifiedEntrances = new Dictionary<string, string>(newModifiedEntrances, StringComparer.OrdinalIgnoreCase);
@@ -119,11 +119,20 @@ namespace StardewArchipelago.GameModifications.EntranceRandomizer
             }
         }
 
-        private static void SwapTwoEntrances(Dictionary<string, string> entrances, string entrance1, string entrance2)
+        private static void SwapTwoEntrances(SlotData slotData, Dictionary<string, string> entrances, string entrance1, string entrance2)
         {
             // Trust me
             var destination1 = entrances[entrance1];
             var destination2 = entrances[entrance2];
+
+            // Way less work for decoupled
+            if (slotData.EntranceRandomizationBehavior.HasFlag(EntranceRandomizationBehavior.Decoupled))
+            {
+                entrances[entrance1] = destination2;
+                entrances[entrance2] = destination1;
+                return;
+            }
+
             var reversed1 = ReverseKey(entrance1);
             var reversed2 = ReverseKey(entrance2);
             var reversedDestination1 = ReverseKey(destination1);
