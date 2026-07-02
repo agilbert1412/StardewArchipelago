@@ -105,11 +105,14 @@ namespace StardewArchipelago.GameModifications.RandomizedData
 
             var originalIsCrabPot = fishDifficultyOrTrap.Equals("trap", StringComparison.InvariantCultureIgnoreCase);
 
-            if (randomizedData.Method.Equals(RandomizedFishData.CATCH_METHOD_CRAB_POT))
+            var isCrabPot = randomizedData.Method == null ? originalIsCrabPot : randomizedData.Method.Equals(RandomizedFishData.CATCH_METHOD_CRAB_POT);
+            var isFishingRod = randomizedData.Method == null ? !originalIsCrabPot : randomizedData.Method.Equals(RandomizedFishData.CATCH_METHOD_FISHING_ROD);
+
+            if (isCrabPot)
             {
                 fishDataFields = ModifyCrabPotFishDataFields(randomizedData, originalIsCrabPot, fishDataFields, fishName);
             }
-            else if (randomizedData.Method.Equals(RandomizedFishData.CATCH_METHOD_FISHING_ROD))
+            else if (isFishingRod)
             {
                 fishDataFields = ModifyFishingRodFishDataFields(originalIsCrabPot, fishDataFields, fishName, randomizedData, difficultyIndex);
             }
