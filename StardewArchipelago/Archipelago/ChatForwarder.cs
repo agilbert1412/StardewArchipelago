@@ -525,7 +525,7 @@ namespace StardewArchipelago.Archipelago
             argument = argument.Replace(" ", "").Replace(",", "").Replace("_", "").Replace("-", "");
             if (int.TryParse(argument, out var numberOfDays))
             {
-                MultiSleepManager.SetDaysToSkip(numberOfDays);
+                MultiSleepManager.SetDaysToSkip(numberOfDays-1);
                 return;
             }
 
