@@ -5,6 +5,7 @@ using Microsoft.Xna.Framework;
 using StardewArchipelago.Archipelago;
 using StardewArchipelago.Constants;
 using StardewArchipelago.GameModifications.EntranceRandomizer;
+using StardewArchipelago.Serialization;
 using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Locations;
@@ -20,15 +21,17 @@ namespace StardewArchipelago.GameModifications.CodeInjections
         private static IModHelper _helper;
         private static StardewArchipelagoClient _archipelago;
         private static EntranceManager _entranceManager;
+        private static ArchipelagoStateDto _state;
 
         private static bool _skipER = false;
 
-        public static void Initialize(ILogger logger, IModHelper helper, StardewArchipelagoClient archipelago, EntranceManager entranceManager)
+        public static void Initialize(ILogger logger, IModHelper helper, StardewArchipelagoClient archipelago, EntranceManager entranceManager, ArchipelagoStateDto state)
         {
             _logger = logger;
             _helper = helper;
             _archipelago = archipelago;
             _entranceManager = entranceManager;
+            _state = state;
         }
 
         public static bool PerformWarpFarmer_EntranceRandomization_Prefix(ref LocationRequest locationRequest, ref int tileX,
@@ -179,7 +182,7 @@ namespace StardewArchipelago.GameModifications.CodeInjections
             }
 
             _skipER = true;
-            if (Game1.player.currentLocation is Farm farm)
+            if (Game1.player.currentLocation is Farm farm && _state.HasFoundFarmhouseBed)
             {
                 var insideHouseSpot = homeOfFarmer.GetPlayerBedSpot();
                 Game1.warpFarmer(homeOfFarmer.Name, insideHouseSpot.X, insideHouseSpot.Y, false);
