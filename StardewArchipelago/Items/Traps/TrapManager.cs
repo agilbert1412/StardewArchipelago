@@ -148,6 +148,11 @@ namespace StardewArchipelago.Items.Traps
                 original: AccessTools.Method(typeof(FarmAnimal), nameof(FarmAnimal.setRandomPosition)),
                 prefix: new HarmonyMethod(typeof(CowInjections), nameof(CowInjections.SetRandomPosition_DontLookForProduceArea_Prefix))
             );
+
+            harmony.Patch(
+                original: AccessTools.Method(typeof(FarmAnimal), nameof(FarmAnimal.pet)),
+                prefix: new HarmonyMethod(typeof(CowInjections), nameof(CowInjections.Pet_DontShowMenu_Prefix))
+            );
         }
 
         public bool IsTrap(string unlockName)

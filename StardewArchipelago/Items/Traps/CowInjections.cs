@@ -248,5 +248,26 @@ namespace StardewArchipelago.Items.Traps
 
             cow.SleepIfNecessary();
         }
+
+        // public void pet(Farmer who, bool is_auto_pet = false)
+        public static bool Pet_DontShowMenu_Prefix(FarmAnimal __instance, Farmer who, bool is_auto_pet)
+        {
+            try
+            {
+                if (!__instance.modData.ContainsKey(INVISIBLE_COW_KEY))
+                {
+                    return MethodPrefix.RUN_ORIGINAL_METHOD;
+                }
+
+                __instance.wasPet.Set(false);
+                return MethodPrefix.RUN_ORIGINAL_METHOD;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Failed in {nameof(Pet_DontShowMenu_Prefix)}:\n{ex}");
+                return MethodPrefix.RUN_ORIGINAL_METHOD;
+            }
+
+        }
     }
 }
