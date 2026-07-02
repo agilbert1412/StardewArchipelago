@@ -836,13 +836,15 @@ namespace StardewArchipelago.GameModifications.Shops
             var getHoveredItemExtraItemAmountMethod = _helper.Reflection.GetMethod(menu, "getHoveredItemExtraItemAmount");
             var hoveredItemExtraItemAmount = getHoveredItemExtraItemAmountMethod.Invoke<int>();
 
+            var currencySymbol = GetCurrencyIndex(menu, hoveredItem2);
+
             if ((hoveredItem2 != null ? (hoveredItem2.IsRecipe ? 1 : 0) : 0) != 0)
             {
-                IClickableMenu.drawToolTip(b, " ", menu.boldTitleText, hoveredItem1, menu.heldItem != null, currencySymbol: menu.currency, extraItemToShowIndex: hoveredItemExtraItemIndex, extraItemToShowAmount: hoveredItemExtraItemAmount, craftingIngredients: new CraftingRecipe(hoveredItem1?.BaseName ?? menu.hoveredItem.Name), moneyAmountToShowAtBottom: menu.hoverPrice > 0 ? menu.hoverPrice : -1);
+                IClickableMenu.drawToolTip(b, " ", menu.boldTitleText, hoveredItem1, menu.heldItem != null, currencySymbol: currencySymbol, extraItemToShowIndex: hoveredItemExtraItemIndex, extraItemToShowAmount: hoveredItemExtraItemAmount, craftingIngredients: new CraftingRecipe(hoveredItem1?.BaseName ?? menu.hoveredItem.Name), moneyAmountToShowAtBottom: menu.hoverPrice > 0 ? menu.hoverPrice : -1);
             }
             else
             {
-                IClickableMenu.drawToolTip(b, materialsHoverText, menu.boldTitleText, hoveredItem1, menu.heldItem != null, currencySymbol: menu.currency, extraItemToShowIndex: hoveredItemExtraItemIndex, extraItemToShowAmount: hoveredItemExtraItemAmount, moneyAmountToShowAtBottom: menu.hoverPrice > 0 ? menu.hoverPrice : -1);
+                IClickableMenu.drawToolTip(b, materialsHoverText, menu.boldTitleText, hoveredItem1, menu.heldItem != null, currencySymbol: currencySymbol, extraItemToShowIndex: hoveredItemExtraItemIndex, extraItemToShowAmount: hoveredItemExtraItemAmount, moneyAmountToShowAtBottom: menu.hoverPrice > 0 ? menu.hoverPrice : -1);
             }
 
             DrawHoverItemCurrency(menu, b, hoveredItem2);

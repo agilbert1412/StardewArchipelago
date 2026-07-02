@@ -244,15 +244,19 @@ namespace StardewArchipelago.GameModifications.RandomizedData
 
         private static void ModifyShopItemCurrency(ShopItemData shopDataItem, RandomizedShopItemData randomizedShopItemData)
         {
-            ModifyShopItemCurrency(shopDataItem.ModData, randomizedShopItemData);
+            ModifyShopItemCurrency(shopDataItem, shopDataItem.ModData, randomizedShopItemData);
         }
 
-        private static void ModifyShopItemCurrency(Dictionary<string, string> shopDataItemModData, RandomizedShopItemData randomizedShopItemData)
+        private static void ModifyShopItemCurrency(ShopItemData shopDataItem, Dictionary<string, string> shopDataItemModData, RandomizedShopItemData randomizedShopItemData)
         {
             if (!string.IsNullOrWhiteSpace(randomizedShopItemData.Currency))
             {
                 shopDataItemModData.TryAdd(ShopMenuInjections.CURRENCY_KEY, randomizedShopItemData.Currency);
                 shopDataItemModData[ShopMenuInjections.CURRENCY_KEY] = randomizedShopItemData.Currency;
+                if (shopDataItem.TradeItemId == QualifiedItemIds.QI_GEM || shopDataItem.TradeItemId == QualifiedItemIds.GOLDEN_WALNUT)
+                {
+                    shopDataItem.TradeItemId = null;
+                }
             }
         }
 
