@@ -8,6 +8,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 using StardewArchipelago.Archipelago;
 using StardewArchipelago.Archipelago.SlotData;
+using StardewArchipelago.Archipelago.SlotData.SlotEnums;
 using StardewArchipelago.Constants;
 using StardewArchipelago.Locations.CodeInjections.Vanilla;
 using StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles;
@@ -176,7 +177,10 @@ namespace StardewArchipelago.GameModifications.MultiSleep
                 possibleResponses.Add(new Response(MultiSleepUntilBehavior.GREAT_LUCK, "Great Luck"));
             }
             possibleResponses.Add(new Response(MultiSleepUntilBehavior.FESTIVAL, "Festival"));
-            possibleResponses.Add(new Response(MultiSleepUntilBehavior.BIRTHDAY, "Birthday"));
+            if (AnyVillagerBirthdayThisMonth())
+            {
+                possibleResponses.Add(new Response(MultiSleepUntilBehavior.BIRTHDAY, "Birthday"));
+            }
             if (TravelingMerchantInjections.HasAnyTravelingMerchantDay())
             {
                 possibleResponses.Add(new Response(MultiSleepUntilBehavior.TRAVELING_CART, "Traveling Cart"));
@@ -202,6 +206,34 @@ namespace StardewArchipelago.GameModifications.MultiSleep
             possibleResponses.Add(new Response("Cancel", "Nevermind").SetHotKey(Keys.Escape));
 
             __instance.createQuestionDialogue(multiSleepMessage, possibleResponses.ToArray(), "SleepUntil", null);
+        }
+
+        private static bool AnyVillagerBirthdayThisMonth()
+        {
+            if (!_archipelago.SlotData.StartWithout.HasFlag(StartWithout.Villagers))
+            {
+                return true;
+            }
+
+            foreach (var (character, characterData) in Game1.characterData)
+            {
+                if (characterData == null || !characterData.CanReceiveGifts)
+                {
+                    continue;
+                }
+
+                if (characterData.BirthSeason == null)
+                {
+                    continue;
+                }
+
+                if (characterData.BirthSeason == Game1.season && _archipelago.HasReceivedItem($"{character} Arrival"))
+                {
+                    return true;
+                }
+            }
+
+            return false;
         }
 
         public static void InitiateSleepUntil(GameLocation instance, string untilKey)
