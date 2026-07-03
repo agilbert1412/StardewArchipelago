@@ -5,6 +5,7 @@ using Microsoft.Xna.Framework.Graphics;
 using StardewArchipelago.Archipelago;
 using StardewModdingAPI;
 using StardewValley;
+using StardewValley.GameData.FarmAnimals;
 using System;
 
 namespace StardewArchipelago.Items.Traps
@@ -140,7 +141,7 @@ namespace StardewArchipelago.Items.Traps
                 }
 
                 var difficulty = _archipelago.SlotData.TrapItemsDifficulty;
-                double chanceToDespawnPerDay = _difficultyBalancer.CowDespawnChancePerDay[difficulty];
+                var chanceToDespawnPerDay = _difficultyBalancer.CowDespawnChancePerDay[difficulty];
                 if (Game1.random.NextDouble() < chanceToDespawnPerDay)
                 {
                     if (__instance.homeInterior is AnimalHouse animalHouse)
@@ -235,7 +236,7 @@ namespace StardewArchipelago.Items.Traps
             //    return;
             var tile = location.getRandomTile();
             cow.Position = new Vector2(tile.X * 64f, tile.Y * 64f);
-            int num = 0;
+            var num = 0;
             while (cow.Position.Equals(Vector2.Zero) || location.Objects.ContainsKey(cow.Position) || location.isCollidingPosition(cow.GetBoundingBox(), Game1.viewport, false, 0, false, cow))
             {
                 tile = location.getRandomTile();
@@ -259,8 +260,46 @@ namespace StardewArchipelago.Items.Traps
                     return MethodPrefix.RUN_ORIGINAL_METHOD;
                 }
 
-                __instance.wasPet.Set(false);
-                return MethodPrefix.RUN_ORIGINAL_METHOD;
+                var autoPetFriendship = 7;
+                if (__instance.wasAutoPet.Value)
+                {
+                    __instance.friendshipTowardFarmer.Value = Math.Min(1000, __instance.friendshipTowardFarmer.Value + autoPetFriendship);
+                }
+                else if (is_auto_pet)
+                {
+                    __instance.friendshipTowardFarmer.Value = Math.Min(1000, __instance.friendshipTowardFarmer.Value + (15 - autoPetFriendship));
+                }
+                else
+                {
+                    __instance.friendshipTowardFarmer.Value = Math.Min(1000, __instance.friendshipTowardFarmer.Value + 15);
+                }
+                if (is_auto_pet)
+                {
+                    __instance.wasAutoPet.Value = true;
+                }
+                var animalData = __instance.GetAnimalData();
+                var happinessDrain = animalData != null ? animalData.HappinessDrain : 0;
+                if (!is_auto_pet)
+                {
+                    if (animalData != null && animalData.ProfessionForHappinessBoost >= 0 && who.professions.Contains(animalData.ProfessionForHappinessBoost))
+                    {
+                        __instance.friendshipTowardFarmer.Value = Math.Min(1000, __instance.friendshipTowardFarmer.Value + 15);
+                        __instance.happiness.Value = (byte)Math.Min(byte.MaxValue, __instance.happiness.Value + Math.Max(5, 30 + happinessDrain));
+                    }
+                    var num2 = 20;
+                    if (__instance.wasAutoPet.Value)
+                    {
+                        num2 = 32;
+                    }
+                    __instance.doEmote(__instance.moodMessage.Value == 4 ? 12 : num2);
+                }
+                __instance.happiness.Value = (byte)Math.Min(byte.MaxValue, __instance.happiness.Value + Math.Max(5, 30 + happinessDrain));
+                if (!is_auto_pet)
+                {
+                    __instance.makeSound();
+                    // who.gainExperience(0, 5);
+                }
+                return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
             }
             catch (Exception ex)
             {
