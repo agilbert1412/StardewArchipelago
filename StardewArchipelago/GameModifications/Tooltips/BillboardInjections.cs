@@ -363,15 +363,26 @@ namespace StardewArchipelago.GameModifications.Tooltips
         private static IEnumerable<string> GetMissingSecretsChecks(int day)
         {
             var season = Game1.season;
+            var festivalIdentifier = FestivalLocationNames.GetFestivalIdentifier(Game1.season, day);
             foreach (var secretDate in SecretsLocationNames.SECRET_DATES)
             {
                 var secretName = secretDate.Name;
-                var secretSeasons = secretDate.Seasons;
-                var secretDays = secretDate.Days;
-
-                if (!secretSeasons.Contains(season) || !secretDays.Contains(day))
+                if (secretDate.IsRelatedToFestival)
                 {
-                    continue;
+                    var secretFestival = secretDate.AssociatedFestival;
+                    if (!secretFestival.Equals(festivalIdentifier, StringComparison.InvariantCultureIgnoreCase))
+                    {
+                        continue;
+                    }
+                }
+                else
+                {
+                    var secretSeasons = secretDate.Seasons;
+                    var secretDays = secretDate.Days;
+                    if (!secretSeasons.Contains(season) || !secretDays.Contains(day))
+                    {
+                        continue;
+                    }
                 }
 
 

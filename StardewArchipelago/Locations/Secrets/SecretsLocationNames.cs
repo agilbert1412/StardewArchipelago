@@ -1,6 +1,7 @@
-﻿using System.Collections.Generic;
-using StardewArchipelago.Constants.Vanilla;
+﻿using StardewArchipelago.Constants.Vanilla;
+using StardewArchipelago.Locations.Festival;
 using StardewValley;
+using System.Collections.Generic;
 
 namespace StardewArchipelago.Locations.Secrets
 {
@@ -157,10 +158,10 @@ namespace StardewArchipelago.Locations.Secrets
         public static readonly List<SecretData> SECRET_DATES = new List<SecretData>()
         {
             new(POT_OF_GOLD, Season.Spring, 17),
-            new(POISON_THE_GOVERNOR, Season.Summer, 11),
-            new(GRANGE_DISPLAY_BRIBE, Season.Fall, 16),
-            new(PURPLE_LETTUCE, Season.Fall, 16),
-            new(SOMETHING_FOR_SANTA, Season.Winter, 24),
+            new(POISON_THE_GOVERNOR, FestivalNames.LUAU),
+            new(GRANGE_DISPLAY_BRIBE, FestivalNames.FAIR),
+            new(PURPLE_LETTUCE, FestivalNames.FAIR),
+            new(SOMETHING_FOR_SANTA, FestivalNames.WINTER_STAR),
             new(ANNOY_THE_MOON_MAN, 27),
             new(FREE_THE_FORSAKEN_SOULS, Season.Fall, 26),
 
@@ -187,6 +188,14 @@ namespace StardewArchipelago.Locations.Secrets
         public string Name { get; }
         public Season[] Seasons { get; }
         public int[] Days { get; }
+        public string AssociatedFestival { get; }
+        public bool IsRelatedToFestival => !string.IsNullOrEmpty(AssociatedFestival);
+
+        public SecretData(string name, string festival)
+        {
+            Name = name;
+            AssociatedFestival = festival;
+        }
 
         public SecretData(string name, int day) : this(name, new[] { Season.Spring, Season.Summer, Season.Fall, Season.Winter }, new[] { day })
         {
