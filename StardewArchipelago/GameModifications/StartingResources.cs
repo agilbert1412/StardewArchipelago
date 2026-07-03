@@ -46,6 +46,7 @@ namespace StardewArchipelago.GameModifications
             RemoveShippingBin();
             RemovePetBowls();
             SendGilTelephoneLetter();
+            GrantStartingQuest();
         }
 
         private void GivePlayerStartingMoney()
@@ -271,6 +272,12 @@ namespace StardewArchipelago.GameModifications
                 return;
             }
             Game1.player.mailReceived.Add(mailId);
+        }
+
+        public void GrantStartingQuest()
+        {
+            Game1.player.addQuest(Game1.GetFarmTypeID() == "MeadowlandsFarm" ? "132" : "6");
+            Game1.dayTimeMoneyBox.PingQuestLog();
         }
     }
 }
