@@ -13,6 +13,8 @@ namespace StardewArchipelago.Items.Unlocks.Vanilla
     {
         public const string PROGRESSIVE_TOOL_AP_PREFIX = "Progressive ";
         public const string PROGRESSIVE_FISHING_ROD = "Progressive Fishing Rod";
+        public const string PROGRESSIVE_AXE = "Progressive Axe";
+        public const string PROGRESSIVE_PICKAXE = "Progressive Pickaxe";
         public const string RETURN_SCEPTER = "Return Scepter";
         public const string PROGRESSIVE_SCYTHE = "Progressive Scythe";
         public const string GOLDEN_SCYTHE = "Golden Scythe";
@@ -106,6 +108,26 @@ namespace StardewArchipelago.Items.Unlocks.Vanilla
             }
 
             return PlayerHasFishingRodAnywhere();
+        }
+
+        public static bool HasAnyAxe(StardewArchipelagoClient archipelago)
+        {
+            if (archipelago.SlotData.ToolProgression.HasFlag(ToolProgression.Progressive) && archipelago.SlotData.StartWithout.HasFlag(StartWithout.Tools))
+            {
+                return archipelago.HasReceivedItem(PROGRESSIVE_AXE);
+            }
+
+            return true;
+        }
+
+        public static bool HasAnyPickaxe(StardewArchipelagoClient archipelago)
+        {
+            if (archipelago.SlotData.ToolProgression.HasFlag(ToolProgression.Progressive) && archipelago.SlotData.StartWithout.HasFlag(StartWithout.Tools))
+            {
+                return archipelago.HasReceivedItem(PROGRESSIVE_PICKAXE);
+            }
+
+            return true;
         }
 
         private static bool PlayerHasFishingRodAnywhere()

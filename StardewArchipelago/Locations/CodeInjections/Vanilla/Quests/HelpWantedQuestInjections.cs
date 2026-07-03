@@ -197,7 +197,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Quests
             {
                 AddWeightedItemDeliveries(groupNumber, hints, remainingHelpWantedQuests);
                 AddWeightedFishing(groupNumber, hints, remainingHelpWantedQuests);
-                AddWeightedHelpWanted(groupNumber, DailyQuest.GATHERING, hints, remainingHelpWantedQuests);
+                AddWeightedGathering(groupNumber, hints, remainingHelpWantedQuests);
                 AddWeightedSlaying(groupNumber, hints, remainingHelpWantedQuests);
             }
 
@@ -206,6 +206,12 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Quests
 
         private static void AddWeightedItemDeliveries(int groupNumber, Hint[] hints, List<string> remainingHelpWantedQuests)
         {
+            var quest = new ItemDeliveryQuest();
+            if (!quest.GetValidTargetList().Any())
+            {
+                return;
+            }
+
             const int itemDeliveryMultiplier = 4;
             var offset = ((groupNumber - 1) * itemDeliveryMultiplier) + 1;
             for (var delivery = 0; delivery < 4; delivery++)
@@ -216,7 +222,8 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Quests
 
         private static void AddWeightedFishing(int groupNumber, Hint[] hints, List<string> remainingHelpWantedQuests)
         {
-            if (!ToolUnlockManager.HasAnyFishingRod(_archipelago))
+            var validTargets = new[] { "Willy", "Clint" };
+            if (!ToolUnlockManager.HasAnyFishingRod(_archipelago) || validTargets.All(x => Game1.getCharacterFromName(x) == null))
             {
                 return;
             }
@@ -226,12 +233,24 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Quests
 
         private static void AddWeightedSlaying(int groupNumber, Hint[] hints, List<string> remainingHelpWantedQuests)
         {
-            if (Game1.stats.MonstersKilled < 10)
+            var validTargets = new[] { "Clint", "Lewis", "Demetrius", "Wizard" };
+            if (Game1.stats.MonstersKilled < 10 || validTargets.All(x => Game1.getCharacterFromName(x) == null))
             {
                 return;
             }
 
             AddWeightedHelpWanted(groupNumber, DailyQuest.SLAY_MONSTERS, hints, remainingHelpWantedQuests);
+        }
+
+        private static void AddWeightedGathering(int groupNumber, Hint[] hints, List<string> remainingHelpWantedQuests)
+        {
+            var validTargets = new[] { "Clint", "Robin" };
+            if ((!ToolUnlockManager.HasAnyAxe(_archipelago) && !ToolUnlockManager.HasAnyPickaxe(_archipelago)) || validTargets.All(x => Game1.getCharacterFromName(x) == null))
+            {
+                return;
+            }
+
+            AddWeightedHelpWanted(groupNumber, DailyQuest.GATHERING, hints, remainingHelpWantedQuests);
         }
 
         private static void AddWeightedHelpWanted(int questNumber, string questType, Hint[] hints, List<string> remainingHelpWantedQuests)
