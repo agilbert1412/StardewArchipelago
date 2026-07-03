@@ -5,6 +5,12 @@ namespace StardewArchipelago.Archipelago
 {
 	public static class MailboxHelper {
 		public static void TryGetNextMail() {
+
+            if (Game1.eventUp || Game1.IsFading() || Game1.activeClickableMenu != null || Game1.player.isEmoteAnimating || Game1.player.isEating || !Game1.player.CanMove)
+            {
+                return;
+            }
+
 			var mailAmount = Game1.mailbox.Count;
 			if (mailAmount <= 0)
 			{
