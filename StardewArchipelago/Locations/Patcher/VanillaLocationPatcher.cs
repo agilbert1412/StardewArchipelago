@@ -716,7 +716,7 @@ namespace StardewArchipelago.Locations.Patcher
             var performActionArgumentTypes = new[] { typeof(string[]), typeof(Farmer), typeof(Location) };
             _harmony.Patch(
                 original: AccessTools.Method(typeof(GameLocation), nameof(GameLocation.performAction), performActionArgumentTypes),
-                prefix: new HarmonyMethod(typeof(WizardBookInjections), nameof(WizardBookInjections.PerformAction_WizardBook_Prefix))
+                prefix: new HarmonyMethod(typeof(WizardBookInjections), nameof(WizardBookInjections.PerformAction_WizardBookAndHatch_Prefix))
             );
             _harmony.Patch(
                 original: AccessTools.Method(typeof(GameLocation), nameof(GameLocation.answerDialogueAction)),
