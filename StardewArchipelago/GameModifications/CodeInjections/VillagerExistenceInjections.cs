@@ -55,7 +55,21 @@ namespace StardewArchipelago.GameModifications.CodeInjections
                     return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
                 }
 
-                bypassConditions = true;
+                if (!NPC.TryGetData(characterId, out var data))
+                {
+                    return MethodPrefix.RUN_ORIGINAL_METHOD;
+                }
+
+                if (data.UnlockConditions == null)
+                {
+                    return MethodPrefix.RUN_ORIGINAL_METHOD;
+                }
+
+                if (data.UnlockConditions.Equals("YEAR 2", StringComparison.InvariantCultureIgnoreCase))
+                {
+                    bypassConditions = true;
+                }
+
                 return MethodPrefix.RUN_ORIGINAL_METHOD;
             }
             catch (Exception ex)
