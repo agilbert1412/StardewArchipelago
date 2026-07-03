@@ -9,6 +9,7 @@ using StardewValley.Menus;
 using StardewArchipelago.Locations.InGameLocations;
 using System.Collections.Generic;
 using Archipelago.MultiClient.Net.Models;
+using Microsoft.Xna.Framework;
 using StardewArchipelago.Archipelago;
 using StardewArchipelago.Logging;
 using StardewArchipelago.Constants.Vanilla;
@@ -46,7 +47,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
         }
 
         // public virtual bool performAction(string[] action, Farmer who, Location tileLocation)
-        public static bool PerformAction_WizardBook_Prefix(GameLocation __instance, string[] action, Farmer who, Location tileLocation, ref bool __result)
+        public static bool PerformAction_WizardBookAndHatch_Prefix(GameLocation __instance, string[] action, Farmer who, Location tileLocation, ref bool __result)
         {
             try
             {
@@ -60,42 +61,77 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
                     return MethodPrefix.RUN_ORIGINAL_METHOD;
                 }
 
-                if (actionName != "WizardBook")
+                if (actionName == "WizardBook")
                 {
-                    return MethodPrefix.RUN_ORIGINAL_METHOD;
+                    __result = true;
+                    return PerformActionWizardBook(__instance, who);
                 }
 
-                __result = true;
-
-                var hasReceivedAnyBuildings = _wizardBuildings.Any(x => _archipelago.HasReceivedItem(x));
-                var hasMagicInk = who.hasMagicInk;
-                var canPurchaseBlueprints = hasMagicInk && _wizardBuildings.Any(x => _locationChecker.IsLocationMissing($"{x} Blueprint"));
-
-                if (!hasReceivedAnyBuildings && !canPurchaseBlueprints)
+                if (actionName == "WizardHatch")
                 {
-                    return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
+                    __result = true;
+                    return PerformActionWizardHatch(__instance, who, tileLocation);
                 }
 
-                if (hasReceivedAnyBuildings && !canPurchaseBlueprints)
-                {
-                    __instance.ShowConstructOptions("Wizard");
-                    return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
-                }
-
-                if (!hasReceivedAnyBuildings && canPurchaseBlueprints)
-                {
-                    ShowWizardBlueprintsShop();
-                    return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
-                }
-
-                ShowChoiceBetweenBuildingsAndShop(__instance);
-                return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
+                return MethodPrefix.RUN_ORIGINAL_METHOD;
             }
             catch (Exception ex)
             {
-                _logger.LogError($"Failed in {nameof(PerformAction_WizardBook_Prefix)}:\n{ex}");
+                _logger.LogError($"Failed in {nameof(PerformAction_WizardBookAndHatch_Prefix)}:\n{ex}");
                 return MethodPrefix.RUN_ORIGINAL_METHOD;
             }
+        }
+
+        private static bool PerformActionWizardBook(GameLocation __instance, Farmer who)
+        {
+            var hasReceivedAnyBuildings = _wizardBuildings.Any(x => _archipelago.HasReceivedItem(x));
+            var hasMagicInk = who.hasMagicInk;
+            var canPurchaseBlueprints = hasMagicInk && _wizardBuildings.Any(x => _locationChecker.IsLocationMissing($"{x} Blueprint"));
+
+            if (!hasReceivedAnyBuildings && !canPurchaseBlueprints)
+            {
+                return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
+            }
+
+            if (hasReceivedAnyBuildings && !canPurchaseBlueprints)
+            {
+                __instance.ShowConstructOptions("Wizard");
+                return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
+            }
+
+            if (!hasReceivedAnyBuildings && canPurchaseBlueprints)
+            {
+                ShowWizardBlueprintsShop();
+                return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
+            }
+
+            ShowChoiceBetweenBuildingsAndShop(__instance);
+            return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
+        }
+
+        private static bool PerformActionWizardHatch(GameLocation __instance, Farmer who, Location tileLocation)
+        {
+            Friendship friendship;
+            if (who.friendshipData.TryGetValue("Wizard", out friendship) && friendship.Points >= 1000)
+            {
+                __instance.playSound("doorClose", new Vector2?(new Vector2(tileLocation.X, tileLocation.Y)));
+                Game1.warpFarmer("WizardHouseBasement", 4, 4, true);
+            }
+            else
+            {
+                NPC character = __instance.getCharacterFromName("Wizard");
+                if (character == null)
+                {
+                    Game1.drawDialogueBox("You have a feeling you should not enter this yet...");
+                    return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
+                }
+
+                var dialogue = new Dialogue(character, "Data\\ExtraDialogue:Wizard_Hatch");
+                character.CurrentDialogue.Push(dialogue);
+                Game1.drawDialogue(character);
+            }
+
+            return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
         }
 
         private static void ShowChoiceBetweenBuildingsAndShop(GameLocation gameLocation)
