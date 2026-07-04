@@ -1,20 +1,25 @@
 ﻿using KaitoKid.ArchipelagoUtilities.Net.Constants;
 using KaitoKid.Utilities.Interfaces;
+using Microsoft.Xna.Framework;
 using StardewArchipelago.Archipelago;
 using StardewArchipelago.Archipelago.SlotData.SlotEnums;
+using StardewArchipelago.Constants.Vanilla;
+using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Characters;
+using StardewValley.Locations;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Microsoft.Xna.Framework;
-using StardewModdingAPI;
-using StardewValley.Locations;
+using System.Xml.Linq;
 
 namespace StardewArchipelago.GameModifications.CodeInjections
 {
     internal class VillagerExistenceInjections
     {
+        public const string MEET_PREFIX = "Meet ";
+        public const string ARRIVAL_SUFFIX = " Arrival";
+
         private static ILogger _logger;
         private static IModHelper _helper;
         private static StardewArchipelagoClient _archipelago;
@@ -443,10 +448,18 @@ namespace StardewArchipelago.GameModifications.CodeInjections
 
         }
 
-        private static string GetArrivalItem(string npcName)
+        public static string GetArrivalItem(string npcName)
         {
-            var arrivalItem = $"{npcName} Arrival";
+            var apName = NameAliases.NPCNameAliases.ContainsKey(npcName) ? NameAliases.NPCNameAliases[npcName] : npcName;
+            var arrivalItem = $"{apName}{ARRIVAL_SUFFIX}";
             return arrivalItem;
+        }
+
+        public static string GetMeetLocation(string npcName)
+        {
+            var apName = NameAliases.NPCNameAliases.ContainsKey(npcName) ? NameAliases.NPCNameAliases[npcName] : npcName;
+            var meetLocation = $"{MEET_PREFIX}{apName}";
+            return meetLocation;
         }
     }
 }

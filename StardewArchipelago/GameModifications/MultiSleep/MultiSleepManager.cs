@@ -10,6 +10,7 @@ using StardewArchipelago.Archipelago;
 using StardewArchipelago.Archipelago.SlotData;
 using StardewArchipelago.Archipelago.SlotData.SlotEnums;
 using StardewArchipelago.Constants;
+using StardewArchipelago.GameModifications.CodeInjections;
 using StardewArchipelago.Locations.CodeInjections.Vanilla;
 using StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles;
 using StardewModdingAPI;
@@ -227,7 +228,7 @@ namespace StardewArchipelago.GameModifications.MultiSleep
                     continue;
                 }
 
-                if (characterData.BirthSeason == Game1.season && _archipelago.HasReceivedItem($"{character} Arrival"))
+                if (characterData.BirthSeason == Game1.season && _archipelago.HasReceivedItem(VillagerExistenceInjections.GetArrivalItem(character)))
                 {
                     return true;
                 }

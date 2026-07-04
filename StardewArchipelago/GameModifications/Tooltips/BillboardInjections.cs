@@ -18,6 +18,7 @@ using StardewValley.Quests;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using StardewArchipelago.GameModifications.CodeInjections;
 using StardewArchipelago.Locations.CodeInjections.Vanilla.Quests;
 
 namespace StardewArchipelago.GameModifications.Tooltips
@@ -338,6 +339,11 @@ namespace StardewArchipelago.GameModifications.Tooltips
                 if (friend == null)
                 {
                     continue;
+                }
+
+                foreach (var location in _locationChecker.GetAllLocationsNotCheckedContainingWord($"{VillagerExistenceInjections.MEET_PREFIX}{friend.ArchipelagoName}"))
+                {
+                    yield return location;
                 }
 
                 foreach (var location in _locationChecker.GetAllLocationsNotCheckedContainingWord($"Friendsanity: {friend.ArchipelagoName}"))

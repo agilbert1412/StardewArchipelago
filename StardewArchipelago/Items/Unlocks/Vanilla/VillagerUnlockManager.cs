@@ -1,14 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using KaitoKid.ArchipelagoUtilities.Net.Client;
+﻿using KaitoKid.ArchipelagoUtilities.Net.Client;
+using StardewArchipelago.GameModifications.CodeInjections;
 using StardewArchipelago.Items.Mail;
 using StardewValley;
+using System;
+using System.Collections.Generic;
 
 namespace StardewArchipelago.Items.Unlocks.Vanilla
 {
     public class VillagerUnlockManager : IUnlockManager
     {
-        private const string VILLAGER_SUFFIX = " Arrival";
 
         public VillagerUnlockManager()
         {
@@ -23,7 +23,8 @@ namespace StardewArchipelago.Items.Unlocks.Vanilla
         {
             foreach (var (characterId, characterData) in Game1.characterData)
             {
-                unlocks.Add($"{characterId}{VILLAGER_SUFFIX}", (x) => SendVillagerArrivalLetter(x, characterId));
+                var apName = VillagerExistenceInjections.GetArrivalItem(characterId);
+                unlocks.Add(apName, (x) => SendVillagerArrivalLetter(x, characterId));
             }
         }
 
