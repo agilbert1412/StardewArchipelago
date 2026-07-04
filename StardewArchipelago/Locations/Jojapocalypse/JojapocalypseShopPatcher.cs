@@ -22,6 +22,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using StardewArchipelago.Locations.CodeInjections.Vanilla;
 using xTile.Dimensions;
 using Object = StardewValley.Object;
 using Rectangle = xTile.Dimensions.Rectangle;
@@ -54,6 +55,7 @@ namespace StardewArchipelago.Locations.Jojapocalypse
             _jojapocalypseManager = jojapocalypseManager;
             _jojaPriceCalculator = jojaPriceCalculator;
             _jojaFiltering = new JojapocalypseFiltering(_logger, _archipelago, _locationChecker);
+            PhoneInjections.Initialize(_jojaLocationChecker);
             RegisterHoldMusic();
         }
 
@@ -68,10 +70,6 @@ namespace StardewArchipelago.Locations.Jojapocalypse
             _harmony.Patch(
                 original: AccessTools.Method(typeof(Game1), nameof(Game1.ShowTelephoneMenu)),
                 prefix: new HarmonyMethod(typeof(JojapocalypseShopPatcher), nameof(ShowTelephoneMenu_AddJojaPhoneNumber_Prefix))
-            );
-            _harmony.Patch(
-                original: AccessTools.Method(typeof(DefaultPhoneHandler), nameof(DefaultPhoneHandler.CheckForIncomingCall)),
-                postfix: new HarmonyMethod(typeof(JojapocalypseShopPatcher), nameof(CheckForIncomingCall_AddJojaAdCalls_Postfix))
             );
             _harmony.Patch(
                 original: AccessTools.Method(typeof(Phone), nameof(Phone.GetIncomingCallAction)),
@@ -355,30 +353,6 @@ namespace StardewArchipelago.Locations.Jojapocalypse
         {
             _jojapocalypseManager.OnNewPurchase(((JojaObtainableArchipelagoLocation)salable).LocationName);
             return false;
-        }
-
-        //public string CheckForIncomingCall(Random random)
-        public static void CheckForIncomingCall_AddJojaAdCalls_Postfix(DefaultPhoneHandler __instance, Random random, ref string __result)
-        {
-            try
-            {
-                if (!string.IsNullOrWhiteSpace(__result))
-                {
-                    return;
-                }
-
-                var chanceOfAd = (_jojaLocationChecker.GetPercentCheckedLocationsByJoja() * 0.25) + 0.02;
-                if (random.NextDouble() < chanceOfAd)
-                {
-                    __result = JojaConstants.JOJA_INCOMING_CALL;
-                    return;
-                }
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError($"Failed in {nameof(CheckForIncomingCall_AddJojaAdCalls_Postfix)}:\n{ex}");
-                return;
-            }
         }
 
         // public static Action GetIncomingCallAction(string callId)

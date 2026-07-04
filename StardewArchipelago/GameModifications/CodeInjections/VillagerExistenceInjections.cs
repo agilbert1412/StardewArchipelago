@@ -448,16 +448,16 @@ namespace StardewArchipelago.GameModifications.CodeInjections
 
         }
 
-        public static string GetArrivalItem(string npcName)
+        public static string GetArrivalItem(string npcId)
         {
-            var apName = NameAliases.NPCNameAliases.ContainsKey(npcName) ? NameAliases.NPCNameAliases[npcName] : npcName;
+            var apName = NameAliases.NPCNameAliases.ContainsKey(npcId) ? NameAliases.NPCNameAliases[npcId] : npcId;
             var arrivalItem = $"{apName}{ARRIVAL_SUFFIX}";
             return arrivalItem;
         }
 
-        public static string GetMeetLocation(string npcName)
+        public static string GetMeetLocation(string npcId)
         {
-            var apName = NameAliases.NPCNameAliases.ContainsKey(npcName) ? NameAliases.NPCNameAliases[npcName] : npcName;
+            var apName = NameAliases.NPCNameAliases.ContainsKey(npcId) ? NameAliases.NPCNameAliases[npcId] : npcId;
             var meetLocation = $"{MEET_PREFIX}{apName}";
             return meetLocation;
         }

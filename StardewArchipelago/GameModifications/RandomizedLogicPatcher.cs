@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-using HarmonyLib;
+﻿using HarmonyLib;
 using KaitoKid.Utilities.Interfaces;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -10,10 +6,21 @@ using StardewArchipelago.Archipelago;
 using StardewArchipelago.Archipelago.SlotData.SlotEnums;
 using StardewArchipelago.GameModifications.CodeInjections;
 using StardewArchipelago.GameModifications.CodeInjections.Bundles;
+using StardewArchipelago.GameModifications.CodeInjections.Powers;
 using StardewArchipelago.GameModifications.CodeInjections.Television;
 using StardewArchipelago.GameModifications.EntranceRandomizer;
+using StardewArchipelago.GameModifications.MoveLink;
+using StardewArchipelago.GameModifications.MultiplayerVision;
+using StardewArchipelago.GameModifications.RandomizedData;
 using StardewArchipelago.GameModifications.Seasons;
+using StardewArchipelago.GameModifications.Shops;
 using StardewArchipelago.GameModifications.Tooltips;
+using StardewArchipelago.Locations;
+using StardewArchipelago.Locations.CodeInjections.Vanilla.Relationship;
+using StardewArchipelago.Locations.Festival;
+using StardewArchipelago.Locations.InGameLocations;
+using StardewArchipelago.Locations.Jojapocalypse;
+using StardewArchipelago.Logging;
 using StardewArchipelago.Serialization;
 using StardewArchipelago.Stardew;
 using StardewArchipelago.Stardew.NameMapping;
@@ -28,20 +35,16 @@ using StardewValley.Locations;
 using StardewValley.Menus;
 using StardewValley.Network;
 using StardewValley.Objects;
-using Object = StardewValley.Object;
-using StardewArchipelago.Logging;
 using StardewValley.TerrainFeatures;
-using StardewArchipelago.GameModifications.MoveLink;
-using StardewArchipelago.Locations;
-using StardewArchipelago.Locations.CodeInjections.Vanilla.Relationship;
-using StardewArchipelago.Locations.Festival;
-using StardewArchipelago.Locations.InGameLocations;
-using StardewArchipelago.GameModifications.CodeInjections.Powers;
-using StardewArchipelago.GameModifications.MultiplayerVision;
 using StardewValley.Tools;
-using StardewArchipelago.GameModifications.RandomizedData;
-using StardewArchipelago.GameModifications.Shops;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
+using StardewArchipelago.Locations.CodeInjections.Vanilla;
 using xTile.Dimensions;
+using EventInjections = StardewArchipelago.GameModifications.CodeInjections.EventInjections;
+using Object = StardewValley.Object;
 using Rectangle = Microsoft.Xna.Framework.Rectangle;
 
 namespace StardewArchipelago.GameModifications
@@ -161,6 +164,7 @@ namespace StardewArchipelago.GameModifications
             PatchEmptyHandBreak();
             PatchTouchingItems();
             PatchShopMenus();
+            PatchPhone();
 
             _dataPatcher.PatchAllRandomizedData();
             _startingResources.GivePlayerStartingResources();
@@ -1077,6 +1081,14 @@ namespace StardewArchipelago.GameModifications
             _harmony.Patch(
                 original: AccessTools.Method(typeof(MovieTheater), nameof(MovieTheater.performAction), new[] { typeof(string[]), typeof(Farmer), typeof(Location) }),
                 prefix: new HarmonyMethod(typeof(ShopMenuInjections), nameof(ShopMenuInjections.PerformAction_RandomizedCraneGamePrice_Prefix))
+            );
+        }
+
+        private void PatchPhone()
+        {
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(DefaultPhoneHandler), nameof(DefaultPhoneHandler.CheckForIncomingCall)),
+                postfix: new HarmonyMethod(typeof(PhoneInjections), nameof(PhoneInjections.CheckForIncomingCall_AdjustCalls_Postfix))
             );
         }
 
