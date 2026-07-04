@@ -38,6 +38,7 @@ namespace StardewArchipelago.Archipelago
         private static TileSanityManager _tileSanityManager;
         private static BankHandler _bankHandler;
         private static PlayerUnstucker _playerUnstucker;
+        private static PlayerSleeper _playerSleeper;
 
         private static string _lastCommand;
 
@@ -51,6 +52,7 @@ namespace StardewArchipelago.Archipelago
             _goalManager = goalManager;
             _tileSanityManager = tileSanityManager;
             _playerUnstucker = new PlayerUnstucker(tileChooser);
+            _playerSleeper = new PlayerSleeper(_logger);
             _bankHandler = bank;
             _lastCommand = null;
         }
@@ -500,36 +502,8 @@ namespace StardewArchipelago.Archipelago
                 return false;
             }
 
-            var numberOfDays = 1;
-            var messageParts = message.Split(" ");
-
-            SleepImmediately(messageParts.Skip(1).ToArray());
+            _playerSleeper.SleepCommand(message);
             return true;
-        }
-
-        public static void SleepImmediately(string[] messageParts)
-        {
-            SetMultisleep(messageParts);
-            Game1.player.startToPassOut();
-        }
-
-        private static void SetMultisleep(string[] messageParts)
-        {
-            SetLastBedToFarmhouse();
-            if (messageParts == null || messageParts.Length <= 0)
-            {
-                return;
-            }
-
-            var argument = string.Join("", messageParts);
-            argument = argument.Replace(" ", "").Replace(",", "").Replace("_", "").Replace("-", "");
-            if (int.TryParse(argument, out var numberOfDays))
-            {
-                MultiSleepManager.SetDaysToSkip(numberOfDays-1);
-                return;
-            }
-
-            MultiSleepManager.SetCurrentUntilBehavior(argument);
         }
 
         private static void SetLastBedToFarmhouse()
