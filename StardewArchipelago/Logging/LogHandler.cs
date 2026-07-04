@@ -31,7 +31,7 @@ namespace StardewArchipelago.Logging
 
         public static bool IsErrorRelatedToArchipelagoConnection(string message)
         {
-            var invalidErrors = new[] { "Failed to Connect", "Connection to Archipelago" };
+            var invalidErrors = new[] { "Failed to Connect", "Connection to Archipelago", "closed the WebSocket connection" };
             return invalidErrors.Any(x => message.Contains(x, StringComparison.InvariantCultureIgnoreCase));
         }
 
