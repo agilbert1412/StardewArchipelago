@@ -19,7 +19,6 @@ using StardewArchipelago.Locations;
 using StardewArchipelago.Locations.CodeInjections.Vanilla.Relationship;
 using StardewArchipelago.Locations.Festival;
 using StardewArchipelago.Locations.InGameLocations;
-using StardewArchipelago.Locations.Jojapocalypse;
 using StardewArchipelago.Logging;
 using StardewArchipelago.Serialization;
 using StardewArchipelago.Stardew;
@@ -40,7 +39,6 @@ using StardewValley.Tools;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
 using StardewArchipelago.Locations.CodeInjections.Vanilla;
 using xTile.Dimensions;
 using EventInjections = StardewArchipelago.GameModifications.CodeInjections.EventInjections;
@@ -165,6 +163,7 @@ namespace StardewArchipelago.GameModifications
             PatchTouchingItems();
             PatchShopMenus();
             PatchPhone();
+            PatchFestivals();
 
             _dataPatcher.PatchAllRandomizedData();
             _startingResources.GivePlayerStartingResources();
@@ -1089,6 +1088,14 @@ namespace StardewArchipelago.GameModifications
             _harmony.Patch(
                 original: AccessTools.Method(typeof(DefaultPhoneHandler), nameof(DefaultPhoneHandler.CheckForIncomingCall)),
                 postfix: new HarmonyMethod(typeof(PhoneInjections), nameof(PhoneInjections.CheckForIncomingCall_AdjustCalls_Postfix))
+            );
+        }
+
+        private void PatchFestivals()
+        {
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(GameLocation), nameof(GameLocation.AreStoresClosedForFestival)),
+                postfix: new HarmonyMethod(typeof(FestivalInjections), nameof(FestivalInjections.AreStoresClosedForFestival_LeaveStoresOpenWhenER_Prefix))
             );
         }
 

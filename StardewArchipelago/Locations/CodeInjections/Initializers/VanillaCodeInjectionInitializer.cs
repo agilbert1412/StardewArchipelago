@@ -46,6 +46,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Initializers
             IsolatedEventInjections.Initialize(logger, modHelper, archipelago, locationChecker);
             WizardBookInjections.Initialize(logger, modHelper, archipelago, locationChecker);
             PhoneInjections.Initialize(logger, modHelper, archipelago, weaponsManager);
+            FestivalInjections.Initialize(logger, modHelper, archipelago);
             InitializeArcadeMachines(logger, modHelper, archipelago, locationChecker, state);
             TravelingMerchantInjections.Initialize(logger, modHelper, archipelago, locationChecker, state, testerFeatures);
             FishingInjections.Initialize(logger, modHelper, archipelago, locationChecker, itemManager, state.Wallet);
