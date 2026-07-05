@@ -408,9 +408,10 @@ namespace StardewArchipelago.GameModifications.CodeInjections
                 return true;
             }
 
+            var eventDataParts = eventData.Split("/").Select(x => x.Split(" ")).Where(eventDataPartWords => eventDataPartWords.Length >= 2).ToArray();
             foreach (var characterId in illegalVillagers)
             {
-                if (eventData.Contains(characterId))
+                if (eventDataParts.Any(eventDataPartWords => eventDataPartWords[1].Contains(characterId)))
                 {
                     return false;
                 }
