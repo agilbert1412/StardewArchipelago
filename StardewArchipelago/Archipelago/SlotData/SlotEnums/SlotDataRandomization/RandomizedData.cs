@@ -83,10 +83,10 @@ namespace StardewArchipelago.Archipelago.SlotData.SlotEnums.SlotDataRandomizatio
             var allCurrencies = GetAllCurrencies();
             var allMaterialEntries = GetAllMaterialEntries();
 
-            ExportToJson("DR - ShopNames.json", allShopNames);
-            ExportToJson("DR - Items.json", allItemEntries);
-            ExportToJson("DR - Currencies.json", allCurrencies);
-            ExportToJson("DR - Materials.json", allMaterialEntries);
+            //ExportToJson("DR - ShopNames.json", allShopNames);
+            //ExportToJson("DR - Items.json", allItemEntries);
+            //ExportToJson("DR - Currencies.json", allCurrencies);
+            //ExportToJson("DR - Materials.json", allMaterialEntries);
         }
 
         private List<string> GetAllShopNames()
