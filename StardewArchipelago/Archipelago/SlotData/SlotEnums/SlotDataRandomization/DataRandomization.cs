@@ -17,7 +17,14 @@ namespace StardewArchipelago.Archipelago.SlotData.SlotEnums.SlotDataRandomizatio
 
         public DataRandomization(string randomizedDataJson)
         {
-            _randomizedData = JsonConvert.DeserializeObject<RandomizedData>(randomizedDataJson);
+            if (string.IsNullOrWhiteSpace(randomizedDataJson))
+            {
+                _randomizedData = new RandomizedData();
+            }
+            else
+            {
+                _randomizedData = JsonConvert.DeserializeObject<RandomizedData>(randomizedDataJson);
+            }
             _randomizedData.AssignNames();
             CropDataBySeedName = CropData.Where(x => !string.IsNullOrWhiteSpace(x.Value.Seed)).ToDictionary(x => x.Value.Seed, x => x.Value);
         }
