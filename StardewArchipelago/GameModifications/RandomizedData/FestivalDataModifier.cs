@@ -274,6 +274,11 @@ namespace StardewArchipelago.GameModifications.RandomizedData
                 {
                     festival = originalFestival;
                 }
+                else if (_datesMapping.ContainsValue(festival))
+                {
+                    __result = false;
+                    return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
+                }
 
                 ev = new Event()
                 {

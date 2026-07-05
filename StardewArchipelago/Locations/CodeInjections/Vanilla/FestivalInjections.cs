@@ -1,17 +1,9 @@
-﻿using KaitoKid.ArchipelagoUtilities.Net.Client;
-using KaitoKid.ArchipelagoUtilities.Net.Constants;
+﻿using KaitoKid.ArchipelagoUtilities.Net.Constants;
 using KaitoKid.Utilities.Interfaces;
 using StardewArchipelago.Archipelago;
-using StardewArchipelago.Constants;
-using StardewArchipelago.Locations.CodeInjections.Vanilla.MonsterSlayer;
-using StardewArchipelago.Locations.Jojapocalypse;
 using StardewModdingAPI;
-using StardewValley;
-using StardewValley.Objects;
 using System;
-using System.Linq;
 using StardewArchipelago.Archipelago.SlotData.SlotEnums;
-using StardewArchipelago.GameModifications.CodeInjections;
 
 namespace StardewArchipelago.Locations.CodeInjections.Vanilla
 {
@@ -47,5 +39,25 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
                 return MethodPrefix.RUN_ORIGINAL_METHOD;
             }
         }
+
+        // public static bool tryToLoadFestival(string festival, out Event ev)
+        //public static bool TryToLoadFestival_LeaveStoresOpenWhenER_Prefix(ref bool __result)
+        //{
+        //    try
+        //    {
+        //        if (_archipelago.SlotData.EntranceRandomization >= EntranceRandomization.Overworld)
+        //        {
+        //            __result = false;
+        //            return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
+        //        }
+
+        //        return MethodPrefix.RUN_ORIGINAL_METHOD;
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        _logger.LogError($"Failed in {nameof(AreStoresClosedForFestival_LeaveStoresOpenWhenER_Prefix)}:\n{ex}");
+        //        return MethodPrefix.RUN_ORIGINAL_METHOD;
+        //    }
+        //}
     }
 }
