@@ -524,8 +524,8 @@ namespace StardewArchipelago.Items.Traps
                 ++player.friendshipData[name].GiftsThisWeek;
                 player.friendshipData[name].LastGiftDate = new WorldDate(Game1.Date);
                 Game1.player.changeFriendship(friendshipLoss, npc);
-                _permanentState.DaysShunRemaining += shunningDays;
             }
+            _permanentState.DaysShunRemaining += shunningDays;
         }
 
         private static bool _isShunMovement = false;
