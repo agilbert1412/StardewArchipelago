@@ -127,7 +127,6 @@ namespace StardewArchipelago.GameModifications.CodeInjections.Television
             var fishLocations = new List<string>();
             foreach (var (locationId, locationData) in allLocationData)
             {
-                GameLocation location = null;
                 var flag = false;
                 if (locationData.Fish == null)
                 {
@@ -135,6 +134,10 @@ namespace StardewArchipelago.GameModifications.CodeInjections.Television
                 }
                 foreach (var spawnFishData in locationData.Fish)
                 {
+                    if (spawnFishData.RequireMagicBait)
+                    {
+                        continue;
+                    }
                     var season1 = spawnFishData.Season;
                     if (season1.HasValue)
                     {
@@ -149,7 +152,7 @@ namespace StardewArchipelago.GameModifications.CodeInjections.Television
                     {
                         if (spawnFishData.Condition != null)
                         {
-                            location = location ?? Game1.getLocationFromName(locationId);
+                            var location = Game1.getLocationFromName(locationId);
                             if (!GameStateQuery.CheckConditions(spawnFishData.Condition, location))
                             {
                                 continue;

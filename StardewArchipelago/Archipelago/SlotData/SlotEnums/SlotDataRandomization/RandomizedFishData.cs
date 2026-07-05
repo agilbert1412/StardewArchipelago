@@ -1,9 +1,11 @@
-﻿using Microsoft.Xna.Framework;
+﻿using System;
+using Microsoft.Xna.Framework;
 using StardewArchipelago.GameModifications.EntranceRandomizer;
 using StardewArchipelago.Stardew;
 using StardewValley.GameData.Locations;
 using System.Collections.Generic;
 using System.Linq;
+using StardewValley;
 
 namespace StardewArchipelago.Archipelago.SlotData.SlotEnums.SlotDataRandomization
 {
@@ -111,8 +113,13 @@ namespace StardewArchipelago.Archipelago.SlotData.SlotEnums.SlotDataRandomizatio
                         mapName = "UndergroundMine";
                     }
 
-                    var condition = Season == null ? relevantOriginalEntry?.Condition :
-                        Season.Length >= 4 ? null : $"LOCATION_SEASON Here {string.Join(" ", Season.Select(x => x.ToLower()))}";
+                    var condition = relevantOriginalEntry?.Condition;
+                    var season = relevantOriginalEntry?.Season;
+                    if (Season != null)
+                    {
+                        condition = Season.Length >= 4 ? null : $"LOCATION_SEASON Here {string.Join(" ", Season.Select(x => x.ToLower()))}";
+                        season = Season.Length != 1 ? null : Season.Select(x => Enum.Parse<Season>(x)).First();
+                    }
 
                     if (isLocationUnchanged)
                     {
@@ -130,6 +137,7 @@ namespace StardewArchipelago.Archipelago.SlotData.SlotEnums.SlotDataRandomizatio
                         RequireMagicBait = false,
                         Id = fishQualifiedId,
                         ItemId = fishQualifiedId,
+                        Season = season,
                     };
 
                     spawnDatas.TryAdd(mapName, new List<SpawnFishData>());

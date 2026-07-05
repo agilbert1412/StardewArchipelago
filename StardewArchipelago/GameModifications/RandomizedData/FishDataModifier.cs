@@ -350,6 +350,7 @@ namespace StardewArchipelago.GameModifications.RandomizedData
             newSpawnFishData.RequireMagicBait = modifiedSpawnFishData.RequireMagicBait;
             newSpawnFishData.ItemId = modifiedSpawnFishData.ItemId;
             newSpawnFishData.Id = modifiedSpawnFishData.Id;
+            newSpawnFishData.Season = modifiedSpawnFishData.Season;
             newSpawnFishData.RandomItemId = modifiedSpawnFishData.RandomItemId;
             newSpawnFishData.MinDistanceFromShore = Math.Min(newSpawnFishData.MinDistanceFromShore, 2);
 
