@@ -1,17 +1,18 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using KaitoKid.ArchipelagoUtilities.Net;
+﻿using KaitoKid.ArchipelagoUtilities.Net;
 using KaitoKid.Utilities.Interfaces;
 using Microsoft.Xna.Framework;
 using StardewArchipelago.Archipelago;
 using StardewArchipelago.Archipelago.SlotData.SlotEnums;
 using StardewArchipelago.Extensions;
 using StardewArchipelago.GameModifications.CodeInjections;
+using StardewArchipelago.Locations;
 using StardewArchipelago.Locations.CodeInjections.Vanilla;
 using StardewArchipelago.Stardew;
 using StardewValley;
 using StardewValley.Locations;
 using StardewValley.Objects;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace StardewArchipelago.GameModifications
 {
@@ -21,12 +22,14 @@ namespace StardewArchipelago.GameModifications
         private const int MINIMUM_UNLIMITED_MONEY = 1000000;
         private readonly ILogger _logger;
         private readonly StardewArchipelagoClient _archipelago;
+        private readonly LocationChecker _locationChecker;
         private readonly StardewItemManager _stardewItemManager;
 
         public StartingResources(ILogger logger, StardewArchipelagoClient archipelago, LocationChecker locationChecker, StardewItemManager stardewItemManager)
         {
             _logger = logger;
             _archipelago = archipelago;
+            _locationChecker = locationChecker;
             _stardewItemManager = stardewItemManager;
         }
 
@@ -276,6 +279,11 @@ namespace StardewArchipelago.GameModifications
 
         public void GrantStartingQuest()
         {
+            if (!_locationChecker.IsLocationMissing("Quest: Getting Started"))
+            {
+                return;
+            }
+
             Game1.player.addQuest(Game1.GetFarmTypeID() == "MeadowlandsFarm" ? "132" : "6");
             Game1.dayTimeMoneyBox.PingQuestLog();
         }
