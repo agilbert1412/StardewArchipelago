@@ -6,6 +6,7 @@ using KaitoKid.ArchipelagoUtilities.Net;
 using KaitoKid.Utilities.Interfaces;
 using StardewArchipelago.Archipelago;
 using StardewArchipelago.Bundles;
+using StardewArchipelago.GameModifications.CodeInjections;
 using StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles;
 using StardewValley.Characters;
 using Object = StardewValley.Object;
@@ -39,7 +40,8 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
 
                 RecipeFriendshipInjections.SendFriendshipRecipeChecks(__instance, who);
                 GetExtraTvRemote(__instance, who);
-                _locationChecker.AddCheckedLocation($"Meet {__instance.Name}");
+                var meetLocation = VillagerExistenceInjections.GetMeetLocation(__instance.Name);
+                _locationChecker.AddCheckedLocation(meetLocation);
                 return;
             }
             catch (Exception ex)

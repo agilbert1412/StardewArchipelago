@@ -25,7 +25,7 @@ namespace StardewArchipelago.GameModifications
         {
             var numberOfDays = 1;
             var messageParts = message.Split(" ");
-            if (messageParts[0].Equals("sleep", StringComparison.InvariantCultureIgnoreCase))
+            if (messageParts[0].Contains("sleep", StringComparison.InvariantCultureIgnoreCase))
             {
                 messageParts = messageParts.Skip(1).ToArray();
             }

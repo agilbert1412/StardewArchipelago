@@ -122,7 +122,8 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
                 NPC character = __instance.getCharacterFromName("Wizard");
                 if (character == null)
                 {
-                    Game1.drawDialogueBox("You have a feeling you should not enter this yet...");
+                    var message = "You have a feeling you should not enter this yet...";
+                    DelayedAction.showDialogueAfterDelay(message, 200);
                     return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
                 }
 
