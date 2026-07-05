@@ -111,7 +111,8 @@ namespace StardewArchipelago.Archipelago.SlotData.SlotEnums.SlotDataRandomizatio
                         mapName = "UndergroundMine";
                     }
 
-                    var condition = Season == null ? relevantOriginalEntry?.Condition : $"LOCATION_SEASON Here {string.Join(" ", Season.Select(x => x.ToLower()))}";
+                    var condition = Season == null ? relevantOriginalEntry?.Condition :
+                        Season.Length >= 4 ? null : $"LOCATION_SEASON Here {string.Join(" ", Season.Select(x => x.ToLower()))}";
 
                     if (isLocationUnchanged)
                     {

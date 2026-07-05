@@ -64,11 +64,22 @@ namespace StardewArchipelago.GameModifications.RandomizedData
                         var locationsData = asset.AsDictionary<string, LocationData>().Data;
 
                         var originalFishEntries = GetOriginalFishEntries(locationsData);
+                        var originalFishEntriesByFish = new Dictionary<string, List<SpawnFishData>>();
+                        foreach (var (locationId, originalEntriesForLocation) in originalFishEntries)
+                        {
+                            foreach (var spawnFishData in originalEntriesForLocation)
+                            {
+                                var fishItem = _itemManager.GetItemByQualifiedId(spawnFishData.ItemId);
+                                var fishName = fishItem.Name;
+                                originalFishEntriesByFish.TryAdd(fishName, new List<SpawnFishData>());
+                                originalFishEntriesByFish[fishName].Add(spawnFishData);
+                            }
+                        }
                         var modifiedFishEntries = GetModifiedFishEntries(originalFishEntries);
 
                         foreach (var locationId in locationsData.Keys.ToArray())
                         {
-                            ModifyFishLocationsData(locationsData, locationId, originalFishEntries, modifiedFishEntries);
+                            ModifyFishLocationsData(locationsData, locationId, originalFishEntriesByFish, modifiedFishEntries);
                         }
                     }
                     catch (Exception ex)
@@ -288,7 +299,7 @@ namespace StardewArchipelago.GameModifications.RandomizedData
             return modifiedFishEntries;
         }
 
-        private void ModifyFishLocationsData(IDictionary<string, LocationData> allLocationData, string locationId, Dictionary<string, List<SpawnFishData>> originalFishEntries, Dictionary<string, List<SpawnFishData>> modifiedFishEntries)
+        private void ModifyFishLocationsData(IDictionary<string, LocationData> allLocationData, string locationId, Dictionary<string, List<SpawnFishData>> originalFishEntriesByFish, Dictionary<string, List<SpawnFishData>> modifiedFishEntries)
         {
             var locationData = allLocationData[locationId];
 
@@ -297,25 +308,15 @@ namespace StardewArchipelago.GameModifications.RandomizedData
                 return;
             }
 
-            var originalEntriesForLocation = originalFishEntries[locationId];
             var modifiedEntriesForLocation = modifiedFishEntries[locationId];
-
-            var originalEntriesForLocationByFish = new Dictionary<string, List<SpawnFishData>>();
-            foreach (var spawnFishData in originalEntriesForLocation)
-            {
-                var fishItem = _itemManager.GetItemByQualifiedId(spawnFishData.ItemId);
-                var fishName = fishItem.Name;
-                originalEntriesForLocationByFish.TryAdd(fishName, new List<SpawnFishData>());
-                originalEntriesForLocationByFish[fishName].Add(spawnFishData);
-            }
 
             foreach (var spawnFishData in modifiedEntriesForLocation)
             {
                 var fishItem = _itemManager.GetItemByQualifiedId(spawnFishData.ItemId);
                 var fishName = fishItem.Name;
-                if (originalEntriesForLocationByFish.ContainsKey(fishName))
+                if (originalFishEntriesByFish.ContainsKey(fishName))
                 {
-                    var originalEntriesForThisFish = originalEntriesForLocationByFish[fishName];
+                    var originalEntriesForThisFish = originalFishEntriesByFish[fishName];
                     var newSpawnFishData = originalEntriesForThisFish[0];
                     newSpawnFishData = MergeSpawnFishData(newSpawnFishData, originalEntriesForThisFish);
                     newSpawnFishData = MergeSpawnFishData(newSpawnFishData, spawnFishData);

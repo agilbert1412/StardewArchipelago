@@ -1,4 +1,5 @@
 ﻿using HarmonyLib;
+using KaitoKid.ArchipelagoUtilities.Net.Constants;
 using KaitoKid.Utilities.Interfaces;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -16,6 +17,7 @@ using StardewArchipelago.GameModifications.Seasons;
 using StardewArchipelago.GameModifications.Shops;
 using StardewArchipelago.GameModifications.Tooltips;
 using StardewArchipelago.Locations;
+using StardewArchipelago.Locations.CodeInjections.Vanilla;
 using StardewArchipelago.Locations.CodeInjections.Vanilla.Relationship;
 using StardewArchipelago.Locations.Festival;
 using StardewArchipelago.Locations.InGameLocations;
@@ -39,7 +41,6 @@ using StardewValley.Tools;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using StardewArchipelago.Locations.CodeInjections.Vanilla;
 using xTile.Dimensions;
 using EventInjections = StardewArchipelago.GameModifications.CodeInjections.EventInjections;
 using Object = StardewValley.Object;
@@ -116,6 +117,7 @@ namespace StardewArchipelago.GameModifications
         {
             TVInjections.Initialize(logger, archipelago);
             LivinOffTheLandInjections.Initialize(logger, archipelago);
+            FIBSInjections.Initialize(logger, archipelago);
             GatewayGazetteInjections.Initialize(logger, modHelper, archipelago, entranceManager, state);
         }
 
@@ -637,6 +639,14 @@ namespace StardewArchipelago.GameModifications
                 original: AccessTools.Method(typeof(TV), nameof(TV.checkForAction)),
                 prefix: new HarmonyMethod(typeof(TVInjections), nameof(TVInjections.CheckForAction_TVChannels_Prefix))
             );
+
+            if (_archipelago.SlotData.DataRandomization.FishData != null && _archipelago.SlotData.DataRandomization.FishData.Any())
+            {
+                _harmony.Patch(
+                    original: AccessTools.Method(typeof(TV), "getFishingInfo"),
+                    prefix: new HarmonyMethod(typeof(FIBSInjections), nameof(FIBSInjections.GetFishingInfo_AdaptToDataRandomization_Prefix))
+                );
+            }
 
             _harmony.Patch(
                 original: AccessTools.Method(typeof(TV), "getTodaysTip"),
