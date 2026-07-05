@@ -162,7 +162,7 @@ namespace StardewArchipelago.GameModifications.RandomizedData
             {
                 const int minSizeIndex = 5;
                 const int maxSizeIndex = 6;
-                fishDataFields = new[] { fishName, "50", "mixed", fishDataFields[minSizeIndex], fishDataFields[maxSizeIndex], "600 2600", "spring summer fall winter", "both", "680 .25", "0", ".3", "0", "0", "false" };
+                fishDataFields = new[] { fishName, "45", "mixed", fishDataFields[minSizeIndex], fishDataFields[maxSizeIndex], "600 2600", "spring summer fall winter", "both", "680 .25", "0", ".3", "0", "0", "false" };
             }
             if (randomizedData.Difficulty != null)
             {
