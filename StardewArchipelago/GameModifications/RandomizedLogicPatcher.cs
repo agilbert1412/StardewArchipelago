@@ -1095,7 +1095,7 @@ namespace StardewArchipelago.GameModifications
         {
             _harmony.Patch(
                 original: AccessTools.Method(typeof(GameLocation), nameof(GameLocation.AreStoresClosedForFestival)),
-                postfix: new HarmonyMethod(typeof(FestivalInjections), nameof(FestivalInjections.AreStoresClosedForFestival_LeaveStoresOpenWhenER_Prefix))
+                prefix: new HarmonyMethod(typeof(FestivalInjections), nameof(FestivalInjections.AreStoresClosedForFestival_LeaveStoresOpenWhenER_Prefix))
             );
         }
 
