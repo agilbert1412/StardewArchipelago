@@ -1197,10 +1197,7 @@ namespace StardewArchipelago.Items.Traps
                 return;
             }
 
-            for (var i = 0; i < item.Stack; i++)
-            {
-                player.dropItem(item);
-            }
+            Game1.createItemDebris(item, player.getStandingPosition(), player.FacingDirection, player.currentLocation, flopFish:true);
             player.removeItemFromInventory(item);
         }
 
@@ -1216,11 +1213,11 @@ namespace StardewArchipelago.Items.Traps
         {
             foreach (var item in chest.Items)
             {
-                ButterfingerChest(chest, item, rate);
+                ButterfingerChestItem(chest, item, rate);
             }
         }
 
-        protected void ButterfingerChest(Chest chest, Item item, double chance)
+        protected void ButterfingerChestItem(Chest chest, Item item, double chance)
         {
             var roll = Game1.random.NextDouble();
             if (roll > chance)
@@ -1233,21 +1230,17 @@ namespace StardewArchipelago.Items.Traps
                 return;
             }
 
-            for (var i = 0; i < item.Stack; i++)
-            {
-                DropItem(chest, item);
-            }
-
-            chest.Items.Remove(item);
+            DropChestItem(chest, item);
         }
 
-        public void DropItem(Chest chest, Item item)
+        public void DropChestItem(Chest chest, Item item)
         {
             if (item == null || !item.canBeDropped())
             {
                 return;
             }
-            Game1.createItemDebris(item.getOne(), chest.TileLocation * 64, Game1.random.Next(0, 4));
+            Game1.createItemDebris(item, chest.TileLocation * 64, Game1.random.Next(0, 4), chest.Location, flopFish:true);
+            chest.Items.Remove(item);
         }
 
         private bool ButterfingersOneRandomItem()
