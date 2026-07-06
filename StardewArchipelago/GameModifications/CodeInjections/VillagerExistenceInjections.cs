@@ -12,6 +12,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Xml.Linq;
+using StardewArchipelago.GameModifications.MultiSleep;
 
 namespace StardewArchipelago.GameModifications.CodeInjections
 {
@@ -142,6 +143,12 @@ namespace StardewArchipelago.GameModifications.CodeInjections
         {
             try
             {
+                if (MultiSleepManager.IsCurrentlyMultisleeping())
+                {
+                    __result = false;
+                    return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
+                }
+
                 if (!CanPlayEventWithPet(eventId))
                 {
                     __result = false;

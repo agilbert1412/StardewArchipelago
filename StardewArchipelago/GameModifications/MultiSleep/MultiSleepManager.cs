@@ -40,9 +40,14 @@ namespace StardewArchipelago.GameModifications.MultiSleep
             _currentMultiSleep = new DontMultiSleepBehavior();
         }
 
+        public static bool IsCurrentlyMultisleeping()
+        {
+            return _multiSleepEnabled && _currentMultiSleep != null && _currentMultiSleep.ShouldKeepSleeping();
+        }
+
         public static bool TryDoMultiSleepOnDayStarted()
         {
-            if (!_multiSleepEnabled || !_currentMultiSleep.ShouldKeepSleeping())
+            if (!IsCurrentlyMultisleeping())
             {
                 _currentMultiSleep = new DontMultiSleepBehavior();
                 return false;
