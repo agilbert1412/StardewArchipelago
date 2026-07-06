@@ -6,6 +6,7 @@ using StardewValley;
 using StardewValley.Extensions;
 using StardewValley.GameData.MakeoverOutfits;
 using StardewValley.Objects;
+using StardewValley.Tools;
 using Color = Microsoft.Xna.Framework.Color;
 
 namespace StardewArchipelago.Items.Traps
@@ -93,6 +94,7 @@ namespace StardewArchipelago.Items.Traps
             var player = Game1.player;
             player.Equip(null, player.shirtItem);
             player.Equip(null, player.pantsItem);
+            GiveBackPanIfWearingIt();
             player.Equip(null, player.hat);
 
             var hasEquippedHat = false;
@@ -210,7 +212,23 @@ namespace StardewArchipelago.Items.Traps
             var hatId = $"(H){chosenHatKey}";
             _logger.LogDebug($"Equipping Hat: {hatId}");
             var chosenHat = ItemRegistry.Create<Hat>(hatId);
+
+            GiveBackPanIfWearingIt();
+
             Game1.player.Equip(chosenHat, Game1.player.hat);
+        }
+
+        private static void GiveBackPanIfWearingIt()
+        {
+            var oldHat = Game1.player.hat.Value;
+            if (oldHat is not null)
+            {
+                var handHat = Utility.PerformSpecialItemGrabReplacement(oldHat);
+                if (handHat is Pan oldPan)
+                {
+                    Game1.player.addItemByMenuIfNecessary(oldPan);
+                }
+            }
         }
     }
 }
