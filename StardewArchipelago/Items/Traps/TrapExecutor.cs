@@ -883,7 +883,7 @@ namespace StardewArchipelago.Items.Traps
             if (_archipelago.SlotData.TrapItemsDifficulty >= TrapItemsDifficulty.Eldritch)
             {
                 var cropsData = DataLoader.Crops(Game1.content);
-                var cropsToSeedMap = cropsData.ToDictionary(x => x.Value.HarvestItemId, x => x.Key);
+                var cropsToSeedMap = cropsData.ToDictionary(x => QualifiedItemIds.QualifiedObjectId(x.Value.HarvestItemId), x => QualifiedItemIds.QualifiedObjectId(x.Key));
                 Utility.ForEachItemContext((in ForEachItemContext x) => UngrowInventoryItem(cropsToSeedMap, in x));
             }
         }
@@ -895,21 +895,13 @@ namespace StardewArchipelago.Items.Traps
                 return true;
             }
 
-            string replacementId;
-            if (cropsToSeedMap.ContainsKey(contextObject.ItemId))
-            {
-                replacementId = cropsToSeedMap[contextObject.ItemId];
-            }
-            else if (cropsToSeedMap.ContainsKey(contextObject.QualifiedItemId))
-            {
-                replacementId = cropsToSeedMap[contextObject.QualifiedItemId];
-            }
-            else
+            if (!cropsToSeedMap.ContainsKey(contextObject.QualifiedItemId))
             {
                 return true;
             }
 
-            var qualifiedReplacementId = QualifiedItemIds.QualifiedObjectId(replacementId);
+            var qualifiedReplacementId = cropsToSeedMap[contextObject.QualifiedItemId];
+
             var replacementItem = ItemRegistry.Create<Object>(qualifiedReplacementId);
             if (replacementItem != null)
             {
