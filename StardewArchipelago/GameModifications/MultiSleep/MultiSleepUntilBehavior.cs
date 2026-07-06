@@ -104,6 +104,11 @@ namespace StardewArchipelago.GameModifications.MultiSleep
                 return ArchipelagoJunimoNoteMenu.IsBundleRemaining(MemeBundleNames.HIBERNATION);
             }
 
+            if (IsBehavior(_untilWhat, END_OF_MONTH))
+            {
+                return Game1.dayOfMonth < 28;
+            }
+
             return false;
         }
 
