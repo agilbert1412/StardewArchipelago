@@ -24,6 +24,7 @@ namespace StardewArchipelago.GameModifications.CodeInjections
         private static ArchipelagoStateDto _state;
 
         private static bool _skipER = false;
+        private static bool _skipOneER = false;
 
         public static void Initialize(ILogger logger, IModHelper helper, StardewArchipelagoClient archipelago, EntranceManager entranceManager, ArchipelagoStateDto state)
         {
@@ -34,6 +35,11 @@ namespace StardewArchipelago.GameModifications.CodeInjections
             _state = state;
         }
 
+        public static void SkipNextER()
+        {
+            _skipOneER = true;
+        }
+
         public static bool PerformWarpFarmer_EntranceRandomization_Prefix(ref LocationRequest locationRequest, ref int tileX,
             ref int tileY, ref int facingDirectionAfterWarp)
         {
@@ -41,6 +47,12 @@ namespace StardewArchipelago.GameModifications.CodeInjections
             {
                 if (_skipER || Game1.player.passedOut || Game1.player.FarmerSprite.isPassingOut() || Game1.player.isInBed.Value)
                 {
+                    return MethodPrefix.RUN_ORIGINAL_METHOD;
+                }
+
+                if (_skipOneER)
+                {
+                    _skipOneER = false;
                     return MethodPrefix.RUN_ORIGINAL_METHOD;
                 }
 

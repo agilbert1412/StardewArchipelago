@@ -1,9 +1,13 @@
-﻿using KaitoKid.Utilities.Interfaces;
+﻿using KaitoKid.ArchipelagoUtilities.Net.Extensions;
+using KaitoKid.Utilities.Interfaces;
 using StardewArchipelago.Archipelago;
 using StardewArchipelago.Archipelago.SlotData.SlotEnums;
-using StardewValley;
 using StardewArchipelago.Serialization;
+using StardewValley;
 using StardewValley.Locations;
+using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace StardewArchipelago.GameModifications.CodeInjections
 {
@@ -35,15 +39,20 @@ namespace StardewArchipelago.GameModifications.CodeInjections
             if (Game1.player.currentLocation is FarmHouse)
             {
                 var farm = Game1.RequireLocation("Farm") as Farm;
+                var farmhouseEntry = farm.GetMainFarmHouseEntry();
+                var farmhouseEntryPosition = Utility.PointToVector2(farmhouseEntry) * 64f;
+                if (Game1.eventUp && Game1.CurrentEvent != null)
+                {
+                    Game1.player.locationBeforeForcedEvent.Set("");
+                    Game1.CurrentEvent.setExitLocation("Farm", farmhouseEntry.X, farmhouseEntry.Y);
+                    EntranceInjections.SkipNextER();
+                    return;
+                }
+
                 Game1.player.currentLocation = farm;
-                Game1.player.Position = Utility.PointToVector2(farm.GetMainFarmHouseEntry()) * 64f;
+                Game1.player.Position = farmhouseEntryPosition;
                 Game1.currentLocation = Game1.player.currentLocation;
             }
-        }
-
-        private static void ConstructHouseIfNeeded()
-        {
-
         }
 
         // public static bool AddCharacterIfNecessary(string characterId, bool bypassConditions = false)
