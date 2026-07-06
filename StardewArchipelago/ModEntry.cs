@@ -458,6 +458,12 @@ namespace StardewArchipelago
             _itemManager.TrapManager.TrapExecutor.DebuffApplier.LoadBuffs();
             State.TrapsState.DaysShunRemaining = Math.Max(0, State.TrapsState.DaysShunRemaining-1);
 
+            var pariahShunningDays = new TrapDifficultyBalancer().PariahShunningDays[_archipelago.SlotData.TrapItemsDifficulty];
+            if (State.TrapsState.DaysShunRemaining > pariahShunningDays * 2)
+            {
+                State.TrapsState.DaysShunRemaining = pariahShunningDays;
+            }
+
             if (MultiSleepManager.TryDoMultiSleepOnDayStarted())
             {
                 return;
