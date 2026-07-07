@@ -142,6 +142,14 @@ namespace StardewArchipelago.Items.Traps
 
                 var difficulty = _archipelago.SlotData.TrapItemsDifficulty;
                 var chanceToDespawnPerDay = _difficultyBalancer.CowDespawnChancePerDay[difficulty];
+                if (__instance.wasPet.Value)
+                {
+                    chanceToDespawnPerDay += 0.2;
+                }
+                else if (__instance.wasAutoPet.Value)
+                {
+                    chanceToDespawnPerDay += 0.05;
+                }
                 if (Game1.random.NextDouble() < chanceToDespawnPerDay)
                 {
                     if (__instance.homeInterior is AnimalHouse animalHouse)
@@ -277,6 +285,11 @@ namespace StardewArchipelago.Items.Traps
                 {
                     __instance.wasAutoPet.Value = true;
                 }
+                else
+                {
+                    __instance.wasPet.Value = true;
+                }
+
                 var animalData = __instance.GetAnimalData();
                 var happinessDrain = animalData != null ? animalData.HappinessDrain : 0;
                 if (!is_auto_pet)
