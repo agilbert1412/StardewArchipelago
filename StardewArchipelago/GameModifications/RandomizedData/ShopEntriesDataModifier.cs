@@ -264,12 +264,20 @@ namespace StardewArchipelago.GameModifications.RandomizedData
         {
             if (randomizedShopItemData.Price.HasValue)
             {
-                shopDataItem.Price = (int)Math.Round(randomizedShopItemData.Price.Value * priceMultiplier);
-                if (shopDataItem.PriceModifiers != null)
+                var newPrice = (int)Math.Round(randomizedShopItemData.Price.Value * priceMultiplier);
+                if (shopDataItem.TradeItemId != null && shopDataItem.TradeItemId == QualifiedItemIds.QI_GEM || shopDataItem.TradeItemId == QualifiedItemIds.GOLDEN_WALNUT)
                 {
-                    shopDataItem.PriceModifiers.Clear();
+                    shopDataItem.TradeItemAmount = (int)Math.Round(randomizedShopItemData.Price.Value * priceMultiplier);
                 }
-                shopDataItem.IgnoreShopPriceModifiers = true;
+                else
+                {
+                    shopDataItem.Price = (int)Math.Round(randomizedShopItemData.Price.Value * priceMultiplier);
+                    if (shopDataItem.PriceModifiers != null)
+                    {
+                        shopDataItem.PriceModifiers.Clear();
+                    }
+                    shopDataItem.IgnoreShopPriceModifiers = true;
+                }
             }
         }
 
