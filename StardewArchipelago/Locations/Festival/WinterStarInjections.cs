@@ -94,7 +94,7 @@ namespace StardewArchipelago.Locations.Festival
         {
             try
             {
-                if (__instance.speaker.Name != "Willy" || !Game1.CurrentEvent.isFestival || Game1.currentSeason != "winter" || Game1.dayOfMonth != 25)
+                if (__instance.speaker.Name != "Willy" || !Game1.CurrentEvent.isFestival || !Game1.CurrentEvent.isSpecificFestival("winter25"))
                 {
                     return;
                 }
