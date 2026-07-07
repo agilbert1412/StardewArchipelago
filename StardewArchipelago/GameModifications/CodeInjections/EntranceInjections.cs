@@ -79,6 +79,12 @@ namespace StardewArchipelago.GameModifications.CodeInjections
         // We therefore cheat a little bit by pre-warping the player to somewhere that won't cause trigger these undesired behaviors.
         private static void PrepareForWarpsWithUndesiredBehaviors(LocationRequest locationRequest, WarpRequest replacedWarp)
         {
+            if (Game1.currentLocation?.currentEvent != null && Game1.currentLocation.currentEvent.id == "-1")
+            {
+                Game1.currentLocation.currentEvent.endBehaviors();
+                Game1.currentLocation.currentEvent = null;
+            }
+
             // When entering the farmhouse from anywhere but the Cellar, the game force-places you at the door.
             if (locationRequest.Name == "Farmhouse" && replacedWarp.TileX == 19 && replacedWarp.TileY == 34)
             {
