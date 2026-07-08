@@ -450,12 +450,12 @@ namespace StardewArchipelago.Items.Traps
         public Dictionary<TrapItemsDifficulty, int> EncumberAmount = new()
         {
             { TrapItemsDifficulty.NoTraps, 0 },
-            { TrapItemsDifficulty.Easy, 8 },
-            { TrapItemsDifficulty.Medium, 16 },
-            { TrapItemsDifficulty.Hard, 32 },
-            { TrapItemsDifficulty.Hell, 64 },
-            { TrapItemsDifficulty.Nightmare, 256 },
-            { TrapItemsDifficulty.Eldritch, 1024 },
+            { TrapItemsDifficulty.Easy, 4 },
+            { TrapItemsDifficulty.Medium, 8 },
+            { TrapItemsDifficulty.Hard, 20 },
+            { TrapItemsDifficulty.Hell, 50 },
+            { TrapItemsDifficulty.Nightmare, 120 },
+            { TrapItemsDifficulty.Eldritch, 500 },
         };
 
         public Dictionary<TrapItemsDifficulty, int> SpoilsNumber = new()
