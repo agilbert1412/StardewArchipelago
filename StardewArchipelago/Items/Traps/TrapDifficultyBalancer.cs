@@ -545,6 +545,17 @@ namespace StardewArchipelago.Items.Traps
             { TrapItemsDifficulty.Nightmare, 250 },
             { TrapItemsDifficulty.Eldritch, 1000 },
         };
+
+        public Dictionary<TrapItemsDifficulty, int> ReversedControlsDuration = new()
+        {
+            { TrapItemsDifficulty.NoTraps, 0 },
+            { TrapItemsDifficulty.Easy, 500 },
+            { TrapItemsDifficulty.Medium, 5000 },
+            { TrapItemsDifficulty.Hard, 10000 },
+            { TrapItemsDifficulty.Hell, 30000 },
+            { TrapItemsDifficulty.Nightmare, 120000 },
+            { TrapItemsDifficulty.Eldritch, 300000 },
+        };
     }
 
     public enum TeleportDestination

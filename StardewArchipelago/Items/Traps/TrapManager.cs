@@ -65,6 +65,7 @@ namespace StardewArchipelago.Items.Traps
         private const string BACK_TO_SCHOOL = "Back To School";
         private const string TIRED = "Tired";
         private const string INJURY = "Injury";
+        private const string REVERSE = "Reverse";
 
         private static ILogger _logger;
         private readonly IModHelper _helper;
@@ -265,6 +266,7 @@ namespace StardewArchipelago.Items.Traps
             _traps.Add(BACK_TO_SCHOOL, TrapExecutor.RandomizeProfessions);
             _traps.Add(TIRED, TrapExecutor.Tired);
             _traps.Add(INJURY, TrapExecutor.Injury);
+            _traps.Add(REVERSE, TrapExecutor.ReverseControls);
 
             RegisterTrapsWithTrapSuffix();
             RegisterTrapsWithDifferentSpace();

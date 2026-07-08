@@ -1,4 +1,5 @@
 ﻿using Archipelago.MultiClient.Net.Enums;
+using Force.DeepCloner;
 using KaitoKid.ArchipelagoUtilities.Net.Constants;
 using KaitoKid.ArchipelagoUtilities.Net.Extensions;
 using KaitoKid.Utilities.Interfaces;
@@ -1929,6 +1930,70 @@ namespace StardewArchipelago.Items.Traps
             }
 
             return false;
+        }
+
+        public void ReverseControls()
+        {
+            var difficulty = _archipelago.SlotData.TrapItemsDifficulty;
+            var millisecondsDuration = _difficultyBalancer.ReversedControlsDuration[difficulty];
+            var originalBindings = Game1.options.DeepClone();
+            var newBindings = InvertBindings(Game1.options);
+            ChangeBindingsForAWhile(originalBindings, newBindings, millisecondsDuration);
+        }
+
+        private Options InvertBindings(Options options)
+        {
+            var invertedOptions = options.DeepClone();
+
+            invertedOptions.actionButton = options.cancelButton;
+            invertedOptions.cancelButton = options.actionButton;
+
+            invertedOptions.chatButton = options.emoteButton;
+            invertedOptions.emoteButton = options.chatButton;
+
+            invertedOptions.journalButton = options.mapButton;
+            invertedOptions.mapButton = options.journalButton;
+
+            invertedOptions.moveDownButton = options.moveUpButton;
+            invertedOptions.moveUpButton = options.moveDownButton;
+
+            invertedOptions.moveLeftButton = options.moveRightButton;
+            invertedOptions.moveRightButton = options.moveLeftButton;
+
+            invertedOptions.runButton = options.useToolButton;
+            invertedOptions.useToolButton = options.runButton;
+
+            invertedOptions.zoomButtons = !options.zoomButtons;
+            invertedOptions.alwaysShowToolHitLocation = !options.alwaysShowToolHitLocation;
+            invertedOptions.autoRun = !options.autoRun;
+            invertedOptions.hideToolHitLocationWhenInMotion = !options.hideToolHitLocationWhenInMotion;
+
+            invertedOptions.inventorySlot1 = options.inventorySlot12;
+            invertedOptions.inventorySlot2 = options.inventorySlot11;
+            invertedOptions.inventorySlot3 = options.inventorySlot10;
+            invertedOptions.inventorySlot4 = options.inventorySlot9;
+            invertedOptions.inventorySlot5 = options.inventorySlot8;
+            invertedOptions.inventorySlot6 = options.inventorySlot7;
+            invertedOptions.inventorySlot7 = options.inventorySlot6;
+            invertedOptions.inventorySlot8 = options.inventorySlot5;
+            invertedOptions.inventorySlot9 = options.inventorySlot4;
+            invertedOptions.inventorySlot10 = options.inventorySlot3;
+            invertedOptions.inventorySlot11 = options.inventorySlot2;
+            invertedOptions.inventorySlot12 = options.inventorySlot1;
+
+            return invertedOptions;
+        }
+
+        public void ChangeBindingsForAWhile(Options originalBindings, Options newBindings, int millisecondsDuration)
+        {
+            ChangeBindingsForAWhileAsync(originalBindings, newBindings, millisecondsDuration).FireAndForget();
+        }
+
+        private async Task ChangeBindingsForAWhileAsync(Options originalBindings, Options newBindings, int millisecondsDuration)
+        {
+            Game1.options = newBindings;
+            await Task.Run(() => Thread.Sleep(millisecondsDuration));
+            Game1.options = originalBindings.DeepClone();
         }
     }
 }
