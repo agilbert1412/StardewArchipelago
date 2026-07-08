@@ -387,8 +387,8 @@ namespace StardewArchipelago.Items.Traps
             { TrapItemsDifficulty.Easy, ButterfingersTarget.ActiveItem },
             { TrapItemsDifficulty.Medium, ButterfingersTarget.Hotbar },
             { TrapItemsDifficulty.Hard, ButterfingersTarget.Inventory },
-            { TrapItemsDifficulty.Hell, ButterfingersTarget.Inventory },
-            { TrapItemsDifficulty.Nightmare, ButterfingersTarget.InventoryAndChestsOnSameMap },
+            { TrapItemsDifficulty.Hell, ButterfingersTarget.InventoryAndChestsOnSameMap },
+            { TrapItemsDifficulty.Nightmare, ButterfingersTarget.InventoryAndAllChests },
             { TrapItemsDifficulty.Eldritch, ButterfingersTarget.InventoryAndAllChests },
         };
 
@@ -398,8 +398,8 @@ namespace StardewArchipelago.Items.Traps
             { TrapItemsDifficulty.Easy, 1 },
             { TrapItemsDifficulty.Medium, 0.5 },
             { TrapItemsDifficulty.Hard, 0.5 },
-            { TrapItemsDifficulty.Hell, 1 },
-            { TrapItemsDifficulty.Nightmare, 0.5 },
+            { TrapItemsDifficulty.Hell, 0.2 },
+            { TrapItemsDifficulty.Nightmare, 0.4 },
             { TrapItemsDifficulty.Eldritch, 1 },
         };
 
@@ -408,8 +408,8 @@ namespace StardewArchipelago.Items.Traps
             { TrapItemsDifficulty.NoTraps, 0 },
             { TrapItemsDifficulty.Easy, 0 },
             { TrapItemsDifficulty.Medium, 0 },
-            { TrapItemsDifficulty.Hard, 0 },
-            { TrapItemsDifficulty.Hell, 0 },
+            { TrapItemsDifficulty.Hard, 2 },
+            { TrapItemsDifficulty.Hell, 6 },
             { TrapItemsDifficulty.Nightmare, 12 },
             { TrapItemsDifficulty.Eldritch, 128 },
         };
