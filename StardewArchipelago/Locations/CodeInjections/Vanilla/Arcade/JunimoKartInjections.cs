@@ -217,6 +217,12 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Arcade
                 AddJKScore(__instance.entries, "Sam", 10000);
                 AddJKScore(__instance.entries, "Abigail", 5000);
                 AddJKScore(__instance.entries, "Vincent", 250);
+                AddJKScore(__instance.entries, "Leah", 200);
+                AddJKScore(__instance.entries, "Harvey", 150);
+                AddJKScore(__instance.entries, "Willy", 100);
+                AddJKScore(__instance.entries, "Emily", 60);
+                AddJKScore(__instance.entries, "Pam", 30);
+                AddJKScore(__instance.entries, "Haley", 10);
 
                 _latestScores = new List<KeyValuePair<string, int>>();
                 foreach (var entry in __instance.entries)
@@ -271,7 +277,14 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Arcade
                 return;
             }
 
-            Game1.player.team.junimoKartScores.AddScore(Game1.RequireCharacter(npcName).displayName, score);
+            var npc = Game1.getCharacterFromName(npcName);
+            if (npc == null)
+            {
+                return;
+            }
+
+            var name = npc.displayName ?? npcName;
+            Game1.player.team.junimoKartScores.AddScore(name, score);
         }
     }
 }
