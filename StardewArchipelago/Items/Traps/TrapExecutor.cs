@@ -183,7 +183,8 @@ namespace StardewArchipelago.Items.Traps
         {
             var difficulty = _archipelago.SlotData.TrapItemsDifficulty;
             var destination = _difficultyBalancer.TeleportDestinations[difficulty];
-            TeleportRandomly(destination, difficulty == TrapItemsDifficulty.Eldritch ? 20 : 1);
+            var numberOfTeleports = _difficultyBalancer.NumberOfTeleports[difficulty];
+            TeleportRandomly(destination, numberOfTeleports);
         }
 
         public void TeleportRandomly(TeleportDestination destination, int numberOfTeleports = 1)

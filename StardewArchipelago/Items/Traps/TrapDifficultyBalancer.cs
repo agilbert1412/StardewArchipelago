@@ -51,6 +51,17 @@ namespace StardewArchipelago.Items.Traps
             { TrapItemsDifficulty.Eldritch, TeleportDestination.Anywhere },
         };
 
+        public Dictionary<TrapItemsDifficulty, int> NumberOfTeleports = new()
+        {
+            { TrapItemsDifficulty.NoTraps, 0 },
+            { TrapItemsDifficulty.Easy, 1 },
+            { TrapItemsDifficulty.Medium, 1 },
+            { TrapItemsDifficulty.Hard, 2 },
+            { TrapItemsDifficulty.Hell, 2 },
+            { TrapItemsDifficulty.Nightmare, 5 },
+            { TrapItemsDifficulty.Eldritch, 20 },
+        };
+
         public Dictionary<TrapItemsDifficulty, double> CrowAttackRate = new()
         {
             { TrapItemsDifficulty.NoTraps, 0 },
