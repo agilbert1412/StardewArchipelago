@@ -1,18 +1,13 @@
-﻿using System;
-using KaitoKid.ArchipelagoUtilities.Net;
-using StardewArchipelago.Archipelago.SlotData.SlotEnums.SlotDataRandomization;
+﻿using StardewArchipelago.Archipelago.SlotData.SlotEnums.SlotDataRandomization;
 using StardewArchipelago.GameModifications.EntranceRandomizer;
 using StardewArchipelago.Stardew;
 using StardewValley;
 using StardewValley.GameData.Locations;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Force.DeepCloner;
 using KaitoKid.Utilities.Interfaces;
-using Microsoft.Xna.Framework.Graphics.PackedVector;
 using StardewArchipelago.Constants;
-using xTile.Dimensions;
 
 namespace StardewArchipelago.GameModifications.RandomizedData
 {
@@ -62,6 +57,9 @@ namespace StardewArchipelago.GameModifications.RandomizedData
                         break;
                     case "Forest Pond":
                         AddMapSpawnDatas(mapSpawnDatas, "Forest", "Smallmouth Bass");
+                        break;
+                    case "Forest Waterfall":
+                        AddMapSpawnDatas(mapSpawnDatas, "Forest", "Goby");
                         break;
                     case "Island West Ocean":
                         AddMapSpawnDatas(mapSpawnDatas, "IslandWest", "Lionfish");
