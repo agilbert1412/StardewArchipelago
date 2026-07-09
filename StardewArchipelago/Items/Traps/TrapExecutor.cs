@@ -56,6 +56,7 @@ namespace StardewArchipelago.Items.Traps
         public readonly ObjectNudger Nudger;
         public readonly OutfitChanger _outfitChanger;
         private readonly string[] _availableSoundCues;
+        private List<ICue> _activeSounds;
 
         public TrapExecutor(ILogger logger, IModHelper modHelper, StardewArchipelagoClient archipelago, IGiftHandler giftHandler, ArchipelagoStateDto state)
         {
@@ -75,6 +76,7 @@ namespace StardewArchipelago.Items.Traps
             DebuffApplier = new BuffApplier(_permanentState);
             Nudger = new ObjectNudger(_logger, _helper, _archipelago);
             _outfitChanger = new OutfitChanger(_logger, _helper);
+            _activeSounds = new List<ICue>();
 
             // private SoundBank soundBank;
             var soundBankField = _helper.Reflection.GetField<SoundBank>(Game1.soundBank, "soundBank");
@@ -96,9 +98,9 @@ namespace StardewArchipelago.Items.Traps
             return !isSafeLocation && !isSleepTime && !isFestival && !isInFade && !isInMenu;
         }
 
-        public void PerformTrapManyTimes(int iterations, int delayInSeconds, Func<bool> trapMethod, int delayVariance)
+        public void PerformTrapManyTimes(int iterations, int delayInSeconds, Func<bool> trapMethod, int delayVariance, Action endAction = null)
         {
-            PerformTrapManyTimesAsync(iterations, delayInSeconds, trapMethod, delayVariance).FireAndForget();
+            PerformTrapManyTimesAsync(iterations, delayInSeconds, trapMethod, delayVariance, endAction).FireAndForget();
         }
 
         /// <summary>
@@ -108,8 +110,11 @@ namespace StardewArchipelago.Items.Traps
         /// <param name="delayInSeconds">Delay between iterations</param>
         /// <param name="trapMethod">Method to try to run the trap code. If it returns true, then it has run successfully and counts as an iteration. If it returns false, then it has been skipped and should not count.</param>
         /// <returns></returns>
-        private async Task PerformTrapManyTimesAsync(int iterations, int delayInSeconds, Func<bool> trapMethod, int delayVariance)
+        private async Task PerformTrapManyTimesAsync(int iterations, int delayInSeconds, Func<bool> trapMethod, int delayVariance, Action endAction = null)
         {
+            var minDelay = Math.Max(1, delayInSeconds - delayVariance);
+            var maxDelay = Math.Max(1, delayInSeconds + delayVariance);
+            var delayRange = maxDelay - minDelay;
             while (iterations > 0)
             {
                 if (trapMethod())
@@ -117,12 +122,13 @@ namespace StardewArchipelago.Items.Traps
                     iterations--;
                 }
 
-                var minDelay = Math.Max(1, delayInSeconds - delayVariance);
-                var maxDelay = Math.Max(1, delayInSeconds + delayVariance);
-                var delayRange = maxDelay - minDelay;
                 var delay = Game1.random.NextDouble() * delayRange + minDelay;
                 await Task.Run(() => Thread.Sleep((int)(delay * 1000)));
             }
+
+            var endDelay = (Game1.random.NextDouble() * delayRange + minDelay) * 2;
+            await Task.Run(() => Thread.Sleep((int)(endDelay * 1000)));
+            endAction?.Invoke();
         }
 
         public void AddBurntDebuff()
@@ -802,19 +808,19 @@ namespace StardewArchipelago.Items.Traps
         public void PlayMeows()
         {
             var numberOfMeows = _difficultyBalancer.MeowBarkNumber[_archipelago.SlotData.TrapItemsDifficulty];
-            PerformTrapManyTimes(numberOfMeows, 2, () => PlaySound("cat"), 1);
+            PerformTrapManyTimes(numberOfMeows, 2, () => PlaySound("cat"), 1, StopAllSounds);
         }
 
         public void PlayBarks()
         {
             var numberOfBarks = _difficultyBalancer.MeowBarkNumber[_archipelago.SlotData.TrapItemsDifficulty];
-            PerformTrapManyTimes(numberOfBarks, 2, () => PlaySound("dog_bark"), 1);
+            PerformTrapManyTimes(numberOfBarks, 2, () => PlaySound("dog_bark"), 1, StopAllSounds);
         }
 
         public void PlayNoises()
         {
             var numberOfNoises = _difficultyBalancer.NoiseNumber[_archipelago.SlotData.TrapItemsDifficulty];
-            PerformTrapManyTimes(numberOfNoises, 2, () => PlaySound("random"), 1);
+            PerformTrapManyTimes(numberOfNoises, 2, () => PlaySound("random"), 1, StopAllSounds);
         }
 
         private string GetRandomSoundCue()
@@ -843,8 +849,38 @@ namespace StardewArchipelago.Items.Traps
         {
             var soundToPlay = sound == "random" ? GetRandomSoundCue() : sound;
             int? pitch = minPitch == null || maxPitch == null ? null : Game1.random.Next(minPitch.Value, maxPitch.Value + 1);
-            Game1.playSound(soundToPlay, pitch);
-            return true;
+            if (pitch.HasValue)
+            {
+                var success = Game1.playSound(soundToPlay, pitch.Value, out var cue);
+                _activeSounds.Add(cue);
+                return success;
+            }
+            else
+            {
+                var success = Game1.playSound(soundToPlay, out var cue);
+                _activeSounds.Add(cue);
+                return success;
+            }
+        }
+
+        private void StopAllSounds()
+        {
+            if (_activeSounds == null)
+            {
+                return;
+            }
+
+            var difficulty = _archipelago.SlotData.TrapItemsDifficulty;
+            if (difficulty < TrapItemsDifficulty.Nightmare)
+            {
+                var stopOptions = difficulty <= TrapItemsDifficulty.Hard ? AudioStopOptions.Immediate : AudioStopOptions.AsAuthored;
+                foreach (var activeSound in _activeSounds)
+                {
+                    activeSound?.Stop(stopOptions);
+                }
+            }
+
+            _activeSounds.Clear();
         }
 
         public void ForceNextMultisleep()
