@@ -37,9 +37,6 @@
 
 	<ItemGroup>
 		<Reference Include="Newtonsoft.Json" HintPath="$(GamePath)\smapi-internal\Newtonsoft.Json.dll" private="false" />
-		<Reference Include="showFishInWater">
-		  <HintPath>..\..\..\..\Programs\Steam\steamapps\common\Stardew Valley\Mods\VisibleFish\showFishInWater.dll</HintPath>
-		</Reference>
 	</ItemGroup>
 
 	<ItemGroup>
