@@ -171,17 +171,23 @@ namespace StardewArchipelago.Constants
         {
             if (condition == null)
             {
-                return "";
+                return null;
             }
 
-            return string.Join(',', condition.Split(',').Where(filter));
+            var newCondition = string.Join(',', condition.Split(',').Where(filter));
+            if (string.IsNullOrWhiteSpace(newCondition))
+            {
+                return null;
+            }
+
+            return newCondition;
         }
 
         public static string ConcatenateConditions(IReadOnlyList<string> conditions, bool invert)
         {
-            if (conditions == null || !conditions.Any())
+            if (conditions == null || conditions.All(string.IsNullOrWhiteSpace))
             {
-                return "";
+                return null;
             }
 
             conditions = conditions.Where(x => !string.IsNullOrWhiteSpace(x)).ToList();

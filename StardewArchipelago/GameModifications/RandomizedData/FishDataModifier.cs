@@ -337,7 +337,7 @@ namespace StardewArchipelago.GameModifications.RandomizedData
 
                 foreach (var locationId in locationsToDeleteFrom)
                 {
-                    locationsData[locationId].Fish = locationsData[locationId].Fish.Where(x => IsFishToDelete(x, fishQualifiedId)).ToList();
+                    locationsData[locationId].Fish = locationsData[locationId].Fish.Where(x => !IsFishToDelete(x, fishQualifiedId)).ToList();
                 }
             }
         }
@@ -446,6 +446,7 @@ namespace StardewArchipelago.GameModifications.RandomizedData
                     }
 
                     fishInLocation.Condition = GameStateConditionProvider.RemoveCondition(fishInLocation.Condition, GameStateCondition.LOCATION_SEASON);
+                    fishInLocation.Season = null;
 
                     seasons = seasons.ToHashSet().ToList();
                     if (seasons.Count >= 4)
