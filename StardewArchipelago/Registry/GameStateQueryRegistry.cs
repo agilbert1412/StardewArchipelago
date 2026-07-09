@@ -1,17 +1,18 @@
-﻿using System;
-using StardewArchipelago.Archipelago;
+﻿using StardewArchipelago.Archipelago;
+using StardewArchipelago.Archipelago.Gifting;
 using StardewArchipelago.Constants;
+using StardewArchipelago.Items.Traps;
+using StardewArchipelago.Locations;
 using StardewArchipelago.Locations.CodeInjections.Vanilla;
 using StardewArchipelago.Locations.CodeInjections.Vanilla.MonsterSlayer;
 using StardewArchipelago.Logging;
-using StardewValley;
-using StardewValley.Delegates;
-using System.Linq;
-using StardewArchipelago.Archipelago.Gifting;
-using StardewArchipelago.Items.Traps;
 using StardewArchipelago.Serialization;
 using StardewArchipelago.Stardew;
-using StardewArchipelago.Locations;
+using StardewValley;
+using StardewValley.Delegates;
+using StardewValley.Locations;
+using System;
+using System.Linq;
 
 namespace StardewArchipelago.Registry
 {
@@ -40,6 +41,7 @@ namespace StardewArchipelago.Registry
                 GameStateQuery.Register(GameStateCondition.HAS_STOCK_SIZE, TravelingMerchantInjections.HasStockSizeQueryDelegate);
                 GameStateQuery.Register(GameStateCondition.FOUND_ARTIFACT, ArtifactsFoundQueryDelegate);
                 GameStateQuery.Register(GameStateCondition.FOUND_MINERAL, MineralsFoundQueryDelegate);
+                GameStateQuery.Register(GameStateCondition.CURRENT_MINE_FLOOR, CurrentMineFloorQueryDelegate);
             }
             catch (Exception ex)
             {
@@ -101,6 +103,26 @@ namespace StardewArchipelago.Registry
                 return false;
             }
             return true;
+        }
+
+        private bool CurrentMineFloorQueryDelegate(string[] query, GameStateQueryContext context)
+        {
+            if (!query.Any())
+            {
+                return false;
+            }
+
+            if (!int.TryParse(query[1], out var requestedFloor))
+            {
+                return false;
+            }
+
+            if (Game1.player.currentLocation is not MineShaft currentMines)
+            {
+                return false;
+            }
+
+            return currentMines.mineLevel == requestedFloor;
         }
     }
 }

@@ -1,19 +1,17 @@
-﻿using System;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using StardewArchipelago.GameModifications.EntranceRandomizer;
+using StardewArchipelago.GameModifications.RandomizedData;
 using StardewArchipelago.Stardew;
+using StardewValley;
 using StardewValley.GameData.Locations;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using StardewValley;
 
 namespace StardewArchipelago.Archipelago.SlotData.SlotEnums.SlotDataRandomization
 {
     public class RandomizedFishData
     {
-        public const string CATCH_METHOD_CRAB_POT = "Crab Pot";
-        public const string CATCH_METHOD_FISHING_ROD = "Fishing Rod";
-
         public string Name { get; set; }
         public string Method { get; set; }
         public int? Difficulty { get; set; }
@@ -30,178 +28,6 @@ namespace StardewArchipelago.Archipelago.SlotData.SlotEnums.SlotDataRandomizatio
         public void AssignName(string name)
         {
             Name = name;
-        }
-
-        public Dictionary<string, List<SpawnFishData>> GetSpawnFishDatas(StardewItemManager itemManager, Dictionary<string, List<SpawnFishData>> originalFishEntries)
-        {
-            var spawnDatas = new Dictionary<string, List<SpawnFishData>>();
-            if (Method == CATCH_METHOD_CRAB_POT)
-            {
-                return spawnDatas;
-            }
-
-            var fish = itemManager.GetObjectByName(Name);
-            var fishQualifiedId = fish.GetQualifiedId();
-
-            var fishLocations = Location;
-            var relevantOriginalEntries = GetRelevantOriginalEntries(itemManager, originalFishEntries);
-            var isLocationUnchanged = Location == null;
-            if (isLocationUnchanged)
-            {
-                fishLocations = relevantOriginalEntries.Keys.ToArray();
-            }
-
-
-            foreach (var regionName in fishLocations)
-            {
-                List<SpawnFishData> relevantOriginalEntriesForThisMap;
-                if (relevantOriginalEntries.ContainsKey(regionName))
-                {
-                    relevantOriginalEntriesForThisMap = relevantOriginalEntries[regionName];
-                }
-                else if (relevantOriginalEntries.Any())
-                {
-                    relevantOriginalEntriesForThisMap = relevantOriginalEntries.First().Value;
-                }
-                else
-                {
-                    relevantOriginalEntriesForThisMap = new List<SpawnFishData>() {null };
-                }
-
-                foreach (var relevantOriginalEntry in relevantOriginalEntriesForThisMap)
-                {
-                    var mapName = GetMapName(regionName);
-
-                    string fishAreaId = null;
-                    Rectangle? playerPosition = null;
-                    Rectangle? bobberPosition = null;
-
-                    if (regionName == "Forest River")
-                    {
-                        mapName = "Forest";
-                        fishAreaId = "River";
-                    }
-                    else if (regionName == "Forest Pond")
-                    {
-                        mapName = "Forest";
-                        fishAreaId = "Lake";
-                    }
-                    else if (regionName == "Island West Ocean")
-                    {
-                        mapName = "IslandWest";
-                        fishAreaId = "Ocean";
-                    }
-                    else if (regionName == "Island West River")
-                    {
-                        mapName = "IslandWest";
-                        fishAreaId = "Freshwater";
-                    }
-                    else if (regionName == "Tide Pools")
-                    {
-                        mapName = "Beach";
-                        playerPosition = new Rectangle(82, 0, 100, 100);
-                    }
-                    else if (regionName == "Night Market")
-                    {
-                        mapName = "Submarine";
-                        spawnDatas.TryAdd("Beach", new List<SpawnFishData>());
-                        var beachSpawn = CreateNightMarketFishSpawnDataOnBeach(fishQualifiedId);
-                        spawnDatas["Beach"].Add(beachSpawn);
-                    }
-                    else if (regionName.StartsWith("The Mines"))
-                    {
-                        mapName = "UndergroundMine";
-                    }
-
-                    var condition = relevantOriginalEntry?.Condition;
-                    var season = relevantOriginalEntry?.Season;
-                    if (Season != null)
-                    {
-                        condition = Season.Length >= 4 ? null : $"LOCATION_SEASON Here {string.Join(" ", Season.Select(x => x.ToLower()))}";
-                        season = Season.Length != 1 ? null : Season.Select(x => Enum.Parse<Season>(x)).First();
-                    }
-
-                    if (isLocationUnchanged)
-                    {
-                        fishAreaId ??= relevantOriginalEntry?.FishAreaId;
-                        playerPosition ??= relevantOriginalEntry?.PlayerPosition;
-                        bobberPosition ??= relevantOriginalEntry?.BobberPosition;
-                    }
-
-                    var spawnData = new SpawnFishData()
-                    {
-                        FishAreaId = fishAreaId,
-                        PlayerPosition = playerPosition,
-                        BobberPosition = bobberPosition,
-                        Condition = condition,
-                        RequireMagicBait = false,
-                        Id = fishQualifiedId,
-                        ItemId = fishQualifiedId,
-                        Season = season,
-                    };
-
-                    spawnDatas.TryAdd(mapName, new List<SpawnFishData>());
-                    spawnDatas[mapName].Add(spawnData);
-                }
-            }
-
-            return spawnDatas;
-        }
-
-        private Dictionary<string, List<SpawnFishData>> GetRelevantOriginalEntries(StardewItemManager itemManager, Dictionary<string, List<SpawnFishData>> originalFishEntries)
-        {
-            var relevantEntries = new Dictionary<string, List<SpawnFishData>>();
-            foreach (var (location, originalEntries) in originalFishEntries)
-            {
-                foreach (var originalEntry in originalEntries)
-                {
-                    var fishId = originalEntry.ItemId;
-                    if (!itemManager.ObjectExistsById(fishId))
-                    {
-                        continue;
-                    }
-
-                    var fish = itemManager.GetObjectById(fishId);
-
-                    if (fish.Name.Equals(Name))
-                    {
-                        relevantEntries.TryAdd(location, new List<SpawnFishData>());
-                        relevantEntries[location].Add(originalEntry);
-                    }
-                }
-            }
-
-            return relevantEntries;
-        }
-
-        private string GetMapName(string regionName)
-        {
-            return EntranceManager.TurnAliased(regionName);
-        }
-
-        private SpawnFishData CreateNightMarketFishSpawnDataOnBeach(string fishId)
-        {
-            return new SpawnFishData()
-            {
-                Chance = 0.1f,
-                FishAreaId = null,
-                BobberPosition = new Rectangle
-                {
-                    X = 0,
-                    Y = 32,
-                    Width = 12,
-                    Height = 255,
-                },
-                MinDistanceFromShore = 3,
-                ApplyDailyLuck = false,
-                CuriosityLureBuff = 0.205f,
-                RequireMagicBait = true,
-                Precedence = -10,
-                IgnoreFishDataRequirements = true,
-                CanBeInherited = false,
-                Id = fishId,
-                ItemId = fishId,
-            };
         }
     }
 }

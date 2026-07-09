@@ -1,20 +1,25 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using Force.DeepCloner;
+﻿using Force.DeepCloner;
 using KaitoKid.Utilities.Interfaces;
 using StardewArchipelago.Archipelago;
 using StardewArchipelago.Archipelago.SlotData.SlotEnums.SlotDataRandomization;
+using StardewArchipelago.Constants;
+using StardewArchipelago.Constants.Vanilla;
 using StardewArchipelago.Stardew;
 using StardewModdingAPI;
 using StardewModdingAPI.Events;
 using StardewValley;
 using StardewValley.GameData.Locations;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using xTile.Dimensions;
 
 namespace StardewArchipelago.GameModifications.RandomizedData
 {
     public class FishDataModifier
     {
+        private static readonly string[] _immuneLocations = { "Default", "fishingGame", "Temp" };
+
         private ILogger _logger;
         private IModHelper _modHelper;
         private readonly StardewArchipelagoClient _archipelago;
@@ -50,47 +55,6 @@ namespace StardewArchipelago.GameModifications.RandomizedData
             );
         }
 
-        public void OnLocationsDataRequested(object sender, AssetRequestedEventArgs e)
-        {
-            if (!e.NameWithoutLocale.IsEquivalentTo("Data/Locations"))
-            {
-                return;
-            }
-
-            e.Edit(asset =>
-                {
-                    try
-                    {
-                        var locationsData = asset.AsDictionary<string, LocationData>().Data;
-
-                        var originalFishEntries = GetOriginalFishEntries(locationsData);
-                        var originalFishEntriesByFish = new Dictionary<string, List<SpawnFishData>>();
-                        foreach (var (locationId, originalEntriesForLocation) in originalFishEntries)
-                        {
-                            foreach (var spawnFishData in originalEntriesForLocation)
-                            {
-                                var fishItem = _itemManager.GetItemByQualifiedId(spawnFishData.ItemId);
-                                var fishName = fishItem.Name;
-                                originalFishEntriesByFish.TryAdd(fishName, new List<SpawnFishData>());
-                                originalFishEntriesByFish[fishName].Add(spawnFishData);
-                            }
-                        }
-                        var modifiedFishEntries = GetModifiedFishEntries(originalFishEntries);
-
-                        foreach (var locationId in locationsData.Keys.ToArray())
-                        {
-                            ModifyFishLocationsData(locationsData, locationId, originalFishEntriesByFish, modifiedFishEntries);
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-                        _logger.LogError($"Failed at editing fish assets. Message: {ex.Message}{Environment.NewLine}{Environment.NewLine}{ex.StackTrace}");
-                    }
-                },
-                AssetEditPriority.Late
-            );
-        }
-
         private void ModifyFishData(IDictionary<string, string> allFishData, string fishId)
         {
             var fishData = allFishData[fishId];
@@ -116,8 +80,8 @@ namespace StardewArchipelago.GameModifications.RandomizedData
 
             var originalIsCrabPot = fishDifficultyOrTrap.Equals("trap", StringComparison.InvariantCultureIgnoreCase);
 
-            var isCrabPot = randomizedData.Method == null ? originalIsCrabPot : randomizedData.Method.Equals(RandomizedFishData.CATCH_METHOD_CRAB_POT);
-            var isFishingRod = randomizedData.Method == null ? !originalIsCrabPot : randomizedData.Method.Equals(RandomizedFishData.CATCH_METHOD_FISHING_ROD);
+            var isCrabPot = randomizedData.Method == null ? originalIsCrabPot : randomizedData.Method.Equals(FishSpawnDataGenerator.CATCH_METHOD_CRAB_POT);
+            var isFishingRod = randomizedData.Method == null ? !originalIsCrabPot : randomizedData.Method.Equals(FishSpawnDataGenerator.CATCH_METHOD_FISHING_ROD);
 
             if (isCrabPot)
             {
@@ -193,7 +157,7 @@ namespace StardewArchipelago.GameModifications.RandomizedData
                 depthMultiplier = 0.25;
                 fishDataFields[depthMultiplierIndex] = ".25";
             }
-            
+
 
             return fishDataFields;
         }
@@ -217,116 +181,204 @@ namespace StardewArchipelago.GameModifications.RandomizedData
             return "sunny";
         }
 
-        private Dictionary<string, List<SpawnFishData>> GetOriginalFishEntries(IDictionary<string, LocationData> allLocationData)
+        public void OnLocationsDataRequested(object sender, AssetRequestedEventArgs e)
         {
-            var fishEntries = new Dictionary<string, List<SpawnFishData>>();
+            if (!e.NameWithoutLocale.IsEquivalentTo("Data/Locations"))
+            {
+                return;
+            }
+
+            e.Edit(asset =>
+                {
+                    try
+                    {
+                        var locationsData = asset.AsDictionary<string, LocationData>().Data;
+
+                        SanitizeFishData(locationsData);
+                        var originalFishEntries = GetOriginalFishEntries(locationsData);
+                        var modifiedFishEntries = GetModifiedFishLocationEntries(originalFishEntries);
+                        DeleteOriginalFishEntries(locationsData, modifiedFishEntries);
+                        AddNewFishEntries(locationsData, modifiedFishEntries);
+
+                        UpdateFishEntriesSeasons(locationsData);
+                    }
+                    catch (Exception ex)
+                    {
+                        _logger.LogError($"Failed at editing fish assets. Message: {ex.Message}{Environment.NewLine}{Environment.NewLine}{ex.StackTrace}");
+                    }
+                },
+                AssetEditPriority.Late
+            );
+        }
+
+        private void SanitizeFishData(IDictionary<string, LocationData> allLocationData)
+        {
+            foreach (var (locationId, locationData) in allLocationData)
+            {
+                SanitizeRandomFishData(locationId, locationData);
+            }
+            AddMineshaftFishData(allLocationData["UndergroundMine"]);
+        }
+
+        private void SanitizeRandomFishData(string locationId, LocationData locationData)
+        {
+            if (_immuneLocations.Contains(locationId))
+            {
+                return;
+            }
+
+            for (var i = locationData.Fish.Count - 1; i >= 0; i--)
+            {
+                var spawnFishData = locationData.Fish[i];
+
+                if (spawnFishData.RandomItemId == null || spawnFishData.RandomItemId.Count <= 0)
+                {
+                    continue;
+                }
+
+                for (var ri = spawnFishData.RandomItemId.Count - 1; ri >= 0; ri--)
+                {
+                    var randomItemId = spawnFishData.RandomItemId[ri];
+                    if (!_itemManager.ObjectExistsById(randomItemId))
+                    {
+                        continue;
+                    }
+
+                    var fish = _itemManager.GetObjectById(randomItemId);
+                    var fishName = fish.Name;
+                    if (!_dataRandomization.FishData.ContainsKey(fishName))
+                    {
+                        continue;
+                    }
+
+                    spawnFishData.RandomItemId.RemoveAt(ri);
+                    var randomFishSpawnData = spawnFishData.DeepClone();
+                    randomFishSpawnData.RandomItemId = null;
+                    randomFishSpawnData.Id = randomItemId;
+                    randomFishSpawnData.ItemId = randomItemId;
+                    locationData.Fish.Add(randomFishSpawnData);
+                }
+
+                if (!spawnFishData.RandomItemId.Any())
+                {
+                    locationData.Fish.RemoveAt(i);
+                }
+            }
+        }
+
+        private void AddMineshaftFishData(LocationData locationData)
+        {
+            var spawnDataGenerator = new FishSpawnDataGenerator(_logger, _itemManager, null);
+            locationData.Fish.Add(spawnDataGenerator.CreateBlankSpawnData("Stonefish", GameStateConditionProvider.CreateMineFloorCondition(20)));
+            locationData.Fish.Add(spawnDataGenerator.CreateBlankSpawnData("Ice Pip", GameStateConditionProvider.CreateMineFloorCondition(60)));
+            locationData.Fish.Add(spawnDataGenerator.CreateBlankSpawnData("Lava Eel", GameStateConditionProvider.CreateMineFloorCondition(100)));
+        }
+
+        private Dictionary<FishLocation, List<SpawnFishData>> GetOriginalFishEntries(IDictionary<string, LocationData> allLocationData)
+        {
+            var fishEntries = new Dictionary<FishLocation, List<SpawnFishData>>();
 
             foreach (var (locationId, locationData) in allLocationData)
             {
-                for (var i = locationData.Fish.Count - 1; i >= 0; i--)
+                foreach (var spawnFishData in locationData.Fish)
                 {
-                    var spawnFishData = locationData.Fish[i];
                     if (spawnFishData.ItemId == null)
                     {
-                        if (spawnFishData.RandomItemId == null || spawnFishData.RandomItemId.Count <= 0)
-                        {
-                            continue;
-                        }
-
-                        var atLeastOne = false;
-                        foreach (var fishId in spawnFishData.RandomItemId)
-                        {
-                            if (!_itemManager.ObjectExistsById(fishId))
-                            {
-                                continue;
-                            }
-
-                            var fish = _itemManager.GetObjectById(fishId);
-                            if (!_dataRandomization.FishData.ContainsKey(fish.Name))
-                            {
-                                continue;
-                            }
-
-                            fishEntries.TryAdd(locationId, new List<SpawnFishData>());
-                            var newSpawnFishData = spawnFishData.DeepClone();
-                            newSpawnFishData.RandomItemId = null;
-                            newSpawnFishData.ItemId = fishId;
-                            fishEntries[locationId].Add(newSpawnFishData);
-                            atLeastOne = true;
-                        }
-                        if (atLeastOne)
-                        {
-                            locationData.Fish.RemoveAt(i);
-                        }
+                        continue;
                     }
-                    else
+
+                    var fishId = spawnFishData.ItemId;
+                    if (!_itemManager.ObjectExistsById(fishId))
                     {
-                        var fishId = spawnFishData.ItemId;
-                        if (!_itemManager.ObjectExistsById(fishId))
-                        {
-                            continue;
-                        }
-
-                        var fish = _itemManager.GetObjectById(fishId);
-                        if (!_dataRandomization.FishData.ContainsKey(fish.Name))
-                        {
-                            continue;
-                        }
-
-                        fishEntries.TryAdd(locationId, new List<SpawnFishData>());
-                        fishEntries[locationId].Add(spawnFishData);
-                        locationData.Fish.RemoveAt(i);
+                        continue;
                     }
+
+                    var fish = _itemManager.GetObjectById(fishId);
+                    var fishKey = new FishLocation(fish.Name, locationId);
+                    fishEntries.TryAdd(fishKey, new List<SpawnFishData>());
+                    fishEntries[fishKey].Add(spawnFishData);
                 }
             }
 
             return fishEntries;
         }
 
-        private Dictionary<string, List<SpawnFishData>> GetModifiedFishEntries(Dictionary<string, List<SpawnFishData>> originalFishEntries)
+        private Dictionary<FishLocation, List<SpawnFishData>> GetModifiedFishLocationEntries(Dictionary<FishLocation, List<SpawnFishData>> originalFishEntries)
         {
-            var modifiedFishEntries = new Dictionary<string, List<SpawnFishData>>();
+            var modifiedFishEntries = new Dictionary<FishLocation, List<SpawnFishData>>();
+            var spawnDataGenerator = new FishSpawnDataGenerator(_logger, _itemManager, originalFishEntries);
             foreach (var (fishName, randomizedFishData) in _dataRandomization.FishData)
             {
-                var entriesByLocation = randomizedFishData.GetSpawnFishDatas(_itemManager, originalFishEntries);
-                foreach (var (locationName, entries) in entriesByLocation)
+                if (randomizedFishData.Location == null || !randomizedFishData.Location.Any())
                 {
-                    modifiedFishEntries.TryAdd(locationName, new List<SpawnFishData>());
-                    modifiedFishEntries[locationName].AddRange(entries);
+                    continue;
+                }
+
+                var entriesByLocation = spawnDataGenerator.GetLocationSpawnFishDatas(randomizedFishData);
+                foreach (var (fishLocation, entries) in entriesByLocation)
+                {
+                    modifiedFishEntries.TryAdd(fishLocation, new List<SpawnFishData>());
+                    modifiedFishEntries[fishLocation].AddRange(entries);
                 }
             }
 
             return modifiedFishEntries;
         }
 
-        private void ModifyFishLocationsData(IDictionary<string, LocationData> allLocationData, string locationId, Dictionary<string, List<SpawnFishData>> originalFishEntriesByFish, Dictionary<string, List<SpawnFishData>> modifiedFishEntries)
+        private void DeleteOriginalFishEntries(IDictionary<string, LocationData> locationsData, Dictionary<FishLocation, List<SpawnFishData>> modifiedFishEntries)
         {
-            var locationData = allLocationData[locationId];
-
-            if (!modifiedFishEntries.ContainsKey(locationId))
+            var modifiedFish = modifiedFishEntries.Select(x => x.Key.FishName).ToHashSet();
+            var locationsToDeleteFrom = locationsData.Keys.Where(x => !_immuneLocations.Contains(x)).ToArray();
+            foreach (var fishName in modifiedFish)
             {
-                return;
-            }
+                var fish = _itemManager.GetObjectByName(fishName);
+                var fishId = fish.Id;
+                var fishQualifiedId = fish.GetQualifiedId();
 
-            var modifiedEntriesForLocation = modifiedFishEntries[locationId];
-
-            foreach (var spawnFishData in modifiedEntriesForLocation)
-            {
-                var fishItem = _itemManager.GetItemByQualifiedId(spawnFishData.ItemId);
-                var fishName = fishItem.Name;
-                if (originalFishEntriesByFish.ContainsKey(fishName))
+                foreach (var locationId in locationsToDeleteFrom)
                 {
-                    var originalEntriesForThisFish = originalFishEntriesByFish[fishName];
-                    var newSpawnFishData = originalEntriesForThisFish[0];
-                    newSpawnFishData = MergeSpawnFishData(newSpawnFishData, originalEntriesForThisFish);
-                    newSpawnFishData = MergeSpawnFishData(newSpawnFishData, spawnFishData);
-                    locationData.Fish.Add(newSpawnFishData);
-                }
-                else
-                {
-                    locationData.Fish.Add(spawnFishData);
+                    locationsData[locationId].Fish = locationsData[locationId].Fish.Where(x => IsFishToDelete(x, fishQualifiedId)).ToList();
                 }
             }
+        }
+
+        private bool IsFishToDelete(SpawnFishData x, string fishToDeleteQualifiedId)
+        {
+            if (x.ItemId != null)
+            {
+                if (QualifiedItemIds.QualifiedObjectId(x.ItemId).Equals(fishToDeleteQualifiedId))
+                {
+                    return true;
+                }
+            }
+            if (x.Id != null)
+            {
+                if (QualifiedItemIds.QualifiedObjectId(x.Id).Equals(fishToDeleteQualifiedId))
+                {
+                    return true;
+                }
+            }
+            if (x.RandomItemId != null && x.RandomItemId.Any())
+            {
+                if (x.RandomItemId.Any(y => QualifiedItemIds.QualifiedObjectId(y).Equals(fishToDeleteQualifiedId)))
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        private void AddNewFishEntries(IDictionary<string, LocationData> locationsData, Dictionary<FishLocation, List<SpawnFishData>> modifiedFishEntries)
+        {
+            foreach (var (fishLocation, newFishEntries) in modifiedFishEntries)
+            {
+                ModifyFishLocationsData(locationsData, fishLocation, newFishEntries);
+            }
+        }
+
+        private void ModifyFishLocationsData(IDictionary<string, LocationData> allLocationData, FishLocation fishLocation, List<SpawnFishData> newFishEntries)
+        {
+            allLocationData[fishLocation.LocationId].Fish.AddRange(newFishEntries);
         }
 
         private SpawnFishData MergeSpawnFishData(SpawnFishData spawnFishData, List<SpawnFishData> ModifiedSpawnFishDatas)
@@ -355,6 +407,59 @@ namespace StardewArchipelago.GameModifications.RandomizedData
             newSpawnFishData.MinDistanceFromShore = Math.Min(newSpawnFishData.MinDistanceFromShore, 2);
 
             return newSpawnFishData;
+        }
+
+        private void UpdateFishEntriesSeasons(IDictionary<string, LocationData> locationsData)
+        {
+            var fishData = DataLoader.Fish(Game1.content);
+            foreach (var locationId in locationsData.Keys.ToArray())
+            {
+                if (_immuneLocations.Contains(locationId))
+                {
+                    continue;
+                }
+
+                var locationData = locationsData[locationId];
+                foreach (var fishInLocation in locationData.Fish)
+                {
+                    var fishId = fishInLocation.ItemId;
+                    if (!_itemManager.ObjectExistsById(fishId))
+                    {
+                        continue;
+                    }
+                    var fishName = _itemManager.GetObjectById(fishId).Name;
+                    if (!_dataRandomization.FishData.ContainsKey(fishName))
+                    {
+                        continue;
+                    }
+
+                    var fishDataParts = fishData[QualifiedItemIds.UnqualifyId(fishId)].Split("/");
+                    var seasons = new List<Season>();
+                    if (fishDataParts[1] == "trap")
+                    {
+                        seasons.AddRange(new []{Season.Spring, Season.Summer, Season.Fall, Season.Winter});
+                    }
+                    else
+                    {
+                        var seasonStrings = fishDataParts[6].Split(" ");
+                        seasons.AddRange(seasonStrings.Select(x => Enum.Parse<Season>(x, true)));
+                    }
+
+                    fishInLocation.Condition = GameStateConditionProvider.RemoveCondition(fishInLocation.Condition, GameStateCondition.LOCATION_SEASON);
+
+                    seasons = seasons.ToHashSet().ToList();
+                    if (seasons.Count >= 4)
+                    {
+                        continue;
+                    }
+                    else if (seasons.Count <= 0)
+                    {
+                        throw new Exception($"Fish '{fishName}' has no seasons!");
+                    }
+
+                    fishInLocation.Condition = GameStateConditionProvider.ConcatenateConditions(new[] { fishInLocation.Condition, GameStateConditionProvider.CreateLocationSeasonsCondition(seasons.ToArray()) }, false);
+                }
+            }
         }
     }
 }
