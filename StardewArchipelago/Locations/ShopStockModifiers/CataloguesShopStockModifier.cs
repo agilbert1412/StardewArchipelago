@@ -79,7 +79,7 @@ namespace StardewArchipelago.Locations.ShopStockModifiers
 
                 var apShopItem = CreateArchipelagoLocation(item, locationName);
                 var ccCondition = "IS_COMMUNITY_CENTER_COMPLETE";
-                if (apShopItem.Condition.Contains(ccCondition))
+                if (apShopItem.Condition?.Contains(ccCondition) == true)
                 {
                     apShopItem.Condition = item.Condition.Replace(ccCondition, GameStateConditionProvider.CreateHasReceivedItemCondition(APItem.FOREST_MAGIC));
                 }
