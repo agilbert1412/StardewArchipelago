@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using StardewArchipelago.Constants.Locations;
+using StardewValley;
 
 namespace StardewArchipelago.Constants
 {
@@ -119,6 +120,11 @@ namespace StardewArchipelago.Constants
             return CreateCondition("SEASON", seasons);
         }
 
+        public static string CreateLocationSeasonsCondition(Season[] seasons)
+        {
+            return CreateCondition($"{GameStateCondition.LOCATION_SEASON} Here", seasons.Select(x => x.ToString()).ToArray());
+        }
+
         public static string CreateArtifactsCondition(string[] artifacts)
         {
             return CreateCondition(GameStateCondition.FOUND_ARTIFACT, artifacts);
@@ -146,6 +152,11 @@ namespace StardewArchipelago.Constants
             return CreateCondition(GameStateCondition.HAS_COOKING_RECIPE, new []{"Current", itemName});
         }
 
+        public static string CreateMineFloorCondition(int mineFloor)
+        {
+            return CreateCondition(GameStateCondition.CURRENT_MINE_FLOOR, new[] { mineFloor.ToString() });
+        }
+
         public static string CreateCondition(string condition, string[] arguments)
         {
             return !arguments.Any() ? condition : $"{condition} {string.Join(' ', arguments)}";
@@ -158,14 +169,25 @@ namespace StardewArchipelago.Constants
 
         public static string FilterCondition(string condition, Func<string, bool> filter)
         {
-            return string.Join(',', condition.Split(',').Where(filter));
+            if (condition == null)
+            {
+                return null;
+            }
+
+            var newCondition = string.Join(',', condition.Split(',').Where(filter));
+            if (string.IsNullOrWhiteSpace(newCondition))
+            {
+                return null;
+            }
+
+            return newCondition;
         }
 
         public static string ConcatenateConditions(IReadOnlyList<string> conditions, bool invert)
         {
-            if (conditions == null || !conditions.Any())
+            if (conditions == null || conditions.All(string.IsNullOrWhiteSpace))
             {
-                return "";
+                return null;
             }
 
             conditions = conditions.Where(x => !string.IsNullOrWhiteSpace(x)).ToList();

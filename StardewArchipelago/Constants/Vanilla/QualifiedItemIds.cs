@@ -430,14 +430,19 @@ namespace StardewArchipelago.Constants.Vanilla
             return QualifyId(SHIRT_QUALIFIER, shirtId);
         }
 
-        public static string QualifyId(string qualifier, string objectId)
+        public static string QualifyId(string qualifier, string itemId)
         {
-            if (qualifier == null || objectId == null)
+            if (qualifier == null || itemId == null)
             {
                 return null;
             }
 
-            return $"{qualifier}{objectId}";
+            if (itemId.StartsWith(qualifier))
+            {
+                return itemId;
+            }
+
+            return $"{qualifier}{itemId}";
         }
 
         public static string UnqualifyId(string id)
