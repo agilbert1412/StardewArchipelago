@@ -195,11 +195,15 @@ namespace StardewArchipelago.GameModifications.RandomizedData
                         var locationsData = asset.AsDictionary<string, LocationData>().Data;
 
                         SanitizeFishData(locationsData);
+                        if (_dataRandomization.FishData == null || !_dataRandomization.FishData.Any())
+                        {
+                            return;
+                        }
+
                         var originalFishEntries = GetOriginalFishEntries(locationsData);
                         var modifiedFishEntries = GetModifiedFishLocationEntries(originalFishEntries);
                         DeleteOriginalFishEntries(locationsData, modifiedFishEntries);
                         AddNewFishEntries(locationsData, modifiedFishEntries);
-
                         UpdateFishEntriesSeasons(locationsData);
                     }
                     catch (Exception ex)

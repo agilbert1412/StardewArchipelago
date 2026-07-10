@@ -61,7 +61,7 @@ namespace StardewArchipelago.GameModifications.RandomizedData
 
             _harmony.Patch(
                 original: AccessTools.Method(typeof(MineShaft), nameof(MineShaft.getFish)),
-                postfix: new HarmonyMethod(typeof(RandomizedFishDataInjections), nameof(RandomizedFishDataInjections.GetFish_CorrectMinesFish_Postfix))
+                prefix: new HarmonyMethod(typeof(RandomizedFishDataInjections), nameof(RandomizedFishDataInjections.GetFish_DeHardCodeMinesFish_Prefix))
             );
 
             PatchRandomizedFestivalsData();

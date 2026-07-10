@@ -1,13 +1,15 @@
 ﻿using KaitoKid.Utilities.Interfaces;
 using Microsoft.Xna.Framework;
+using StardewArchipelago.Archipelago;
+using StardewArchipelago.Archipelago.SlotData.SlotEnums.SlotDataRandomization;
 using StardewArchipelago.Stardew;
 using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Locations;
+using StardewValley.Tools;
 using System;
 using System.Linq;
-using StardewArchipelago.Archipelago;
-using StardewArchipelago.Archipelago.SlotData.SlotEnums.SlotDataRandomization;
+using KaitoKid.ArchipelagoUtilities.Net.Constants;
 
 namespace StardewArchipelago.GameModifications.RandomizedData
 {
@@ -29,63 +31,28 @@ namespace StardewArchipelago.GameModifications.RandomizedData
         }
 
         // public override Item getFish(float millisecondsAfterNibble, string bait, int waterDepth, Farmer who, double baitPotency, Vector2 bobberTile, string locationName = null)
-        public static void GetFish_CorrectMinesFish_Postfix(MineShaft __instance, float millisecondsAfterNibble, string bait, int waterDepth, Farmer who, double baitPotency, Vector2 bobberTile, string locationName, ref Item __result)
+        public static bool GetFish_DeHardCodeMinesFish_Prefix(MineShaft __instance, float millisecondsAfterNibble, string bait, int waterDepth, Farmer who, double baitPotency, Vector2 bobberTile, string locationName, ref Item __result)
         {
             try
             {
-                var fishName = __result.Name;
-
-                if (!_dataRandomization.FishData.ContainsKey(fishName) || _dataRandomization.FishData[fishName].Location == null)
+                if (locationName != null && locationName != __instance.Name)
                 {
-                    return;
+                    var locationFromName = Game1.getLocationFromName(locationName);
+                    if (locationFromName != null && locationFromName != __instance)
+                    {
+                        __result = locationFromName.getFish(millisecondsAfterNibble, bait, waterDepth, who, baitPotency, bobberTile);
+                        return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
+                    }
                 }
 
-                var currentRegion = "";
-
-                switch (__instance.getMineArea())
-                {
-                    case 0:
-                    case 10:
-                        currentRegion = "The Mines - Floor 20";
-                        break;
-                    case 40:
-                        currentRegion = "The Mines - Floor 60";
-                        break;
-                    case 80:
-                        currentRegion = "The Mines - Floor 100";
-                        break;
-                    default:
-                        return;
-                }
-
-                var validFish = _dataRandomization.FishData.Values.Where(x => x.Location.Contains(currentRegion)).ToArray();
-
-                if (!validFish.Any())
-                {
-                    __result = Game1.random.NextDouble() < 0.05 + who.LuckLevel * 0.05 ? ItemRegistry.Create("(O)CaveJelly") : CreateRandomTrash();
-                    return;
-                }
-
-                var chosenFish = validFish[Game1.random.Next(0, validFish.Length)];
-                var fishObject = _itemManager.GetObjectByName(chosenFish.Name);
-                var fishId = fishObject.GetQualifiedId();
-                var quality = 0;
-                if (Game1.random.NextDouble() < who.FishingLevel / 10.0)
-                {
-                    quality = 1;
-                }
-                if (Game1.random.NextDouble() < who.FishingLevel / 50.0 + who.LuckLevel / 100.0)
-                {
-                    quality = 2;
-                }
-
-                __result = ItemRegistry.Create(fishId, quality: quality);
-                return;
+                var isTutorialCatch = who.fishCaught.Length == 0;
+                __result = GameLocation.GetFishFromLocationData(__instance.Name, bobberTile, waterDepth, who, isTutorialCatch, false, __instance) ?? ItemRegistry.Create("(O)168");
+                return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
             }
             catch (Exception ex)
             {
-                _logger.LogError($"Failed in {nameof(GetFish_CorrectMinesFish_Postfix)}:\n{ex}");
-                return;
+                _logger.LogError($"Failed in {nameof(GetFish_DeHardCodeMinesFish_Prefix)}:\n{ex}");
+                return MethodPrefix.RUN_ORIGINAL_METHOD;
             }
         }
 
