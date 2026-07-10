@@ -349,6 +349,7 @@ namespace StardewArchipelago.GameModifications.CodeInjections
                 return MethodPrefix.RUN_ORIGINAL_METHOD;
             }
         }
+        
         private static bool IsShopAllowed(string shopId)
         {
             var parts = shopId.Split("_");
@@ -468,6 +469,32 @@ namespace StardewArchipelago.GameModifications.CodeInjections
             var apName = NameAliases.NPCNameAliases.ContainsKey(npcId) ? NameAliases.NPCNameAliases[npcId] : npcId;
             var meetLocation = $"{MEET_PREFIX}{apName}";
             return meetLocation;
+        }
+
+        // public NPC getActorByName(string name, out bool isOptionalNpc, bool legacyReplaceUnderscores = false)
+        public static void GetActorByName_GiveFakeNPCIfNeeded_Postfix(Event __instance, string name, ref bool isOptionalNpc, bool legacyReplaceUnderscores, ref NPC __result)
+        {
+            try
+            {
+                if (__result != null || string.IsNullOrWhiteSpace(name) || name.Contains("spouse"))
+                {
+                    return;
+                }
+
+                var illegalVillagers = GetIllegalVillagers();
+                if (illegalVillagers.Contains(name))
+                {
+                    __result = Nobody;
+                    return;
+                }
+
+                return;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Failed in {nameof(GetActorByName_GiveFakeNPCIfNeeded_Postfix)}:\n{ex}");
+                return;
+            }
         }
     }
 }

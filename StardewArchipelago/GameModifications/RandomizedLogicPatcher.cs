@@ -41,6 +41,7 @@ using StardewValley.Tools;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using xTile.Dimensions;
 using EventInjections = StardewArchipelago.GameModifications.CodeInjections.EventInjections;
 using Object = StardewValley.Object;
@@ -727,9 +728,17 @@ namespace StardewArchipelago.GameModifications
                 prefix: new HarmonyMethod(typeof(VillagerExistenceInjections), nameof(VillagerExistenceInjections.MakeMapModifications_SewerWhenKrobusDoesntExit_Prefix))
             );
 
+            // public NPC getActorByName(string name, out bool isOptionalNpc, bool legacyReplaceUnderscores = false)
+            var getActorByNameMethods = typeof(Event).GetMethods(BindingFlags.Public | BindingFlags.Instance);
+            var getActorByNameMethod = getActorByNameMethods.Single(m => m.Name == nameof(Event.getActorByName) && m.GetParameters().Length == 3);
             _harmony.Patch(
-                original: AccessTools.Method(typeof(GameLocation), nameof(GameLocation.lockedDoorWarp)),
-                prefix: new HarmonyMethod(typeof(VillagerExistenceInjections), nameof(VillagerExistenceInjections.LockedDoorWarp_LockedWhenOwnerDoesntExist_Prefix))
+                original: getActorByNameMethod,
+                postfix: new HarmonyMethod(typeof(VillagerExistenceInjections), nameof(VillagerExistenceInjections.GetActorByName_GiveFakeNPCIfNeeded_Postfix))
+            );
+
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(Sewer), nameof(Sewer.MakeMapModifications)),
+                prefix: new HarmonyMethod(typeof(VillagerExistenceInjections), nameof(VillagerExistenceInjections.MakeMapModifications_SewerWhenKrobusDoesntExit_Prefix))
             );
 
             //// public static NPC getCharacterFromName(string name, bool mustBeVillager = true, bool includeEventActors = false)
