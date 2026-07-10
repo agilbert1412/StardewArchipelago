@@ -12,6 +12,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Xml.Linq;
+using Microsoft.Xna.Framework.Graphics;
+using Netcode;
 using StardewArchipelago.GameModifications.MultiSleep;
 
 namespace StardewArchipelago.GameModifications.CodeInjections
@@ -36,6 +38,7 @@ namespace StardewArchipelago.GameModifications.CodeInjections
                     _fakeNpcNobody = new NPC
                     {
                         displayName = "nobody",
+                        Sprite = new FakeAnimatedSprite(),
                     };
                 }
                 return _fakeNpcNobody;
@@ -494,6 +497,39 @@ namespace StardewArchipelago.GameModifications.CodeInjections
             {
                 _logger.LogError($"Failed in {nameof(GetActorByName_GiveFakeNPCIfNeeded_Postfix)}:\n{ex}");
                 return;
+            }
+        }
+    }
+
+    internal class FakeAnimatedSprite : AnimatedSprite
+    {
+        public FakeAnimatedSprite() : base()
+        {
+        }
+
+        public override void setCurrentAnimation(List<FarmerSprite.AnimationFrame> animation)
+        {
+            return;
+        }
+
+        public override void draw(SpriteBatch b, Vector2 screenPosition, float layerDepth)
+        {
+            return;
+        }
+
+        public override bool Animate(GameTime gameTime, int startFrame, int numberOfFrames, float interval)
+        {
+            return false;
+        }
+
+        public override int CurrentFrame
+        {
+            get
+            {
+                return 0;
+            }
+            set
+            {
             }
         }
     }
