@@ -65,7 +65,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
                     return MethodPrefix.RUN_ORIGINAL_METHOD;
                 }
 
-                var receivedHouseUpgrades = _archipelago.GetReceivedItemCount(BUILDING_PROGRESSIVE_HOUSE);
+                var receivedHouseUpgrades = GetAvailableHouseUpgrades();
                 if (Game1.player.HouseUpgradeLevel >= receivedHouseUpgrades)
                 {
                     answerChoices = answerChoices.Where(x => x.responseKey != "Upgrade").ToArray();
@@ -146,12 +146,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
         {
             try
             {
-                var receivedHouseUpgrades = _archipelago.GetReceivedItemCount(BUILDING_PROGRESSIVE_HOUSE);
-                if (_archipelago.SlotData.StartWithout.HasFlag(StartWithout.House))
-                {
-                    // The first upgrade creates a free house but does not unlock an upgrade
-                    receivedHouseUpgrades--;
-                }
+                var receivedHouseUpgrades = GetAvailableHouseUpgrades();
 
                 if (Game1.player.HouseUpgradeLevel >= receivedHouseUpgrades)
                 {
@@ -160,6 +155,11 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
 
                 var houseUpgradeReceivedFromAP = _archipelago.GetAllReceivedItems()
                     .Where(x => x.ItemName == BUILDING_PROGRESSIVE_HOUSE).ToArray();
+
+                if (_archipelago.SlotData.StartWithout.HasFlag(StartWithout.House))
+                {
+                    houseUpgradeReceivedFromAP = houseUpgradeReceivedFromAP.Skip(1).ToArray();
+                }
 
                 var upgrade1Dialogue = Game1.parseText(Game1.content.LoadString("Strings\\Locations:ScienceHouse_Carpenter_UpgradeHouse1"));
                 var upgrade2Dialogue = Game1.parseText(Game1.content.LoadString("Strings\\Locations:ScienceHouse_Carpenter_UpgradeHouse2"));
@@ -194,6 +194,18 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
                 _logger.LogError($"Failed in {nameof(HouseUpgradeOffer_OfferFreeUpgrade_Prefix)}:\n{ex}");
                 return MethodPrefix.RUN_ORIGINAL_METHOD;
             }
+        }
+
+        private static int GetAvailableHouseUpgrades()
+        {
+
+            var receivedHouseUpgrades = _archipelago.GetReceivedItemCount(BUILDING_PROGRESSIVE_HOUSE);
+            if (_archipelago.SlotData.StartWithout.HasFlag(StartWithout.House))
+            {
+                // The first upgrade creates a free house but does not unlock an upgrade
+                receivedHouseUpgrades--;
+            }
+            return receivedHouseUpgrades;
         }
 
         private static string GetChildRoomDialogue()
