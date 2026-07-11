@@ -1,18 +1,22 @@
-﻿using StardewArchipelago.Archipelago.SlotData.SlotEnums.SlotDataRandomization;
+﻿using System;
+using Force.DeepCloner;
+using KaitoKid.Utilities.Interfaces;
+using StardewArchipelago.Archipelago.SlotData.SlotEnums.SlotDataRandomization;
+using StardewArchipelago.Constants;
 using StardewArchipelago.GameModifications.EntranceRandomizer;
 using StardewArchipelago.Stardew;
 using StardewValley;
 using StardewValley.GameData.Locations;
 using System.Collections.Generic;
 using System.Linq;
-using Force.DeepCloner;
-using KaitoKid.Utilities.Interfaces;
-using StardewArchipelago.Constants;
+using xTile;
 
 namespace StardewArchipelago.GameModifications.RandomizedData
 {
     public class FishSpawnDataGenerator
     {
+        private const int DEFAULT_PRECEDENCE = 0;
+        private const float DEFAULT_CHANCE = 1.0f;
         public const string CATCH_METHOD_CRAB_POT = "Crab Pot";
         public const string CATCH_METHOD_FISHING_ROD = "Fishing Rod";
 
@@ -89,6 +93,15 @@ namespace StardewArchipelago.GameModifications.RandomizedData
                         break;
                 }
 
+                var conditionsToKeep = new[] { GameStateCondition.PLAYER_SPECIAL_ORDER_RULE_ACTIVE };
+                var originalSpawnDatas = CreateSpawnDataFrom(null, fishName, false, false).Where(x => !string.IsNullOrWhiteSpace(x.Condition) && conditionsToKeep.Any(y => x.Condition.Contains(y)));
+
+                string conditionToKeep = null;
+                foreach (var originalSpawnData in originalSpawnDatas)
+                {
+                    conditionToKeep = originalSpawnData.Condition;
+                }
+
                 foreach (var (map, addedSpawnDatas) in mapSpawnDatas)
                 {
                     foreach (var addedSpawnData in addedSpawnDatas)
@@ -96,6 +109,10 @@ namespace StardewArchipelago.GameModifications.RandomizedData
                         addedSpawnData.Id = fishQualifiedId;
                         addedSpawnData.ItemId = fishQualifiedId;
                         addedSpawnData.RandomItemId = null;
+                        if (conditionToKeep != null && (addedSpawnData.Condition == null || !addedSpawnData.Condition.Contains(conditionToKeep)))
+                        {
+                            addedSpawnData.Condition = GameStateConditionProvider.ConcatenateConditions(new []{addedSpawnData.Condition, conditionToKeep}, false);
+                        }
                     }
                     var key = new FishLocation(fishName, map);
                     spawnDatas.TryAdd(key, new List<SpawnFishData>());
@@ -108,33 +125,42 @@ namespace StardewArchipelago.GameModifications.RandomizedData
 
         private void AddMapSpawnDatasWithCondition(Dictionary<string, List<SpawnFishData>> mapSpawnDatas, string map, string fish, string condition)
         {
-            var spawnData = AddMapSpawnDatas(mapSpawnDatas, map, fish);
-            if (spawnData.Condition == null)
+            var spawnDatas = AddMapSpawnDatas(mapSpawnDatas, map, fish);
+            foreach (var spawnData in spawnDatas)
             {
-                spawnData.Condition = "";
+                if (spawnData.Condition == null)
+                {
+                    spawnData.Condition = "";
+                }
+                if (spawnData.Condition.Contains(condition))
+                {
+                    continue;
+                }
+                spawnData.Condition = GameStateConditionProvider.ConcatenateConditions(new[] { spawnData.Condition, condition }, false);
             }
-            if (spawnData.Condition.Contains(condition))
-            {
-                return;
-            }
-            spawnData.Condition = GameStateConditionProvider.ConcatenateConditions(new[] { spawnData.Condition, condition }, false);
         }
 
-        private SpawnFishData AddMapSpawnDatas(Dictionary<string, List<SpawnFishData>> mapSpawnDatas, string map, string fish, bool removeConditions = false)
+        private IEnumerable<SpawnFishData> AddMapSpawnDatas(Dictionary<string, List<SpawnFishData>> mapSpawnDatas, string map, string fish, bool removeConditions = false)
         {
             mapSpawnDatas.TryAdd(map, new List<SpawnFishData>());
             var spawnData = CreateSpawnDataFrom(map, fish, removeConditions, true);
-            mapSpawnDatas[map].Add(spawnData);
+            mapSpawnDatas[map].AddRange(spawnData);
             return spawnData;
         }
 
         private void AddAnywhereSpawnDatas(Dictionary<string, List<SpawnFishData>> mapSpawnDatas, string map, string fish, bool removeConditions = false)
         {
             mapSpawnDatas.TryAdd(map, new List<SpawnFishData>());
-            mapSpawnDatas[map].Add(CreateSpawnDataFrom(null, fish, removeConditions, false));
+            mapSpawnDatas[map].AddRange(CreateSpawnDataFrom(null, fish, removeConditions, false));
         }
 
-        private SpawnFishData CreateSpawnDataFrom(string map, string fish, bool removeConditions, bool keepSpawnFields)
+        private void AddMapSpawnDatasWithFestivalCondition(Dictionary<string, List<SpawnFishData>> mapSpawnDatas, string map, string fish)
+        {
+            mapSpawnDatas.TryAdd(map, new List<SpawnFishData>());
+            mapSpawnDatas[map].AddRange(CreateSpawnDataWithFestivalConditionFrom(fish));
+        }
+
+        private IEnumerable<SpawnFishData> CreateSpawnDataFrom(string map, string fish, bool removeConditions, bool keepSpawnFields)
         {
             if (map == null)
             {
@@ -150,7 +176,7 @@ namespace StardewArchipelago.GameModifications.RandomizedData
 
             if (map == null)
             {
-                return CreateBlankSpawnData(fish);
+                return new[] { CreateBlankSpawnData(fish) };
             }
 
             var key = new FishLocation(fish, map);
@@ -167,7 +193,51 @@ namespace StardewArchipelago.GameModifications.RandomizedData
                 entry.Condition = null;
             }
 
-            entry.Chance = 1.0f;
+            var newEntries = new List<SpawnFishData> { CleanEntry(entry, keepSpawnFields) };
+
+            switch (fish)
+            {
+                case "Rainbow Trout":
+                case "Squid":
+                    newEntries.AddRange(CreateSpawnDataWithFestivalConditionFrom(fish));
+                    break;
+            }
+
+            return newEntries;
+        }
+
+        private IEnumerable<SpawnFishData> CreateSpawnDataWithFestivalConditionFrom(string fish)
+        {
+            string map = null;
+            foreach (var (fishLocation, fishEntries) in _originalFishEntries)
+            {
+                if (fishLocation.FishName == fish && fishEntries.Any(x => x.Condition != null && x.Condition.Contains(GameStateCondition.IS_PASSIVE_FESTIVAL_OPEN)))
+                {
+                    map = fishLocation.LocationId;
+                    break;
+                }
+            }
+
+            if (map == null)
+            {
+                throw new Exception($"Could not find a festival spawn data for {fish}");
+            }
+
+            var key = new FishLocation(fish, map);
+
+            var entries = _originalFishEntries[key].Where(x => x.Condition != null && x.Condition.Contains(GameStateCondition.IS_PASSIVE_FESTIVAL_OPEN)).Select(x => x.DeepClone());
+            if (!entries.Any())
+            {
+                throw new Exception($"Could not find a festival spawn data for {fish}");
+            }
+
+            return entries.Select(x => CleanEntry(x, false));
+        }
+
+        private static SpawnFishData CleanEntry(SpawnFishData entry, bool keepSpawnFields)
+        {
+            entry.Chance = DEFAULT_CHANCE;
+            entry.Precedence = DEFAULT_PRECEDENCE;
             if (!keepSpawnFields)
             {
                 if (entry.FishAreaId != null)
@@ -220,7 +290,8 @@ namespace StardewArchipelago.GameModifications.RandomizedData
         {
             return new SpawnFishData()
             {
-                Chance = 1f,
+                Chance = DEFAULT_CHANCE,
+                Precedence = DEFAULT_PRECEDENCE,
             };
         }
 

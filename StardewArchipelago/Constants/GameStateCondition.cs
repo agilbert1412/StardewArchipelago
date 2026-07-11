@@ -14,6 +14,8 @@ namespace StardewArchipelago.Constants
         public static readonly string HAS_CRAFTING_RECIPE = "PLAYER_HAS_CRAFTING_RECIPE";
         public static readonly string HAS_COOKING_RECIPE = "PLAYER_HAS_COOKING_RECIPE";
         public static readonly string LOCATION_SEASON = "LOCATION_SEASON";
+        public static readonly string IS_PASSIVE_FESTIVAL_OPEN = "IS_PASSIVE_FESTIVAL_OPEN";
+        public static readonly string PLAYER_SPECIAL_ORDER_RULE_ACTIVE = "PLAYER_SPECIAL_ORDER_RULE_ACTIVE";
 
         private static string CreateId(string name)
         {
