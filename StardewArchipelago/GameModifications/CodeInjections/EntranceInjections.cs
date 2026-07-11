@@ -1,5 +1,4 @@
-﻿using System;
-using KaitoKid.ArchipelagoUtilities.Net.Constants;
+﻿using KaitoKid.ArchipelagoUtilities.Net.Constants;
 using KaitoKid.Utilities.Interfaces;
 using Microsoft.Xna.Framework;
 using StardewArchipelago.Archipelago;
@@ -8,8 +7,12 @@ using StardewArchipelago.GameModifications.EntranceRandomizer;
 using StardewArchipelago.Serialization;
 using StardewModdingAPI;
 using StardewValley;
+using StardewValley.GameData;
 using StardewValley.Locations;
+using StardewValley.Menus;
 using StardewValley.Tools;
+using System;
+using System.Collections.Generic;
 using xTile.Dimensions;
 using Object = StardewValley.Object;
 
@@ -79,7 +82,7 @@ namespace StardewArchipelago.GameModifications.CodeInjections
         // We therefore cheat a little bit by pre-warping the player to somewhere that won't cause trigger these undesired behaviors.
         private static void PrepareForWarpsWithUndesiredBehaviors(LocationRequest locationRequest, WarpRequest replacedWarp)
         {
-            if (Game1.currentLocation?.currentEvent != null && Game1.currentLocation.currentEvent.id == "-1")
+            if (Game1.currentLocation?.currentEvent != null && Game1.currentLocation.currentEvent.id == "-1" && !Game1.currentLocation.currentEvent.isFestival)
             {
                 Game1.currentLocation.currentEvent.endBehaviors();
                 Game1.currentLocation.currentEvent = null;
@@ -118,6 +121,7 @@ namespace StardewArchipelago.GameModifications.CodeInjections
                     data.MapReplacements != null && data.MapReplacements.TryGetValue(locationRequest.Name, out var name))
                 {
                     locationRequest.Name = name;
+                    locationRequest.Location = Game1.RequireLocation(name);
                 }
             }
 
@@ -173,7 +177,12 @@ namespace StardewArchipelago.GameModifications.CodeInjections
                 var locationRequest = GetRandomizedLocationRequest(replacedWarp.LocationRequest, replacedWarp, out var tileX, out var tileY, out var facingDirectionAfterWarp);
 
                 _skipER = true;
-                Game1.warpFarmer(locationRequest, tileX, tileY, facingDirectionAfterWarp);
+
+                // private static void performWarpFarmer(LocationRequest locationRequest, int tileX, int tileY, int facingDirectionAfterWarp)
+                var performWarpFarmerMethod = _helper.Reflection.GetMethod(typeof(Game1), "performWarpFarmer");
+
+                // FakeWarpFarmer(locationRequest, tileX, tileY, facingDirectionAfterWarp);
+                performWarpFarmerMethod.Invoke(locationRequest, tileX, tileY, facingDirectionAfterWarp);
                 Game1.fadeToBlackAlpha = 0.99f;
                 Game1.screenGlow = false;
                 __instance.lastUser.temporarilyInvincible = false;
@@ -538,6 +547,242 @@ namespace StardewArchipelago.GameModifications.CodeInjections
                 _logger.LogError($"Failed in {nameof(PerformAction_LockerRoomKeys_Prefix)}");
                 return MethodPrefix.RUN_ORIGINAL_METHOD;
             }
+        }
+
+
+        public static void FakeWarpFarmer(
+            LocationRequest locationRequest,
+            int tileX,
+            int tileY,
+            int facingDirectionAfterWarp)
+        {
+            int warp_offset_x = Game1.nextFarmerWarpOffsetX;
+            int warp_offset_y = Game1.nextFarmerWarpOffsetY;
+            Game1.nextFarmerWarpOffsetX = 0;
+            Game1.nextFarmerWarpOffsetY = 0;
+            foreach (string activePassiveFestival in (IEnumerable<string>)Game1.netWorldState.Value.ActivePassiveFestivals)
+            {
+                PassiveFestivalData data;
+                string locationName;
+                if (Utility.TryGetPassiveFestivalData(activePassiveFestival, out data) && Game1.dayOfMonth >= data.StartDay && Game1.dayOfMonth <= data.EndDay && data.Season == Game1.season && data.MapReplacements != null &&
+                    data.MapReplacements.TryGetValue(locationRequest.Name, out locationName))
+                    locationRequest = Game1.getLocationRequest(locationName);
+            }
+            switch (locationRequest.Name)
+            {
+                case "BusStop":
+                    if (tileX < 10)
+                    {
+                        tileX = 10;
+                        break;
+                    }
+                    break;
+                case "Farm":
+                    switch (Game1.currentLocation?.NameOrUniqueName)
+                    {
+                        case "FarmCave":
+                            if (tileX == 34 && tileY == 6)
+                            {
+                                Point parsed;
+                                if (Game1.getFarm().TryGetMapPropertyAs("FarmCaveEntry", out parsed))
+                                {
+                                    tileX = parsed.X;
+                                    tileY = parsed.Y;
+                                    break;
+                                }
+                                switch (Game1.whichFarm)
+                                {
+                                    case 5:
+                                        tileX = 30;
+                                        tileY = 36;
+                                        break;
+                                    case 6:
+                                        tileX = 34;
+                                        tileY = 16;
+                                        break;
+                                }
+                            }
+                            else
+                                break;
+                            break;
+                        case "Forest":
+                            if (tileX == 41 && tileY == 64)
+                            {
+                                Point parsed;
+                                if (Game1.getFarm().TryGetMapPropertyAs("ForestEntry", out parsed))
+                                {
+                                    tileX = parsed.X;
+                                    tileY = parsed.Y;
+                                    break;
+                                }
+                                switch (Game1.whichFarm)
+                                {
+                                    case 5:
+                                        tileX = 40;
+                                        tileY = 64;
+                                        break;
+                                    case 6:
+                                        tileX = 82;
+                                        tileY = 103;
+                                        break;
+                                }
+                            }
+                            else
+                                break;
+                            break;
+                        case "BusStop":
+                            Point parsed1;
+                            if (tileX == 79 && tileY == 17 && Game1.getFarm().TryGetMapPropertyAs("BusStopEntry", out parsed1))
+                            {
+                                tileX = parsed1.X;
+                                tileY = parsed1.Y;
+                                break;
+                            }
+                            break;
+                        case "Backwoods":
+                            Point parsed2;
+                            if (tileX == 40 && tileY == 0 && Game1.getFarm().TryGetMapPropertyAs("BackwoodsEntry", out parsed2))
+                            {
+                                tileX = parsed2.X;
+                                tileY = parsed2.Y;
+                                break;
+                            }
+                            break;
+                    }
+                    break;
+                case "IslandSouth":
+                    if (tileX <= 15 && tileY <= 6)
+                    {
+                        tileX = 21;
+                        tileY = 43;
+                        break;
+                    }
+                    break;
+                case "Trailer":
+                    if (Game1.MasterPlayer.mailReceived.Contains("pamHouseUpgrade"))
+                    {
+                        locationRequest = Game1.getLocationRequest("Trailer_Big");
+                        tileX = 13;
+                        tileY = 24;
+                        break;
+                    }
+                    break;
+                case "Club":
+                    if (!Game1.player.hasClubCard)
+                    {
+                        locationRequest = Game1.getLocationRequest("SandyHouse");
+                        locationRequest.OnWarp += (LocationRequest.Callback)(() =>
+                        {
+                            NPC characterFromName = Game1.currentLocation.getCharacterFromName("Bouncer");
+                            if (characterFromName == null)
+                                return;
+                            Vector2 vector2 = new Vector2(17f, 4f);
+                            characterFromName.showTextAboveHead(Game1.content.LoadString("Strings\\Locations:Club_Bouncer_TextAboveHead" + (Game1.random.Next(2) + 1).ToString()));
+                            int num = Game1.random.Next();
+                            Game1.currentLocation.playSound("thudStep");
+                            Game1.Multiplayer.broadcastSprites(Game1.currentLocation, new TemporaryAnimatedSprite(288, 100f, 1, 24, vector2 * 64f, true, false, Game1.currentLocation, Game1.player)
+                            {
+                                shakeIntensity = 0.5f,
+                                shakeIntensityChange = 1f / 500f,
+                                extraInfoForEndBehavior = num,
+                                endFunction = new TemporaryAnimatedSprite.endBehavior(Game1.currentLocation.removeTemporarySpritesWithID)
+                            }, new TemporaryAnimatedSprite("LooseSprites\\Cursors", new Microsoft.Xna.Framework.Rectangle(598, 1279, 3, 4), 53f, 5, 9, vector2 * 64f + new Vector2(5f, 0.0f) * 4f, true, false, 0.0263f, 0.0f, Color.Yellow, 4f,
+                                0.0f, 0.0f, 0.0f)
+                            {
+                                id = num
+                            }, new TemporaryAnimatedSprite("LooseSprites\\Cursors", new Microsoft.Xna.Framework.Rectangle(598, 1279, 3, 4), 53f, 5, 9, vector2 * 64f + new Vector2(5f, 0.0f) * 4f, true, true, 0.0263f, 0.0f, Color.Orange, 4f,
+                                0.0f, 0.0f, 0.0f)
+                            {
+                                delayBeforeAnimationStart = 100,
+                                id = num
+                            }, new TemporaryAnimatedSprite("LooseSprites\\Cursors", new Microsoft.Xna.Framework.Rectangle(598, 1279, 3, 4), 53f, 5, 9, vector2 * 64f + new Vector2(5f, 0.0f) * 4f, true, false, 0.0263f, 0.0f, Color.White, 3f,
+                                0.0f, 0.0f, 0.0f)
+                            {
+                                delayBeforeAnimationStart = 200,
+                                id = num
+                            });
+                            Game1.currentLocation.netAudio.StartPlaying("fuse");
+                        });
+                        tileX = 17;
+                        tileY = 4;
+                        break;
+                    }
+                    break;
+            }
+            if (VolcanoDungeon.IsGeneratedLevel(locationRequest.Name))
+            {
+                warp_offset_x = 0;
+                warp_offset_y = 0;
+            }
+            if (Game1.player.isRidingHorse() && Game1.currentLocation != null)
+            {
+                GameLocation new_location = locationRequest.Location ?? Game1.getLocationFromName(locationRequest.Name);
+                if (Game1.game1.ShouldDismountOnWarp(Game1.player.mount, Game1.currentLocation, new_location))
+                {
+                    Game1.player.mount.dismount();
+                    warp_offset_x = 0;
+                    warp_offset_y = 0;
+                }
+            }
+
+            // private static void performWarpFarmer(LocationRequest locationRequest, int tileX, int tileY, int facingDirectionAfterWarp)
+            var performWarpFarmerMethod = _helper.Reflection.GetMethod(typeof(Game1), "performWarpFarmer");
+
+            if (Game1.weatherIcon == 1 && Game1.whereIsTodaysFest != null && locationRequest.Name.Equals(Game1.whereIsTodaysFest) && !Game1.warpingForForcedRemoteEvent)
+            {
+                string[] strArray = ArgUtility.SplitBySpace(Game1.temporaryContent.Load<Dictionary<string, string>>("Data\\Festivals\\" + Game1.currentSeason + Game1.dayOfMonth.ToString())["conditions"].Split('/')[1]);
+                if (Game1.timeOfDay <= Convert.ToInt32(strArray[1]))
+                {
+                    if (Game1.timeOfDay < Convert.ToInt32(strArray[0]))
+                    {
+                        if (Game1.currentLocation?.Name == "Hospital")
+                        {
+                            locationRequest = Game1.getLocationRequest("BusStop");
+                            tileX = 34;
+                            tileY = 23;
+                        }
+                        else
+                        {
+                            Game1.player.Position = Game1.player.lastPosition;
+                            Game1.drawObjectDialogue(Game1.content.LoadString("Strings\\StringsFromCSFiles:Game1.cs.2973"));
+                            return;
+                        }
+                    }
+                    else
+                    {
+                        if (Game1.IsMultiplayer)
+                        {
+                            Game1.netReady.SetLocalReady("festivalStart", true);
+                            Game1.activeClickableMenu = (IClickableMenu)new ReadyCheckDialog("festivalStart", true, (ConfirmationDialog.behavior)(who =>
+                            {
+                                Game1.exitActiveMenu();
+                                if (Game1.player.mount != null)
+                                {
+                                    Game1.player.mount.dismount();
+                                    warp_offset_x = 0;
+                                    warp_offset_y = 0;
+                                }
+
+                                performWarpFarmerMethod.Invoke(locationRequest, tileX, tileY, facingDirectionAfterWarp);
+                                // Game1.performWarpFarmer(locationRequest, tileX, tileY, facingDirectionAfterWarp);
+                            }));
+                            return;
+                        }
+                        if (Game1.player.mount != null)
+                        {
+                            Game1.player.mount.dismount();
+                            warp_offset_x = 0;
+                            warp_offset_y = 0;
+                        }
+                    }
+                }
+            }
+            tileX += warp_offset_x;
+            tileY += warp_offset_y;
+
+            performWarpFarmerMethod.Invoke(locationRequest, tileX, tileY, facingDirectionAfterWarp);
+            // Game1.performWarpFarmer(locationRequest, tileX, tileY, facingDirectionAfterWarp);
+
         }
 
     }

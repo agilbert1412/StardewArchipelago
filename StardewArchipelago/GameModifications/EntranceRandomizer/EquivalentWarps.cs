@@ -2,6 +2,7 @@ using KaitoKid.ArchipelagoUtilities.Net.Client;
 using StardewArchipelago.Constants;
 using StardewArchipelago.Locations.Jojapocalypse;
 using StardewValley;
+using StardewValley.Locations;
 using System;
 using System.Collections.Generic;
 
@@ -17,6 +18,8 @@ namespace StardewArchipelago.GameModifications.EntranceRandomizer
         private const string trailerBig = "Trailer_Big";
         private const string beach = "Beach";
         private const string beachNightMarket = "BeachNightMarket";
+        private const string desert = "Desert";
+        private const string desertFestival = "DesertFestival";
         private const string grandpaShedRuins = "Custom_GrandpasShedRuins";
         private const string grandpaShedFinish = "Custom_GrandpasShed";
         private const string auroraVineyard = "Custom_AuroraVineyard";
@@ -27,6 +30,7 @@ namespace StardewArchipelago.GameModifications.EntranceRandomizer
         private static readonly string[] _jojaMartLocations = { jojaMart, abandonedJojaMart, movieTheater };
         private static readonly string[] _trailerLocations = { trailer, trailerBig };
         private static readonly string[] _beachLocations = { beach, beachNightMarket };
+        private static readonly string[] _desertLocations = { desert, desertFestival };
         private static readonly string[] _grandpaShedLocations = { grandpaShedRuins, grandpaShedFinish };
         private static readonly string[] _auroraVineyardLocations = { auroraVineyard, auroraVineyardRefurbished };
         private static readonly string[] _auroraVineyardCellarLocations = { auroraVineyardCellar, auroraVineyardCellarRefurbished };
@@ -74,6 +78,11 @@ namespace StardewArchipelago.GameModifications.EntranceRandomizer
             if (IsBeach(entrance, out _))
             {
                 return beach;
+            }
+
+            if (IsDesert(entrance, out _))
+            {
+                return desert;
             }
 
             if (IsGrandpaShed(entrance, out _))
@@ -124,6 +133,11 @@ namespace StardewArchipelago.GameModifications.EntranceRandomizer
             if (IsBeach(entrance, out var beachCorrectEntrance))
             {
                 return beachCorrectEntrance;
+            }
+
+            if (IsDesert(entrance, out var desertCorrectEntrance))
+            {
+                return desertCorrectEntrance;
             }
 
             if (IsGrandpaShed(entrance, out var shedCorrectEntrance))
@@ -251,6 +265,29 @@ namespace StardewArchipelago.GameModifications.EntranceRandomizer
                 }
 
                 correctArea = area.Replace(beachLocation, beach);
+                return true;
+            }
+
+            correctArea = area;
+            return false;
+        }
+
+        private bool IsDesert(string area, out string correctArea)
+        {
+            foreach (var desertLocation in _desertLocations)
+            {
+                if (!area.Equals(desertLocation, StringComparison.OrdinalIgnoreCase))
+                {
+                    continue;
+                }
+
+                if (Game1.dayOfMonth >= 15 && Game1.dayOfMonth <= 17 && Game1.season == Season.Spring)
+                {
+                    correctArea = area.Replace(desertLocation, desertFestival);
+                    return true;
+                }
+
+                correctArea = area.Replace(desertLocation, desert);
                 return true;
             }
 
