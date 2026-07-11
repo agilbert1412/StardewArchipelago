@@ -272,7 +272,7 @@ namespace StardewArchipelago.GameModifications.RandomizedData
 
         private string GetMapName(string regionName)
         {
-            return EntranceManager.TurnAliased(regionName);
+            return EntranceManager.TurnAliased(regionName).Split("|").First();
         }
 
         public SpawnFishData CreateBlankSpawnData(string fishName, string condition = null)
