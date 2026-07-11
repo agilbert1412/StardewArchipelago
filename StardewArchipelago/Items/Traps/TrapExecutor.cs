@@ -938,6 +938,14 @@ namespace StardewArchipelago.Items.Traps
                 return true;
             }
 
+            var path = context.GetPath();
+            var container = path.Last();
+
+            if (container is not StardewValley.Inventories.Inventory)
+            {
+                return true;
+            }
+
             var qualifiedReplacementId = cropsToSeedMap[contextObject.QualifiedItemId];
 
             var replacementItem = ItemRegistry.Create<Object>(qualifiedReplacementId);
