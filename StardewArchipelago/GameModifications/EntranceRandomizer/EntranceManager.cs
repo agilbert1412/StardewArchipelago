@@ -433,6 +433,8 @@ namespace StardewArchipelago.GameModifications.EntranceRandomizer
         {
             { "SebastianRoom to ScienceHouse|6|24", "SebastianRoom to ScienceHouse" }, // LockedDoorWarp 6 24 ScienceHouse 900 2000S–
             { "ScienceHouse|6|24 to SebastianRoom", "ScienceHouse to SebastianRoom" }, // LockedDoorWarp 6 24 ScienceHouse 900 2000S–
+            { "Beach to Town", "Beach|39|0 to Town" },
+            { "Town to Beach", "Town to Beach|39|0" },
             { "Use Water Obelisk", "Farm to Beach" },
             { "Use Earth Obelisk", "Farm to Mountain" },
             { "Use Desert Obelisk", "Farm to Desert" },
@@ -492,7 +494,6 @@ namespace StardewArchipelago.GameModifications.EntranceRandomizer
             { "Tide Pools Shortcut", "Beach|67|0" },
             { "Town Shortcut below Museum", "Town|94|109" },
             { "Beach Shortcut", "Beach|0|5" },
-            { "Beach", "Beach|39|0" },
             { "Forest Shortcut", "Forest" },
             { "Minecart Town", "Town|105|80" },
             { "Minecart Mines", "Mine|13|10" },
