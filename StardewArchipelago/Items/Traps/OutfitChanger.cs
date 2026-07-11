@@ -186,9 +186,8 @@ namespace StardewArchipelago.Items.Traps
 
         public void RandomizeHair()
         {
-            var hairs = DataLoader.HairData(Game1.content);
-            var hairKeys = hairs.Keys.ToArray();
-            var chosenHairKey = hairKeys[Game1.random.Next(hairKeys.Length)];
+            var hairKeys = Farmer.allHairStyleIndices;
+            var chosenHairKey = hairKeys[Game1.random.Next(hairKeys.Count)];
             _logger.LogDebug($"Equipping Hair: {chosenHairKey}");
             Game1.player.changeHairStyle(chosenHairKey);
             Game1.player.changeHairColor(new Color(Game1.random.Next(256), Game1.random.Next(256), Game1.random.Next(256)));
