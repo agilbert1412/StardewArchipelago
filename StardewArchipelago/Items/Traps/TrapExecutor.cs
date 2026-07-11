@@ -31,6 +31,7 @@ using System.Linq;
 using System.Numerics;
 using System.Threading;
 using System.Threading.Tasks;
+using StardewValley.Network;
 using Object = StardewValley.Object;
 using Vector2 = Microsoft.Xna.Framework.Vector2;
 
@@ -941,7 +942,7 @@ namespace StardewArchipelago.Items.Traps
             var path = context.GetPath();
             var container = path.Last();
 
-            if (container is not StardewValley.Inventories.Inventory)
+            if (container is OverlaidDictionary)
             {
                 return true;
             }
