@@ -737,6 +737,11 @@ namespace StardewArchipelago.GameModifications
             );
 
             _harmony.Patch(
+                original: AccessTools.Method(typeof(GameLocation), nameof(GameLocation.lockedDoorWarp)),
+                prefix: new HarmonyMethod(typeof(VillagerExistenceInjections), nameof(VillagerExistenceInjections.LockedDoorWarp_LockedWhenOwnerDoesntExist_Prefix))
+            );
+
+            _harmony.Patch(
                 original: AccessTools.Method(typeof(Sewer), nameof(Sewer.MakeMapModifications)),
                 prefix: new HarmonyMethod(typeof(VillagerExistenceInjections), nameof(VillagerExistenceInjections.MakeMapModifications_SewerWhenKrobusDoesntExit_Prefix))
             );
