@@ -449,6 +449,16 @@ namespace StardewArchipelago.GameModifications.RandomizedData
                         seasons.AddRange(seasonStrings.Select(x => Enum.Parse<Season>(x, true)));
                     }
 
+                    // This will be handled by logic after the beta async
+                    if (locationId.Contains("Island") || locationId.Contains("Caldera"))
+                    {
+                        seasons.Add(Season.Summer);
+                    }
+                    if (locationId.Contains("Submarine"))
+                    {
+                        seasons.Add(Season.Winter);
+                    }
+
                     fishInLocation.Condition = GameStateConditionProvider.RemoveCondition(fishInLocation.Condition, GameStateCondition.LOCATION_SEASON);
                     fishInLocation.Season = null;
 
