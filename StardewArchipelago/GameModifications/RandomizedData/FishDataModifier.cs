@@ -83,7 +83,7 @@ namespace StardewArchipelago.GameModifications.RandomizedData
             var isCrabPot = randomizedData.Method == null ? originalIsCrabPot : randomizedData.Method.Equals(FishSpawnDataGenerator.CATCH_METHOD_CRAB_POT);
             var isFishingRod = randomizedData.Method == null ? !originalIsCrabPot : randomizedData.Method.Equals(FishSpawnDataGenerator.CATCH_METHOD_FISHING_ROD);
 
-            if (isCrabPot)
+            if (isCrabPot || true)
             {
                 fishDataFields = ModifyCrabPotFishDataFields(randomizedData, originalIsCrabPot, fishDataFields, fishName);
             }

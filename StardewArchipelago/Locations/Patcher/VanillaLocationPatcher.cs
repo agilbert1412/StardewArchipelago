@@ -967,6 +967,11 @@ namespace StardewArchipelago.Locations.Patcher
                 original: AccessTools.Method(typeof(BobberBar), nameof(BobberBar.update)),
                 prefix: new HarmonyMethod(typeof(FishingInjections), nameof(FishingInjections.Update_CountMissedFish_Prefix))
             );
+
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(FishingRod), nameof(FishingRod.pullFishFromWater)),
+                prefix: new HarmonyMethod(typeof(FishingInjections), nameof(FishingInjections.pullFishFromWater_CrabPotFishDeserveASize_Prefix))
+            );
         }
 
         private void AddFishsanityLocations()
@@ -977,11 +982,6 @@ namespace StardewArchipelago.Locations.Patcher
                     original: AccessTools.Method(typeof(Farmer), nameof(Farmer.caughtFish)),
                     postfix: new HarmonyMethod(typeof(FishingInjections), nameof(FishingInjections.CaughtFish_CheckGoalCompletion_Postfix))
                 );
-            }
-
-            if (_archipelago.SlotData.Fishsanity == Fishsanity.None)
-            {
-                return;
             }
 
             _harmony.Patch(
