@@ -450,7 +450,7 @@ namespace StardewArchipelago.GameModifications.RandomizedData
                     }
 
                     // This will be handled by logic after the beta async
-                    if (locationId.Contains("Island") || locationId.Contains("Caldera"))
+                    if (locationId.Contains("Island") || locationId.Contains("Caldera") || locationId.Contains("Desert"))
                     {
                         seasons.Add(Season.Summer);
                     }
