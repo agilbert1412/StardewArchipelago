@@ -15,6 +15,7 @@ using System.Xml.Linq;
 using Microsoft.Xna.Framework.Graphics;
 using Netcode;
 using StardewArchipelago.GameModifications.MultiSleep;
+using Rectangle = xTile.Dimensions.Rectangle;
 
 namespace StardewArchipelago.GameModifications.CodeInjections
 {
@@ -27,18 +28,20 @@ namespace StardewArchipelago.GameModifications.CodeInjections
         private static IModHelper _helper;
         private static StardewArchipelagoClient _archipelago;
 
-        private static NPC _fakeNpcNobody;
+        private static Dictionary<string, FakeEventNPC> _fakeNpcs;
 
-        public static NPC Nobody
+        public static FakeEventNPC GetFakeNpc(string name)
         {
-            get
+            if (!_fakeNpcs.ContainsKey(name))
             {
-                if (_fakeNpcNobody == null)
-                {
-                    _fakeNpcNobody = new NPC(new AnimatedSprite(Game1.content, Game1.player.getTexture()), Vector2.Zero, 0, "nobody");
-                }
-                return _fakeNpcNobody;
+                _fakeNpcs.Add(name, CreateFakeNPC(name));
             }
+            return _fakeNpcs[name];
+        }
+
+        private static FakeEventNPC CreateFakeNPC(string name)
+        {
+            return new FakeEventNPC(name);
         }
 
         public static void Initialize(ILogger logger, IModHelper helper, StardewArchipelagoClient archipelago)
@@ -46,6 +49,8 @@ namespace StardewArchipelago.GameModifications.CodeInjections
             _logger = logger;
             _archipelago = archipelago;
             _helper = helper;
+
+            _fakeNpcs = new Dictionary<string, FakeEventNPC>();
         }
 
         // public static bool AddCharacterIfNecessary(string characterId, bool bypassConditions = false)
@@ -53,6 +58,10 @@ namespace StardewArchipelago.GameModifications.CodeInjections
         {
             try
             {
+                if (_fakeNpcs.ContainsKey(characterId))
+                {
+                    _fakeNpcs.Remove(characterId);
+                }
                 var allowed = AllowedToExist(characterId);
 
                 if (!allowed)
@@ -89,6 +98,7 @@ namespace StardewArchipelago.GameModifications.CodeInjections
         {
             try
             {
+                _fakeNpcs.Clear();
                 Utility.ForEachLocation(location =>
                 {
                     location.characters.RemoveWhere(npc =>
@@ -483,7 +493,14 @@ namespace StardewArchipelago.GameModifications.CodeInjections
                 var illegalVillagers = GetIllegalVillagers();
                 if (illegalVillagers.Contains(name))
                 {
-                    __result = Nobody;
+                    __result = GetFakeNpc(name);
+                    // private Dictionary<string, Vector3> actorPositionsAfterMove;
+                    var actorPositionsAfterMoveField = _helper.Reflection.GetField<Dictionary<string, Vector3>>(__instance, "actorPositionsAfterMove");
+                    var actorPositionsAfterMove = actorPositionsAfterMoveField.GetValue();
+                    if (actorPositionsAfterMove.ContainsKey(name))
+                    {
+                        actorPositionsAfterMove.Remove(name);
+                    }
                     return;
                 }
 
@@ -494,6 +511,54 @@ namespace StardewArchipelago.GameModifications.CodeInjections
                 _logger.LogError($"Failed in {nameof(GetActorByName_GiveFakeNPCIfNeeded_Postfix)}:\n{ex}");
                 return;
             }
+        }
+    }
+
+    internal class FakeEventNPC : NPC
+    {
+        public FakeEventNPC(string name) : base(new AnimatedSprite(Game1.content, Game1.player.getTexture()), Vector2.Zero, 0, name)
+        {
+
+        }
+
+        public override void update(GameTime time, GameLocation location)
+        {
+            base.update(time, location);
+        }
+
+        public override void update(GameTime time, GameLocation location, long id, bool move)
+        {
+            base.update(time, location, id, move);
+        }
+
+        public override void draw(SpriteBatch b, float alpha = 1)
+        {
+            base.draw(b, alpha);
+        }
+
+        public override void draw(SpriteBatch b)
+        {
+            base.draw(b);
+        }
+
+        public override void draw(SpriteBatch b, int ySourceRectOffset, float alpha = 1)
+        {
+            base.draw(b, ySourceRectOffset, alpha);
+        }
+
+        public override void Halt()
+        {
+            base.Halt();
+        }
+
+        public override void MovePosition(GameTime time, Rectangle viewport, GameLocation currentLocation)
+        {
+            base.MovePosition(time, viewport, currentLocation);
+        }
+
+        public override void updateMovement(GameLocation location, GameTime time)
+        {
+            base.updateMovement(location, time);
         }
     }
 }

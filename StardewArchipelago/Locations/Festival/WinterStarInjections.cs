@@ -68,7 +68,7 @@ namespace StardewArchipelago.Locations.Festival
 
                 if (__result == null)
                 {
-                    __result = VillagerExistenceInjections.Nobody;
+                    __result = VillagerExistenceInjections.GetFakeNpc("Nobody");
                 }
 
                 return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
