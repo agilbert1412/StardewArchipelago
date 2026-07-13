@@ -377,7 +377,10 @@ namespace StardewArchipelago.GameModifications.CodeInjections
 
         private static HashSet<string> GetIllegalVillagers()
         {
-            var villagers = Game1.characterData.Select(x => x.Key).Where(x => !AllowedToExist(x)).ToHashSet();
+            var villagers = Game1.characterData
+                .Select(x => x.Key)
+                .Where(x => !AllowedToExist(x) || Game1.getCharacterFromName(x) == null)
+                .ToHashSet();
             return villagers;
         }
 
