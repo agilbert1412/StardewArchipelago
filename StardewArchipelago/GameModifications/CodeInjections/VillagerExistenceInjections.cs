@@ -99,19 +99,44 @@ namespace StardewArchipelago.GameModifications.CodeInjections
             try
             {
                 _fakeNpcs.Clear();
+                var npcsFoundYet = new HashSet<string>();
                 Utility.ForEachLocation(location =>
                 {
                     location.characters.RemoveWhere(npc =>
                     {
+                        if (!NpcNeedsArrivalToExist(npc.Name))
+                        {
+                            return false;
+                        }
+
                         if (!AllowedToExist(npc.Name))
                         {
                             Game1.player.friendshipData.Remove(npc.Name);
                             return true;
                         }
+
+                        if (npcsFoundYet.Contains(npc.Name))
+                        {
+                            return true;
+                        }
+
+                        npcsFoundYet.Add(npc.Name);
                         return false;
                     });
                     return true;
                 });
+
+                var npcsFriendshipsYet = new HashSet<string>();
+                foreach (var friendshipKey in Game1.player.friendshipData.Keys.ToArray())
+                {
+                    if (npcsFriendshipsYet.Contains(friendshipKey))
+                    {
+                        Game1.player.friendshipData.Remove(friendshipKey);
+                        continue;
+                    }
+
+                    npcsFriendshipsYet.Add(friendshipKey);
+                }
 
                 return MethodPrefix.RUN_ORIGINAL_METHOD;
             }
@@ -442,16 +467,12 @@ namespace StardewArchipelago.GameModifications.CodeInjections
 
         private static bool AllowedToExist(string villagerId)
         {
-            var alwaysNeedArrival = new[] { "Kent" };
-            var needsArrival = _archipelago.SlotData.StartWithout.HasFlag(StartWithout.Villagers) || alwaysNeedArrival.Contains(villagerId);
             if (!Game1.characterData.ContainsKey(villagerId))
             {
                 return true;
             }
-            var npcCanSocialize = Game1.characterData[villagerId].CanSocialize;
 
-            var canSocialize = npcCanSocialize == null || !npcCanSocialize.Equals(false.ToString(), StringComparison.InvariantCultureIgnoreCase);
-            needsArrival = needsArrival && canSocialize;
+            var needsArrival = NpcNeedsArrivalToExist(villagerId);
 
             if (!NPC.TryGetData(villagerId, out var npcData))
             {
@@ -466,7 +487,21 @@ namespace StardewArchipelago.GameModifications.CodeInjections
             var arrivalItem = GetArrivalItem(villagerId);
             var hasArrival = _archipelago.HasReceivedItem(arrivalItem);
             return hasArrival;
+        }
 
+        private static bool NpcNeedsArrivalToExist(string villagerId)
+        {
+            if (!Game1.characterData.ContainsKey(villagerId))
+            {
+                return false;
+            }
+
+            var alwaysNeedArrival = new[] { "Kent" };
+            var needsArrival = _archipelago.SlotData.StartWithout.HasFlag(StartWithout.Villagers) || alwaysNeedArrival.Contains(villagerId);
+            var npcCanSocialize = Game1.characterData[villagerId].CanSocialize;
+            var canSocialize = npcCanSocialize == null || !npcCanSocialize.Equals(false.ToString(), StringComparison.InvariantCultureIgnoreCase);
+            needsArrival = needsArrival && canSocialize;
+            return needsArrival;
         }
 
         public static string GetArrivalItem(string npcId)
