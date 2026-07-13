@@ -435,6 +435,8 @@ namespace StardewArchipelago.GameModifications.EntranceRandomizer
             { "ScienceHouse|6|24 to SebastianRoom", "ScienceHouse to SebastianRoom" }, // LockedDoorWarp 6 24 ScienceHouse 900 2000S–
             { "Beach to Town", "Beach|39|0 to Town" },
             { "Town to Beach", "Town to Beach|39|0" },
+            { "Mountain to Town", "Mountain|15|40 to Town" }, // Town 81 0 to Mountain 15 40
+            { "Town to Mountain", "Town to Mountain|15|40" },
             { "Use Water Obelisk", "Farm to Beach" },
             { "Use Earth Obelisk", "Farm to Mountain" },
             { "Use Desert Obelisk", "Farm to Desert" },
