@@ -16,6 +16,8 @@ using KaitoKid.Utilities.Interfaces;
 using StardewArchipelago.Archipelago;
 using StardewArchipelago.Constants.Vanilla;
 using StardewArchipelago.Archipelago.SlotData.SlotEnums;
+using StardewArchipelago.Bundles;
+using StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles;
 using StardewArchipelago.Locations.Jojapocalypse.Consequences;
 
 namespace StardewArchipelago.Locations.CodeInjections.Vanilla
@@ -313,7 +315,26 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
 
         private static bool RepeatableFilter(KeyValuePair<string, SpecialOrderData> order)
         {
-            return order.Value.Repeatable || !Game1.MasterPlayer.team.completedSpecialOrders.Contains(order.Key);
+            var forcedRepeatableOrders = GetForcedRepeatableSpecialOrders();
+            return order.Value.Repeatable || forcedRepeatableOrders.Contains(order.Key) || !Game1.MasterPlayer.team.completedSpecialOrders.Contains(order.Key);
+        }
+
+        private static List<string> GetForcedRepeatableSpecialOrders()
+        {
+            var repeatableOrders = new Dictionary<string, string[]>()
+            {
+                { MemeBundleNames.FINDERS_KEEPER, new[] { "Wizard", "Wizard2" } },
+            };
+            var forcedRepeatableOrders = new List<string>();
+            foreach (var (bundle, orders) in repeatableOrders)
+            {
+                if (ArchipelagoJunimoNoteMenu.IsBundleRemaining(bundle))
+                {
+                    forcedRepeatableOrders.AddRange(orders);
+                }
+            }
+
+            return forcedRepeatableOrders;
         }
 
         private static bool TooLateInMonthFilter(KeyValuePair<string, SpecialOrderData> order)

@@ -66,5 +66,6 @@
         public const string LOONEY = "Looney";
         public const string MORSHU = "Morshu";
         public const string LINGO = "Lingo";
+        public const string FINDERS_KEEPER = "Finders Keepers";
     }
 }
