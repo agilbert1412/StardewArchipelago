@@ -1,4 +1,5 @@
-﻿using KaitoKid.ArchipelagoUtilities.Net;
+﻿using System;
+using KaitoKid.ArchipelagoUtilities.Net;
 using KaitoKid.ArchipelagoUtilities.Net.Client;
 using KaitoKid.ArchipelagoUtilities.Net.Constants;
 using KaitoKid.Utilities.Interfaces;
@@ -11,11 +12,15 @@ using StardewArchipelago.Serialization;
 using StardewArchipelago.Stardew;
 using StardewModdingAPI;
 using StardewValley;
+using StardewValley.Extensions;
+using StardewValley.GameData.Locations;
 using StardewValley.Menus;
+using StardewValley.Objects;
 using StardewValley.SpecialOrders;
 using StardewValley.Tools;
-using System;
+using System.Collections.Generic;
 using System.Linq;
+using Object = StardewValley.Object;
 
 namespace StardewArchipelago.Locations.CodeInjections.Vanilla
 {
@@ -212,6 +217,122 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
 
             var fishData = fishDatas[fishId];
             return fishData.Split("/")[1].Equals("trap", StringComparison.InvariantCultureIgnoreCase);
+        }
+
+        // public override void DayUpdate()
+        public static bool DayUpdate_FairCrabPotOdds_Prefix(CrabPot __instance)
+        {
+            try
+            {
+                var location = __instance.Location;
+                var player = Game1.GetPlayer(__instance.owner.Value) ?? Game1.MasterPlayer;
+                var hasMariner = player.professions.Contains(10);
+                if (__instance.NeedsBait(player) || __instance.heldObject.Value != null)
+                {
+                    return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
+                }
+
+                __instance.tileIndexToShow = 714;
+                __instance.readyForHarvest.Value = true;
+                var daySaveRandom = Utility.CreateDaySaveRandom(__instance.tileLocation.X * 1000.0, __instance.tileLocation.Y * (double)byte.MaxValue, __instance.directionOffset.X * 1000.0 + __instance.directionOffset.Y);
+                var possibleFish = new List<string>();
+                if (!location.TryGetFishAreaForTile(__instance.tileLocation.Value, out var id, out var data))
+                {
+                    data = null;
+                }
+
+                var chanceOfJunk = GetBaitModifiers(__instance, hasMariner, data, daySaveRandom, out var amount, out var quality, out var specificFishId);
+                var rolledFishes = new List<Object>();
+                if (!daySaveRandom.NextBool(chanceOfJunk))
+                {
+                    var crabPotFishForTile = location.GetCrabPotFishForTile(__instance.tileLocation.Value);
+                    var allFishData = DataLoader.Fish(Game1.content).OrderBy(x => daySaveRandom.NextDouble());
+                    foreach (var (fishId, fishData) in allFishData)
+                    {
+                        if (!fishData.Contains("trap"))
+                        {
+                            continue;
+                        }
+
+                        var fishDataFields = fishData.Split('/');
+                        var areas = ArgUtility.SplitBySpace(fishDataFields[4]);
+                        var fishCanBeCaughtHere = areas.Any(x => crabPotFishForTile.Any(y => x == y));
+                        if (!fishCanBeCaughtHere)
+                        {
+                            continue;
+                        }
+
+                        possibleFish.Add(fishId);
+                        var fishChance = Convert.ToDouble(fishDataFields[2]);
+                        if (specificFishId != null && specificFishId == fishId)
+                        {
+                            fishChance *= fishChance < 0.1 ? 4.0 : (fishChance < 0.2 ? 3.0 : 2.0);
+                        }
+                        if (daySaveRandom.NextDouble() < fishChance)
+                        {
+                            rolledFishes.Add(ItemRegistry.Create<Object>("(O)" + fishId, amount, quality));
+                            break;
+                        }
+                    }
+                }
+
+                Object itemCaught = null;
+                if (rolledFishes.Any())
+                {
+                    if (specificFishId != null)
+                    {
+                        itemCaught = rolledFishes.FirstOrDefault(x => x.ItemId == specificFishId);
+                    }
+                    itemCaught ??= rolledFishes[daySaveRandom.Next(rolledFishes.Count)];
+                }
+                else
+                {
+                    itemCaught = hasMariner ?
+                        ItemRegistry.Create<Object>("(O)" + daySaveRandom.ChooseFrom(possibleFish), amount, quality) :
+                        ItemRegistry.Create<Object>("(O)" + daySaveRandom.Next(168, 173));
+                }
+
+                __instance.heldObject.Value = itemCaught;
+                return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Failed in {nameof(DayUpdate_FairCrabPotOdds_Prefix)}:\n{ex}");
+                return MethodPrefix.RUN_ORIGINAL_METHOD;
+            }
+        }
+
+        private static double GetBaitModifiers(CrabPot __instance, bool hasMariner, FishAreaData data, Random daySaveRandom, out int amount, out int quality, out string specificFishId)
+        {
+            var chanceOfJunk = hasMariner ? 0.0 : data?.CrabPotJunkChance ?? 0.2;
+            amount = 1;
+            quality = 0;
+            specificFishId = null;
+            var id = __instance.bait.Value?.QualifiedItemId;
+            switch (id)
+            {
+                case "(O)DeluxeBait":
+                    quality = 1;
+                    chanceOfJunk /= 2.0;
+                    break;
+                case "(O)774":
+                    chanceOfJunk /= 2.0;
+                    if (daySaveRandom.NextBool(0.25))
+                    {
+                        amount = 2;
+                        break;
+                    }
+                    break;
+                case "(O)SpecificBait":
+                    if (__instance.bait.Value.preservedParentSheetIndex.Value != null && __instance.bait.Value.preserve.Value.HasValue)
+                    {
+                        specificFishId = __instance.bait.Value.preservedParentSheetIndex.Value;
+                        chanceOfJunk /= 2.0;
+                        break;
+                    }
+                    break;
+            }
+            return chanceOfJunk;
         }
     }
 }

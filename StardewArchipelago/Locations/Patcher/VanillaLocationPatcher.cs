@@ -972,6 +972,11 @@ namespace StardewArchipelago.Locations.Patcher
                 original: AccessTools.Method(typeof(FishingRod), nameof(FishingRod.pullFishFromWater)),
                 prefix: new HarmonyMethod(typeof(FishingInjections), nameof(FishingInjections.pullFishFromWater_CrabPotFishDeserveASize_Prefix))
             );
+
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(CrabPot), nameof(CrabPot.DayUpdate)),
+                prefix: new HarmonyMethod(typeof(FishingInjections), nameof(FishingInjections.DayUpdate_FairCrabPotOdds_Prefix))
+            );
         }
 
         private void AddFishsanityLocations()
