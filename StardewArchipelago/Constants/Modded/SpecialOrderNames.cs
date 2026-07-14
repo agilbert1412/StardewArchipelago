@@ -20,6 +20,7 @@ namespace StardewArchipelago.Constants.Modded
             { "Krobus_Name", "Void Soul" },
             { "Lemurkat.SpecialOrders.JasperGeodes_Name", "Geode Order" },
             { "Lemurkat.SpecialOrders.JasperScrolls_Name", "Dwarven Scrolls" },
+            { "Lemurkat.SpecialOrders.JasperDevices_Name", "[Not Implemented Jasper Devices Special Order]" },
         };
     }
 }
