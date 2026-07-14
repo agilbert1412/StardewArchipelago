@@ -1,10 +1,12 @@
 ﻿using Force.DeepCloner;
 using KaitoKid.Utilities.Interfaces;
+using Newtonsoft.Json;
 using StardewArchipelago.Archipelago;
 using StardewArchipelago.Archipelago.SlotData.SlotEnums;
 using StardewArchipelago.Constants;
 using StardewArchipelago.Constants.Locations;
 using StardewArchipelago.Constants.Vanilla;
+using StardewArchipelago.GameModifications.Shops;
 using StardewArchipelago.Stardew;
 using StardewArchipelago.Stardew.NameMapping;
 using StardewModdingAPI;
@@ -133,6 +135,13 @@ namespace StardewArchipelago.Locations.ShopStockModifiers
             {
                 toolShopItem.Price = (int)Math.Round(toolShopItem.Price * priceMultiplier);
                 toolShopItem.TradeItemAmount = (int)Math.Round(toolShopItem.TradeItemAmount * priceMultiplier);
+                if (toolShopItem.CustomFields != null && toolShopItem.CustomFields.ContainsKey(ShopMenuInjections.MATERIALS_KEY))
+                {
+                    var materialsJson = toolShopItem.CustomFields[ShopMenuInjections.MATERIALS_KEY];
+                    var materials = JsonConvert.DeserializeObject<Dictionary<string, int>>(materialsJson);
+                    var pricedMaterials = materials.ToDictionary(x => x.Key, x => (int)Math.Round(x.Value * priceMultiplier));
+                    toolShopItem.CustomFields[ShopMenuInjections.MATERIALS_KEY] = JsonConvert.SerializeObject(pricedMaterials);
+                }
             }
         }
 

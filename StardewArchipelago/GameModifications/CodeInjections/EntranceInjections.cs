@@ -843,20 +843,6 @@ namespace StardewArchipelago.GameModifications.CodeInjections
             }
         }
 
-        // public void resetForPlayerEntry()
-        //public static void ResetForPlayerEntry_NoteThatWeProperlyResetForPlayerEntry_Prefix(GameLocation __instance)
-        //{
-        //    try
-        //    {
-        //        _needToResetForPlayerEntry = false;
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        _logger.LogError($"Failed in {nameof(ResetForPlayerEntry_NoteThatWeProperlyResetForPlayerEntry_Prefix)}\t{ex}");
-        //        return;
-        //    }
-        //}
-
         // private bool onFadeToBlackComplete()
         public static void OnFadeToBlackComplete_ResetForPlayerEntryIfNeeded_Postfix(Game1 __instance, ref bool __result)
         {
