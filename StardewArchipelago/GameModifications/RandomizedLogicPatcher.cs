@@ -419,21 +419,6 @@ namespace StardewArchipelago.GameModifications
                 prefix: new HarmonyMethod(typeof(EntranceInjections), nameof(EntranceInjections.TotemWarpForReal_WarpTotemRandomizer_Prefix))
             );
 
-            //_harmony.Patch(
-            //    original: AccessTools.Method(typeof(Building), "obeliskWarpForReal"),
-            //    prefix: new HarmonyMethod(typeof(EntranceInjections), nameof(EntranceInjections.ObeliskWarpForReal_ObeliskRandomizer_Prefix))
-            //);
-
-            //_harmony.Patch(
-            //    original: AccessTools.Method(typeof(Game1), "onFadeToBlackComplete"),
-            //    prefix: new HarmonyMethod(typeof(EntranceInjections), nameof(EntranceInjections.OnFadeToBlackComplete_CheckIfResetForPlayerEntryWasCalled_Prefix))
-            //);
-
-            //_harmony.Patch(
-            //    original: AccessTools.Method(typeof(GameLocation), nameof(GameLocation.resetForPlayerEntry)),
-            //    prefix: new HarmonyMethod(typeof(EntranceInjections), nameof(EntranceInjections.ResetForPlayerEntry_NoteThatWeProperlyResetForPlayerEntry_Prefix))
-            //);
-
             _harmony.Patch(
                 original: AccessTools.Method(typeof(Game1), "onFadeToBlackComplete"),
                 postfix: new HarmonyMethod(typeof(EntranceInjections), nameof(EntranceInjections.OnFadeToBlackComplete_ResetForPlayerEntryIfNeeded_Postfix))
