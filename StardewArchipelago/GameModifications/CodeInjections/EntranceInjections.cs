@@ -1,6 +1,7 @@
 ﻿using KaitoKid.ArchipelagoUtilities.Net.Constants;
 using KaitoKid.Utilities.Interfaces;
 using Microsoft.Xna.Framework;
+using Netcode;
 using StardewArchipelago.Archipelago;
 using StardewArchipelago.Constants;
 using StardewArchipelago.GameModifications.EntranceRandomizer;
@@ -69,6 +70,7 @@ namespace StardewArchipelago.GameModifications.CodeInjections
                 locationRequest = GetRandomizedLocationRequest(locationRequest, replacedWarp, out tileX, out tileY, out facingDirectionAfterWarp);
                 PrepareForWarpsWithUndesiredBehaviors(locationRequest, replacedWarp);
 
+                SetNeedForResetPlayerEntry(locationRequest, tileX, tileY);
                 return MethodPrefix.RUN_ORIGINAL_METHOD;
             }
             catch (Exception ex)
@@ -110,6 +112,7 @@ namespace StardewArchipelago.GameModifications.CodeInjections
                 return;
             }
         }
+
         private static LocationRequest GetRandomizedLocationRequest(LocationRequest locationRequest, WarpRequest replacedWarp, out int tileX, out int tileY, out int facingDirectionAfterWarp)
         {
             locationRequest.Name = replacedWarp.LocationRequest.Name;
@@ -191,6 +194,7 @@ namespace StardewArchipelago.GameModifications.CodeInjections
                 __instance.lastUser.CanMove = true;
                 _skipER = false;
 
+                SetNeedForResetPlayerEntry(locationRequest, tileX, tileY);
                 return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
             }
             catch (Exception ex)
@@ -276,6 +280,7 @@ namespace StardewArchipelago.GameModifications.CodeInjections
                 Game1.displayFarmer = true;
                 _skipER = false;
 
+                SetNeedForResetPlayerEntry(locationRequest, tileX, tileY);
                 return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
             }
             catch (Exception ex)
@@ -785,5 +790,97 @@ namespace StardewArchipelago.GameModifications.CodeInjections
 
         }
 
+        private static bool _needToResetForPlayerEntry = false;
+
+        private static void SetNeedForResetPlayerEntry(LocationRequest locationRequest, int tileX, int tileY)
+        {
+            var mapName = locationRequest.Name;
+            var map = locationRequest.Location;
+            if (map is BusStop && tileX.IsCloseTo(14))
+            {
+                _needToResetForPlayerEntry = true;
+                return;
+            }
+            if (map is Town && tileX.IsCloseTo(105))
+            {
+                _needToResetForPlayerEntry = true;
+                return;
+            }
+            if (map is Mine && tileX.IsCloseTo(13))
+            {
+                _needToResetForPlayerEntry = true;
+                return;
+            }
+            if (map is Mountain && tileX.IsCloseTo(124))
+            {
+                _needToResetForPlayerEntry = true;
+                return;
+            }
+            if (map is IslandSouth && tileX.IsCloseTo(6) && tileY.IsCloseTo(31))
+            {
+                _needToResetForPlayerEntry = true;
+                return;
+            }
+            if (map is IslandWest && tileX.IsCloseTo(74) && tileY.IsCloseTo(9))
+            {
+                _needToResetForPlayerEntry = true;
+                return;
+            }
+            if (map is IslandEast && tileX.IsCloseTo(28) && tileY.IsCloseTo(28))
+            {
+                _needToResetForPlayerEntry = true;
+                return;
+            }
+            if (map is IslandNorth && tileX.IsCloseTo(60) && tileY.IsCloseTo(16))
+            {
+                _needToResetForPlayerEntry = true;
+                return;
+            }
+            if (map is IslandNorth && tileX.IsCloseTo(5) && tileY.IsCloseTo(48))
+            {
+                _needToResetForPlayerEntry = true;
+                return;
+            }
+        }
+
+        // public void resetForPlayerEntry()
+        //public static void ResetForPlayerEntry_NoteThatWeProperlyResetForPlayerEntry_Prefix(GameLocation __instance)
+        //{
+        //    try
+        //    {
+        //        _needToResetForPlayerEntry = false;
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        _logger.LogError($"Failed in {nameof(ResetForPlayerEntry_NoteThatWeProperlyResetForPlayerEntry_Prefix)}\t{ex}");
+        //        return;
+        //    }
+        //}
+
+        // private bool onFadeToBlackComplete()
+        public static void OnFadeToBlackComplete_ResetForPlayerEntryIfNeeded_Postfix(Game1 __instance, ref bool __result)
+        {
+            try
+            {
+                if (_needToResetForPlayerEntry)
+                {
+                    Game1.currentLocation.resetForPlayerEntry();
+                    _needToResetForPlayerEntry = false;
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Failed in {nameof(OnFadeToBlackComplete_ResetForPlayerEntryIfNeeded_Postfix)}\t{ex}");
+                return;
+            }
+        }
+    }
+
+    internal static class TileExtensions
+    {
+        internal static bool IsCloseTo(this int val, int otherVal)
+        {
+            return Math.Abs(val - otherVal) <= 1;
+        }
     }
 }
