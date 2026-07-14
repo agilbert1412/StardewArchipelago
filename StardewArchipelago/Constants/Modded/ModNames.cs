@@ -4,6 +4,7 @@
     {
         public const string ALEC = "Alec Revisited";
         public const string ARCHAEOLOGY = "Archaeology";
+        public const string AUTOMATE = "Automate";
         public const string AYEISHA = "Ayeisha - The Postal Worker (Custom NPC)";
         public const string BIGGER_BACKPACK = "Bigger Backpack";
         public const string BINNING = "Binning Skill";

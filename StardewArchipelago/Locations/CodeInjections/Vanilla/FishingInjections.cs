@@ -20,6 +20,7 @@ using StardewValley.SpecialOrders;
 using StardewValley.Tools;
 using System.Collections.Generic;
 using System.Linq;
+using StardewArchipelago.Constants.Modded;
 using Object = StardewValley.Object;
 
 namespace StardewArchipelago.Locations.CodeInjections.Vanilla
@@ -246,7 +247,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
                 if (!daySaveRandom.NextBool(chanceOfJunk))
                 {
                     var crabPotFishForTile = location.GetCrabPotFishForTile(__instance.tileLocation.Value);
-                    var allFishData = DataLoader.Fish(Game1.content).OrderBy(x => daySaveRandom.NextDouble());
+                    var allFishData = DataLoader.Fish(Game1.content).OrderBy(x => daySaveRandom.NextDouble()).ToArray();
                     foreach (var (fishId, fishData) in allFishData)
                     {
                         if (!fishData.Contains("trap"))
@@ -293,6 +294,14 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
                 }
 
                 __instance.heldObject.Value = itemCaught;
+                if (itemCaught != null && _modHelper.ModRegistry.IsLoaded(ModUniqueIds.UniqueIds[ModNames.AUTOMATE]))
+                {
+                    var apLocation = $"{FISHSANITY_PREFIX}{itemCaught.Name}";
+                    if (_archipelago.GetLocationId(apLocation) > -1)
+                    {
+                        _locationChecker.AddCheckedLocation(apLocation);
+                    }
+                }
                 return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
             }
             catch (Exception ex)

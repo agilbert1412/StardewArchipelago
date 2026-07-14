@@ -7,6 +7,7 @@ namespace StardewArchipelago.Constants.Modded
         public static readonly Dictionary<string, string> UniqueIds = new()
         {
             { ModNames.BIGGER_BACKPACK, "spacechase0.BiggerBackpack" },
+            { ModNames.AUTOMATE, "Pathoschild.Automate" },
         };
     }
 }
