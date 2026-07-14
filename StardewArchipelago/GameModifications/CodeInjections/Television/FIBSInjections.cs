@@ -57,7 +57,7 @@ namespace StardewArchipelago.GameModifications.CodeInjections.Television
             var allFishData = DataLoader.Fish(Game1.content);
             var allLocationData = Game1.locationData;
             var num = 0;
-            foreach (var (fishId, fishData) in allFishData)
+            foreach (var (fishId, fishData) in allFishData.OrderBy(x => x.Value))
             {
                 var fishDataFields = fishData.Split('/');
                 var season = fishDataFields[6];
