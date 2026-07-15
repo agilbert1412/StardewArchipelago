@@ -17,7 +17,7 @@ General:
 - [Skull Cavern Elevator](https://www.nexusmods.com/stardewvalley/mods/963), by Lestoph, Version 1.6.x
 - [Bigger Backpack](https://www.nexusmods.com/stardewvalley/mods/1845), by spacechase0, Version 7.3.x
 - [Tractor Mod](https://www.nexusmods.com/stardewvalley/mods/1401), by Pathoschild, Version 4.24.x
-- [Distant Lands - Witch Swamp Overhaul](https://www.nexusmods.com/stardewvalley/mods/18109), by Aimon111, Version 2.2.x
+- [Distant Lands - Witch Swamp Overhaul](https://www.nexusmods.com/stardewvalley/mods/18109), by Aimon111, Version 2.2.5
 
 Skills:
 - [Spacecore Luck Skill](https://www.nexusmods.com/stardewvalley/mods/28103), by spacechase0, Version 1.5.x - Note: This mod was ported from the now deprecated "Luck Skill", and has added some new content that isn't fully randomized. But it should work like before
