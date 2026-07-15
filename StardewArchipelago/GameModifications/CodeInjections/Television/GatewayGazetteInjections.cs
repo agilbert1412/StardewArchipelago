@@ -1,9 +1,7 @@
-﻿using System;
-using System.IO;
-using System.Linq;
-using KaitoKid.Utilities.Interfaces;
+﻿using KaitoKid.Utilities.Interfaces;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
 using StardewArchipelago.Archipelago;
 using StardewArchipelago.Archipelago.SlotData.SlotEnums;
 using StardewArchipelago.Constants;
@@ -14,6 +12,9 @@ using StardewArchipelago.Textures;
 using StardewModdingAPI;
 using StardewValley;
 using StardewValley.Objects;
+using System;
+using System.IO;
+using System.Linq;
 
 namespace StardewArchipelago.GameModifications.CodeInjections.Television
 {
@@ -120,15 +121,15 @@ namespace StardewArchipelago.GameModifications.CodeInjections.Television
             }
 
             var agentName = Community.AllNames[random.Next(Community.AllNames.Length)];
-            var entrancesNotChecked = _entranceManager.ModifiedEntrances.Keys.Where(x => !_state.EntrancesTraversed.Any(y => y.Equals(x, StringComparison.InvariantCultureIgnoreCase))).ToArray();
+            var entrancesNotChecked = _entranceManager.ModifiedEntrances.Keys.Where(x => !_state.EntrancesTraversed.Any(y => _entranceManager.EntranceAliasesMap[x].Equals(y, StringComparison.InvariantCultureIgnoreCase))).ToArray();
             if (!entrancesNotChecked.Any())
             {
                 entrancesNotChecked = _entranceManager.ModifiedEntrances.Keys.ToArray();
             }
             var entranceToReveal = entrancesNotChecked[random.Next(entrancesNotChecked.Length)];
-            var friendlyEntranceName = GetFriendlyMapName(entranceToReveal);
+            var friendlyEntranceName = _entranceManager.EntranceAliasesMap[entranceToReveal];
             var destinationInternalName = _entranceManager.ModifiedEntrances[entranceToReveal];
-            var destinationFriendlyName = GetFriendlyDestinationName(destinationInternalName);
+            var destinationFriendlyName = _entranceManager.EntranceAliasesMap[destinationInternalName];
             Game1.drawObjectDialogue(Game1.parseText(string.Format(GAZETTE_EPISODE, agentName, friendlyEntranceName, destinationFriendlyName)));
             Game1.afterDialogues = tv.proceedToNextScene;
         }
