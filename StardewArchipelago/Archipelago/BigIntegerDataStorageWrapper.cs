@@ -128,6 +128,7 @@ namespace StardewArchipelago.Archipelago
         {
             try
             {
+                _session.DataStorage[scope, key].Initialize(0);
                 _session.DataStorage[scope, key] *= multiple;
                 return true;
             }
@@ -142,12 +143,30 @@ namespace StardewArchipelago.Archipelago
         {
             try
             {
+                _session.DataStorage[scope, key].Initialize(0);
                 _session.DataStorage[scope, key] += new OperationSpecification { OperationType = OperationType.RightShift };
                 return true;
             }
             catch (Exception ex)
             {
                 _logger.LogError($"Error dividing by 2 in DataStorage key [{key}].{Environment.NewLine}Message: {ex.Message}{Environment.NewLine}Stack Trace: {ex.StackTrace}");
+                return false;
+            }
+        }
+
+        public bool DivideByEight(Scope scope, string key)
+        {
+            try
+            {
+                _session.DataStorage[scope, key].Initialize(0);
+                _session.DataStorage[scope, key] += new OperationSpecification { OperationType = OperationType.RightShift };
+                _session.DataStorage[scope, key] += new OperationSpecification { OperationType = OperationType.RightShift };
+                _session.DataStorage[scope, key] += new OperationSpecification { OperationType = OperationType.RightShift };
+                return true;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Error dividing by 8 in DataStorage key [{key}].{Environment.NewLine}Message: {ex.Message}{Environment.NewLine}Stack Trace: {ex.StackTrace}");
                 return false;
             }
         }

@@ -325,12 +325,18 @@ namespace StardewArchipelago.Archipelago
                 return false;
             }
 
-            if (divisor != 2)
+            if (divisor == 2)
             {
-                throw new NotImplementedException($"Can't divide DataStorage by {divisor} yet.");
+                return _bigIntegerDataStorage.DivideByTwo(scope, key);
             }
 
-            return _bigIntegerDataStorage.DivideByTwo(scope, key);
+            if (divisor == 8)
+            {
+                return _bigIntegerDataStorage.DivideByEight(scope, key);
+            }
+
+            // return _bigIntegerDataStorage.DivideBy(scope, key, divisor);
+            throw new NotImplementedException($"Can't divide DataStorage by {divisor} yet.");
         }
 
         private ScoutingPreference ShouldHint(bool createAsHint)
