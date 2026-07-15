@@ -144,7 +144,7 @@ namespace StardewArchipelago.Archipelago
             try
             {
                 _session.DataStorage[scope, key].Initialize(0);
-                _session.DataStorage[scope, key] += new OperationSpecification { OperationType = OperationType.RightShift };
+                _session.DataStorage[scope, key] += new OperationSpecification { OperationType = OperationType.RightShift, Value = 1};
                 return true;
             }
             catch (Exception ex)
@@ -159,9 +159,7 @@ namespace StardewArchipelago.Archipelago
             try
             {
                 _session.DataStorage[scope, key].Initialize(0);
-                _session.DataStorage[scope, key] += new OperationSpecification { OperationType = OperationType.RightShift };
-                _session.DataStorage[scope, key] += new OperationSpecification { OperationType = OperationType.RightShift };
-                _session.DataStorage[scope, key] += new OperationSpecification { OperationType = OperationType.RightShift };
+                _session.DataStorage[scope, key] += new OperationSpecification { OperationType = OperationType.RightShift, Value = 3 };
                 return true;
             }
             catch (Exception ex)
