@@ -1,14 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using StardewArchipelago.Logging;
-using StardewModdingAPI;
-using StardewArchipelago.Archipelago;
+﻿using StardewArchipelago.Archipelago;
 using StardewArchipelago.Archipelago.Gifting;
 using StardewArchipelago.Items.Traps;
 using StardewArchipelago.Locations.CodeInjections.Vanilla.MonsterSlayer;
+using StardewArchipelago.Logging;
 using StardewArchipelago.Serialization;
 using StardewArchipelago.Stardew;
-using StardewArchipelago.Locations;
+using StardewModdingAPI;
+using System;
+using System.Collections.Generic;
 
 namespace StardewArchipelago.Registry
 {

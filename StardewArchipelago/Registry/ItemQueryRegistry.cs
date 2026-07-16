@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using StardewArchipelago.Archipelago;
+﻿using StardewArchipelago.Archipelago;
 using StardewArchipelago.Archipelago.Gifting;
 using StardewArchipelago.Constants;
 using StardewArchipelago.Items.Traps;
@@ -14,6 +12,8 @@ using StardewArchipelago.Serialization;
 using StardewArchipelago.Stardew;
 using StardewModdingAPI;
 using StardewValley.Internal;
+using System;
+using System.Collections.Generic;
 
 namespace StardewArchipelago.Registry
 {

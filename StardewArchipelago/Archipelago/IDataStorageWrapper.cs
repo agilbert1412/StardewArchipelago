@@ -20,5 +20,6 @@ namespace StardewArchipelago.Archipelago
         bool Subtract(Scope scope, string key, T amount, bool dontGoBelowZero);
         bool Multiply(Scope scope, string key, int multiple);
         bool DivideByTwo(Scope scope, string key);
+        bool DivideByEight(Scope scope, string key);
     }
 }

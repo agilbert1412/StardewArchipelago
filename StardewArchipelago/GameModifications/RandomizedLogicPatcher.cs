@@ -462,6 +462,11 @@ namespace StardewArchipelago.GameModifications
             );
 
             _harmony.Patch(
+                original: AccessTools.Method(typeof(Utility), nameof(Utility.isGreenRainDay), new []{typeof(int), typeof(Season)}),
+                prefix: new HarmonyMethod(typeof(SeasonsRandomizer), nameof(SeasonsRandomizer.IsGreenRainDay_UseCorrectSeason_Prefix))
+            );
+
+            _harmony.Patch(
                 original: AccessTools.Method(typeof(Game1), nameof(Game1.getWeatherModificationsForDate)),
                 prefix: new HarmonyMethod(typeof(SeasonsRandomizer), nameof(SeasonsRandomizer.GetWeatherModificationsForDate_UseCorrectDates_Prefix))
             );

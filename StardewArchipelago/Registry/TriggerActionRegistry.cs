@@ -1,5 +1,4 @@
-﻿using System;
-using StardewArchipelago.Archipelago;
+﻿using StardewArchipelago.Archipelago;
 using StardewArchipelago.Archipelago.Gifting;
 using StardewArchipelago.Constants;
 using StardewArchipelago.Items.Traps;
@@ -10,6 +9,7 @@ using StardewArchipelago.Logging;
 using StardewArchipelago.Serialization;
 using StardewArchipelago.Stardew;
 using StardewValley.Triggers;
+using System;
 
 namespace StardewArchipelago.Registry
 {

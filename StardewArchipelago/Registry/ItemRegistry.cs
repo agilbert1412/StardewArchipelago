@@ -1,5 +1,4 @@
-﻿using System;
-using KaitoKid.Utilities.Interfaces;
+﻿using KaitoKid.Utilities.Interfaces;
 using StardewArchipelago.Archipelago;
 using StardewArchipelago.Archipelago.Gifting;
 using StardewArchipelago.Items.Traps;
@@ -9,6 +8,7 @@ using StardewArchipelago.Locations.InGameLocations;
 using StardewArchipelago.Registry.Definition;
 using StardewArchipelago.Serialization;
 using StardewArchipelago.Stardew;
+using System;
 
 namespace StardewArchipelago.Registry
 {

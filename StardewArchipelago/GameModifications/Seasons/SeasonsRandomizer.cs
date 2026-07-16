@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using KaitoKid.ArchipelagoUtilities.Net.Constants;
+﻿using KaitoKid.ArchipelagoUtilities.Net.Constants;
 using KaitoKid.Utilities.Interfaces;
 using Microsoft.Xna.Framework.Input;
 using StardewArchipelago.Archipelago;
@@ -10,7 +7,13 @@ using StardewArchipelago.GameModifications.MultiSleep;
 using StardewArchipelago.Serialization;
 using StardewModdingAPI;
 using StardewValley;
+using StardewValley.GameData;
+using StardewValley.GameData.LocationContexts;
 using StardewValley.Network;
+using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Linq;
 
 namespace StardewArchipelago.GameModifications.Seasons
 {
@@ -244,49 +247,79 @@ namespace StardewArchipelago.GameModifications.Seasons
             }
         }
 
+        // public static bool isGreenRainDay(int day, Season season)
+        public static bool IsGreenRainDay_UseCorrectSeason_Prefix(int day, ref Season season, ref bool __result)
+        {
+            try
+            {
+                season = Game1.season;
+                return MethodPrefix.RUN_ORIGINAL_METHOD;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Failed in {nameof(IsGreenRainDay_UseCorrectSeason_Prefix)}:\n{ex}");
+                return MethodPrefix.RUN_ORIGINAL_METHOD;
+            }
+        }
+
         // public static string getWeatherModificationsForDate(WorldDate date, string default_weather)
         public static bool GetWeatherModificationsForDate_UseCorrectDates_Prefix(WorldDate date, string default_weather, ref string __result)
         {
             try
             {
                 var chosenWeather = default_weather;
-                var num = date.TotalDays - Game1.Date.TotalDays;
-                var currentSeason = Game1.season;
-                if (date.DayOfMonth == 1 || Game1.stats.DaysPlayed + num <= 4L)
+                var daysPlayed = Game1.stats.DaysPlayed;
+                var game1Date = Game1.Date;
+                var num = date.TotalDays - game1Date.TotalDays;
+                var isToday = date.TotalDays == game1Date.TotalDays;
+                var isTomorrow = date.TotalDays == game1Date.TotalDays + 1 || (date.DayOfMonth == 1 && game1Date.DayOfMonth == 28);
+                var season = Game1.season;
+
+                if (!isToday && !isTomorrow)
+                {
+                    _logger.LogError($"Game tried to query the weather for a day that is neither today nor tomorrow.{Environment.NewLine}Stack: {Environment.StackTrace}");
+                }
+
+                // We only ever query the weather for either today or tomorrow
+                var totalDaysForWeatherDate = isToday ? daysPlayed : daysPlayed + 1;
+
+                if (date.DayOfMonth == 1 || totalDaysForWeatherDate <= 5)
                 {
                     chosenWeather = Weather.Sun;
                 }
-
-                if (Game1.stats.DaysPlayed + num == 3L)
+                if (totalDaysForWeatherDate == 3L)
                 {
                     chosenWeather = Weather.Rain;
                 }
-
-                if (currentSeason == Season.Summer && date.DayOfMonth % 13 == 0)
+                if (Utility.isGreenRainDay(date.DayOfMonth, season))
+                {
+                    chosenWeather = Weather.GreenRain;
+                }
+                if (season == Season.Summer && date.DayOfMonth % 13 == 0)
                 {
                     chosenWeather = Weather.Storm;
                 }
-
-                if (Utility.isFestivalDay(date.DayOfMonth, currentSeason))
+                if (Utility.isFestivalDay(date.DayOfMonth, season))
                 {
                     chosenWeather = Weather.Festival;
                 }
-
                 foreach (var passiveFestivalData in DataLoader.PassiveFestivals(Game1.content).Values)
                 {
-                    if (date.DayOfMonth < passiveFestivalData.StartDay || date.DayOfMonth > passiveFestivalData.EndDay || date.Season != passiveFestivalData.Season ||
-                        !GameStateQuery.CheckConditions(passiveFestivalData.Condition) || passiveFestivalData.MapReplacements == null)
+                    if (date.DayOfMonth < passiveFestivalData.StartDay || date.DayOfMonth > passiveFestivalData.EndDay || 
+                        season != passiveFestivalData.Season || !GameStateQuery.CheckConditions(passiveFestivalData.Condition) ||
+                        passiveFestivalData.MapReplacements == null)
                     {
                         continue;
                     }
                     foreach (var key in passiveFestivalData.MapReplacements.Keys)
                     {
                         var locationFromName = Game1.getLocationFromName(key);
-                        if (locationFromName != null && locationFromName.InValleyContext())
+                        if (locationFromName == null || !locationFromName.InValleyContext())
                         {
-                            chosenWeather = Weather.Sun;
-                            break;
+                            continue;
                         }
+                        chosenWeather = Weather.Sun;
+                        break;
                     }
                 }
 
@@ -427,6 +460,7 @@ namespace StardewArchipelago.GameModifications.Seasons
             public const string Rain = "Rain";
             public const string Storm = "Storm";
             public const string Festival = "Festival";
+            public const string GreenRain = "GreenRain";
         }
     }
 }
