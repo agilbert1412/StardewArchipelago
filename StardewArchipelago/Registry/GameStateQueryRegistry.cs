@@ -119,7 +119,7 @@ namespace StardewArchipelago.Registry
 
             if (Game1.player.currentLocation is not MineShaft currentMines)
             {
-                return false;
+                return true;
             }
 
             return currentMines.mineLevel == requestedFloor;
