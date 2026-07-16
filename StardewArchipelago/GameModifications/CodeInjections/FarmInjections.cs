@@ -85,7 +85,12 @@ namespace StardewArchipelago.GameModifications.CodeInjections
             {
                 if (numDebris <= 0)
                 {
-                    return MethodPrefix.RUN_ORIGINAL_METHOD;;
+                    return MethodPrefix.RUN_ORIGINAL_METHOD;
+                }
+
+                if (Utility.isGreenRainDay())
+                {
+                    return MethodPrefix.RUN_ORIGINAL_METHOD;
                 }
 
                 if (Game1.getFarm().isBuildingConstructed("Gold Clock") && _locationsWithGoldenClockEffect.Contains(__instance.Name) && !Game1.netWorldState.Value.goldenClocksTurnedOff.Value)
