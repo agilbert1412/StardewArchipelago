@@ -1,25 +1,26 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using KaitoKid.ArchipelagoUtilities.Net;
+﻿using KaitoKid.ArchipelagoUtilities.Net;
 using KaitoKid.ArchipelagoUtilities.Net.Client;
-using Newtonsoft.Json.Linq;
+using Microsoft.Xna.Framework;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using StardewArchipelago.Archipelago;
 using StardewArchipelago.Archipelago.Gifting;
 using StardewArchipelago.Archipelago.SlotData.SlotEnums;
+using StardewArchipelago.GameModifications;
+using StardewArchipelago.Items.Traps;
+using StardewArchipelago.Locations;
 using StardewArchipelago.Locations.CodeInjections.Vanilla.MonsterSlayer;
 using StardewArchipelago.Logging;
-using StardewModdingAPI;
-using StardewValley.TerrainFeatures;
-using StardewValley;
-using static StardewArchipelago.ModEntry;
-using StardewArchipelago.GameModifications;
-using StardewArchipelago.Stardew;
-using System.Linq;
-using Microsoft.Xna.Framework;
 using StardewArchipelago.Serialization;
-using StardewArchipelago.Locations;
+using StardewArchipelago.Stardew;
+using StardewModdingAPI;
+using StardewValley;
+using StardewValley.TerrainFeatures;
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using static StardewArchipelago.ModEntry;
 
 namespace StardewArchipelago.Registry
 {
@@ -37,6 +38,7 @@ namespace StardewArchipelago.Registry
         private IGiftHandler _giftHandler;
         private WeaponsManager _weaponsManager;
         private ArchipelagoStateDto _state;
+        private TrapManager _trapManager;
 
         public ConsoleCommandsRegistry(LogHandler logger, IModHelper modHelper, ModEntry mod)
         {
@@ -45,7 +47,9 @@ namespace StardewArchipelago.Registry
             _mod = mod;
         }
 
-        public void Initialize(StardewArchipelagoClient archipelago, StardewItemManager stardewItemManager, StardewLocationChecker locationChecker, IGiftHandler giftHandler, WeaponsManager weaponsManager, ArchipelagoStateDto state)
+        public void Initialize(StardewArchipelagoClient archipelago, StardewItemManager stardewItemManager,
+            StardewLocationChecker locationChecker, IGiftHandler giftHandler, WeaponsManager weaponsManager,
+            ArchipelagoStateDto state, TrapManager trapManager)
         {
             _archipelago = archipelago;
             _stardewItemManager = stardewItemManager;
@@ -53,6 +57,7 @@ namespace StardewArchipelago.Registry
             _giftHandler = giftHandler;
             _weaponsManager = weaponsManager;
             _state = state;
+            _trapManager = trapManager;
         }
 
         public void RegisterOnModEntry()
@@ -90,6 +95,7 @@ namespace StardewArchipelago.Registry
             _modHelper.ConsoleCommands.Add("export_shippables", "Export all currently loaded shippable items", ExportShippables);
             _modHelper.ConsoleCommands.Add("export_mismatches", "Export all items where Name and DisplayName mismatch which can be shipped", ExportMismatchedItems);
             _modHelper.ConsoleCommands.Add("export_weapons", "Export all weapons by category and tier", ExportWeapons);
+            _modHelper.ConsoleCommands.Add("trap", "Execute the given trap immediately", ExecuteTrap);
             //_modHelper.ConsoleCommands.Add("release_slot", "Release the current slot completely", ReleaseSlot);
             //_modHelper.ConsoleCommands.Add("debug_method", "Runs whatever is currently in the debug method", DebugMethod);
             // _modHelper.ConsoleCommands.Add("set_next_season", "Sets the next season to a chosen value", SetNextSeason);
@@ -292,6 +298,18 @@ namespace StardewArchipelago.Registry
             weapons.Add("Slingshots", _weaponsManager.SlingshotsByTier);
             var weaponsAsJson = JsonConvert.SerializeObject(weapons);
             File.WriteAllText("weapons.json", weaponsAsJson);
+        }
+
+        private void ExecuteTrap(string arg1, string[] arg2)
+        {
+            if (arg2.Length < 1)
+            {
+                _logger.Log($"You must specify a trap to execute", LogLevel.Info);
+                return;
+            }
+
+            var trap = arg2[0];
+            _trapManager.ExecuteTrapImmediately(trap);
         }
 
         private void ReleaseSlot(string arg1, string[] arg2)
