@@ -37,7 +37,7 @@ namespace StardewArchipelago.Registry
             {
                 foreach (var registryManager in _registryManagers)
                 {
-                    registryManager.Initialize(archipelago, stardewItemManager, locationChecker, _giftHandler, weaponsManager, state);
+                    registryManager.Initialize(archipelago, stardewItemManager, locationChecker, _giftHandler, weaponsManager, state, trapManager);
                 }
             }
             catch (Exception ex)
