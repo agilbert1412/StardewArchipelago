@@ -137,6 +137,10 @@ namespace StardewArchipelago.GameModifications.RandomizedData
                 const int seasonIndex = 6;
                 fishDataFields[seasonIndex] = string.Join(" ", randomizedData.Season.Select(x => x.ToLower()));
             }
+            else
+            {
+                SanitizeFishWithWrongSeasonInVanillaData(fishDataFields, fishName);
+            }
             if (randomizedData.Weather != null)
             {
                 const int weatherIndex = 7;
@@ -160,6 +164,34 @@ namespace StardewArchipelago.GameModifications.RandomizedData
 
 
             return fishDataFields;
+        }
+
+        private static void SanitizeFishWithWrongSeasonInVanillaData(string[] fishDataFields, string fishName)
+        {
+            const int seasonIndex = 6;
+            switch (fishName)
+            {
+                case "Crimsonfish":
+                    fishDataFields[seasonIndex] = "summer";
+                    return;
+                case "Angler":
+                    fishDataFields[seasonIndex] = "fall";
+                    return;
+                case "Legend":
+                    fishDataFields[seasonIndex] = "spring";
+                    return;
+                case "Glacierfish":
+                    fishDataFields[seasonIndex] = "winter";
+                    return;
+                case "Mutant Carp":
+                case "Son of Crimsonfish":
+                case "Ms. Angler":
+                case "Legend II":
+                case "Radioactive Carp":
+                case "Glacierfish Jr.":
+                    fishDataFields[seasonIndex] = "spring summer fall winter";
+                    return;
+            }
         }
 
         private string ConvertWeatherName(string[] weathers)

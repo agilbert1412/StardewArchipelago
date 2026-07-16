@@ -404,7 +404,7 @@ namespace StardewArchipelago.GameModifications.CodeInjections
         {
             var villagers = Game1.characterData
                 .Select(x => x.Key)
-                .Where(x => !AllowedToExist(x) || Game1.getCharacterFromName(x) == null)
+                .Where(x => !AllowedToExist(x))
                 .ToHashSet();
             return villagers;
         }
@@ -486,7 +486,8 @@ namespace StardewArchipelago.GameModifications.CodeInjections
 
             var arrivalItem = GetArrivalItem(villagerId);
             var hasArrival = _archipelago.HasReceivedItem(arrivalItem);
-            return hasArrival;
+            var isArrived = Game1.getCharacterFromName(villagerId) != null;
+            return hasArrival && isArrived;
         }
 
         private static bool NpcNeedsArrivalToExist(string villagerId)
