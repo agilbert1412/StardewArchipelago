@@ -116,6 +116,7 @@ namespace StardewArchipelago.GameModifications.CodeInjections
         private static LocationRequest GetRandomizedLocationRequest(LocationRequest locationRequest, WarpRequest replacedWarp, out int tileX, out int tileY, out int facingDirectionAfterWarp)
         {
             locationRequest.Name = replacedWarp.LocationRequest.Name;
+            locationRequest.Location = replacedWarp.LocationRequest.Location;
 
             foreach (var activePassiveFestival in Game1.netWorldState.Value.ActivePassiveFestivals)
             {
@@ -128,7 +129,6 @@ namespace StardewArchipelago.GameModifications.CodeInjections
                 }
             }
 
-            locationRequest.Location = replacedWarp.LocationRequest.Location;
             locationRequest.IsStructure = replacedWarp.LocationRequest.IsStructure;
             tileX = replacedWarp.TileX;
             tileY = replacedWarp.TileY;
