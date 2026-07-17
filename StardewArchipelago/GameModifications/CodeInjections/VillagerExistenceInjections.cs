@@ -62,7 +62,7 @@ namespace StardewArchipelago.GameModifications.CodeInjections
                 {
                     _fakeNpcs.Remove(characterId);
                 }
-                var allowed = AllowedToExist(characterId);
+                var allowed = AllowedToExist(characterId, out _);
 
                 if (!allowed)
                 {
@@ -109,7 +109,7 @@ namespace StardewArchipelago.GameModifications.CodeInjections
                             return false;
                         }
 
-                        if (!AllowedToExist(npc.Name))
+                        if (!AllowedToExist(npc.Name, out _))
                         {
                             Game1.player.friendshipData.Remove(npc.Name);
                             return true;
@@ -157,7 +157,7 @@ namespace StardewArchipelago.GameModifications.CodeInjections
                     return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
                 }
 
-                var illegalVillagers = GetIllegalVillagers();
+                var illegalVillagers = GetIllegalVillagers(true);
                 if (!CanPlayEventWithVillagers(eventId, Game1.currentLocation, illegalVillagers))
                 {
                     return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
@@ -189,7 +189,7 @@ namespace StardewArchipelago.GameModifications.CodeInjections
                     return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
                 }
 
-                var illegalVillagers = GetIllegalVillagers();
+                var illegalVillagers = GetIllegalVillagers(true);
                 if (!CanPlayEventWithVillagers(eventId, location, illegalVillagers))
                 {
                     __result = false;
@@ -388,7 +388,7 @@ namespace StardewArchipelago.GameModifications.CodeInjections
         {
             var parts = shopId.Split("_");
 
-            var illegalVillagers = GetIllegalVillagers();
+            var illegalVillagers = GetIllegalVillagers(true);
             foreach (var part in parts)
             {
                 if (illegalVillagers.Any(x => x.Equals(part)))
@@ -400,11 +400,11 @@ namespace StardewArchipelago.GameModifications.CodeInjections
             return true;
         }
 
-        private static HashSet<string> GetIllegalVillagers()
+        private static HashSet<string> GetIllegalVillagers(bool mustAlreadyExist)
         {
             var villagers = Game1.characterData
                 .Select(x => x.Key)
-                .Where(x => !AllowedToExist(x))
+                .Where(x => !AllowedToExist(x, out var alreadyExists) || (mustAlreadyExist && !alreadyExists))
                 .ToHashSet();
             return villagers;
         }
@@ -465,8 +465,9 @@ namespace StardewArchipelago.GameModifications.CodeInjections
             return true;
         }
 
-        private static bool AllowedToExist(string villagerId)
+        private static bool AllowedToExist(string villagerId, out bool alreadyExists)
         {
+            alreadyExists = Game1.getCharacterFromName(villagerId) != null;
             if (!Game1.characterData.ContainsKey(villagerId))
             {
                 return true;
@@ -486,8 +487,7 @@ namespace StardewArchipelago.GameModifications.CodeInjections
 
             var arrivalItem = GetArrivalItem(villagerId);
             var hasArrival = _archipelago.HasReceivedItem(arrivalItem);
-            var isArrived = Game1.getCharacterFromName(villagerId) != null;
-            return hasArrival && isArrived;
+            return hasArrival;
         }
 
         private static bool NpcNeedsArrivalToExist(string villagerId)
@@ -529,7 +529,7 @@ namespace StardewArchipelago.GameModifications.CodeInjections
                     return;
                 }
 
-                var illegalVillagers = GetIllegalVillagers();
+                var illegalVillagers = GetIllegalVillagers(true);
                 if (illegalVillagers.Contains(name))
                 {
                     __result = GetFakeNpc(name);
