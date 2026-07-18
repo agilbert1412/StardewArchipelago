@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 using Microsoft.Xna.Framework;
 
 namespace StardewArchipelago.Extensions
@@ -31,35 +32,40 @@ namespace StardewArchipelago.Extensions
             var red = random.Next(0, 256);
             var green = random.Next(0, 256);
             var blue = random.Next(0, 256);
-            var total = red + green + blue;
-            var whichToChange = random.Next(0, 3);
-            while (total < 384)
+            var components = ComputeComponentStats(red, green, blue, out var total, out var average, out var difference);
+            while (total < 384 || difference < 48 || components.Any(x => Math.Abs(average - x) < 16))
             {
-                red = Math.Min(red + random.Next(0, 32), 255);
-                blue = Math.Min(blue + random.Next(0, 32), 255);
-                green = Math.Min(green + random.Next(0, 32), 255);
-                total = red + green + blue;
-            }
-            while (total > 624)
-            {
+                var whichToChange = random.Next(0, 3);
                 switch (whichToChange)
                 {
                     case 0:
-                        red = Math.Max(red - random.Next(0, 32), 0);
+                        red = random.Next(0, 256);
                         break;
                     case 1:
-                        blue = Math.Max(blue - random.Next(0, 32), 0);
+                        green = random.Next(0, 256);
                         break;
                     case 2:
-                        green = Math.Max(green - random.Next(0, 32), 0);
+                        blue = random.Next(0, 256);
                         break;
                 }
-                total = red + green + blue;
+                components = ComputeComponentStats(red, green, blue, out total, out average, out difference);
             }
 
             var resultingColor = new Color(red, green, blue);
             _cache.Add(hashedValue, resultingColor);
             return resultingColor;
+        }
+
+        private static int[] ComputeComponentStats(int red, int green, int blue, out int total, out double average, out int difference)
+        {
+
+            var components = new[] { red, green, blue };
+            total = components.Sum();
+            var highest = components.Max();
+            var lowest = components.Min();
+            average = components.Average();
+            difference = highest - lowest;
+            return components;
         }
     }
 }
