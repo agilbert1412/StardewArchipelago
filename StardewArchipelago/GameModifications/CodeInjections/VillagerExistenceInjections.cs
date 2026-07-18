@@ -467,7 +467,7 @@ namespace StardewArchipelago.GameModifications.CodeInjections
 
         private static bool AllowedToExist(string villagerId, out bool alreadyExists)
         {
-            alreadyExists = Game1.getCharacterFromName(villagerId) != null;
+            alreadyExists = true;
             if (!Game1.characterData.ContainsKey(villagerId))
             {
                 return true;
@@ -485,6 +485,7 @@ namespace StardewArchipelago.GameModifications.CodeInjections
                 return true;
             }
 
+            alreadyExists = Game1.getCharacterFromName(villagerId) != null;
             var arrivalItem = GetArrivalItem(villagerId);
             var hasArrival = _archipelago.HasReceivedItem(arrivalItem);
             return hasArrival;
