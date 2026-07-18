@@ -536,7 +536,7 @@ namespace StardewArchipelago
                 return;
             }
 
-            if (e.IsMultipleOf(60))
+            if (e.IsMultipleOf(300))
             {
                 _itemManager.ItemParser.TrapManager.DequeueTrap();
             }
