@@ -253,7 +253,7 @@ namespace StardewArchipelago.GameModifications.RandomizedData
             {
                 shopDataItemModData.TryAdd(ShopMenuInjections.CURRENCY_KEY, randomizedShopItemData.Currency);
                 shopDataItemModData[ShopMenuInjections.CURRENCY_KEY] = randomizedShopItemData.Currency;
-                if (shopDataItem.TradeItemId == QualifiedItemIds.QI_GEM || shopDataItem.TradeItemId == QualifiedItemIds.GOLDEN_WALNUT)
+                if (shopDataItem.TradeItemId == QualifiedItemIds.QI_GEM || shopDataItem.TradeItemId == QualifiedItemIds.GOLDEN_WALNUT || shopDataItem.TradeItemId == ObjectIds.CALICO_EGG)
                 {
                     shopDataItem.TradeItemId = null;
                 }
@@ -265,7 +265,7 @@ namespace StardewArchipelago.GameModifications.RandomizedData
             if (randomizedShopItemData.Price.HasValue)
             {
                 var newPrice = (int)Math.Round(randomizedShopItemData.Price.Value * priceMultiplier);
-                if (shopDataItem.TradeItemId != null && shopDataItem.TradeItemId == QualifiedItemIds.QI_GEM || shopDataItem.TradeItemId == QualifiedItemIds.GOLDEN_WALNUT)
+                if (shopDataItem.TradeItemId != null && shopDataItem.TradeItemId == QualifiedItemIds.QI_GEM || shopDataItem.TradeItemId == QualifiedItemIds.GOLDEN_WALNUT || shopDataItem.TradeItemId == ObjectIds.CALICO_EGG)
                 {
                     shopDataItem.TradeItemAmount = newPrice;
                 }
