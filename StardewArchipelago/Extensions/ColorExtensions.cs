@@ -33,7 +33,7 @@ namespace StardewArchipelago.Extensions
             var green = random.Next(0, 256);
             var blue = random.Next(0, 256);
             var components = ComputeComponentStats(red, green, blue, out var total, out var average, out var difference);
-            while (total < 384 || difference < 48 || components.Any(x => Math.Abs(average - x) < 16))
+            while (total < 384 || difference < 48 || components.Any(x => Math.Abs(average - x) < 16) || total > 768)
             {
                 var whichToChange = random.Next(0, 3);
                 switch (whichToChange)
