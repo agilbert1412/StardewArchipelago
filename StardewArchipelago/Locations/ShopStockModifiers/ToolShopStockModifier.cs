@@ -43,11 +43,19 @@ namespace StardewArchipelago.Locations.ShopStockModifiers
                     var toolShopData = shopsData["ClintUpgrade"];
                     ReplaceToolUpgradesWithApChecks(toolShopData);
                     ReplaceVanillaToolUpgradesWithCustomQuery(toolShopData);
+                },
+                AssetEditPriority.Late
+            );
+
+            e.Edit(asset =>
+                {
+                    var shopsData = asset.AsDictionary<string, ShopData>().Data;
+                    var toolShopData = shopsData["ClintUpgrade"];
                     MakeEverythingCheaper(toolShopData);
                     var oresShopData = shopsData["Blacksmith"];
                     MakeOresRespectInflation(oresShopData);
                 },
-                AssetEditPriority.Late
+                AssetEditPriority.Late + 2 // We want this to run after DR, because it makes things cheaper
             );
         }
 

@@ -95,6 +95,7 @@ namespace StardewArchipelago.GameModifications.CodeInjections
             {
                 // If trying to simulate entry from the Cellar, we pre-warp the player
                 Game1.currentLocation = Game1.getLocationFromName(locationRequest.Name);
+                Game1.player.currentLocation = Game1.currentLocation;
                 return;
             }
 
