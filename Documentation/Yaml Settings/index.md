@@ -96,7 +96,7 @@ Some of these settings are not available on the website, and must be edited loca
 - ~~[Bundle Blacklist](./bundle_blacklist.md)~~
 - ~~[Allowed Filler Items](./allowed_filler_items.md)~~
 - ~~[Trap Distribution](./trap_distribution.md)~~
-- ~~[Custom Logic](./custom_logic.md)~~
+- [Custom Logic](./custom_logic.md)
 - ~~[Progression Balancing](./progression_balancing.md)~~
 - ~~[Accessibility](./accessibility.md)~~
 
