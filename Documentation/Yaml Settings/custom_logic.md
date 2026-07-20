@@ -2,7 +2,7 @@
 
 ## Custom Logic
 
-This setting allows you to alter the logic used for your slot. This changes what checks Archipelago expects you to be willing and able to complete based on the items that you've received. It does not affect your ability to do anything in-game in any way.
+This setting allows you to alter the logic used for your slot. This changes what locations Archipelago expects you to be willing and able to complete based on the items that you've received. It does not affect your ability to do anything in-game in any way.
 
 For example, under the default settings you won't be expected to catch a Lava Eel until you reach level 8 Fishing. There's nothing stopping you from catching one at level 7 Fishing, but doing so would be considered out-of-logic.
 
