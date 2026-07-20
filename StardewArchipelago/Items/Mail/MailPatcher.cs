@@ -249,9 +249,14 @@ namespace StardewArchipelago.Items.Mail
             const string deluxeScarecrowRecipeItemText = "%item craftingRecipe Deluxe_Scarecrow %%";
 
             var scoutedLocation = _archipelago.ScoutStardewLocation(RARECROW_SOCIETY_AP_LOCATION);
-            var scoutedItemName = scoutedLocation.ItemName;
-            var scoutedPlayer = scoutedLocation.PlayerName;
-            var replacementText = $"We will send {scoutedItemName} to {scoutedPlayer} to commemorate your achievement.";
+            var replacementText = $"We will send the reward to the appropriate recipient to commemorate your achievement";
+            if (scoutedLocation != null)
+            {
+                var scoutedItemName = scoutedLocation.ItemName;
+                var scoutedPlayer = scoutedLocation.PlayerName;
+                replacementText = $"We will send {scoutedItemName} to {scoutedPlayer} to commemorate your achievement.";
+            }
+            
             const string recipeReplacementText = "";
 
             var mailContent = DataLoader.Mail(Game1.content);

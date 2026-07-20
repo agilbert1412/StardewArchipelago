@@ -101,6 +101,7 @@ namespace StardewArchipelago
         public ArchipelagoStateDto State { get; set; }
         public ILogger Logger => _logger;
         public BundlesManager BundlesManager => _bundlesManager;
+        public TesterFeatures TesterFeatures => _testerFeatures;
 
         public ModEntry() : base()
         {

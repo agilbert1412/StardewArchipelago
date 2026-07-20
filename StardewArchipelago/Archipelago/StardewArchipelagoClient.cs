@@ -363,6 +363,11 @@ namespace StardewArchipelago.Archipelago
 
         public ScoutedLocation ScoutStardewLocation(string locationName, bool createAsHint = false)
         {
+            if (ModEntry.Instance.TesterFeatures.NoScouting.Value >= 1)
+            {
+                return null;
+            }
+
             var scoutBehavior = ShouldHint(createAsHint);
             ScoutedLocation scoutedLocation;
             if (scoutBehavior == ScoutingPreference.HintEverything)

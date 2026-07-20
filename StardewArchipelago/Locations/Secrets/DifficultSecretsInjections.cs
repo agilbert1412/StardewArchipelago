@@ -180,9 +180,12 @@ namespace StardewArchipelago.Locations.Secrets
                 }
                 if (number > 250000 && !Game1.player.mailReceived.Contains("numbersEggFreeScout"))
                 {
-                    Game1.player.mailReceived.Add("numbersEggFreeScout");
-                    Game1.chatBox.addMessage("Let me give you a little hint...", new Color(100, 50, (int)byte.MaxValue));
-                    Game1.chatBox.addMessage($"I wonder if {_stackMasterScout.PlayerName} really needs their {_stackMasterScout.ItemName}?", new Color(100, 50, (int)byte.MaxValue));
+                    if (_stackMasterScout != null)
+                    {
+                        Game1.player.mailReceived.Add("numbersEggFreeScout");
+                        Game1.chatBox.addMessage("Let me give you a little hint...", new Color(100, 50, (int)byte.MaxValue));
+                        Game1.chatBox.addMessage($"I wonder if {_stackMasterScout.PlayerName} really needs their {_stackMasterScout.ItemName}?", new Color(100, 50, (int)byte.MaxValue));
+                    }
                 }
                 if (number >= 1000000)
                 {

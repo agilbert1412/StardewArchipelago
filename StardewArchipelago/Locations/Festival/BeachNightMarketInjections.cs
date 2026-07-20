@@ -71,7 +71,7 @@ namespace StardewArchipelago.Locations.Festival
                 // var paintingMailKey = $"NightMarketYear{Game1.year}Day{nightMarket.getDayOfNightMarket()}_paintingSold";
                 if (_locationChecker.IsLocationMissing(paintingLocationSoldToday))
                 {
-                    var scoutedPainting = _archipelago.ScoutSingleLocation(paintingLocationSoldToday, false);
+                    var scoutedPainting = _archipelago.ScoutStardewLocation(paintingLocationSoldToday, false);
 
                     if (ModEntry.Instance.Config.ShowLupiniScoutedItem && scoutedPainting != null)
                     {

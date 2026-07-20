@@ -37,6 +37,7 @@ namespace StardewArchipelago.Textures
             var aliases = JsonSerializer.Deserialize<ItemSpriteAliases>(jsonAliases, options);
             return aliases;
         }
+
         public static Texture2D GetCorrectTexture(ILogger logger, IModHelper modHelper, StardewArchipelagoClient archipelago, ScoutedLocation scoutedLocation, Hint relatedHint)
         {
             Initialize(logger, modHelper);
@@ -56,6 +57,12 @@ namespace StardewArchipelago.Textures
 
         public static bool TryGetItemSprite(StardewArchipelagoClient archipelago, ScoutedLocation scoutedLocation, out Texture2D itemSprite)
         {
+            if (scoutedLocation == null)
+            {
+                itemSprite = null;
+                return false;
+            }
+
             var config = ModEntry.Instance.Config;
             if (config.CustomAssets && _itemSprites != null && _itemSprites.TryGetCustomAsset(scoutedLocation, archipelago.GameName, config.CustomAssetGameFlexible, config.CustomAssetGenericGame, out var sprite))
             {

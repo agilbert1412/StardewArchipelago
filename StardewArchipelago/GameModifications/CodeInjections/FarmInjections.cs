@@ -351,13 +351,19 @@ namespace StardewArchipelago.GameModifications.CodeInjections
 
         private static string GetScoutedInfoForPet()
         {
+            const string defaultMessage = "What would your grandfather say if you abandoned this poor animal?";
             if (!IsPetFriendsanity())
             {
-                return "What would your grandfather say if you abandoned this poor animal?";
+                return defaultMessage;
             }
 
             var location = string.Format(FriendshipInjections.FRIENDSANITY_PATTERN, Friends.PET_NAME, 5);
             var scouted = _archipelago.ScoutStardewLocation(location);
+            if (scouted == null)
+            {
+                return defaultMessage;
+            }
+
             return $"After all, what would {scouted.PlayerName} do without their {scouted.ItemName}?";
         }
 

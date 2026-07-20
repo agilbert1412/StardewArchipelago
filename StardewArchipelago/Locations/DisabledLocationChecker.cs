@@ -50,7 +50,13 @@ namespace StardewArchipelago.Locations
         private async Task AdvertiseScoutedLocationAsync(string locationName)
         {
             var scout = _archipelago.ScoutSingleLocation(locationName, false);
-            Game1.chatBox.addMessage($"Did you know that Joja sell a '{scout.ItemName}'. Pay us (a visit)!", JojaConstants.JOJA_COLOR);
+            if (scout == null)
+            {
+                Game1.chatBox.addMessage($"Did you know that Joja sells everything you might ever need? Pay us (a visit)!", JojaConstants.JOJA_COLOR);
+                return;
+            }
+
+            Game1.chatBox.addMessage($"Did you know that Joja sell a '{scout.ItemName}'? Pay us (a visit)!", JojaConstants.JOJA_COLOR);
         }
     }
 }

@@ -94,6 +94,12 @@ namespace StardewArchipelago.Locations.InGameLocations
             ItemId = $"{IDProvider.AP_LOCATION}_{LocationName /*.Replace(" ", "_")*/}";
 
             _locationChecker = locationChecker;
+
+            if (ModEntry.Instance.TesterFeatures.NoScouting.Value >= 1)
+            {
+                allowScouting = false;
+            }
+
             AllowScouting = allowScouting;
 
             var relatedHint = myActiveHints.FirstOrDefault(hint => archipelago.GetLocationName(hint).Equals(locationName, StringComparison.OrdinalIgnoreCase));

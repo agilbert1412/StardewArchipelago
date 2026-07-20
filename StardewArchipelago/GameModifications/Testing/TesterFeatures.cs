@@ -14,6 +14,7 @@ namespace StardewArchipelago.GameModifications.Testing
         public readonly TesterFeature Multiplayer = new(TesterFeatureNames.MULTIPLAYER, 0);
         public readonly TesterFeature UnstableMods = new(TesterFeatureNames.UNSTABLE_MODS, VerifyMods.MODS_AND_VERSIONS);
         public readonly TesterFeature MoveLink = new(TesterFeatureNames.MOVE_LINK, 0);
+        public readonly TesterFeature NoScouting = new(TesterFeatureNames.NO_SCOUTING, 0);
         private readonly Dictionary<string, TesterFeature> _featuresByName = new();
 
         public TesterFeatures(ILogger logger, IModHelper modHelper)
@@ -22,6 +23,7 @@ namespace StardewArchipelago.GameModifications.Testing
             _featuresByName.Add(Multiplayer.Name, Multiplayer);
             _featuresByName.Add(UnstableMods.Name, UnstableMods);
             _featuresByName.Add(MoveLink.Name, MoveLink);
+            _featuresByName.Add(NoScouting.Name, NoScouting);
 
 #if DEBUG
             // UnstableMods.Value = VerifyMods.NOTHING;
