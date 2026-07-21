@@ -83,7 +83,7 @@ namespace StardewArchipelago.GameModifications.CodeInjections
             try
             {
                 var farmer = Game1.player;
-                if (farmer == null || farmer.isRidingHorse() || farmer.IsSitting())
+                if (farmer == null || farmer.isRidingHorse() || farmer.IsSitting() || farmer.bathingClothes.Value)
                 {
                     return;
                 }
