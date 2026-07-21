@@ -6,7 +6,6 @@
         public const string UNSTABLE_MODS = "VerifyMods";
         public const string MULTIPLAYER = "Multiplayer";
         public const string MOVE_LINK = "MoveLink";
-        public const string NO_SHOP_SCOUTING = "NoShopScouting";
         public const string NO_SCOUTING = "NoScouting";
     }
 }
