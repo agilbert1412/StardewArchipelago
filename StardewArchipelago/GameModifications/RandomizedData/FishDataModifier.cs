@@ -443,7 +443,9 @@ namespace StardewArchipelago.GameModifications.RandomizedData
                         continue;
                     }
 
-                    var fishDataParts = fishData[QualifiedItemIds.UnqualifyId(fishId)].Split("/");
+                    var unqualifiedId = QualifiedItemIds.UnqualifyId(fishId);
+                    var fishDataValue = fishData[unqualifiedId];
+                    var fishDataParts = fishDataValue.Split("/");
                     var seasons = new List<Season>();
                     if (fishDataParts[1] == "trap")
                     {
@@ -463,6 +465,10 @@ namespace StardewArchipelago.GameModifications.RandomizedData
                     if (locationId.Contains("Submarine"))
                     {
                         seasons.Add(Season.Winter);
+                    }
+                    if (locationId.Contains("Desert") && fishDataValue.Contains("rainy"))
+                    {
+                        fishData[unqualifiedId] = fishDataValue.Replace("rainy", "both");
                     }
 
                     fishInLocation.Condition = GameStateConditionProvider.RemoveCondition(fishInLocation.Condition, GameStateCondition.LOCATION_SEASON);
