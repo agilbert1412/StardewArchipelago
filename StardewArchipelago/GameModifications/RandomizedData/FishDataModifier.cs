@@ -234,6 +234,8 @@ namespace StardewArchipelago.GameModifications.RandomizedData
 
                         var originalFishEntries = GetOriginalFishEntries(locationsData);
                         var modifiedFishEntries = GetModifiedFishLocationEntries(originalFishEntries);
+                        var originalFishEntriesGrouped = originalFishEntries.GroupBy(x => x.Key.FishName).OrderBy(x => x.Key).ToArray();
+                        var modifiedFishEntriesGrouped = modifiedFishEntries.GroupBy(x => x.Key.FishName).OrderBy(x => x.Key).ToArray();
                         DeleteOriginalFishEntries(locationsData, modifiedFishEntries);
                         AddNewFishEntries(locationsData, modifiedFishEntries);
                         UpdateFishEntriesSeasons(locationsData);
@@ -416,35 +418,7 @@ namespace StardewArchipelago.GameModifications.RandomizedData
         {
             allLocationData[fishLocation.LocationId].Fish.AddRange(newFishEntries);
         }
-
-        private SpawnFishData MergeSpawnFishData(SpawnFishData spawnFishData, List<SpawnFishData> ModifiedSpawnFishDatas)
-        {
-            var newSpawnFishData = spawnFishData.DeepClone();
-            foreach (var modifiedSpawnFishData in ModifiedSpawnFishDatas)
-            {
-                newSpawnFishData = MergeSpawnFishData(spawnFishData, modifiedSpawnFishData);
-            }
-
-            return newSpawnFishData;
-        }
-
-        private SpawnFishData MergeSpawnFishData(SpawnFishData spawnFishData, SpawnFishData modifiedSpawnFishData)
-        {
-            var newSpawnFishData = spawnFishData.DeepClone();
-            newSpawnFishData.FishAreaId = modifiedSpawnFishData.FishAreaId;
-            newSpawnFishData.PlayerPosition = modifiedSpawnFishData.PlayerPosition;
-            newSpawnFishData.BobberPosition = modifiedSpawnFishData.BobberPosition;
-            newSpawnFishData.Condition = modifiedSpawnFishData.Condition;
-            newSpawnFishData.RequireMagicBait = modifiedSpawnFishData.RequireMagicBait;
-            newSpawnFishData.ItemId = modifiedSpawnFishData.ItemId;
-            newSpawnFishData.Id = modifiedSpawnFishData.Id;
-            newSpawnFishData.Season = modifiedSpawnFishData.Season;
-            newSpawnFishData.RandomItemId = modifiedSpawnFishData.RandomItemId;
-            newSpawnFishData.MinDistanceFromShore = Math.Min(newSpawnFishData.MinDistanceFromShore, 2);
-
-            return newSpawnFishData;
-        }
-
+        
         private void UpdateFishEntriesSeasons(IDictionary<string, LocationData> locationsData)
         {
             var fishData = DataLoader.Fish(Game1.content);

@@ -530,6 +530,12 @@ namespace StardewArchipelago
 
             // _helper.GameContent.InvalidateCache("Data/Shops");
 
+            //var fish = new List<string>();
+            //for (var i = 0; i < 1000; i++)
+            //{
+            //    fish.Add(Game1.currentLocation.getFish(0, null, 1, Game1.player, 1, Game1.player.Tile).Name);
+            //}
+
             ArchipelagoJunimoNoteMenu.OnUpdateTickedStatic(e);
             State?.Wallet?.CookieClicker?.DoFrame();
             if (!_archipelago.IsConnected || _itemManager == null)

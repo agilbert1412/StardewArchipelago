@@ -16,6 +16,7 @@ namespace StardewArchipelago.Constants
         public static readonly string LOCATION_SEASON = "LOCATION_SEASON";
         public static readonly string IS_PASSIVE_FESTIVAL_OPEN = "IS_PASSIVE_FESTIVAL_OPEN";
         public static readonly string PLAYER_SPECIAL_ORDER_RULE_ACTIVE = "PLAYER_SPECIAL_ORDER_RULE_ACTIVE";
+        public static readonly string WEATHER = "WEATHER";
 
         private static string CreateId(string name)
         {

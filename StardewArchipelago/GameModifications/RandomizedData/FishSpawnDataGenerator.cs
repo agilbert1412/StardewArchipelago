@@ -94,13 +94,16 @@ namespace StardewArchipelago.GameModifications.RandomizedData
                 }
 
                 var conditionsToKeep = new[] { GameStateCondition.PLAYER_SPECIAL_ORDER_RULE_ACTIVE };
-                var originalSpawnDatas = CreateSpawnDataFrom(null, fishName, false, false).Where(x => !string.IsNullOrWhiteSpace(x.Condition) && conditionsToKeep.Any(y => x.Condition.Contains(y)));
+                var originalSpawnDatas = CreateSpawnDataFrom(null, fishName, false, false)
+                    .Where(x => !string.IsNullOrWhiteSpace(x.Condition) && conditionsToKeep.Any(y => x.Condition.Contains(y)));
 
                 string conditionToKeep = null;
                 foreach (var originalSpawnData in originalSpawnDatas)
                 {
                     conditionToKeep = originalSpawnData.Condition;
                 }
+
+                conditionToKeep = GameStateConditionProvider.RemoveCondition(conditionToKeep, GameStateCondition.WEATHER);
 
                 foreach (var (map, addedSpawnDatas) in mapSpawnDatas)
                 {
@@ -109,6 +112,7 @@ namespace StardewArchipelago.GameModifications.RandomizedData
                         addedSpawnData.Id = fishQualifiedId;
                         addedSpawnData.ItemId = fishQualifiedId;
                         addedSpawnData.RandomItemId = null;
+                        addedSpawnData.IsBossFish = originalSpawnDatas.Any(x => x.IsBossFish);
                         if (conditionToKeep != null && (addedSpawnData.Condition == null || !addedSpawnData.Condition.Contains(conditionToKeep)))
                         {
                             addedSpawnData.Condition = GameStateConditionProvider.ConcatenateConditions(new []{addedSpawnData.Condition, conditionToKeep}, false);
@@ -240,22 +244,11 @@ namespace StardewArchipelago.GameModifications.RandomizedData
             entry.Precedence = DEFAULT_PRECEDENCE;
             if (!keepSpawnFields)
             {
-                if (entry.FishAreaId != null)
-                {
-                    entry.FishAreaId = null;
-                }
-                if (entry.RequireMagicBait)
-                {
-                    entry.RequireMagicBait = false;
-                }
-                if (entry.BobberPosition != null)
-                {
-                    entry.BobberPosition = null;
-                }
-                if (entry.PlayerPosition != null)
-                {
-                    entry.PlayerPosition = null;
-                }
+                entry.FishAreaId = null;
+                entry.RequireMagicBait = false;
+                entry.BobberPosition = null;
+                entry.PlayerPosition = null;
+                entry.MaxDistanceFromShore = -1;
             }
             return entry;
         }

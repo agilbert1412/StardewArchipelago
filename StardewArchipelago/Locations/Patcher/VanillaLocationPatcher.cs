@@ -444,6 +444,12 @@ namespace StardewArchipelago.Locations.Patcher
                 original: AccessTools.Method(typeof(Event.DefaultCommands), nameof(Event.DefaultCommands.GainSkill)),
                 prefix: new HarmonyMethod(typeof(FishingRodInjections), nameof(FishingRodInjections.GainSkill_WillyFishingLesson_Prefix))
             );
+
+            // DEBUG PATCH
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(FishingRod), nameof(FishingRod.DoFunction)),
+                prefix: new HarmonyMethod(typeof(FishingRodInjections), nameof(FishingRodInjections.DoFunction_DebugFishing_Prefix))
+            );
         }
 
         private void PatchCopperPan()
