@@ -115,7 +115,7 @@ namespace StardewArchipelago.Locations.ShopStockModifiers
                 QualifiedItemIds.THE_ALLEYWAY_BUFFET, QualifiedItemIds.THE_ART_O_CRABBING, QualifiedItemIds.DWARVISH_SAFETY_MANUAL,
                 QualifiedItemIds.JEWELS_OF_THE_SEA, QualifiedItemIds.WOODYS_SECRET, QualifiedItemIds.MAPPING_CAVE_SYSTEMS,
                 QualifiedItemIds.JACK_BE_NIMBLE_JACK_BE_THICK, QualifiedItemIds.FRIENDSHIP_101, QualifiedItemIds.MONSTER_COMPENDIUM,
-                // QualifiedItemIds.RACCOON_JOURNAL, // Removed from bookseller due to being reliable in-logic at the raccoons
+                QualifiedItemIds.TREASURE_APPRAISAL_GUIDE, QualifiedItemIds.RACCOON_JOURNAL,
             };
 
             var received1Condition = GameStateConditionProvider.CreateHasReceivedItemExactAmountCondition(APItem.BOOKSELLER_RARE_BOOKS, 1);
