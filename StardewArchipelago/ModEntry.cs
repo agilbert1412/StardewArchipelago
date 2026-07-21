@@ -342,6 +342,7 @@ namespace StardewArchipelago
             _hintHelper = new HintHelper();
             Game1.chatBox?.addMessage($"Connected to Archipelago as {_archipelago.SlotData.SlotName}. Type !!help for client commands", Color.Green);
             ArchipelagoJunimoNoteMenu.CompleteBundleIfExists(MemeBundleNames.CONNECTION);
+            Game1.AddNPCs();
         }
 
         private ConnectionResult AttemptConnectionToArchipelago()
