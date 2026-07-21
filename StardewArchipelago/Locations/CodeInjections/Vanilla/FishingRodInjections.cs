@@ -12,6 +12,7 @@ using StardewValley.Extensions;
 using StardewValley.Tools;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace StardewArchipelago.Locations.CodeInjections.Vanilla
 {
@@ -163,7 +164,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
         {
             try
             {
-                return MethodPrefix.RUN_ORIGINAL_METHOD;
+                // return MethodPrefix.RUN_ORIGINAL_METHOD;
                 who = who ?? __instance.lastUser;
                 if (__instance.fishCaught || !who.IsLocalPlayer && (__instance.isReeling || __instance.isFishing || __instance.pullingOutOfWater))
                 {
@@ -283,8 +284,10 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
                             fish1.Add(location.getFish(__instance.fishingNibbleAccumulator, baitId, 1, who, baitPotency, bobberTile).Name);
                             fish2.Add(location.getFish(__instance.fishingNibbleAccumulator, baitId, 2, who, baitPotency, bobberTile).Name);
                             fish3.Add(location.getFish(__instance.fishingNibbleAccumulator, baitId, 3, who, baitPotency, bobberTile).Name);
-                            fish4.Add(location.getFish(__instance.fishingNibbleAccumulator, baitId, 4, who, baitPotency, bobberTile).Name);
+                            fish4.Add(location.getFish(__instance.fishingNibbleAccumulator, baitId, waterDepth, who, baitPotency, bobberTile).Name);
                         }
+
+                        var fishUnique = fish4.ToHashSet();
 
                         var o = location.getFish(__instance.fishingNibbleAccumulator, baitId, 1, who, baitPotency, bobberTile);
                         var o2 = location.getFish(__instance.fishingNibbleAccumulator, baitId, waterDepth, who, baitPotency, bobberTile);

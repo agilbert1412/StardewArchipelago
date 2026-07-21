@@ -446,10 +446,10 @@ namespace StardewArchipelago.Locations.Patcher
             );
 
             // DEBUG PATCH
-            _harmony.Patch(
-                original: AccessTools.Method(typeof(FishingRod), nameof(FishingRod.DoFunction)),
-                prefix: new HarmonyMethod(typeof(FishingRodInjections), nameof(FishingRodInjections.DoFunction_DebugFishing_Prefix))
-            );
+            //_harmony.Patch(
+            //    original: AccessTools.Method(typeof(FishingRod), nameof(FishingRod.DoFunction)),
+            //    prefix: new HarmonyMethod(typeof(FishingRodInjections), nameof(FishingRodInjections.DoFunction_DebugFishing_Prefix))
+            //);
         }
 
         private void PatchCopperPan()

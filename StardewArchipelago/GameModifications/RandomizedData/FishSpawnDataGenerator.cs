@@ -197,7 +197,7 @@ namespace StardewArchipelago.GameModifications.RandomizedData
                 entry.Condition = null;
             }
 
-            var newEntries = new List<SpawnFishData> { CleanEntry(entry, keepSpawnFields) };
+            var newEntries = new List<SpawnFishData> { CleanEntry(entry, keepSpawnFields, false) };
 
             switch (fish)
             {
@@ -235,10 +235,10 @@ namespace StardewArchipelago.GameModifications.RandomizedData
                 throw new Exception($"Could not find a festival spawn data for {fish}");
             }
 
-            return entries.Select(x => CleanEntry(x, false));
+            return entries.Select(x => CleanEntry(x, false, true));
         }
 
-        private static SpawnFishData CleanEntry(SpawnFishData entry, bool keepSpawnFields)
+        private static SpawnFishData CleanEntry(SpawnFishData entry, bool keepSpawnFields, bool keepIgnoringRequirements)
         {
             entry.Chance = DEFAULT_CHANCE;
             entry.Precedence = DEFAULT_PRECEDENCE;
@@ -249,6 +249,10 @@ namespace StardewArchipelago.GameModifications.RandomizedData
                 entry.BobberPosition = null;
                 entry.PlayerPosition = null;
                 entry.MaxDistanceFromShore = -1;
+                if (entry.IgnoreFishDataRequirements && !keepIgnoringRequirements)
+                {
+                    entry.IgnoreFishDataRequirements = false;
+                }
             }
             return entry;
         }
