@@ -533,8 +533,10 @@ namespace StardewArchipelago
             //var fish = new List<string>();
             //for (var i = 0; i < 1000; i++)
             //{
-            //    fish.Add(Game1.currentLocation.getFish(0, null, 1, Game1.player, 1, Game1.player.Tile).Name);
+            //    fish.Add(Game1.currentLocation.getFish(0, null, 3, Game1.player, 1, Game1.player.Tile).Name);
             //}
+
+            //var uniqueFish = fish.ToHashSet();
 
             ArchipelagoJunimoNoteMenu.OnUpdateTickedStatic(e);
             State?.Wallet?.CookieClicker?.DoFrame();

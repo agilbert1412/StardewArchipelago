@@ -103,7 +103,6 @@ namespace StardewArchipelago.GameModifications.RandomizedData
                     conditionToKeep = originalSpawnData.Condition;
                 }
 
-                conditionToKeep = GameStateConditionProvider.RemoveCondition(conditionToKeep, GameStateCondition.WEATHER);
 
                 foreach (var (map, addedSpawnDatas) in mapSpawnDatas)
                 {
@@ -117,6 +116,7 @@ namespace StardewArchipelago.GameModifications.RandomizedData
                         {
                             addedSpawnData.Condition = GameStateConditionProvider.ConcatenateConditions(new []{addedSpawnData.Condition, conditionToKeep}, false);
                         }
+                        addedSpawnData.Condition = GameStateConditionProvider.RemoveCondition(addedSpawnData.Condition, GameStateCondition.WEATHER);
                     }
                     var key = new FishLocation(fishName, map);
                     spawnDatas.TryAdd(key, new List<SpawnFishData>());
@@ -249,6 +249,7 @@ namespace StardewArchipelago.GameModifications.RandomizedData
                 entry.BobberPosition = null;
                 entry.PlayerPosition = null;
                 entry.MaxDistanceFromShore = -1;
+                entry.MinDistanceFromShore = Math.Min(2, entry.MinDistanceFromShore);
                 if (entry.IgnoreFishDataRequirements && !keepIgnoringRequirements)
                 {
                     entry.IgnoreFishDataRequirements = false;
