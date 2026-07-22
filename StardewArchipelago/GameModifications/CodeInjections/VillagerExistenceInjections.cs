@@ -600,5 +600,13 @@ namespace StardewArchipelago.GameModifications.CodeInjections
         {
             base.updateMovement(location, time);
         }
+
+        public override void doEmote(int whichEmote, bool playSound, bool nextEventCommand = true)
+        {
+            if (nextEventCommand)
+            {
+                ++Game1.currentLocation.currentEvent.CurrentCommand;
+            }
+        }
     }
 }
