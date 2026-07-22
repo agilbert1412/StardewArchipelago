@@ -326,9 +326,9 @@ namespace StardewArchipelago.GameModifications.EntranceRandomizer
             var currentPosition = Game1.player.TilePoint;
             var currentPositions = new List<Point>();
             var targetPositions = new List<Point>();
-            for (var x = -1; x <= 1; x++)
+            for (var x = -1; x <= 2; x++)
             {
-                for (var y = -1; y <= 1; y++)
+                for (var y = -1; y <= 2; y++)
                 {
                     currentPositions.Add(new Point(currentPosition.X + x, currentPosition.Y + y));
                     targetPositions.Add(new Point(targetPosition.X + x, targetPosition.Y + y));
