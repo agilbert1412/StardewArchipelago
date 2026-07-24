@@ -151,6 +151,7 @@ namespace StardewArchipelago.Locations.Patcher
             CleanAdventureGuildEvents();
             CleanTravelingMerchantEvents();
             CleanFestivalEvents();
+            CleanSpecialOrderEvents();
             CleanChefsanityEvents();
             CleanCraftsanityEvents();
             CleanKrobusEvents();
@@ -649,6 +650,8 @@ namespace StardewArchipelago.Locations.Patcher
 
         private void ReplaceSpecialOrdersWithChecks()
         {
+            _modHelper.Events.Content.AssetRequested += SpecialOrderInjections.OnSpecialOrdersRequested;
+
             _harmony.Patch(
                 original: AccessTools.Method(typeof(SpecialOrder), nameof(SpecialOrder.GetSpecialOrder)),
                 postfix: new HarmonyMethod(typeof(SpecialOrderInjections), nameof(SpecialOrderInjections.GetSpecialOrder_ArchipelagoReward_Postfix))
@@ -1367,6 +1370,11 @@ namespace StardewArchipelago.Locations.Patcher
             {
                 return;
             }
+        }
+
+        private void CleanSpecialOrderEvents()
+        {
+            _modHelper.Events.Content.AssetRequested -= SpecialOrderInjections.OnSpecialOrdersRequested;
         }
 
         private void CleanChefsanityEvents()

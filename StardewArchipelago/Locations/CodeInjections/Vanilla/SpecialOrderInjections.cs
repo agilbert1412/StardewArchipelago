@@ -19,6 +19,7 @@ using StardewArchipelago.Archipelago.SlotData.SlotEnums;
 using StardewArchipelago.Bundles;
 using StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles;
 using StardewArchipelago.Locations.Jojapocalypse.Consequences;
+using StardewModdingAPI.Events;
 
 namespace StardewArchipelago.Locations.CodeInjections.Vanilla
 {
@@ -44,6 +45,31 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
         public static void IncrementRerollCount()
         {
             _rerollCount++;
+        }
+
+        public static void OnSpecialOrdersRequested(object sender, AssetRequestedEventArgs e)
+        {
+            if (!e.NameWithoutLocale.IsEquivalentTo("Data/SpecialOrders"))
+            {
+                return;
+            }
+
+            e.Edit(asset =>
+                {
+                    var specialOrdersData = asset.AsDictionary<string, SpecialOrderData>().Data;
+                    MakeRepeatable(specialOrdersData);
+                },
+                AssetEditPriority.Late
+            );
+        }
+
+        private static void MakeRepeatable(IDictionary<string, SpecialOrderData> specialOrdersData)
+        {
+            var forcedRepeatables = GetForcedRepeatableSpecialOrders();
+            foreach (var forcedRepeatable in forcedRepeatables)
+            {
+                specialOrdersData[forcedRepeatable].Repeatable = true;
+            }
         }
 
         // public static bool IsSpecialOrdersBoardUnlocked()
@@ -120,6 +146,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
             }
             return;
         }
+
         private static void SetAllMailRewardsToNoletter(SpecialOrder specialOrder)
         {
 
@@ -315,8 +342,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
 
         private static bool RepeatableFilter(KeyValuePair<string, SpecialOrderData> order)
         {
-            var forcedRepeatableOrders = GetForcedRepeatableSpecialOrders();
-            return order.Value.Repeatable || forcedRepeatableOrders.Contains(order.Key) || !Game1.MasterPlayer.team.completedSpecialOrders.Contains(order.Key);
+            return order.Value.Repeatable || !Game1.MasterPlayer.team.completedSpecialOrders.Contains(order.Key);
         }
 
         private static List<string> GetForcedRepeatableSpecialOrders()
