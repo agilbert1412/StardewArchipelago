@@ -1919,7 +1919,7 @@ namespace StardewArchipelago.Items.Traps
 
             var level10Professions = level5Profession == level5Professions.First() ? level10Professions1 : level10Professions2;
 
-            foreach (var profession in level10Professions)
+            foreach (var profession in level10Professions1.Union(level10Professions2))
             {
                 Game1.player.professions.Remove(profession);
             }
