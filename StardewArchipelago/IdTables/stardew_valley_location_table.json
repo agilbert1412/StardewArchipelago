@@ -620,169 +620,169 @@
         },
         "Copper Hoe Upgrade": {
             "code": 717103,
-            "region": "Blacksmith Copper Upgrades",
+            "region": "Blacksmith - Shop",
             "tags": ["HOE_UPGRADE", "TOOL_UPGRADE"],
             "content_packs": []
         },
         "Iron Hoe Upgrade": {
             "code": 717104,
-            "region": "Blacksmith Iron Upgrades",
+            "region": "Blacksmith - Shop",
             "tags": ["HOE_UPGRADE", "TOOL_UPGRADE"],
             "content_packs": []
         },
         "Gold Hoe Upgrade": {
             "code": 717105,
-            "region": "Blacksmith Gold Upgrades",
+            "region": "Blacksmith - Shop",
             "tags": ["HOE_UPGRADE", "TOOL_UPGRADE"],
             "content_packs": []
         },
         "Iridium Hoe Upgrade": {
             "code": 717106,
-            "region": "Blacksmith Iridium Upgrades",
+            "region": "Blacksmith - Shop",
             "tags": ["HOE_UPGRADE", "TOOL_UPGRADE"],
             "content_packs": []
         },
         "Copper Pickaxe Upgrade": {
             "code": 717107,
-            "region": "Blacksmith Copper Upgrades",
+            "region": "Blacksmith - Shop",
             "tags": ["PICKAXE_UPGRADE", "TOOL_UPGRADE"],
             "content_packs": []
         },
         "Iron Pickaxe Upgrade": {
             "code": 717108,
-            "region": "Blacksmith Iron Upgrades",
+            "region": "Blacksmith - Shop",
             "tags": ["PICKAXE_UPGRADE", "TOOL_UPGRADE"],
             "content_packs": []
         },
         "Gold Pickaxe Upgrade": {
             "code": 717109,
-            "region": "Blacksmith Gold Upgrades",
+            "region": "Blacksmith - Shop",
             "tags": ["PICKAXE_UPGRADE", "TOOL_UPGRADE"],
             "content_packs": []
         },
         "Iridium Pickaxe Upgrade": {
             "code": 717110,
-            "region": "Blacksmith Iridium Upgrades",
+            "region": "Blacksmith - Shop",
             "tags": ["PICKAXE_UPGRADE", "TOOL_UPGRADE"],
             "content_packs": []
         },
         "Copper Axe Upgrade": {
             "code": 717111,
-            "region": "Blacksmith Copper Upgrades",
+            "region": "Blacksmith - Shop",
             "tags": ["AXE_UPGRADE", "TOOL_UPGRADE"],
             "content_packs": []
         },
         "Iron Axe Upgrade": {
             "code": 717112,
-            "region": "Blacksmith Iron Upgrades",
+            "region": "Blacksmith - Shop",
             "tags": ["AXE_UPGRADE", "TOOL_UPGRADE"],
             "content_packs": []
         },
         "Gold Axe Upgrade": {
             "code": 717113,
-            "region": "Blacksmith Gold Upgrades",
+            "region": "Blacksmith - Shop",
             "tags": ["AXE_UPGRADE", "TOOL_UPGRADE"],
             "content_packs": []
         },
         "Iridium Axe Upgrade": {
             "code": 717114,
-            "region": "Blacksmith Iridium Upgrades",
+            "region": "Blacksmith - Shop",
             "tags": ["AXE_UPGRADE", "TOOL_UPGRADE"],
             "content_packs": []
         },
         "Copper Watering Can Upgrade": {
             "code": 717115,
-            "region": "Blacksmith Copper Upgrades",
+            "region": "Blacksmith - Shop",
             "tags": ["TOOL_UPGRADE", "WATERING_CAN_UPGRADE"],
             "content_packs": []
         },
         "Iron Watering Can Upgrade": {
             "code": 717116,
-            "region": "Blacksmith Iron Upgrades",
+            "region": "Blacksmith - Shop",
             "tags": ["TOOL_UPGRADE", "WATERING_CAN_UPGRADE"],
             "content_packs": []
         },
         "Gold Watering Can Upgrade": {
             "code": 717117,
-            "region": "Blacksmith Gold Upgrades",
+            "region": "Blacksmith - Shop",
             "tags": ["TOOL_UPGRADE", "WATERING_CAN_UPGRADE"],
             "content_packs": []
         },
         "Iridium Watering Can Upgrade": {
             "code": 717118,
-            "region": "Blacksmith Iridium Upgrades",
+            "region": "Blacksmith - Shop",
             "tags": ["TOOL_UPGRADE", "WATERING_CAN_UPGRADE"],
             "content_packs": []
         },
         "Copper Trash Can Upgrade": {
             "code": 717119,
-            "region": "Blacksmith Copper Upgrades",
+            "region": "Blacksmith - Shop",
             "tags": ["TOOL_UPGRADE", "TRASH_CAN_UPGRADE"],
             "content_packs": []
         },
         "Iron Trash Can Upgrade": {
             "code": 717120,
-            "region": "Blacksmith Iron Upgrades",
+            "region": "Blacksmith - Shop",
             "tags": ["TOOL_UPGRADE", "TRASH_CAN_UPGRADE"],
             "content_packs": []
         },
         "Gold Trash Can Upgrade": {
             "code": 717121,
-            "region": "Blacksmith Gold Upgrades",
+            "region": "Blacksmith - Shop",
             "tags": ["TOOL_UPGRADE", "TRASH_CAN_UPGRADE"],
             "content_packs": []
         },
         "Iridium Trash Can Upgrade": {
             "code": 717122,
-            "region": "Blacksmith Iridium Upgrades",
+            "region": "Blacksmith - Shop",
             "tags": ["TOOL_UPGRADE", "TRASH_CAN_UPGRADE"],
             "content_packs": []
         },
         "Purchase Training Rod": {
             "code": 717123,
-            "region": "Willy's Fish Shop",
+            "region": "Willy's Fish Cabin",
             "tags": ["FISHING_ROD_UPGRADE", "TOOL_UPGRADE"],
             "content_packs": []
         },
         "Bamboo Pole Cutscene": {
             "code": 717124,
-            "region": "Beach",
+            "region": "Beach Map Anywhere",
             "tags": ["FISHING_ROD_UPGRADE", "TOOL_UPGRADE"],
             "content_packs": []
         },
         "Purchase Fiberglass Rod": {
             "code": 717125,
-            "region": "Willy's Fish Shop",
+            "region": "Willy's Fish Cabin",
             "tags": ["FISHING_ROD_UPGRADE", "TOOL_UPGRADE"],
             "content_packs": []
         },
         "Purchase Iridium Rod": {
             "code": 717126,
-            "region": "Willy's Fish Shop",
+            "region": "Willy's Fish Cabin",
             "tags": ["FISHING_ROD_UPGRADE", "TOOL_UPGRADE"],
             "content_packs": []
         },
         "Copper Pan Cutscene": {
             "code": 717127,
-            "region": "Mountain",
+            "region": "Mountain Map Anywhere",
             "tags": ["PAN_UPGRADE", "TOOL_UPGRADE"],
             "content_packs": []
         },
         "Iron Pan Upgrade": {
             "code": 717128,
-            "region": "Blacksmith Iron Upgrades",
+            "region": "Blacksmith - Shop",
             "tags": ["PAN_UPGRADE", "TOOL_UPGRADE"],
             "content_packs": []
         },
         "Gold Pan Upgrade": {
             "code": 717129,
-            "region": "Blacksmith Gold Upgrades",
+            "region": "Blacksmith - Shop",
             "tags": ["PAN_UPGRADE", "TOOL_UPGRADE"],
             "content_packs": []
         },
         "Iridium Pan Upgrade": {
             "code": 717130,
-            "region": "Blacksmith Iridium Upgrades",
+            "region": "Blacksmith - Shop",
             "tags": ["PAN_UPGRADE", "TOOL_UPGRADE"],
             "content_packs": []
         },
@@ -1304,7 +1304,7 @@
         },
         "Rat Problem Cutscene": {
             "code": 717252,
-            "region": "Town",
+            "region": "Enter Town From Bus Stop",
             "tags": ["MANDATORY"],
             "content_packs": []
         },
@@ -1782,6 +1782,12 @@
             "tags": ["BUILDING_BLUEPRINT"],
             "content_packs": []
         },
+        "Farm House Blueprint": {
+            "code": 717420,
+            "region": "Carpenter Shop",
+            "tags": ["BUILDING_BLUEPRINT"],
+            "content_packs": []
+        },
         "Quest: Introductions": {
             "code": 717501,
             "region": "Town",
@@ -1844,7 +1850,7 @@
         },
         "Quest: Robin's Lost Axe": {
             "code": 717511,
-            "region": "Mountain",
+            "region": "Forest",
             "tags": ["STORY_QUEST"],
             "content_packs": []
         },
@@ -2012,7 +2018,7 @@
         },
         "Quest: Clint's Attempt": {
             "code": 717539,
-            "region": "Clint's Blacksmith",
+            "region": "Blacksmith",
             "tags": ["STORY_QUEST"],
             "content_packs": []
         },
@@ -2205,13 +2211,13 @@
         "Journey of the Prairie King Victory": {
             "code": 717620,
             "region": "JotPK World 3",
-            "tags": ["ARCADE_MACHINE_VICTORY", "JOTPK"],
+            "tags": ["ARCADE_MACHINE_VICTORY", "JOTPK", "JOTPK_VICTORY"],
             "content_packs": []
         },
         "Junimo Kart: Sunset Speedway (Victory)": {
             "code": 717621,
             "region": "Junimo Kart 4",
-            "tags": ["ARCADE_MACHINE_VICTORY", "JUNIMO_KART"],
+            "tags": ["ARCADE_MACHINE_VICTORY", "JUNIMO_KART", "JUNIMO_KART_VICTORY"],
             "content_packs": []
         },
         "Secret: Old Master Cannoli": {
@@ -2234,25 +2240,25 @@
         },
         "Have a Baby": {
             "code": 717704,
-            "region": "Farmhouse",
+            "region": "Farmhouse Crib",
             "tags": ["BABY"],
             "content_packs": []
         },
         "Have Another Baby": {
             "code": 717705,
-            "region": "Farmhouse",
+            "region": "Farmhouse Crib",
             "tags": ["BABY"],
             "content_packs": []
         },
         "Spouse Stardrop": {
             "code": 717706,
-            "region": "Farmhouse",
+            "region": "Farmhouse Kitchen",
             "tags": [],
             "content_packs": []
         },
         "Krobus Stardrop": {
             "code": 717707,
-            "region": "Sewer",
+            "region": "Sewer - Shop",
             "tags": ["MANDATORY"],
             "content_packs": []
         },
@@ -3410,31 +3416,31 @@
         },
         "Fishsanity: Son of Crimsonfish": {
             "code": 718066,
-            "region": "Beach",
+            "region": "Qi's Walnut Room",
             "tags": ["FISHSANITY", "GINGER_ISLAND", "REQUIRES_QI_ORDERS"],
             "content_packs": ["Ginger Island (Vanilla)", "Qi Board (Vanilla)"]
         },
         "Fishsanity: Glacierfish Jr.": {
             "code": 718067,
-            "region": "Beach",
+            "region": "Qi's Walnut Room",
             "tags": ["FISHSANITY", "GINGER_ISLAND", "REQUIRES_QI_ORDERS"],
             "content_packs": ["Ginger Island (Vanilla)", "Qi Board (Vanilla)"]
         },
         "Fishsanity: Legend II": {
             "code": 718068,
-            "region": "Beach",
+            "region": "Qi's Walnut Room",
             "tags": ["FISHSANITY", "GINGER_ISLAND", "REQUIRES_QI_ORDERS"],
             "content_packs": ["Ginger Island (Vanilla)", "Qi Board (Vanilla)"]
         },
         "Fishsanity: Ms. Angler": {
             "code": 718069,
-            "region": "Beach",
+            "region": "Qi's Walnut Room",
             "tags": ["FISHSANITY", "GINGER_ISLAND", "REQUIRES_QI_ORDERS"],
             "content_packs": ["Ginger Island (Vanilla)", "Qi Board (Vanilla)"]
         },
         "Fishsanity: Radioactive Carp": {
             "code": 718070,
-            "region": "Beach",
+            "region": "Qi's Walnut Room",
             "tags": ["FISHSANITY", "GINGER_ISLAND", "REQUIRES_QI_ORDERS"],
             "content_packs": ["Ginger Island (Vanilla)", "Qi Board (Vanilla)"]
         },
@@ -4526,85 +4532,85 @@
         },
         "Friendsanity: Sebastian 1 <3": {
             "code": 718357,
-            "region": "Carpenter Shop",
+            "region": "Carpenter House",
             "tags": ["FRIENDSANITY"],
             "content_packs": []
         },
         "Friendsanity: Sebastian 2 <3": {
             "code": 718358,
-            "region": "Carpenter Shop",
+            "region": "Carpenter House",
             "tags": ["FRIENDSANITY"],
             "content_packs": []
         },
         "Friendsanity: Sebastian 3 <3": {
             "code": 718359,
-            "region": "Carpenter Shop",
+            "region": "Carpenter House",
             "tags": ["FRIENDSANITY"],
             "content_packs": []
         },
         "Friendsanity: Sebastian 4 <3": {
             "code": 718360,
-            "region": "Carpenter Shop",
+            "region": "Carpenter House",
             "tags": ["FRIENDSANITY"],
             "content_packs": []
         },
         "Friendsanity: Sebastian 5 <3": {
             "code": 718361,
-            "region": "Carpenter Shop",
+            "region": "Carpenter House",
             "tags": ["FRIENDSANITY"],
             "content_packs": []
         },
         "Friendsanity: Sebastian 6 <3": {
             "code": 718362,
-            "region": "Carpenter Shop",
+            "region": "Carpenter House",
             "tags": ["FRIENDSANITY"],
             "content_packs": []
         },
         "Friendsanity: Sebastian 7 <3": {
             "code": 718363,
-            "region": "Carpenter Shop",
+            "region": "Carpenter House",
             "tags": ["FRIENDSANITY"],
             "content_packs": []
         },
         "Friendsanity: Sebastian 8 <3": {
             "code": 718364,
-            "region": "Carpenter Shop",
+            "region": "Carpenter House",
             "tags": ["FRIENDSANITY"],
             "content_packs": []
         },
         "Friendsanity: Sebastian 9 <3": {
             "code": 718365,
-            "region": "Carpenter Shop",
+            "region": "Carpenter House",
             "tags": ["FRIENDSANITY"],
             "content_packs": []
         },
         "Friendsanity: Sebastian 10 <3": {
             "code": 718366,
-            "region": "Carpenter Shop",
+            "region": "Carpenter House",
             "tags": ["FRIENDSANITY"],
             "content_packs": []
         },
         "Friendsanity: Sebastian 11 <3": {
             "code": 718367,
-            "region": "Carpenter Shop",
+            "region": "Carpenter House",
             "tags": ["FRIENDSANITY"],
             "content_packs": []
         },
         "Friendsanity: Sebastian 12 <3": {
             "code": 718368,
-            "region": "Carpenter Shop",
+            "region": "Carpenter House",
             "tags": ["FRIENDSANITY"],
             "content_packs": []
         },
         "Friendsanity: Sebastian 13 <3": {
             "code": 718369,
-            "region": "Carpenter Shop",
+            "region": "Carpenter House",
             "tags": ["FRIENDSANITY"],
             "content_packs": []
         },
         "Friendsanity: Sebastian 14 <3": {
             "code": 718370,
-            "region": "Carpenter Shop",
+            "region": "Carpenter House",
             "tags": ["FRIENDSANITY"],
             "content_packs": []
         },
@@ -5030,85 +5036,85 @@
         },
         "Friendsanity: Maru 1 <3": {
             "code": 718441,
-            "region": "Carpenter Shop",
+            "region": "Carpenter House",
             "tags": ["FRIENDSANITY"],
             "content_packs": []
         },
         "Friendsanity: Maru 2 <3": {
             "code": 718442,
-            "region": "Carpenter Shop",
+            "region": "Carpenter House",
             "tags": ["FRIENDSANITY"],
             "content_packs": []
         },
         "Friendsanity: Maru 3 <3": {
             "code": 718443,
-            "region": "Carpenter Shop",
+            "region": "Carpenter House",
             "tags": ["FRIENDSANITY"],
             "content_packs": []
         },
         "Friendsanity: Maru 4 <3": {
             "code": 718444,
-            "region": "Carpenter Shop",
+            "region": "Carpenter House",
             "tags": ["FRIENDSANITY"],
             "content_packs": []
         },
         "Friendsanity: Maru 5 <3": {
             "code": 718445,
-            "region": "Carpenter Shop",
+            "region": "Carpenter House",
             "tags": ["FRIENDSANITY"],
             "content_packs": []
         },
         "Friendsanity: Maru 6 <3": {
             "code": 718446,
-            "region": "Carpenter Shop",
+            "region": "Carpenter House",
             "tags": ["FRIENDSANITY"],
             "content_packs": []
         },
         "Friendsanity: Maru 7 <3": {
             "code": 718447,
-            "region": "Carpenter Shop",
+            "region": "Carpenter House",
             "tags": ["FRIENDSANITY"],
             "content_packs": []
         },
         "Friendsanity: Maru 8 <3": {
             "code": 718448,
-            "region": "Carpenter Shop",
+            "region": "Carpenter House",
             "tags": ["FRIENDSANITY"],
             "content_packs": []
         },
         "Friendsanity: Maru 9 <3": {
             "code": 718449,
-            "region": "Carpenter Shop",
+            "region": "Carpenter House",
             "tags": ["FRIENDSANITY"],
             "content_packs": []
         },
         "Friendsanity: Maru 10 <3": {
             "code": 718450,
-            "region": "Carpenter Shop",
+            "region": "Carpenter House",
             "tags": ["FRIENDSANITY"],
             "content_packs": []
         },
         "Friendsanity: Maru 11 <3": {
             "code": 718451,
-            "region": "Carpenter Shop",
+            "region": "Carpenter House",
             "tags": ["FRIENDSANITY"],
             "content_packs": []
         },
         "Friendsanity: Maru 12 <3": {
             "code": 718452,
-            "region": "Carpenter Shop",
+            "region": "Carpenter House",
             "tags": ["FRIENDSANITY"],
             "content_packs": []
         },
         "Friendsanity: Maru 13 <3": {
             "code": 718453,
-            "region": "Carpenter Shop",
+            "region": "Carpenter House",
             "tags": ["FRIENDSANITY"],
             "content_packs": []
         },
         "Friendsanity: Maru 14 <3": {
             "code": 718454,
-            "region": "Carpenter Shop",
+            "region": "Carpenter House",
             "tags": ["FRIENDSANITY"],
             "content_packs": []
         },
@@ -5258,181 +5264,181 @@
         },
         "Friendsanity: Clint 1 <3": {
             "code": 718480,
-            "region": "Clint's Blacksmith",
+            "region": "Blacksmith",
             "tags": ["FRIENDSANITY"],
             "content_packs": []
         },
         "Friendsanity: Clint 2 <3": {
             "code": 718481,
-            "region": "Clint's Blacksmith",
+            "region": "Blacksmith",
             "tags": ["FRIENDSANITY"],
             "content_packs": []
         },
         "Friendsanity: Clint 3 <3": {
             "code": 718482,
-            "region": "Clint's Blacksmith",
+            "region": "Blacksmith",
             "tags": ["FRIENDSANITY"],
             "content_packs": []
         },
         "Friendsanity: Clint 4 <3": {
             "code": 718483,
-            "region": "Clint's Blacksmith",
+            "region": "Blacksmith",
             "tags": ["FRIENDSANITY"],
             "content_packs": []
         },
         "Friendsanity: Clint 5 <3": {
             "code": 718484,
-            "region": "Clint's Blacksmith",
+            "region": "Blacksmith",
             "tags": ["FRIENDSANITY"],
             "content_packs": []
         },
         "Friendsanity: Clint 6 <3": {
             "code": 718485,
-            "region": "Clint's Blacksmith",
+            "region": "Blacksmith",
             "tags": ["FRIENDSANITY"],
             "content_packs": []
         },
         "Friendsanity: Clint 7 <3": {
             "code": 718486,
-            "region": "Clint's Blacksmith",
+            "region": "Blacksmith",
             "tags": ["FRIENDSANITY"],
             "content_packs": []
         },
         "Friendsanity: Clint 8 <3": {
             "code": 718487,
-            "region": "Clint's Blacksmith",
+            "region": "Blacksmith",
             "tags": ["FRIENDSANITY"],
             "content_packs": []
         },
         "Friendsanity: Clint 9 <3": {
             "code": 718488,
-            "region": "Clint's Blacksmith",
+            "region": "Blacksmith",
             "tags": ["FRIENDSANITY"],
             "content_packs": []
         },
         "Friendsanity: Clint 10 <3": {
             "code": 718489,
-            "region": "Clint's Blacksmith",
+            "region": "Blacksmith",
             "tags": ["FRIENDSANITY"],
             "content_packs": []
         },
         "Friendsanity: Demetrius 1 <3": {
             "code": 718491,
-            "region": "Carpenter Shop",
+            "region": "Carpenter House",
             "tags": ["FRIENDSANITY"],
             "content_packs": []
         },
         "Friendsanity: Demetrius 2 <3": {
             "code": 718492,
-            "region": "Carpenter Shop",
+            "region": "Carpenter House",
             "tags": ["FRIENDSANITY"],
             "content_packs": []
         },
         "Friendsanity: Demetrius 3 <3": {
             "code": 718493,
-            "region": "Carpenter Shop",
+            "region": "Carpenter House",
             "tags": ["FRIENDSANITY"],
             "content_packs": []
         },
         "Friendsanity: Demetrius 4 <3": {
             "code": 718494,
-            "region": "Carpenter Shop",
+            "region": "Carpenter House",
             "tags": ["FRIENDSANITY"],
             "content_packs": []
         },
         "Friendsanity: Demetrius 5 <3": {
             "code": 718495,
-            "region": "Carpenter Shop",
+            "region": "Carpenter House",
             "tags": ["FRIENDSANITY"],
             "content_packs": []
         },
         "Friendsanity: Demetrius 6 <3": {
             "code": 718496,
-            "region": "Carpenter Shop",
+            "region": "Carpenter House",
             "tags": ["FRIENDSANITY"],
             "content_packs": []
         },
         "Friendsanity: Demetrius 7 <3": {
             "code": 718497,
-            "region": "Carpenter Shop",
+            "region": "Carpenter House",
             "tags": ["FRIENDSANITY"],
             "content_packs": []
         },
         "Friendsanity: Demetrius 8 <3": {
             "code": 718498,
-            "region": "Carpenter Shop",
+            "region": "Carpenter House",
             "tags": ["FRIENDSANITY"],
             "content_packs": []
         },
         "Friendsanity: Demetrius 9 <3": {
             "code": 718499,
-            "region": "Carpenter Shop",
+            "region": "Carpenter House",
             "tags": ["FRIENDSANITY"],
             "content_packs": []
         },
         "Friendsanity: Demetrius 10 <3": {
             "code": 718500,
-            "region": "Carpenter Shop",
+            "region": "Carpenter House",
             "tags": ["FRIENDSANITY"],
             "content_packs": []
         },
         "Friendsanity: Dwarf 1 <3": {
             "code": 718502,
-            "region": "Mines Dwarf Shop",
+            "region": "Mines Dwarf Cave",
             "tags": ["FRIENDSANITY"],
             "content_packs": []
         },
         "Friendsanity: Dwarf 2 <3": {
             "code": 718503,
-            "region": "Mines Dwarf Shop",
+            "region": "Mines Dwarf Cave",
             "tags": ["FRIENDSANITY"],
             "content_packs": []
         },
         "Friendsanity: Dwarf 3 <3": {
             "code": 718504,
-            "region": "Mines Dwarf Shop",
+            "region": "Mines Dwarf Cave",
             "tags": ["FRIENDSANITY"],
             "content_packs": []
         },
         "Friendsanity: Dwarf 4 <3": {
             "code": 718505,
-            "region": "Mines Dwarf Shop",
+            "region": "Mines Dwarf Cave",
             "tags": ["FRIENDSANITY"],
             "content_packs": []
         },
         "Friendsanity: Dwarf 5 <3": {
             "code": 718506,
-            "region": "Mines Dwarf Shop",
+            "region": "Mines Dwarf Cave",
             "tags": ["FRIENDSANITY"],
             "content_packs": []
         },
         "Friendsanity: Dwarf 6 <3": {
             "code": 718507,
-            "region": "Mines Dwarf Shop",
+            "region": "Mines Dwarf Cave",
             "tags": ["FRIENDSANITY"],
             "content_packs": []
         },
         "Friendsanity: Dwarf 7 <3": {
             "code": 718508,
-            "region": "Mines Dwarf Shop",
+            "region": "Mines Dwarf Cave",
             "tags": ["FRIENDSANITY"],
             "content_packs": []
         },
         "Friendsanity: Dwarf 8 <3": {
             "code": 718509,
-            "region": "Mines Dwarf Shop",
+            "region": "Mines Dwarf Cave",
             "tags": ["FRIENDSANITY"],
             "content_packs": []
         },
         "Friendsanity: Dwarf 9 <3": {
             "code": 718510,
-            "region": "Mines Dwarf Shop",
+            "region": "Mines Dwarf Cave",
             "tags": ["FRIENDSANITY"],
             "content_packs": []
         },
         "Friendsanity: Dwarf 10 <3": {
             "code": 718511,
-            "region": "Mines Dwarf Shop",
+            "region": "Mines Dwarf Cave",
             "tags": ["FRIENDSANITY"],
             "content_packs": []
         },
@@ -5798,61 +5804,61 @@
         },
         "Friendsanity: Krobus 1 <3": {
             "code": 718579,
-            "region": "Sewer",
+            "region": "Sewer - Shop",
             "tags": ["FRIENDSANITY"],
             "content_packs": []
         },
         "Friendsanity: Krobus 2 <3": {
             "code": 718580,
-            "region": "Sewer",
+            "region": "Sewer - Shop",
             "tags": ["FRIENDSANITY"],
             "content_packs": []
         },
         "Friendsanity: Krobus 3 <3": {
             "code": 718581,
-            "region": "Sewer",
+            "region": "Sewer - Shop",
             "tags": ["FRIENDSANITY"],
             "content_packs": []
         },
         "Friendsanity: Krobus 4 <3": {
             "code": 718582,
-            "region": "Sewer",
+            "region": "Sewer - Shop",
             "tags": ["FRIENDSANITY"],
             "content_packs": []
         },
         "Friendsanity: Krobus 5 <3": {
             "code": 718583,
-            "region": "Sewer",
+            "region": "Sewer - Shop",
             "tags": ["FRIENDSANITY"],
             "content_packs": []
         },
         "Friendsanity: Krobus 6 <3": {
             "code": 718584,
-            "region": "Sewer",
+            "region": "Sewer - Shop",
             "tags": ["FRIENDSANITY"],
             "content_packs": []
         },
         "Friendsanity: Krobus 7 <3": {
             "code": 718585,
-            "region": "Sewer",
+            "region": "Sewer - Shop",
             "tags": ["FRIENDSANITY"],
             "content_packs": []
         },
         "Friendsanity: Krobus 8 <3": {
             "code": 718586,
-            "region": "Sewer",
+            "region": "Sewer - Shop",
             "tags": ["FRIENDSANITY"],
             "content_packs": []
         },
         "Friendsanity: Krobus 9 <3": {
             "code": 718587,
-            "region": "Sewer",
+            "region": "Sewer - Shop",
             "tags": ["FRIENDSANITY"],
             "content_packs": []
         },
         "Friendsanity: Krobus 10 <3": {
             "code": 718588,
-            "region": "Sewer",
+            "region": "Sewer - Shop",
             "tags": ["FRIENDSANITY"],
             "content_packs": []
         },
@@ -6218,61 +6224,61 @@
         },
         "Friendsanity: Robin 1 <3": {
             "code": 718656,
-            "region": "Carpenter Shop",
+            "region": "Carpenter House",
             "tags": ["FRIENDSANITY"],
             "content_packs": []
         },
         "Friendsanity: Robin 2 <3": {
             "code": 718657,
-            "region": "Carpenter Shop",
+            "region": "Carpenter House",
             "tags": ["FRIENDSANITY"],
             "content_packs": []
         },
         "Friendsanity: Robin 3 <3": {
             "code": 718658,
-            "region": "Carpenter Shop",
+            "region": "Carpenter House",
             "tags": ["FRIENDSANITY"],
             "content_packs": []
         },
         "Friendsanity: Robin 4 <3": {
             "code": 718659,
-            "region": "Carpenter Shop",
+            "region": "Carpenter House",
             "tags": ["FRIENDSANITY"],
             "content_packs": []
         },
         "Friendsanity: Robin 5 <3": {
             "code": 718660,
-            "region": "Carpenter Shop",
+            "region": "Carpenter House",
             "tags": ["FRIENDSANITY"],
             "content_packs": []
         },
         "Friendsanity: Robin 6 <3": {
             "code": 718661,
-            "region": "Carpenter Shop",
+            "region": "Carpenter House",
             "tags": ["FRIENDSANITY"],
             "content_packs": []
         },
         "Friendsanity: Robin 7 <3": {
             "code": 718662,
-            "region": "Carpenter Shop",
+            "region": "Carpenter House",
             "tags": ["FRIENDSANITY"],
             "content_packs": []
         },
         "Friendsanity: Robin 8 <3": {
             "code": 718663,
-            "region": "Carpenter Shop",
+            "region": "Carpenter House",
             "tags": ["FRIENDSANITY"],
             "content_packs": []
         },
         "Friendsanity: Robin 9 <3": {
             "code": 718664,
-            "region": "Carpenter Shop",
+            "region": "Carpenter House",
             "tags": ["FRIENDSANITY"],
             "content_packs": []
         },
         "Friendsanity: Robin 10 <3": {
             "code": 718665,
-            "region": "Carpenter Shop",
+            "region": "Carpenter House",
             "tags": ["FRIENDSANITY"],
             "content_packs": []
         },
@@ -6630,6 +6636,216 @@
             "tags": ["FRIENDSANITY"],
             "content_packs": []
         },
+        "Meet Alex": {
+            "code": 718750,
+            "region": "Alex's House",
+            "tags": ["MEET_VILLAGER"],
+            "content_packs": []
+        },
+        "Meet Elliott": {
+            "code": 718751,
+            "region": "Elliott's House",
+            "tags": ["MEET_VILLAGER"],
+            "content_packs": []
+        },
+        "Meet Harvey": {
+            "code": 718752,
+            "region": "Hospital",
+            "tags": ["MEET_VILLAGER"],
+            "content_packs": []
+        },
+        "Meet Sam": {
+            "code": 718753,
+            "region": "Sam's House",
+            "tags": ["MEET_VILLAGER"],
+            "content_packs": []
+        },
+        "Meet Sebastian": {
+            "code": 718754,
+            "region": "Carpenter House",
+            "tags": ["MEET_VILLAGER"],
+            "content_packs": []
+        },
+        "Meet Shane": {
+            "code": 718755,
+            "region": "Marnie's Ranch",
+            "tags": ["MEET_VILLAGER"],
+            "content_packs": []
+        },
+        "Meet Abigail": {
+            "code": 718756,
+            "region": "Pierre's General Store",
+            "tags": ["MEET_VILLAGER"],
+            "content_packs": []
+        },
+        "Meet Emily": {
+            "code": 718757,
+            "region": "Haley's House",
+            "tags": ["MEET_VILLAGER"],
+            "content_packs": []
+        },
+        "Meet Haley": {
+            "code": 718758,
+            "region": "Haley's House",
+            "tags": ["MEET_VILLAGER"],
+            "content_packs": []
+        },
+        "Meet Leah": {
+            "code": 718759,
+            "region": "Leah's Cottage",
+            "tags": ["MEET_VILLAGER"],
+            "content_packs": []
+        },
+        "Meet Maru": {
+            "code": 718760,
+            "region": "Carpenter House",
+            "tags": ["MEET_VILLAGER"],
+            "content_packs": []
+        },
+        "Meet Penny": {
+            "code": 718761,
+            "region": "Trailer",
+            "tags": ["MEET_VILLAGER"],
+            "content_packs": []
+        },
+        "Meet Caroline": {
+            "code": 718762,
+            "region": "Pierre's General Store",
+            "tags": ["MEET_VILLAGER"],
+            "content_packs": []
+        },
+        "Meet Clint": {
+            "code": 718763,
+            "region": "Blacksmith",
+            "tags": ["MEET_VILLAGER"],
+            "content_packs": []
+        },
+        "Meet Demetrius": {
+            "code": 718764,
+            "region": "Carpenter House",
+            "tags": ["MEET_VILLAGER"],
+            "content_packs": []
+        },
+        "Meet Dwarf": {
+            "code": 718765,
+            "region": "Mines Dwarf Cave",
+            "tags": ["MEET_VILLAGER"],
+            "content_packs": []
+        },
+        "Meet Evelyn": {
+            "code": 718766,
+            "region": "Alex's House",
+            "tags": ["MEET_VILLAGER"],
+            "content_packs": []
+        },
+        "Meet George": {
+            "code": 718767,
+            "region": "Alex's House",
+            "tags": ["MEET_VILLAGER"],
+            "content_packs": []
+        },
+        "Meet Gus": {
+            "code": 718768,
+            "region": "Saloon",
+            "tags": ["MEET_VILLAGER"],
+            "content_packs": []
+        },
+        "Meet Jas": {
+            "code": 718769,
+            "region": "Marnie's Ranch",
+            "tags": ["MEET_VILLAGER"],
+            "content_packs": []
+        },
+        "Meet Jodi": {
+            "code": 718770,
+            "region": "Sam's House",
+            "tags": ["MEET_VILLAGER"],
+            "content_packs": []
+        },
+        "Meet Kent": {
+            "code": 718771,
+            "region": "Marnie's Ranch",
+            "tags": ["MEET_VILLAGER_ALWAYS"],
+            "content_packs": []
+        },
+        "Meet Krobus": {
+            "code": 718772,
+            "region": "Sewer",
+            "tags": ["MEET_VILLAGER"],
+            "content_packs": []
+        },
+        "Meet Leo": {
+            "code": 718773,
+            "region": "Leo's Hut",
+            "tags": ["GINGER_ISLAND", "MEET_VILLAGER"],
+            "content_packs": ["Ginger Island (Vanilla)"]
+        },
+        "Meet Lewis": {
+            "code": 718774,
+            "region": "Mayor's Manor",
+            "tags": ["MEET_VILLAGER"],
+            "content_packs": []
+        },
+        "Meet Linus": {
+            "code": 718775,
+            "region": "Tent",
+            "tags": ["MEET_VILLAGER"],
+            "content_packs": []
+        },
+        "Meet Marnie": {
+            "code": 718776,
+            "region": "Marnie's Ranch",
+            "tags": ["MEET_VILLAGER"],
+            "content_packs": []
+        },
+        "Meet Pam": {
+            "code": 718777,
+            "region": "Trailer",
+            "tags": ["MEET_VILLAGER"],
+            "content_packs": []
+        },
+        "Meet Pierre": {
+            "code": 718778,
+            "region": "Pierre's General Store",
+            "tags": ["MEET_VILLAGER"],
+            "content_packs": []
+        },
+        "Meet Robin": {
+            "code": 718779,
+            "region": "Carpenter House",
+            "tags": ["MEET_VILLAGER"],
+            "content_packs": []
+        },
+        "Meet Sandy": {
+            "code": 718780,
+            "region": "Oasis",
+            "tags": ["MEET_VILLAGER"],
+            "content_packs": []
+        },
+        "Meet Vincent": {
+            "code": 718781,
+            "region": "Marnie's Ranch",
+            "tags": ["MEET_VILLAGER"],
+            "content_packs": []
+        },
+        "Meet Willy": {
+            "code": 718782,
+            "region": "Willy's Fish Shop",
+            "tags": ["MEET_VILLAGER"],
+            "content_packs": []
+        },
+        "Meet Wizard": {
+            "code": 718783,
+            "region": "Wizard Tower",
+            "tags": ["MEET_VILLAGER"],
+            "content_packs": []
+        },
+        "Meet Pet": {
+            "code": 718784,
+            "region": "Farmhouse",
+            "tags": ["MEET_VILLAGER_ALWAYS"],
+            "content_packs": []
+        },
         "Egg Hunt Victory": {
             "code": 719001,
             "region": "Egg Festival",
@@ -6638,7 +6854,7 @@
         },
         "Egg Festival: Strawberry Seeds": {
             "code": 719002,
-            "region": "Egg Festival",
+            "region": "Egg Festival - Shop",
             "tags": ["FESTIVAL"],
             "content_packs": []
         },
@@ -6650,7 +6866,7 @@
         },
         "Rarecrow #5 (Woman)": {
             "code": 719004,
-            "region": "Flower Dance",
+            "region": "Flower Dance - Shop",
             "tags": ["FESTIVAL"],
             "content_packs": []
         },
@@ -6698,7 +6914,7 @@
         },
         "Rarecrow #2 (Witch)": {
             "code": 719012,
-            "region": "Spirit's Eve",
+            "region": "Spirit's Eve - Shop",
             "tags": ["FESTIVAL"],
             "content_packs": []
         },
@@ -6818,25 +7034,25 @@
         },
         "Tub o' Flowers Recipe": {
             "code": 719032,
-            "region": "Flower Dance",
+            "region": "Flower Dance - Shop",
             "tags": ["FESTIVAL"],
             "content_packs": []
         },
         "Jack-O-Lantern Recipe": {
             "code": 719033,
-            "region": "Spirit's Eve",
+            "region": "Spirit's Eve - Shop",
             "tags": ["FESTIVAL"],
             "content_packs": []
         },
         "Moonlight Jellies Banner": {
             "code": 719034,
-            "region": "Dance of the Moonlight Jellies",
+            "region": "Dance of the Moonlight Jellies - Shop",
             "tags": ["FESTIVAL"],
             "content_packs": []
         },
         "Starport Decal": {
             "code": 719035,
-            "region": "Dance of the Moonlight Jellies",
+            "region": "Dance of the Moonlight Jellies - Shop",
             "tags": ["FESTIVAL"],
             "content_packs": []
         },
@@ -7232,13 +7448,13 @@
         },
         "Robin's Project": {
             "code": 719113,
-            "region": "Carpenter Shop",
+            "region": "Carpenter House",
             "tags": ["SPECIAL_ORDER_BOARD"],
             "content_packs": []
         },
         "Robin's Resource Rush": {
             "code": 719114,
-            "region": "Carpenter Shop",
+            "region": "Carpenter House",
             "tags": ["SPECIAL_ORDER_BOARD"],
             "content_packs": []
         },
@@ -12644,7 +12860,7 @@
         },
         "Triple Shot Espresso Recipe": {
             "code": 720377,
-            "region": "Saloon",
+            "region": "Saloon - Shop",
             "tags": ["CHEFSANITY", "CHEFSANITY_PURCHASE"],
             "content_packs": []
         },
@@ -12674,907 +12890,907 @@
         },
         "Craft Cherry Bomb": {
             "code": 720401,
-            "region": "Farm",
+            "region": "Crafting",
             "tags": ["CRAFTSANITY", "CRAFTSANITY_CRAFT"],
             "content_packs": []
         },
         "Craft Bomb": {
             "code": 720402,
-            "region": "Farm",
+            "region": "Crafting",
             "tags": ["CRAFTSANITY", "CRAFTSANITY_CRAFT"],
             "content_packs": []
         },
         "Craft Mega Bomb": {
             "code": 720403,
-            "region": "Farm",
+            "region": "Crafting",
             "tags": ["CRAFTSANITY", "CRAFTSANITY_CRAFT"],
             "content_packs": []
         },
         "Craft Gate": {
             "code": 720404,
-            "region": "Farm",
+            "region": "Crafting",
             "tags": ["CRAFTSANITY", "CRAFTSANITY_CRAFT"],
             "content_packs": []
         },
         "Craft Wood Fence": {
             "code": 720405,
-            "region": "Farm",
+            "region": "Crafting",
             "tags": ["CRAFTSANITY", "CRAFTSANITY_CRAFT"],
             "content_packs": []
         },
         "Craft Stone Fence": {
             "code": 720406,
-            "region": "Farm",
+            "region": "Crafting",
             "tags": ["CRAFTSANITY", "CRAFTSANITY_CRAFT"],
             "content_packs": []
         },
         "Craft Iron Fence": {
             "code": 720407,
-            "region": "Farm",
+            "region": "Crafting",
             "tags": ["CRAFTSANITY", "CRAFTSANITY_CRAFT"],
             "content_packs": []
         },
         "Craft Hardwood Fence": {
             "code": 720408,
-            "region": "Farm",
+            "region": "Crafting",
             "tags": ["CRAFTSANITY", "CRAFTSANITY_CRAFT"],
             "content_packs": []
         },
         "Craft Sprinkler": {
             "code": 720409,
-            "region": "Farm",
+            "region": "Crafting",
             "tags": ["CRAFTSANITY", "CRAFTSANITY_CRAFT"],
             "content_packs": []
         },
         "Craft Quality Sprinkler": {
             "code": 720410,
-            "region": "Farm",
+            "region": "Crafting",
             "tags": ["CRAFTSANITY", "CRAFTSANITY_CRAFT"],
             "content_packs": []
         },
         "Craft Iridium Sprinkler": {
             "code": 720411,
-            "region": "Farm",
+            "region": "Crafting",
             "tags": ["CRAFTSANITY", "CRAFTSANITY_CRAFT"],
             "content_packs": []
         },
         "Craft Bee House": {
             "code": 720412,
-            "region": "Farm",
+            "region": "Crafting",
             "tags": ["CRAFTSANITY", "CRAFTSANITY_CRAFT"],
             "content_packs": []
         },
         "Craft Cask": {
             "code": 720413,
-            "region": "Farm",
+            "region": "Crafting",
             "tags": ["CRAFTSANITY", "CRAFTSANITY_CRAFT"],
             "content_packs": []
         },
         "Craft Cheese Press": {
             "code": 720414,
-            "region": "Farm",
+            "region": "Crafting",
             "tags": ["CRAFTSANITY", "CRAFTSANITY_CRAFT"],
             "content_packs": []
         },
         "Craft Keg": {
             "code": 720415,
-            "region": "Farm",
+            "region": "Crafting",
             "tags": ["CRAFTSANITY", "CRAFTSANITY_CRAFT"],
             "content_packs": []
         },
         "Craft Loom": {
             "code": 720416,
-            "region": "Farm",
+            "region": "Crafting",
             "tags": ["CRAFTSANITY", "CRAFTSANITY_CRAFT"],
             "content_packs": []
         },
         "Craft Mayonnaise Machine": {
             "code": 720417,
-            "region": "Farm",
+            "region": "Crafting",
             "tags": ["CRAFTSANITY", "CRAFTSANITY_CRAFT"],
             "content_packs": []
         },
         "Craft Oil Maker": {
             "code": 720418,
-            "region": "Farm",
+            "region": "Crafting",
             "tags": ["CRAFTSANITY", "CRAFTSANITY_CRAFT"],
             "content_packs": []
         },
         "Craft Preserves Jar": {
             "code": 720419,
-            "region": "Farm",
+            "region": "Crafting",
             "tags": ["CRAFTSANITY", "CRAFTSANITY_CRAFT"],
             "content_packs": []
         },
         "Craft Basic Fertilizer": {
             "code": 720420,
-            "region": "Farm",
+            "region": "Crafting",
             "tags": ["CRAFTSANITY", "CRAFTSANITY_CRAFT"],
             "content_packs": []
         },
         "Craft Quality Fertilizer": {
             "code": 720421,
-            "region": "Farm",
+            "region": "Crafting",
             "tags": ["CRAFTSANITY", "CRAFTSANITY_CRAFT"],
             "content_packs": []
         },
         "Craft Deluxe Fertilizer": {
             "code": 720422,
-            "region": "Farm",
+            "region": "Crafting",
             "tags": ["CRAFTSANITY", "CRAFTSANITY_CRAFT"],
             "content_packs": []
         },
         "Craft Speed-Gro": {
             "code": 720423,
-            "region": "Farm",
+            "region": "Crafting",
             "tags": ["CRAFTSANITY", "CRAFTSANITY_CRAFT"],
             "content_packs": []
         },
         "Craft Deluxe Speed-Gro": {
             "code": 720424,
-            "region": "Farm",
+            "region": "Crafting",
             "tags": ["CRAFTSANITY", "CRAFTSANITY_CRAFT"],
             "content_packs": []
         },
         "Craft Hyper Speed-Gro": {
             "code": 720425,
-            "region": "Farm",
+            "region": "Crafting",
             "tags": ["CRAFTSANITY", "CRAFTSANITY_CRAFT", "GINGER_ISLAND", "REQUIRES_QI_ORDERS"],
             "content_packs": ["Ginger Island (Vanilla)", "Qi Board (Vanilla)"]
         },
         "Craft Basic Retaining Soil": {
             "code": 720426,
-            "region": "Farm",
+            "region": "Crafting",
             "tags": ["CRAFTSANITY", "CRAFTSANITY_CRAFT"],
             "content_packs": []
         },
         "Craft Quality Retaining Soil": {
             "code": 720427,
-            "region": "Farm",
+            "region": "Crafting",
             "tags": ["CRAFTSANITY", "CRAFTSANITY_CRAFT"],
             "content_packs": []
         },
         "Craft Deluxe Retaining Soil": {
             "code": 720428,
-            "region": "Farm",
+            "region": "Crafting",
             "tags": ["CRAFTSANITY", "CRAFTSANITY_CRAFT", "GINGER_ISLAND"],
             "content_packs": ["Ginger Island (Vanilla)"]
         },
         "Craft Tree Fertilizer": {
             "code": 720429,
-            "region": "Farm",
+            "region": "Crafting",
             "tags": ["CRAFTSANITY", "CRAFTSANITY_CRAFT"],
             "content_packs": []
         },
         "Craft Spring Seeds": {
             "code": 720430,
-            "region": "Farm",
+            "region": "Crafting",
             "tags": ["CRAFTSANITY", "CRAFTSANITY_CRAFT"],
             "content_packs": []
         },
         "Craft Summer Seeds": {
             "code": 720431,
-            "region": "Farm",
+            "region": "Crafting",
             "tags": ["CRAFTSANITY", "CRAFTSANITY_CRAFT"],
             "content_packs": []
         },
         "Craft Fall Seeds": {
             "code": 720432,
-            "region": "Farm",
+            "region": "Crafting",
             "tags": ["CRAFTSANITY", "CRAFTSANITY_CRAFT"],
             "content_packs": []
         },
         "Craft Winter Seeds": {
             "code": 720433,
-            "region": "Farm",
+            "region": "Crafting",
             "tags": ["CRAFTSANITY", "CRAFTSANITY_CRAFT"],
             "content_packs": []
         },
         "Craft Ancient Seeds": {
             "code": 720434,
-            "region": "Farm",
+            "region": "Crafting",
             "tags": ["CRAFTSANITY", "CRAFTSANITY_CRAFT"],
             "content_packs": []
         },
         "Craft Grass Starter": {
             "code": 720435,
-            "region": "Farm",
+            "region": "Crafting",
             "tags": ["CRAFTSANITY", "CRAFTSANITY_CRAFT"],
             "content_packs": []
         },
         "Craft Tea Sapling": {
             "code": 720436,
-            "region": "Farm",
+            "region": "Crafting",
             "tags": ["CRAFTSANITY", "CRAFTSANITY_CRAFT"],
             "content_packs": []
         },
         "Craft Fiber Seeds": {
             "code": 720437,
-            "region": "Farm",
+            "region": "Crafting",
             "tags": ["CRAFTSANITY", "CRAFTSANITY_CRAFT"],
             "content_packs": []
         },
         "Craft Wood Floor": {
             "code": 720438,
-            "region": "Farm",
+            "region": "Crafting",
             "tags": ["CRAFTSANITY", "CRAFTSANITY_CRAFT"],
             "content_packs": []
         },
         "Craft Rustic Plank Floor": {
             "code": 720439,
-            "region": "Farm",
+            "region": "Crafting",
             "tags": ["CRAFTSANITY", "CRAFTSANITY_CRAFT"],
             "content_packs": []
         },
         "Craft Straw Floor": {
             "code": 720440,
-            "region": "Farm",
+            "region": "Crafting",
             "tags": ["CRAFTSANITY", "CRAFTSANITY_CRAFT"],
             "content_packs": []
         },
         "Craft Weathered Floor": {
             "code": 720441,
-            "region": "Farm",
+            "region": "Crafting",
             "tags": ["CRAFTSANITY", "CRAFTSANITY_CRAFT"],
             "content_packs": []
         },
         "Craft Crystal Floor": {
             "code": 720442,
-            "region": "Farm",
+            "region": "Crafting",
             "tags": ["CRAFTSANITY", "CRAFTSANITY_CRAFT"],
             "content_packs": []
         },
         "Craft Stone Floor": {
             "code": 720443,
-            "region": "Farm",
+            "region": "Crafting",
             "tags": ["CRAFTSANITY", "CRAFTSANITY_CRAFT"],
             "content_packs": []
         },
         "Craft Stone Walkway Floor": {
             "code": 720444,
-            "region": "Farm",
+            "region": "Crafting",
             "tags": ["CRAFTSANITY", "CRAFTSANITY_CRAFT"],
             "content_packs": []
         },
         "Craft Brick Floor": {
             "code": 720445,
-            "region": "Farm",
+            "region": "Crafting",
             "tags": ["CRAFTSANITY", "CRAFTSANITY_CRAFT"],
             "content_packs": []
         },
         "Craft Wood Path": {
             "code": 720446,
-            "region": "Farm",
+            "region": "Crafting",
             "tags": ["CRAFTSANITY", "CRAFTSANITY_CRAFT"],
             "content_packs": []
         },
         "Craft Gravel Path": {
             "code": 720447,
-            "region": "Farm",
+            "region": "Crafting",
             "tags": ["CRAFTSANITY", "CRAFTSANITY_CRAFT"],
             "content_packs": []
         },
         "Craft Cobblestone Path": {
             "code": 720448,
-            "region": "Farm",
+            "region": "Crafting",
             "tags": ["CRAFTSANITY", "CRAFTSANITY_CRAFT"],
             "content_packs": []
         },
         "Craft Stepping Stone Path": {
             "code": 720449,
-            "region": "Farm",
+            "region": "Crafting",
             "tags": ["CRAFTSANITY", "CRAFTSANITY_CRAFT"],
             "content_packs": []
         },
         "Craft Crystal Path": {
             "code": 720450,
-            "region": "Farm",
+            "region": "Crafting",
             "tags": ["CRAFTSANITY", "CRAFTSANITY_CRAFT"],
             "content_packs": []
         },
         "Craft Spinner": {
             "code": 720451,
-            "region": "Farm",
+            "region": "Crafting",
             "tags": ["CRAFTSANITY", "CRAFTSANITY_CRAFT"],
             "content_packs": []
         },
         "Craft Trap Bobber": {
             "code": 720452,
-            "region": "Farm",
+            "region": "Crafting",
             "tags": ["CRAFTSANITY", "CRAFTSANITY_CRAFT"],
             "content_packs": []
         },
         "Craft Cork Bobber": {
             "code": 720453,
-            "region": "Farm",
+            "region": "Crafting",
             "tags": ["CRAFTSANITY", "CRAFTSANITY_CRAFT"],
             "content_packs": []
         },
         "Craft Quality Bobber": {
             "code": 720454,
-            "region": "Farm",
+            "region": "Crafting",
             "tags": ["CRAFTSANITY", "CRAFTSANITY_CRAFT"],
             "content_packs": []
         },
         "Craft Treasure Hunter": {
             "code": 720455,
-            "region": "Farm",
+            "region": "Crafting",
             "tags": ["CRAFTSANITY", "CRAFTSANITY_CRAFT"],
             "content_packs": []
         },
         "Craft Dressed Spinner": {
             "code": 720456,
-            "region": "Farm",
+            "region": "Crafting",
             "tags": ["CRAFTSANITY", "CRAFTSANITY_CRAFT"],
             "content_packs": []
         },
         "Craft Barbed Hook": {
             "code": 720457,
-            "region": "Farm",
+            "region": "Crafting",
             "tags": ["CRAFTSANITY", "CRAFTSANITY_CRAFT"],
             "content_packs": []
         },
         "Craft Magnet": {
             "code": 720458,
-            "region": "Farm",
+            "region": "Crafting",
             "tags": ["CRAFTSANITY", "CRAFTSANITY_CRAFT"],
             "content_packs": []
         },
         "Craft Bait": {
             "code": 720459,
-            "region": "Farm",
+            "region": "Crafting",
             "tags": ["CRAFTSANITY", "CRAFTSANITY_CRAFT"],
             "content_packs": []
         },
         "Craft Wild Bait": {
             "code": 720460,
-            "region": "Farm",
+            "region": "Crafting",
             "tags": ["CRAFTSANITY", "CRAFTSANITY_CRAFT"],
             "content_packs": []
         },
         "Craft Magic Bait": {
             "code": 720461,
-            "region": "Farm",
+            "region": "Crafting",
             "tags": ["CRAFTSANITY", "CRAFTSANITY_CRAFT", "GINGER_ISLAND", "REQUIRES_QI_ORDERS"],
             "content_packs": ["Ginger Island (Vanilla)", "Qi Board (Vanilla)"]
         },
         "Craft Crab Pot": {
             "code": 720462,
-            "region": "Farm",
+            "region": "Crafting",
             "tags": ["CRAFTSANITY", "CRAFTSANITY_CRAFT"],
             "content_packs": []
         },
         "Craft Sturdy Ring": {
             "code": 720463,
-            "region": "Farm",
+            "region": "Crafting",
             "tags": ["CRAFTSANITY", "CRAFTSANITY_CRAFT"],
             "content_packs": []
         },
         "Craft Warrior Ring": {
             "code": 720464,
-            "region": "Farm",
+            "region": "Crafting",
             "tags": ["CRAFTSANITY", "CRAFTSANITY_CRAFT"],
             "content_packs": []
         },
         "Craft Ring of Yoba": {
             "code": 720465,
-            "region": "Farm",
+            "region": "Crafting",
             "tags": ["CRAFTSANITY", "CRAFTSANITY_CRAFT"],
             "content_packs": []
         },
         "Craft Thorns Ring": {
             "code": 720466,
-            "region": "Farm",
+            "region": "Crafting",
             "tags": ["CRAFTSANITY", "CRAFTSANITY_CRAFT", "GINGER_ISLAND"],
             "content_packs": ["Ginger Island (Vanilla)"]
         },
         "Craft Glowstone Ring": {
             "code": 720467,
-            "region": "Farm",
+            "region": "Crafting",
             "tags": ["CRAFTSANITY", "CRAFTSANITY_CRAFT"],
             "content_packs": []
         },
         "Craft Iridium Band": {
             "code": 720468,
-            "region": "Farm",
+            "region": "Crafting",
             "tags": ["CRAFTSANITY", "CRAFTSANITY_CRAFT"],
             "content_packs": []
         },
         "Craft Wedding Ring": {
             "code": 720469,
-            "region": "Farm",
+            "region": "Crafting",
             "tags": ["CRAFTSANITY", "CRAFTSANITY_CRAFT"],
             "content_packs": []
         },
         "Craft Field Snack": {
             "code": 720470,
-            "region": "Farm",
+            "region": "Crafting",
             "tags": ["CRAFTSANITY", "CRAFTSANITY_CRAFT"],
             "content_packs": []
         },
         "Craft Bug Steak": {
             "code": 720471,
-            "region": "Farm",
+            "region": "Crafting",
             "tags": ["CRAFTSANITY", "CRAFTSANITY_CRAFT"],
             "content_packs": []
         },
         "Craft Life Elixir": {
             "code": 720472,
-            "region": "Farm",
+            "region": "Crafting",
             "tags": ["CRAFTSANITY", "CRAFTSANITY_CRAFT"],
             "content_packs": []
         },
         "Craft Oil of Garlic": {
             "code": 720473,
-            "region": "Farm",
+            "region": "Crafting",
             "tags": ["CRAFTSANITY", "CRAFTSANITY_CRAFT"],
             "content_packs": []
         },
         "Craft Monster Musk": {
             "code": 720474,
-            "region": "Farm",
+            "region": "Crafting",
             "tags": ["CRAFTSANITY", "CRAFTSANITY_CRAFT"],
             "content_packs": []
         },
         "Craft Fairy Dust": {
             "code": 720475,
-            "region": "Farm",
+            "region": "Crafting",
             "tags": ["CRAFTSANITY", "CRAFTSANITY_CRAFT", "GINGER_ISLAND"],
             "content_packs": ["Ginger Island (Vanilla)"]
         },
         "Craft Warp Totem: Beach": {
             "code": 720476,
-            "region": "Farm",
+            "region": "Crafting",
             "tags": ["CRAFTSANITY", "CRAFTSANITY_CRAFT"],
             "content_packs": []
         },
         "Craft Warp Totem: Mountains": {
             "code": 720477,
-            "region": "Farm",
+            "region": "Crafting",
             "tags": ["CRAFTSANITY", "CRAFTSANITY_CRAFT"],
             "content_packs": []
         },
         "Craft Warp Totem: Farm": {
             "code": 720478,
-            "region": "Farm",
+            "region": "Crafting",
             "tags": ["CRAFTSANITY", "CRAFTSANITY_CRAFT"],
             "content_packs": []
         },
         "Craft Warp Totem: Desert": {
             "code": 720479,
-            "region": "Farm",
+            "region": "Crafting",
             "tags": ["CRAFTSANITY", "CRAFTSANITY_CRAFT"],
             "content_packs": []
         },
         "Craft Warp Totem: Island": {
             "code": 720480,
-            "region": "Farm",
+            "region": "Crafting",
             "tags": ["CRAFTSANITY", "CRAFTSANITY_CRAFT", "GINGER_ISLAND"],
             "content_packs": ["Ginger Island (Vanilla)"]
         },
         "Craft Rain Totem": {
             "code": 720481,
-            "region": "Farm",
+            "region": "Crafting",
             "tags": ["CRAFTSANITY", "CRAFTSANITY_CRAFT"],
             "content_packs": []
         },
         "Craft Torch": {
             "code": 720482,
-            "region": "Farm",
+            "region": "Crafting",
             "tags": ["CRAFTSANITY", "CRAFTSANITY_CRAFT"],
             "content_packs": []
         },
         "Craft Campfire": {
             "code": 720483,
-            "region": "Farm",
+            "region": "Crafting",
             "tags": ["CRAFTSANITY", "CRAFTSANITY_CRAFT"],
             "content_packs": []
         },
         "Craft Wooden Brazier": {
             "code": 720484,
-            "region": "Farm",
+            "region": "Crafting",
             "tags": ["CRAFTSANITY", "CRAFTSANITY_CRAFT"],
             "content_packs": []
         },
         "Craft Stone Brazier": {
             "code": 720485,
-            "region": "Farm",
+            "region": "Crafting",
             "tags": ["CRAFTSANITY", "CRAFTSANITY_CRAFT"],
             "content_packs": []
         },
         "Craft Gold Brazier": {
             "code": 720486,
-            "region": "Farm",
+            "region": "Crafting",
             "tags": ["CRAFTSANITY", "CRAFTSANITY_CRAFT"],
             "content_packs": []
         },
         "Craft Carved Brazier": {
             "code": 720487,
-            "region": "Farm",
+            "region": "Crafting",
             "tags": ["CRAFTSANITY", "CRAFTSANITY_CRAFT"],
             "content_packs": []
         },
         "Craft Stump Brazier": {
             "code": 720488,
-            "region": "Farm",
+            "region": "Crafting",
             "tags": ["CRAFTSANITY", "CRAFTSANITY_CRAFT"],
             "content_packs": []
         },
         "Craft Barrel Brazier": {
             "code": 720489,
-            "region": "Farm",
+            "region": "Crafting",
             "tags": ["CRAFTSANITY", "CRAFTSANITY_CRAFT"],
             "content_packs": []
         },
         "Craft Skull Brazier": {
             "code": 720490,
-            "region": "Farm",
+            "region": "Crafting",
             "tags": ["CRAFTSANITY", "CRAFTSANITY_CRAFT"],
             "content_packs": []
         },
         "Craft Marble Brazier": {
             "code": 720491,
-            "region": "Farm",
+            "region": "Crafting",
             "tags": ["CRAFTSANITY", "CRAFTSANITY_CRAFT"],
             "content_packs": []
         },
         "Craft Wood Lamp-post": {
             "code": 720492,
-            "region": "Farm",
+            "region": "Crafting",
             "tags": ["CRAFTSANITY", "CRAFTSANITY_CRAFT"],
             "content_packs": []
         },
         "Craft Iron Lamp-post": {
             "code": 720493,
-            "region": "Farm",
+            "region": "Crafting",
             "tags": ["CRAFTSANITY", "CRAFTSANITY_CRAFT"],
             "content_packs": []
         },
         "Craft Jack-O-Lantern": {
             "code": 720494,
-            "region": "Farm",
+            "region": "Crafting",
             "tags": ["CRAFTSANITY", "CRAFTSANITY_CRAFT"],
             "content_packs": []
         },
         "Craft Bone Mill": {
             "code": 720495,
-            "region": "Farm",
+            "region": "Crafting",
             "tags": ["CRAFTSANITY", "CRAFTSANITY_CRAFT"],
             "content_packs": []
         },
         "Craft Charcoal Kiln": {
             "code": 720496,
-            "region": "Farm",
+            "region": "Crafting",
             "tags": ["CRAFTSANITY", "CRAFTSANITY_CRAFT"],
             "content_packs": []
         },
         "Craft Crystalarium": {
             "code": 720497,
-            "region": "Farm",
+            "region": "Crafting",
             "tags": ["CRAFTSANITY", "CRAFTSANITY_CRAFT"],
             "content_packs": []
         },
         "Craft Furnace": {
             "code": 720498,
-            "region": "Farm",
+            "region": "Crafting",
             "tags": ["CRAFTSANITY", "CRAFTSANITY_CRAFT"],
             "content_packs": []
         },
         "Craft Geode Crusher": {
             "code": 720499,
-            "region": "Farm",
+            "region": "Crafting",
             "tags": ["CRAFTSANITY", "CRAFTSANITY_CRAFT"],
             "content_packs": []
         },
         "Craft Heavy Tapper": {
             "code": 720500,
-            "region": "Farm",
+            "region": "Crafting",
             "tags": ["CRAFTSANITY", "CRAFTSANITY_CRAFT", "GINGER_ISLAND", "REQUIRES_QI_ORDERS"],
             "content_packs": ["Ginger Island (Vanilla)", "Qi Board (Vanilla)"]
         },
         "Craft Lightning Rod": {
             "code": 720501,
-            "region": "Farm",
+            "region": "Crafting",
             "tags": ["CRAFTSANITY", "CRAFTSANITY_CRAFT"],
             "content_packs": []
         },
         "Craft Ostrich Incubator": {
             "code": 720502,
-            "region": "Farm",
+            "region": "Crafting",
             "tags": ["CRAFTSANITY", "CRAFTSANITY_CRAFT", "GINGER_ISLAND"],
             "content_packs": ["Ginger Island (Vanilla)"]
         },
         "Craft Recycling Machine": {
             "code": 720503,
-            "region": "Farm",
+            "region": "Crafting",
             "tags": ["CRAFTSANITY", "CRAFTSANITY_CRAFT"],
             "content_packs": []
         },
         "Craft Seed Maker": {
             "code": 720504,
-            "region": "Farm",
+            "region": "Crafting",
             "tags": ["CRAFTSANITY", "CRAFTSANITY_CRAFT"],
             "content_packs": []
         },
         "Craft Slime Egg-Press": {
             "code": 720505,
-            "region": "Farm",
+            "region": "Crafting",
             "tags": ["CRAFTSANITY", "CRAFTSANITY_CRAFT"],
             "content_packs": []
         },
         "Craft Slime Incubator": {
             "code": 720506,
-            "region": "Farm",
+            "region": "Crafting",
             "tags": ["CRAFTSANITY", "CRAFTSANITY_CRAFT"],
             "content_packs": []
         },
         "Craft Solar Panel": {
             "code": 720507,
-            "region": "Farm",
+            "region": "Crafting",
             "tags": ["CRAFTSANITY", "CRAFTSANITY_CRAFT", "GINGER_ISLAND"],
             "content_packs": ["Ginger Island (Vanilla)"]
         },
         "Craft Tapper": {
             "code": 720508,
-            "region": "Farm",
+            "region": "Crafting",
             "tags": ["CRAFTSANITY", "CRAFTSANITY_CRAFT"],
             "content_packs": []
         },
         "Craft Worm Bin": {
             "code": 720509,
-            "region": "Farm",
+            "region": "Crafting",
             "tags": ["CRAFTSANITY", "CRAFTSANITY_CRAFT"],
             "content_packs": []
         },
         "Craft Tub o' Flowers": {
             "code": 720510,
-            "region": "Farm",
+            "region": "Crafting",
             "tags": ["CRAFTSANITY", "CRAFTSANITY_CRAFT"],
             "content_packs": []
         },
         "Craft Wicked Statue": {
             "code": 720511,
-            "region": "Farm",
+            "region": "Crafting",
             "tags": ["CRAFTSANITY", "CRAFTSANITY_CRAFT"],
             "content_packs": []
         },
         "Craft Flute Block": {
             "code": 720512,
-            "region": "Farm",
+            "region": "Crafting",
             "tags": ["CRAFTSANITY", "CRAFTSANITY_CRAFT"],
             "content_packs": []
         },
         "Craft Drum Block": {
             "code": 720513,
-            "region": "Farm",
+            "region": "Crafting",
             "tags": ["CRAFTSANITY", "CRAFTSANITY_CRAFT"],
             "content_packs": []
         },
         "Craft Chest": {
             "code": 720514,
-            "region": "Farm",
+            "region": "Crafting",
             "tags": ["CRAFTSANITY", "CRAFTSANITY_CRAFT"],
             "content_packs": []
         },
         "Craft Stone Chest": {
             "code": 720515,
-            "region": "Farm",
+            "region": "Crafting",
             "tags": ["CRAFTSANITY", "CRAFTSANITY_CRAFT"],
             "content_packs": []
         },
         "Craft Wood Sign": {
             "code": 720516,
-            "region": "Farm",
+            "region": "Crafting",
             "tags": ["CRAFTSANITY", "CRAFTSANITY_CRAFT"],
             "content_packs": []
         },
         "Craft Stone Sign": {
             "code": 720517,
-            "region": "Farm",
+            "region": "Crafting",
             "tags": ["CRAFTSANITY", "CRAFTSANITY_CRAFT"],
             "content_packs": []
         },
         "Craft Dark Sign": {
             "code": 720518,
-            "region": "Farm",
+            "region": "Crafting",
             "tags": ["CRAFTSANITY", "CRAFTSANITY_CRAFT"],
             "content_packs": []
         },
         "Craft Garden Pot": {
             "code": 720519,
-            "region": "Farm",
+            "region": "Crafting",
             "tags": ["CRAFTSANITY", "CRAFTSANITY_CRAFT"],
             "content_packs": []
         },
         "Craft Scarecrow": {
             "code": 720520,
-            "region": "Farm",
+            "region": "Crafting",
             "tags": ["CRAFTSANITY", "CRAFTSANITY_CRAFT"],
             "content_packs": []
         },
         "Craft Deluxe Scarecrow": {
             "code": 720521,
-            "region": "Farm",
+            "region": "Crafting",
             "tags": ["CRAFTSANITY", "CRAFTSANITY_CRAFT"],
             "content_packs": []
         },
         "Craft Staircase": {
             "code": 720522,
-            "region": "Farm",
+            "region": "Crafting",
             "tags": ["CRAFTSANITY", "CRAFTSANITY_CRAFT"],
             "content_packs": []
         },
         "Craft Explosive Ammo": {
             "code": 720523,
-            "region": "Farm",
+            "region": "Crafting",
             "tags": ["CRAFTSANITY", "CRAFTSANITY_CRAFT"],
             "content_packs": []
         },
         "Craft Transmute (Fe)": {
             "code": 720524,
-            "region": "Farm",
+            "region": "Crafting",
             "tags": ["CRAFTSANITY", "CRAFTSANITY_CRAFT"],
             "content_packs": []
         },
         "Craft Transmute (Au)": {
             "code": 720525,
-            "region": "Farm",
+            "region": "Crafting",
             "tags": ["CRAFTSANITY", "CRAFTSANITY_CRAFT"],
             "content_packs": []
         },
         "Craft Mini-Jukebox": {
             "code": 720526,
-            "region": "Farm",
+            "region": "Crafting",
             "tags": ["CRAFTSANITY", "CRAFTSANITY_CRAFT"],
             "content_packs": []
         },
         "Craft Mini-Obelisk": {
             "code": 720527,
-            "region": "Farm",
+            "region": "Crafting",
             "tags": ["CRAFTSANITY", "CRAFTSANITY_CRAFT"],
             "content_packs": []
         },
         "Craft Farm Computer": {
             "code": 720528,
-            "region": "Farm",
+            "region": "Crafting",
             "tags": ["CRAFTSANITY", "CRAFTSANITY_CRAFT"],
             "content_packs": []
         },
         "Craft Hopper": {
             "code": 720529,
-            "region": "Farm",
+            "region": "Crafting",
             "tags": ["CRAFTSANITY", "CRAFTSANITY_CRAFT", "GINGER_ISLAND", "REQUIRES_QI_ORDERS"],
             "content_packs": ["Ginger Island (Vanilla)", "Qi Board (Vanilla)"]
         },
         "Craft Cookout Kit": {
             "code": 720530,
-            "region": "Farm",
+            "region": "Crafting",
             "tags": ["CRAFTSANITY", "CRAFTSANITY_CRAFT"],
             "content_packs": []
         },
         "Craft Fish Smoker": {
             "code": 720531,
-            "region": "Farm",
+            "region": "Crafting",
             "tags": ["CRAFTSANITY", "CRAFTSANITY_CRAFT"],
             "content_packs": []
         },
         "Craft Dehydrator": {
             "code": 720532,
-            "region": "Farm",
+            "region": "Crafting",
             "tags": ["CRAFTSANITY", "CRAFTSANITY_CRAFT"],
             "content_packs": []
         },
         "Craft Blue Grass Starter": {
             "code": 720533,
-            "region": "Farm",
+            "region": "Crafting",
             "tags": ["CRAFTSANITY", "CRAFTSANITY_CRAFT", "GINGER_ISLAND", "REQUIRES_QI_ORDERS"],
             "content_packs": ["Ginger Island (Vanilla)", "Qi Board (Vanilla)"]
         },
         "Craft Mystic Tree Seed": {
             "code": 720534,
-            "region": "Farm",
+            "region": "Crafting",
             "tags": ["CRAFTSANITY", "CRAFTSANITY_CRAFT", "REQUIRES_MASTERIES"],
             "content_packs": []
         },
         "Craft Sonar Bobber": {
             "code": 720535,
-            "region": "Farm",
+            "region": "Crafting",
             "tags": ["CRAFTSANITY", "CRAFTSANITY_CRAFT"],
             "content_packs": []
         },
         "Craft Challenge Bait": {
             "code": 720536,
-            "region": "Farm",
+            "region": "Crafting",
             "tags": ["CRAFTSANITY", "CRAFTSANITY_CRAFT", "REQUIRES_MASTERIES"],
             "content_packs": []
         },
         "Craft Treasure Totem": {
             "code": 720537,
-            "region": "Farm",
+            "region": "Crafting",
             "tags": ["CRAFTSANITY", "CRAFTSANITY_CRAFT", "REQUIRES_MASTERIES"],
             "content_packs": []
         },
         "Craft Heavy Furnace": {
             "code": 720538,
-            "region": "Farm",
+            "region": "Crafting",
             "tags": ["CRAFTSANITY", "CRAFTSANITY_CRAFT", "REQUIRES_MASTERIES"],
             "content_packs": []
         },
         "Craft Deluxe Worm Bin": {
             "code": 720539,
-            "region": "Farm",
+            "region": "Crafting",
             "tags": ["CRAFTSANITY", "CRAFTSANITY_CRAFT"],
             "content_packs": []
         },
         "Craft Mushroom Log": {
             "code": 720540,
-            "region": "Farm",
+            "region": "Crafting",
             "tags": ["CRAFTSANITY", "CRAFTSANITY_CRAFT"],
             "content_packs": []
         },
         "Craft Big Chest": {
             "code": 720541,
-            "region": "Farm",
+            "region": "Crafting",
             "tags": ["CRAFTSANITY", "CRAFTSANITY_CRAFT"],
             "content_packs": []
         },
         "Craft Big Stone Chest": {
             "code": 720542,
-            "region": "Farm",
+            "region": "Crafting",
             "tags": ["CRAFTSANITY", "CRAFTSANITY_CRAFT"],
             "content_packs": []
         },
         "Craft Text Sign": {
             "code": 720543,
-            "region": "Farm",
+            "region": "Crafting",
             "tags": ["CRAFTSANITY", "CRAFTSANITY_CRAFT"],
             "content_packs": []
         },
         "Craft Tent Kit": {
             "code": 720544,
-            "region": "Farm",
+            "region": "Crafting",
             "tags": ["CRAFTSANITY", "CRAFTSANITY_CRAFT"],
             "content_packs": []
         },
         "Craft Statue Of The Dwarf King": {
             "code": 720545,
-            "region": "Farm",
+            "region": "Crafting",
             "tags": ["CRAFTSANITY", "CRAFTSANITY_CRAFT", "REQUIRES_MASTERIES"],
             "content_packs": []
         },
         "Craft Statue Of Blessings": {
             "code": 720546,
-            "region": "Farm",
+            "region": "Crafting",
             "tags": ["CRAFTSANITY", "CRAFTSANITY_CRAFT", "REQUIRES_MASTERIES"],
             "content_packs": []
         },
         "Craft Anvil": {
             "code": 720547,
-            "region": "Farm",
+            "region": "Crafting",
             "tags": ["CRAFTSANITY", "CRAFTSANITY_CRAFT", "REQUIRES_MASTERIES"],
             "content_packs": []
         },
         "Craft Mini-Forge": {
             "code": 720548,
-            "region": "Farm",
+            "region": "Crafting",
             "tags": ["CRAFTSANITY", "CRAFTSANITY_CRAFT", "GINGER_ISLAND", "REQUIRES_MASTERIES"],
             "content_packs": ["Ginger Island (Vanilla)"]
         },
         "Craft Deluxe Bait": {
             "code": 720549,
-            "region": "Farm",
+            "region": "Crafting",
             "tags": ["CRAFTSANITY", "CRAFTSANITY_CRAFT"],
             "content_packs": []
         },
         "Craft Bait Maker": {
             "code": 720550,
-            "region": "Farm",
+            "region": "Crafting",
             "tags": ["CRAFTSANITY", "CRAFTSANITY_CRAFT"],
             "content_packs": []
         },
         "Grass Starter Recipe": {
             "code": 720551,
-            "region": "Pierre's General Store",
+            "region": "Pierre's General Store - Shop",
             "tags": ["CRAFTSANITY", "CRAFTSANITY_RECIPE"],
             "content_packs": []
         },
@@ -13604,7 +13820,7 @@
         },
         "Crystal Floor Recipe": {
             "code": 720556,
-            "region": "Sewer",
+            "region": "Sewer - Shop",
             "tags": ["CRAFTSANITY", "CRAFTSANITY_RECIPE"],
             "content_packs": []
         },
@@ -13712,7 +13928,7 @@
         },
         "Wicked Statue Recipe": {
             "code": 720574,
-            "region": "Sewer",
+            "region": "Sewer - Shop",
             "tags": ["CRAFTSANITY", "CRAFTSANITY_RECIPE"],
             "content_packs": []
         },
@@ -13730,13 +13946,13 @@
         },
         "Fish Smoker Recipe": {
             "code": 720577,
-            "region": "Willy's Fish Shop",
+            "region": "Willy's Fish Cabin",
             "tags": ["CRAFTSANITY", "CRAFTSANITY_RECIPE"],
             "content_packs": []
         },
         "Dehydrator Recipe": {
             "code": 720578,
-            "region": "Pierre's General Store",
+            "region": "Pierre's General Store - Shop",
             "tags": ["CRAFTSANITY", "CRAFTSANITY_RECIPE"],
             "content_packs": []
         },
@@ -14486,7 +14702,7 @@
         },
         "Walnutsanity: Open Golden Coconut": {
             "code": 721101,
-            "region": "Clint's Blacksmith",
+            "region": "Blacksmith - Shop",
             "tags": ["WALNUTSANITY", "WALNUTSANITY_PUZZLE"],
             "content_packs": []
         },
@@ -14516,7 +14732,7 @@
         },
         "Walnutsanity: Fishing Walnut 5": {
             "code": 721106,
-            "region": "Island Southeast",
+            "region": "Island SouthEast",
             "tags": ["WALNUTSANITY", "WALNUTSANITY_REPEATABLE"],
             "content_packs": []
         },
@@ -15002,25 +15218,25 @@
         },
         "Walnutsanity: Cliff Over Island South Bush": {
             "code": 721187,
-            "region": "Island North",
+            "region": "Island South Ridge",
             "tags": ["WALNUTSANITY", "WALNUTSANITY_BUSH"],
             "content_packs": []
         },
         "Walnutsanity: Starfish Tide Pool": {
             "code": 721188,
-            "region": "Island Southeast",
+            "region": "Island SouthEast",
             "tags": ["WALNUTSANITY", "WALNUTSANITY_PUZZLE"],
             "content_packs": []
         },
         "Walnutsanity: Diamond Of Yellow Starfish": {
             "code": 721189,
-            "region": "Island Southeast",
+            "region": "Island SouthEast",
             "tags": ["WALNUTSANITY", "WALNUTSANITY_DIG"],
             "content_packs": []
         },
         "Walnutsanity: Mermaid Song": {
             "code": 721190,
-            "region": "Island Southeast",
+            "region": "Island SouthEast",
             "tags": ["WALNUTSANITY", "WALNUTSANITY_PUZZLE"],
             "content_packs": []
         },
@@ -15104,25 +15320,25 @@
         },
         "Secret: Thank the Devs": {
             "code": 721210,
-            "region": "Menu",
+            "region": "Stardew Valley",
             "tags": ["EASY_SECRET", "SECRETSANITY"],
             "content_packs": []
         },
         "Secret: Annoy the Moon Man": {
             "code": 721211,
-            "region": "Menu",
+            "region": "Stardew Valley",
             "tags": ["DIFFICULT_SECRET", "SECRETSANITY"],
             "content_packs": []
         },
         "Secret: Acknowledge the Lonely Stone": {
             "code": 721212,
-            "region": "Menu",
+            "region": "Stardew Valley",
             "tags": ["EASY_SECRET", "SECRETSANITY"],
             "content_packs": []
         },
         "Secret: Jungle Junimo": {
             "code": 721213,
-            "region": "Menu",
+            "region": "Stardew Valley",
             "tags": ["EASY_SECRET", "SECRETSANITY"],
             "content_packs": []
         },
@@ -15278,19 +15494,19 @@
         },
         "Secret: Nice Try": {
             "code": 721240,
-            "region": "Menu",
+            "region": "Stardew Valley",
             "tags": ["EASY_SECRET", "SECRETSANITY"],
             "content_packs": []
         },
         "Secret: Enjoy your new life here": {
             "code": 721241,
-            "region": "Menu",
+            "region": "Stardew Valley",
             "tags": ["EASY_SECRET", "SECRETSANITY"],
             "content_packs": []
         },
         "Secret: 'What'd you expect?'": {
             "code": 721242,
-            "region": "Menu",
+            "region": "Stardew Valley",
             "tags": ["EASY_SECRET", "SECRETSANITY"],
             "content_packs": []
         },
@@ -15314,13 +15530,13 @@
         },
         "Secret: A gift of lovely perfume": {
             "code": 721246,
-            "region": "Sewer",
+            "region": "Sewer - Shop",
             "tags": ["EASY_SECRET", "SECRETSANITY"],
             "content_packs": []
         },
         "Secret: Where exactly does this juice come from?": {
             "code": 721247,
-            "region": "Mines Dwarf Shop",
+            "region": "Mines Dwarf Cave",
             "tags": ["EASY_SECRET", "SECRETSANITY"],
             "content_packs": []
         },
@@ -16338,2373 +16554,2427 @@
             "tags": ["BUNDLE", "COMMUNITY_CENTER_BUNDLE", "MEME_BUNDLE"],
             "content_packs": []
         },
+        "Lingo Bundle": {
+            "code": 721508,
+            "region": "Community Center",
+            "tags": ["BUNDLE", "COMMUNITY_CENTER_BUNDLE", "MEME_BUNDLE"],
+            "content_packs": []
+        },
+        "Peace Bundle": {
+            "code": 721509,
+            "region": "Community Center",
+            "tags": ["BUNDLE", "COMMUNITY_CENTER_BUNDLE", "MEME_BUNDLE"],
+            "content_packs": []
+        },
+        "Camping Bundle": {
+            "code": 721510,
+            "region": "Community Center",
+            "tags": ["BUNDLE", "COMMUNITY_CENTER_BUNDLE", "MEME_BUNDLE"],
+            "content_packs": []
+        },
+        "Finders Keepers Bundle": {
+            "code": 721511,
+            "region": "Community Center",
+            "tags": ["BUNDLE", "COMMUNITY_CENTER_BUNDLE", "MEME_BUNDLE"],
+            "content_packs": []
+        },
+        "Looney Bundle": {
+            "code": 721512,
+            "region": "Community Center",
+            "tags": ["BUNDLE", "COMMUNITY_CENTER_BUNDLE", "MEME_BUNDLE"],
+            "content_packs": []
+        },
+        "Morshu Bundle": {
+            "code": 721513,
+            "region": "Community Center",
+            "tags": ["BUNDLE", "COMMUNITY_CENTER_BUNDLE", "MEME_BUNDLE"],
+            "content_packs": []
+        },
+        "Numbers Bundle": {
+            "code": 721514,
+            "region": "Community Center",
+            "tags": ["BUNDLE", "COMMUNITY_CENTER_BUNDLE", "MEME_BUNDLE"],
+            "content_packs": []
+        },
+        "Yeehaw Bundle": {
+            "code": 721515,
+            "region": "Community Center",
+            "tags": ["BUNDLE", "COMMUNITY_CENTER_BUNDLE", "MEME_BUNDLE"],
+            "content_packs": []
+        },
+        "Error Bundle": {
+            "code": 721516,
+            "region": "Community Center",
+            "tags": ["BUNDLE", "COMMUNITY_CENTER_BUNDLE", "MEME_BUNDLE"],
+            "content_packs": []
+        },
         "Wear ???": {
             "code": 721601,
-            "region": "Farm",
+            "region": "Hat Wearing",
             "tags": ["GINGER_ISLAND", "HATSANITY", "HAT_POST_PERFECTION"],
             "content_packs": ["Ginger Island (Vanilla)"]
         },
         "Wear Abigail's Bow": {
             "code": 721602,
-            "region": "Farm",
+            "region": "Hat Wearing",
             "tags": ["HATSANITY", "HAT_RNG"],
             "content_packs": []
         },
         "Wear Arcane Hat": {
             "code": 721603,
-            "region": "Farm",
+            "region": "Hat Wearing",
             "tags": ["HATSANITY", "HAT_NEAR_PERFECTION"],
             "content_packs": []
         },
         "Wear Archer's Cap": {
             "code": 721604,
-            "region": "Farm",
+            "region": "Hat Wearing",
             "tags": ["GINGER_ISLAND", "HATSANITY", "HAT_NEAR_PERFECTION"],
             "content_packs": ["Ginger Island (Vanilla)"]
         },
         "Wear Beanie": {
             "code": 721605,
-            "region": "Farm",
+            "region": "Hat Wearing",
             "tags": ["HATSANITY", "HAT_TAILORING"],
             "content_packs": []
         },
         "Wear Blobfish Mask": {
             "code": 721606,
-            "region": "Farm",
+            "region": "Hat Wearing",
             "tags": ["HATSANITY", "HAT_TAILORING"],
             "content_packs": []
         },
         "Wear Blue Bonnet": {
             "code": 721607,
-            "region": "Farm",
+            "region": "Hat Wearing",
             "tags": ["HATSANITY", "HAT_MEDIUM"],
             "content_packs": []
         },
         "Wear Blue Bow": {
             "code": 721608,
-            "region": "Farm",
+            "region": "Hat Wearing",
             "tags": ["HATSANITY", "HAT_EASY"],
             "content_packs": []
         },
         "Wear Blue Cowboy Hat": {
             "code": 721609,
-            "region": "Farm",
+            "region": "Hat Wearing",
             "tags": ["HATSANITY", "HAT_RNG"],
             "content_packs": []
         },
         "Wear Blue Ribbon": {
             "code": 721610,
-            "region": "Farm",
+            "region": "Hat Wearing",
             "tags": ["HATSANITY", "HAT_MEDIUM"],
             "content_packs": []
         },
         "Wear Bluebird Mask": {
             "code": 721611,
-            "region": "Farm",
+            "region": "Hat Wearing",
             "tags": ["GINGER_ISLAND", "HATSANITY", "HAT_MEDIUM"],
             "content_packs": ["Ginger Island (Vanilla)"]
         },
         "Wear Bowler Hat": {
             "code": 721612,
-            "region": "Farm",
+            "region": "Hat Wearing",
             "tags": ["HATSANITY", "HAT_DIFFICULT"],
             "content_packs": []
         },
         "Wear Bridal Veil": {
             "code": 721613,
-            "region": "Farm",
+            "region": "Hat Wearing",
             "tags": ["HATSANITY", "HAT_TAILORING"],
             "content_packs": []
         },
         "Wear Bucket Hat": {
             "code": 721614,
-            "region": "Farm",
+            "region": "Hat Wearing",
             "tags": ["HATSANITY", "HAT_MEDIUM"],
             "content_packs": []
         },
         "Wear Butterfly Bow": {
             "code": 721615,
-            "region": "Farm",
+            "region": "Hat Wearing",
             "tags": ["HATSANITY", "HAT_EASY"],
             "content_packs": []
         },
         "Wear Cat Ears": {
             "code": 721616,
-            "region": "Farm",
+            "region": "Hat Wearing",
             "tags": ["HATSANITY", "HAT_MEDIUM"],
             "content_packs": []
         },
         "Wear Chef Hat": {
             "code": 721617,
-            "region": "Farm",
+            "region": "Hat Wearing",
             "tags": ["GINGER_ISLAND", "HATSANITY", "HAT_NEAR_PERFECTION"],
             "content_packs": ["Ginger Island (Vanilla)"]
         },
         "Wear Chicken Mask": {
             "code": 721618,
-            "region": "Farm",
+            "region": "Hat Wearing",
             "tags": ["HATSANITY", "HAT_NEAR_PERFECTION"],
             "content_packs": []
         },
         "Wear Cone Hat": {
             "code": 721619,
-            "region": "Farm",
+            "region": "Hat Wearing",
             "tags": ["HATSANITY", "HAT_EASY"],
             "content_packs": []
         },
         "Wear Cool Cap": {
             "code": 721620,
-            "region": "Farm",
+            "region": "Hat Wearing",
             "tags": ["HATSANITY", "HAT_MEDIUM"],
             "content_packs": []
         },
         "Wear Copper Pan": {
             "code": 721621,
-            "region": "Farm",
+            "region": "Hat Wearing",
             "tags": ["HATSANITY", "HAT_EASY"],
             "content_packs": []
         },
         "Wear Cowboy Hat": {
             "code": 721622,
-            "region": "Farm",
+            "region": "Hat Wearing",
             "tags": ["HATSANITY", "HAT_NEAR_PERFECTION"],
             "content_packs": []
         },
         "Wear Cowgal Hat": {
             "code": 721623,
-            "region": "Farm",
+            "region": "Hat Wearing",
             "tags": ["HATSANITY", "HAT_DIFFICULT"],
             "content_packs": []
         },
         "Wear Cowpoke Hat": {
             "code": 721624,
-            "region": "Farm",
+            "region": "Hat Wearing",
             "tags": ["GINGER_ISLAND", "HATSANITY", "HAT_DIFFICULT"],
             "content_packs": ["Ginger Island (Vanilla)"]
         },
         "Wear Daisy": {
             "code": 721625,
-            "region": "Farm",
+            "region": "Hat Wearing",
             "tags": ["HATSANITY", "HAT_EASY"],
             "content_packs": []
         },
         "Wear Dark Ballcap": {
             "code": 721626,
-            "region": "Farm",
+            "region": "Hat Wearing",
             "tags": ["HATSANITY", "HAT_RNG"],
             "content_packs": []
         },
         "Wear Dark Cowboy Hat": {
             "code": 721627,
-            "region": "Farm",
+            "region": "Hat Wearing",
             "tags": ["HATSANITY", "HAT_RNG"],
             "content_packs": []
         },
         "Wear Dark Velvet Bow": {
             "code": 721628,
-            "region": "Farm",
+            "region": "Hat Wearing",
             "tags": ["HATSANITY", "HAT_EASY"],
             "content_packs": []
         },
         "Wear Delicate Bow": {
             "code": 721629,
-            "region": "Farm",
+            "region": "Hat Wearing",
             "tags": ["HATSANITY", "HAT_EASY"],
             "content_packs": []
         },
         "Wear Deluxe Cowboy Hat": {
             "code": 721630,
-            "region": "Farm",
+            "region": "Hat Wearing",
             "tags": ["GINGER_ISLAND", "HATSANITY", "HAT_MEDIUM"],
             "content_packs": ["Ginger Island (Vanilla)"]
         },
         "Wear Deluxe Pirate Hat": {
             "code": 721631,
-            "region": "Farm",
+            "region": "Hat Wearing",
             "tags": ["GINGER_ISLAND", "HATSANITY", "HAT_RNG"],
             "content_packs": ["Ginger Island (Vanilla)"]
         },
         "Wear Dinosaur Hat": {
             "code": 721632,
-            "region": "Farm",
+            "region": "Hat Wearing",
             "tags": ["HATSANITY", "HAT_TAILORING"],
             "content_packs": []
         },
         "Wear Earmuffs": {
             "code": 721633,
-            "region": "Farm",
+            "region": "Hat Wearing",
             "tags": ["HATSANITY", "HAT_MEDIUM"],
             "content_packs": []
         },
         "Wear Elegant Turban": {
             "code": 721634,
-            "region": "Farm",
+            "region": "Hat Wearing",
             "tags": ["GINGER_ISLAND", "HATSANITY", "HAT_POST_PERFECTION"],
             "content_packs": ["Ginger Island (Vanilla)"]
         },
         "Wear Emily's Magic Hat": {
             "code": 721635,
-            "region": "Farm",
+            "region": "Hat Wearing",
             "tags": ["HATSANITY", "HAT_MEDIUM"],
             "content_packs": []
         },
         "Wear Eye Patch": {
             "code": 721636,
-            "region": "Farm",
+            "region": "Hat Wearing",
             "tags": ["GINGER_ISLAND", "HATSANITY", "HAT_NEAR_PERFECTION"],
             "content_packs": ["Ginger Island (Vanilla)"]
         },
         "Wear Fashion Hat": {
             "code": 721637,
-            "region": "Farm",
+            "region": "Hat Wearing",
             "tags": ["HATSANITY", "HAT_TAILORING"],
             "content_packs": []
         },
         "Wear Fedora": {
             "code": 721638,
-            "region": "Farm",
+            "region": "Hat Wearing",
             "tags": ["HATSANITY", "HAT_EASY"],
             "content_packs": []
         },
         "Wear Fishing Hat": {
             "code": 721639,
-            "region": "Farm",
+            "region": "Hat Wearing",
             "tags": ["HATSANITY", "HAT_TAILORING"],
             "content_packs": []
         },
         "Wear Flat Topped Hat": {
             "code": 721640,
-            "region": "Farm",
+            "region": "Hat Wearing",
             "tags": ["HATSANITY", "HAT_TAILORING"],
             "content_packs": []
         },
         "Wear Floppy Beanie": {
             "code": 721641,
-            "region": "Farm",
+            "region": "Hat Wearing",
             "tags": ["HATSANITY", "HAT_TAILORING"],
             "content_packs": []
         },
         "Wear Forager's Hat": {
             "code": 721642,
-            "region": "Farm",
+            "region": "Hat Wearing",
             "tags": ["GINGER_ISLAND", "HATSANITY", "HAT_TAILORING"],
             "content_packs": ["Ginger Island (Vanilla)"]
         },
         "Wear Frog Hat": {
             "code": 721643,
-            "region": "Farm",
+            "region": "Hat Wearing",
             "tags": ["GINGER_ISLAND", "HATSANITY", "HAT_MEDIUM"],
             "content_packs": ["Ginger Island (Vanilla)"]
         },
         "Wear Garbage Hat": {
             "code": 721644,
-            "region": "Farm",
+            "region": "Hat Wearing",
             "tags": ["HATSANITY", "HAT_RNG"],
             "content_packs": []
         },
         "Wear Gil's Hat": {
             "code": 721645,
-            "region": "Farm",
+            "region": "Hat Wearing",
             "tags": ["HATSANITY", "HAT_DIFFICULT"],
             "content_packs": []
         },
         "Wear Gnome's Cap": {
             "code": 721646,
-            "region": "Farm",
+            "region": "Hat Wearing",
             "tags": ["GINGER_ISLAND", "HATSANITY", "HAT_NEAR_PERFECTION", "REQUIRES_QI_ORDERS"],
             "content_packs": ["Ginger Island (Vanilla)", "Qi Board (Vanilla)"]
         },
         "Wear Goblin Mask": {
             "code": 721647,
-            "region": "Farm",
+            "region": "Hat Wearing",
             "tags": ["GINGER_ISLAND", "HATSANITY", "HAT_NEAR_PERFECTION"],
             "content_packs": ["Ginger Island (Vanilla)"]
         },
         "Wear Goggles": {
             "code": 721648,
-            "region": "Farm",
+            "region": "Hat Wearing",
             "tags": ["HATSANITY", "HAT_TAILORING"],
             "content_packs": []
         },
         "Wear Gold Pan": {
             "code": 721649,
-            "region": "Farm",
+            "region": "Hat Wearing",
             "tags": ["HATSANITY", "HAT_MEDIUM"],
             "content_packs": []
         },
         "Wear Golden Helmet": {
             "code": 721650,
-            "region": "Farm",
+            "region": "Hat Wearing",
             "tags": ["GINGER_ISLAND", "HATSANITY", "HAT_RNG"],
             "content_packs": ["Ginger Island (Vanilla)"]
         },
         "Wear Golden Mask": {
             "code": 721651,
-            "region": "Farm",
+            "region": "Hat Wearing",
             "tags": ["HATSANITY", "HAT_TAILORING"],
             "content_packs": []
         },
         "Wear Good Ol' Cap": {
             "code": 721652,
-            "region": "Farm",
+            "region": "Hat Wearing",
             "tags": ["HATSANITY", "HAT_EASY"],
             "content_packs": []
         },
         "Wear Governor's Hat": {
             "code": 721653,
-            "region": "Farm",
+            "region": "Hat Wearing",
             "tags": ["HATSANITY", "HAT_MEDIUM"],
             "content_packs": []
         },
         "Wear Green Turban": {
             "code": 721654,
-            "region": "Farm",
+            "region": "Hat Wearing",
             "tags": ["HATSANITY", "HAT_MEDIUM"],
             "content_packs": []
         },
         "Wear Hair Bone": {
             "code": 721655,
-            "region": "Farm",
+            "region": "Hat Wearing",
             "tags": ["HATSANITY", "HAT_TAILORING"],
             "content_packs": []
         },
         "Wear Hard Hat": {
             "code": 721656,
-            "region": "Farm",
+            "region": "Hat Wearing",
             "tags": ["HATSANITY", "HAT_DIFFICULT"],
             "content_packs": []
         },
         "Wear Hunter's Cap": {
             "code": 721657,
-            "region": "Farm",
+            "region": "Hat Wearing",
             "tags": ["HATSANITY", "HAT_MEDIUM"],
             "content_packs": []
         },
         "Wear Infinity Crown": {
             "code": 721658,
-            "region": "Farm",
+            "region": "Hat Wearing",
             "tags": ["GINGER_ISLAND", "HATSANITY", "HAT_DIFFICULT"],
             "content_packs": ["Ginger Island (Vanilla)"]
         },
         "Wear Iridium Pan": {
             "code": 721659,
-            "region": "Farm",
+            "region": "Hat Wearing",
             "tags": ["HATSANITY", "HAT_MEDIUM"],
             "content_packs": []
         },
         "Wear Jester Hat": {
             "code": 721660,
-            "region": "Farm",
+            "region": "Hat Wearing",
             "tags": ["HATSANITY", "HAT_EASY"],
             "content_packs": []
         },
         "Wear Joja Cap": {
             "code": 721661,
-            "region": "Farm",
+            "region": "Hat Wearing",
             "tags": ["HATSANITY", "HAT_RNG"],
             "content_packs": []
         },
         "Wear Junimo Hat": {
             "code": 721662,
-            "region": "Farm",
+            "region": "Hat Wearing",
             "tags": ["GINGER_ISLAND", "HATSANITY", "HAT_POST_PERFECTION"],
             "content_packs": ["Ginger Island (Vanilla)"]
         },
         "Wear Knight's Helmet": {
             "code": 721663,
-            "region": "Farm",
+            "region": "Hat Wearing",
             "tags": ["HATSANITY", "HAT_NEAR_PERFECTION"],
             "content_packs": []
         },
         "Wear Laurel Wreath Crown": {
             "code": 721664,
-            "region": "Farm",
+            "region": "Hat Wearing",
             "tags": ["HATSANITY", "HAT_RNG"],
             "content_packs": []
         },
         "Wear Leprechaun Hat": {
             "code": 721665,
-            "region": "Farm",
+            "region": "Hat Wearing",
             "tags": ["HATSANITY", "HAT_EASY"],
             "content_packs": []
         },
         "Wear Living Hat": {
             "code": 721666,
-            "region": "Farm",
+            "region": "Hat Wearing",
             "tags": ["HATSANITY", "HAT_RNG"],
             "content_packs": []
         },
         "Wear Logo Cap": {
             "code": 721667,
-            "region": "Farm",
+            "region": "Hat Wearing",
             "tags": ["HATSANITY", "HAT_TAILORING"],
             "content_packs": []
         },
         "Wear Lucky Bow": {
             "code": 721668,
-            "region": "Farm",
+            "region": "Hat Wearing",
             "tags": ["HATSANITY", "HAT_MEDIUM"],
             "content_packs": []
         },
         "Wear Magic Cowboy Hat": {
             "code": 721669,
-            "region": "Farm",
+            "region": "Hat Wearing",
             "tags": ["HATSANITY", "HAT_DIFFICULT"],
             "content_packs": []
         },
         "Wear Magic Turban": {
             "code": 721670,
-            "region": "Farm",
+            "region": "Hat Wearing",
             "tags": ["HATSANITY", "HAT_DIFFICULT"],
             "content_packs": []
         },
         "Wear Mouse Ears": {
             "code": 721671,
-            "region": "Farm",
+            "region": "Hat Wearing",
             "tags": ["HATSANITY", "HAT_EASY"],
             "content_packs": []
         },
         "Wear Mr. Qi's Hat": {
             "code": 721672,
-            "region": "Farm",
-            "tags": ["GINGER_ISLAND", "HATSANITY", "HAT_MEDIUM"],
-            "content_packs": ["Ginger Island (Vanilla)"]
+            "region": "Hat Wearing",
+            "tags": ["GINGER_ISLAND", "HATSANITY", "HAT_MEDIUM", "REQUIRES_QI_ORDERS"],
+            "content_packs": ["Ginger Island (Vanilla)", "Qi Board (Vanilla)"]
         },
         "Wear Mummy Mask": {
             "code": 721673,
-            "region": "Farm",
+            "region": "Hat Wearing",
             "tags": ["HATSANITY", "HAT_EASY"],
             "content_packs": []
         },
         "Wear Mushroom Cap": {
             "code": 721674,
-            "region": "Farm",
+            "region": "Hat Wearing",
             "tags": ["HATSANITY", "HAT_RNG"],
             "content_packs": []
         },
         "Wear Mystery Hat": {
             "code": 721675,
-            "region": "Farm",
+            "region": "Hat Wearing",
             "tags": ["HATSANITY", "HAT_RNG"],
             "content_packs": []
         },
         "Wear Official Cap": {
             "code": 721676,
-            "region": "Farm",
+            "region": "Hat Wearing",
             "tags": ["HATSANITY", "HAT_MEDIUM"],
             "content_packs": []
         },
         "Wear Pageboy Cap": {
             "code": 721677,
-            "region": "Farm",
+            "region": "Hat Wearing",
             "tags": ["GINGER_ISLAND", "HATSANITY", "HAT_NEAR_PERFECTION"],
             "content_packs": ["Ginger Island (Vanilla)"]
         },
         "Wear Panda Hat": {
             "code": 721678,
-            "region": "Farm",
+            "region": "Hat Wearing",
             "tags": ["DEPRECATED", "HATSANITY", "HAT_IMPOSSIBLE"],
             "content_packs": []
         },
         "Wear Paper Hat": {
             "code": 721679,
-            "region": "Farm",
+            "region": "Hat Wearing",
             "tags": ["GINGER_ISLAND", "HATSANITY", "HAT_EASY"],
             "content_packs": ["Ginger Island (Vanilla)"]
         },
         "Wear Party Hat (Blue)": {
             "code": 721680,
-            "region": "Farm",
+            "region": "Hat Wearing",
             "tags": ["HATSANITY", "HAT_TAILORING"],
             "content_packs": []
         },
         "Wear Party Hat (Green)": {
             "code": 721681,
-            "region": "Farm",
+            "region": "Hat Wearing",
             "tags": ["HATSANITY", "HAT_TAILORING"],
             "content_packs": []
         },
         "Wear Party Hat (Red)": {
             "code": 721682,
-            "region": "Farm",
+            "region": "Hat Wearing",
             "tags": ["HATSANITY", "HAT_TAILORING"],
             "content_packs": []
         },
         "Wear Pink Bow": {
             "code": 721683,
-            "region": "Farm",
+            "region": "Hat Wearing",
             "tags": ["GINGER_ISLAND", "HATSANITY", "HAT_EASY"],
             "content_packs": ["Ginger Island (Vanilla)"]
         },
         "Wear Pirate Hat": {
             "code": 721684,
-            "region": "Farm",
+            "region": "Hat Wearing",
             "tags": ["HATSANITY", "HAT_TAILORING"],
             "content_packs": []
         },
         "Wear Plum Chapeau": {
             "code": 721685,
-            "region": "Farm",
+            "region": "Hat Wearing",
             "tags": ["HATSANITY", "HAT_DIFFICULT"],
             "content_packs": []
         },
         "Wear Polka Bow": {
             "code": 721686,
-            "region": "Farm",
+            "region": "Hat Wearing",
             "tags": ["HATSANITY", "HAT_MEDIUM"],
             "content_packs": []
         },
         "Wear Propeller Hat": {
             "code": 721687,
-            "region": "Farm",
+            "region": "Hat Wearing",
             "tags": ["HATSANITY", "HAT_TAILORING"],
             "content_packs": []
         },
         "Wear Pumpkin Mask": {
             "code": 721688,
-            "region": "Farm",
+            "region": "Hat Wearing",
             "tags": ["HATSANITY", "HAT_TAILORING"],
             "content_packs": []
         },
         "Wear Qi Mask": {
             "code": 721689,
-            "region": "Farm",
+            "region": "Hat Wearing",
             "tags": ["GINGER_ISLAND", "HATSANITY", "HAT_TAILORING"],
             "content_packs": ["Ginger Island (Vanilla)"]
         },
         "Wear Raccoon Hat": {
             "code": 721690,
-            "region": "Farm",
+            "region": "Hat Wearing",
             "tags": ["HATSANITY", "HAT_MEDIUM"],
             "content_packs": []
         },
         "Wear Radioactive Goggles": {
             "code": 721691,
-            "region": "Farm",
+            "region": "Hat Wearing",
             "tags": ["GINGER_ISLAND", "HATSANITY", "HAT_TAILORING", "REQUIRES_QI_ORDERS"],
             "content_packs": ["Ginger Island (Vanilla)", "Qi Board (Vanilla)"]
         },
         "Wear Red Cowboy Hat": {
             "code": 721692,
-            "region": "Farm",
+            "region": "Hat Wearing",
             "tags": ["HATSANITY", "HAT_RNG"],
             "content_packs": []
         },
         "Wear Red Fez": {
             "code": 721693,
-            "region": "Farm",
+            "region": "Hat Wearing",
             "tags": ["HATSANITY", "HAT_MEDIUM"],
             "content_packs": []
         },
         "Wear Sailor's Cap": {
             "code": 721694,
-            "region": "Farm",
+            "region": "Hat Wearing",
             "tags": ["HATSANITY", "HAT_EASY"],
             "content_packs": []
         },
         "Wear Santa Hat": {
             "code": 721695,
-            "region": "Farm",
+            "region": "Hat Wearing",
             "tags": ["HATSANITY", "HAT_MEDIUM"],
             "content_packs": []
         },
         "Wear Skeleton Mask": {
             "code": 721696,
-            "region": "Farm",
+            "region": "Hat Wearing",
             "tags": ["HATSANITY", "HAT_MEDIUM"],
             "content_packs": []
         },
         "Wear Small Cap": {
             "code": 721697,
-            "region": "Farm",
+            "region": "Hat Wearing",
             "tags": ["GINGER_ISLAND", "HATSANITY", "HAT_MEDIUM"],
             "content_packs": ["Ginger Island (Vanilla)"]
         },
         "Wear Sombrero": {
             "code": 721698,
-            "region": "Farm",
+            "region": "Hat Wearing",
             "tags": ["HATSANITY", "HAT_NEAR_PERFECTION"],
             "content_packs": []
         },
         "Wear Sou'wester": {
             "code": 721699,
-            "region": "Farm",
+            "region": "Hat Wearing",
             "tags": ["HATSANITY", "HAT_EASY"],
             "content_packs": []
         },
         "Wear Space Helmet": {
             "code": 721700,
-            "region": "Farm",
+            "region": "Hat Wearing",
             "tags": ["GINGER_ISLAND", "HATSANITY", "HAT_DIFFICULT"],
             "content_packs": ["Ginger Island (Vanilla)"]
         },
         "Wear Sports Cap": {
             "code": 721701,
-            "region": "Farm",
+            "region": "Hat Wearing",
             "tags": ["HATSANITY", "HAT_MEDIUM"],
             "content_packs": []
         },
         "Wear Spotted Headscarf": {
             "code": 721702,
-            "region": "Farm",
+            "region": "Hat Wearing",
             "tags": ["HATSANITY", "HAT_TAILORING"],
             "content_packs": []
         },
         "Wear Squid Hat": {
             "code": 721703,
-            "region": "Farm",
+            "region": "Hat Wearing",
             "tags": ["HATSANITY", "HAT_MEDIUM"],
             "content_packs": []
         },
         "Wear Squire's Helmet": {
             "code": 721704,
-            "region": "Farm",
+            "region": "Hat Wearing",
             "tags": ["HATSANITY", "HAT_RNG"],
             "content_packs": []
         },
         "Wear Star Helmet": {
             "code": 721705,
-            "region": "Farm",
+            "region": "Hat Wearing",
             "tags": ["GINGER_ISLAND", "HATSANITY", "HAT_TAILORING"],
             "content_packs": ["Ginger Island (Vanilla)"]
         },
         "Wear Steel Pan": {
             "code": 721706,
-            "region": "Farm",
+            "region": "Hat Wearing",
             "tags": ["HATSANITY", "HAT_MEDIUM"],
             "content_packs": []
         },
         "Wear Straw Hat": {
             "code": 721707,
-            "region": "Farm",
+            "region": "Hat Wearing",
             "tags": ["HATSANITY", "HAT_MEDIUM"],
             "content_packs": []
         },
         "Wear Sunglasses": {
             "code": 721708,
-            "region": "Farm",
+            "region": "Hat Wearing",
             "tags": ["GINGER_ISLAND", "HATSANITY", "HAT_TAILORING"],
             "content_packs": ["Ginger Island (Vanilla)"]
         },
         "Wear Swashbuckler Hat": {
             "code": 721709,
-            "region": "Farm",
+            "region": "Hat Wearing",
             "tags": ["GINGER_ISLAND", "HATSANITY", "HAT_TAILORING"],
             "content_packs": ["Ginger Island (Vanilla)"]
         },
         "Wear Tiara": {
             "code": 721710,
-            "region": "Farm",
+            "region": "Hat Wearing",
             "tags": ["HATSANITY", "HAT_EASY"],
             "content_packs": []
         },
         "Wear Tiger Hat": {
             "code": 721711,
-            "region": "Farm",
+            "region": "Hat Wearing",
             "tags": ["GINGER_ISLAND", "HATSANITY", "HAT_RNG"],
             "content_packs": ["Ginger Island (Vanilla)"]
         },
         "Wear Top Hat": {
             "code": 721712,
-            "region": "Farm",
+            "region": "Hat Wearing",
             "tags": ["HATSANITY", "HAT_EASY"],
             "content_packs": []
         },
         "Wear Totem Mask": {
             "code": 721713,
-            "region": "Farm",
+            "region": "Hat Wearing",
             "tags": ["HATSANITY", "HAT_TAILORING"],
             "content_packs": []
         },
         "Wear Tricorn Hat": {
             "code": 721714,
-            "region": "Farm",
+            "region": "Hat Wearing",
             "tags": ["HATSANITY", "HAT_RNG"],
             "content_packs": []
         },
         "Wear Tropiclip": {
             "code": 721715,
-            "region": "Farm",
+            "region": "Hat Wearing",
             "tags": ["HATSANITY", "HAT_EASY"],
             "content_packs": []
         },
         "Wear Trucker Hat": {
             "code": 721716,
-            "region": "Farm",
+            "region": "Hat Wearing",
             "tags": ["HATSANITY", "HAT_MEDIUM"],
             "content_packs": []
         },
         "Wear Warrior Helmet": {
             "code": 721717,
-            "region": "Farm",
+            "region": "Hat Wearing",
             "tags": ["GINGER_ISLAND", "HATSANITY", "HAT_TAILORING"],
             "content_packs": ["Ginger Island (Vanilla)"]
         },
         "Wear Watermelon Band": {
             "code": 721718,
-            "region": "Farm",
+            "region": "Hat Wearing",
             "tags": ["HATSANITY", "HAT_DIFFICULT"],
             "content_packs": []
         },
         "Wear Wearable Dwarf Helm": {
             "code": 721719,
-            "region": "Farm",
+            "region": "Hat Wearing",
             "tags": ["HATSANITY", "HAT_TAILORING"],
             "content_packs": []
         },
         "Wear White Bow": {
             "code": 721720,
-            "region": "Farm",
+            "region": "Hat Wearing",
             "tags": ["HATSANITY", "HAT_DIFFICULT"],
             "content_packs": []
         },
         "Wear White Turban": {
             "code": 721721,
-            "region": "Farm",
+            "region": "Hat Wearing",
             "tags": ["HATSANITY", "HAT_TAILORING"],
             "content_packs": []
         },
         "Wear Witch Hat": {
             "code": 721722,
-            "region": "Farm",
+            "region": "Hat Wearing",
             "tags": ["HATSANITY", "HAT_TAILORING"],
             "content_packs": []
         },
         "Eat Wild Horseradish": {
             "code": 721751,
-            "region": "Farm",
+            "region": "Eating",
             "tags": ["EATSANITY", "EATSANITY_CROP"],
             "content_packs": []
         },
         "Eat Daffodil": {
             "code": 721752,
-            "region": "Farm",
+            "region": "Eating",
             "tags": ["EATSANITY", "EATSANITY_CROP"],
             "content_packs": []
         },
         "Eat Leek": {
             "code": 721753,
-            "region": "Farm",
+            "region": "Eating",
             "tags": ["EATSANITY", "EATSANITY_CROP"],
             "content_packs": []
         },
         "Eat Dandelion": {
             "code": 721754,
-            "region": "Farm",
+            "region": "Eating",
             "tags": ["EATSANITY", "EATSANITY_CROP"],
             "content_packs": []
         },
         "Eat Parsnip": {
             "code": 721755,
-            "region": "Farm",
+            "region": "Eating",
             "tags": ["EATSANITY", "EATSANITY_CROP"],
             "content_packs": []
         },
         "Eat Cave Carrot": {
             "code": 721756,
-            "region": "Farm",
+            "region": "Eating",
             "tags": ["EATSANITY", "EATSANITY_CROP"],
             "content_packs": []
         },
         "Eat Cactus Fruit": {
             "code": 721757,
-            "region": "Farm",
+            "region": "Eating",
             "tags": ["EATSANITY", "EATSANITY_CROP"],
             "content_packs": []
         },
         "Eat Green Bean": {
             "code": 721758,
-            "region": "Farm",
+            "region": "Eating",
             "tags": ["EATSANITY", "EATSANITY_CROP"],
             "content_packs": []
         },
         "Eat Cauliflower": {
             "code": 721759,
-            "region": "Farm",
+            "region": "Eating",
             "tags": ["EATSANITY", "EATSANITY_CROP"],
             "content_packs": []
         },
         "Eat Potato": {
             "code": 721760,
-            "region": "Farm",
+            "region": "Eating",
             "tags": ["EATSANITY", "EATSANITY_CROP"],
             "content_packs": []
         },
         "Eat Garlic": {
             "code": 721761,
-            "region": "Farm",
+            "region": "Eating",
             "tags": ["EATSANITY", "EATSANITY_CROP"],
             "content_packs": []
         },
         "Eat Kale": {
             "code": 721762,
-            "region": "Farm",
+            "region": "Eating",
             "tags": ["EATSANITY", "EATSANITY_CROP"],
             "content_packs": []
         },
         "Eat Melon": {
             "code": 721763,
-            "region": "Farm",
+            "region": "Eating",
             "tags": ["EATSANITY", "EATSANITY_CROP"],
             "content_packs": []
         },
         "Eat Tomato": {
             "code": 721764,
-            "region": "Farm",
+            "region": "Eating",
             "tags": ["EATSANITY", "EATSANITY_CROP"],
             "content_packs": []
         },
         "Eat Morel": {
             "code": 721765,
-            "region": "Farm",
+            "region": "Eating",
             "tags": ["EATSANITY", "EATSANITY_CROP"],
             "content_packs": []
         },
         "Eat Blueberry": {
             "code": 721766,
-            "region": "Farm",
+            "region": "Eating",
             "tags": ["EATSANITY", "EATSANITY_CROP"],
             "content_packs": []
         },
         "Eat Fiddlehead Fern": {
             "code": 721767,
-            "region": "Farm",
+            "region": "Eating",
             "tags": ["EATSANITY", "EATSANITY_CROP"],
             "content_packs": []
         },
         "Eat Hot Pepper": {
             "code": 721768,
-            "region": "Farm",
+            "region": "Eating",
             "tags": ["EATSANITY", "EATSANITY_CROP"],
             "content_packs": []
         },
         "Eat Radish": {
             "code": 721769,
-            "region": "Farm",
+            "region": "Eating",
             "tags": ["EATSANITY", "EATSANITY_CROP"],
             "content_packs": []
         },
         "Eat Red Cabbage": {
             "code": 721770,
-            "region": "Farm",
+            "region": "Eating",
             "tags": ["EATSANITY", "EATSANITY_CROP"],
             "content_packs": []
         },
         "Eat Starfruit": {
             "code": 721771,
-            "region": "Farm",
+            "region": "Eating",
             "tags": ["EATSANITY", "EATSANITY_CROP"],
             "content_packs": []
         },
         "Eat Corn": {
             "code": 721772,
-            "region": "Farm",
+            "region": "Eating",
             "tags": ["EATSANITY", "EATSANITY_CROP"],
             "content_packs": []
         },
         "Eat Unmilled Rice": {
             "code": 721773,
-            "region": "Farm",
+            "region": "Eating",
             "tags": ["EATSANITY", "EATSANITY_CROP"],
             "content_packs": []
         },
         "Eat Eggplant": {
             "code": 721774,
-            "region": "Farm",
+            "region": "Eating",
             "tags": ["EATSANITY", "EATSANITY_CROP"],
             "content_packs": []
         },
         "Eat Artichoke": {
             "code": 721775,
-            "region": "Farm",
+            "region": "Eating",
             "tags": ["EATSANITY", "EATSANITY_CROP"],
             "content_packs": []
         },
         "Eat Bok Choy": {
             "code": 721776,
-            "region": "Farm",
+            "region": "Eating",
             "tags": ["EATSANITY", "EATSANITY_CROP"],
             "content_packs": []
         },
         "Eat Yam": {
             "code": 721777,
-            "region": "Farm",
+            "region": "Eating",
             "tags": ["EATSANITY", "EATSANITY_CROP"],
             "content_packs": []
         },
         "Eat Chanterelle": {
             "code": 721778,
-            "region": "Farm",
+            "region": "Eating",
             "tags": ["EATSANITY", "EATSANITY_CROP"],
             "content_packs": []
         },
         "Eat Cranberries": {
             "code": 721779,
-            "region": "Farm",
+            "region": "Eating",
             "tags": ["EATSANITY", "EATSANITY_CROP"],
             "content_packs": []
         },
         "Eat Beet": {
             "code": 721780,
-            "region": "Farm",
+            "region": "Eating",
             "tags": ["EATSANITY", "EATSANITY_CROP"],
             "content_packs": []
         },
         "Eat Salmonberry": {
             "code": 721781,
-            "region": "Farm",
+            "region": "Eating",
             "tags": ["EATSANITY", "EATSANITY_CROP"],
             "content_packs": []
         },
         "Eat Amaranth": {
             "code": 721782,
-            "region": "Farm",
+            "region": "Eating",
             "tags": ["EATSANITY", "EATSANITY_CROP"],
             "content_packs": []
         },
         "Eat Hops": {
             "code": 721783,
-            "region": "Farm",
+            "region": "Eating",
             "tags": ["EATSANITY", "EATSANITY_CROP"],
             "content_packs": []
         },
         "Eat Spice Berry": {
             "code": 721784,
-            "region": "Farm",
+            "region": "Eating",
             "tags": ["EATSANITY", "EATSANITY_CROP"],
             "content_packs": []
         },
         "Eat Grape": {
             "code": 721785,
-            "region": "Farm",
+            "region": "Eating",
             "tags": ["EATSANITY", "EATSANITY_CROP"],
             "content_packs": []
         },
         "Eat Spring Onion": {
             "code": 721786,
-            "region": "Farm",
+            "region": "Eating",
             "tags": ["EATSANITY", "EATSANITY_CROP"],
             "content_packs": []
         },
         "Eat Strawberry": {
             "code": 721787,
-            "region": "Farm",
+            "region": "Eating",
             "tags": ["EATSANITY", "EATSANITY_CROP"],
             "content_packs": []
         },
         "Eat Sweet Pea": {
             "code": 721788,
-            "region": "Farm",
+            "region": "Eating",
             "tags": ["EATSANITY", "EATSANITY_CROP"],
             "content_packs": []
         },
         "Eat Common Mushroom": {
             "code": 721789,
-            "region": "Farm",
+            "region": "Eating",
             "tags": ["EATSANITY", "EATSANITY_CROP"],
             "content_packs": []
         },
         "Eat Wild Plum": {
             "code": 721790,
-            "region": "Farm",
+            "region": "Eating",
             "tags": ["EATSANITY", "EATSANITY_CROP"],
             "content_packs": []
         },
         "Eat Hazelnut": {
             "code": 721791,
-            "region": "Farm",
+            "region": "Eating",
             "tags": ["EATSANITY", "EATSANITY_CROP"],
             "content_packs": []
         },
         "Eat Blackberry": {
             "code": 721792,
-            "region": "Farm",
+            "region": "Eating",
             "tags": ["EATSANITY", "EATSANITY_CROP"],
             "content_packs": []
         },
         "Eat Winter Root": {
             "code": 721793,
-            "region": "Farm",
+            "region": "Eating",
             "tags": ["EATSANITY", "EATSANITY_CROP"],
             "content_packs": []
         },
         "Eat Crystal Fruit": {
             "code": 721794,
-            "region": "Farm",
+            "region": "Eating",
             "tags": ["EATSANITY", "EATSANITY_CROP"],
             "content_packs": []
         },
         "Eat Snow Yam": {
             "code": 721795,
-            "region": "Farm",
+            "region": "Eating",
             "tags": ["EATSANITY", "EATSANITY_CROP"],
             "content_packs": []
         },
         "Eat Crocus": {
             "code": 721796,
-            "region": "Farm",
+            "region": "Eating",
             "tags": ["EATSANITY", "EATSANITY_CROP"],
             "content_packs": []
         },
         "Eat Sunflower": {
             "code": 721797,
-            "region": "Farm",
+            "region": "Eating",
             "tags": ["EATSANITY", "EATSANITY_CROP"],
             "content_packs": []
         },
         "Eat Purple Mushroom": {
             "code": 721798,
-            "region": "Farm",
+            "region": "Eating",
             "tags": ["EATSANITY", "EATSANITY_CROP"],
             "content_packs": []
         },
         "Eat Tulip": {
             "code": 721799,
-            "region": "Farm",
+            "region": "Eating",
             "tags": ["EATSANITY", "EATSANITY_CROP"],
             "content_packs": []
         },
         "Eat Summer Spangle": {
             "code": 721800,
-            "region": "Farm",
+            "region": "Eating",
             "tags": ["EATSANITY", "EATSANITY_CROP"],
             "content_packs": []
         },
         "Eat Fairy Rose": {
             "code": 721801,
-            "region": "Farm",
+            "region": "Eating",
             "tags": ["EATSANITY", "EATSANITY_CROP"],
             "content_packs": []
         },
         "Eat Blue Jazz": {
             "code": 721802,
-            "region": "Farm",
+            "region": "Eating",
             "tags": ["EATSANITY", "EATSANITY_CROP"],
             "content_packs": []
         },
         "Eat Poppy": {
             "code": 721803,
-            "region": "Farm",
+            "region": "Eating",
             "tags": ["EATSANITY", "EATSANITY_CROP"],
             "content_packs": []
         },
         "Eat Apple": {
             "code": 721804,
-            "region": "Farm",
+            "region": "Eating",
             "tags": ["EATSANITY", "EATSANITY_CROP"],
             "content_packs": []
         },
         "Eat Apricot": {
             "code": 721805,
-            "region": "Farm",
+            "region": "Eating",
             "tags": ["EATSANITY", "EATSANITY_CROP"],
             "content_packs": []
         },
         "Eat Orange": {
             "code": 721806,
-            "region": "Farm",
+            "region": "Eating",
             "tags": ["EATSANITY", "EATSANITY_CROP"],
             "content_packs": []
         },
         "Eat Peach": {
             "code": 721807,
-            "region": "Farm",
+            "region": "Eating",
             "tags": ["EATSANITY", "EATSANITY_CROP"],
             "content_packs": []
         },
         "Eat Pomegranate": {
             "code": 721808,
-            "region": "Farm",
+            "region": "Eating",
             "tags": ["EATSANITY", "EATSANITY_CROP"],
             "content_packs": []
         },
         "Eat Cherry": {
             "code": 721809,
-            "region": "Farm",
+            "region": "Eating",
             "tags": ["EATSANITY", "EATSANITY_CROP"],
             "content_packs": []
         },
         "Eat Banana": {
             "code": 721810,
-            "region": "Farm",
+            "region": "Eating",
             "tags": ["EATSANITY", "EATSANITY_CROP", "GINGER_ISLAND"],
             "content_packs": ["Ginger Island (Vanilla)"]
         },
         "Eat Ginger": {
             "code": 721811,
-            "region": "Farm",
+            "region": "Eating",
             "tags": ["EATSANITY", "EATSANITY_CROP", "GINGER_ISLAND"],
             "content_packs": ["Ginger Island (Vanilla)"]
         },
         "Eat Taro Root": {
             "code": 721812,
-            "region": "Farm",
+            "region": "Eating",
             "tags": ["EATSANITY", "EATSANITY_CROP", "GINGER_ISLAND"],
             "content_packs": ["Ginger Island (Vanilla)"]
         },
         "Eat Pineapple": {
             "code": 721813,
-            "region": "Farm",
+            "region": "Eating",
             "tags": ["EATSANITY", "EATSANITY_CROP", "GINGER_ISLAND"],
             "content_packs": ["Ginger Island (Vanilla)"]
         },
         "Eat Mango": {
             "code": 721814,
-            "region": "Farm",
+            "region": "Eating",
             "tags": ["EATSANITY", "EATSANITY_CROP", "GINGER_ISLAND"],
             "content_packs": ["Ginger Island (Vanilla)"]
         },
         "Eat Magma Cap": {
             "code": 721815,
-            "region": "Farm",
+            "region": "Eating",
             "tags": ["EATSANITY", "EATSANITY_CROP", "GINGER_ISLAND"],
             "content_packs": ["Ginger Island (Vanilla)"]
         },
         "Eat Qi Fruit": {
             "code": 721816,
-            "region": "Farm",
+            "region": "Eating",
             "tags": ["EATSANITY", "EATSANITY_CROP", "GINGER_ISLAND", "REQUIRES_QI_ORDERS"],
             "content_packs": ["Ginger Island (Vanilla)", "Qi Board (Vanilla)"]
         },
         "Eat Carrot": {
             "code": 721817,
-            "region": "Farm",
+            "region": "Eating",
             "tags": ["EATSANITY", "EATSANITY_CROP"],
             "content_packs": []
         },
         "Eat Summer Squash": {
             "code": 721818,
-            "region": "Farm",
+            "region": "Eating",
             "tags": ["EATSANITY", "EATSANITY_CROP"],
             "content_packs": []
         },
         "Eat Broccoli": {
             "code": 721819,
-            "region": "Farm",
+            "region": "Eating",
             "tags": ["EATSANITY", "EATSANITY_CROP"],
             "content_packs": []
         },
         "Eat Powdermelon": {
             "code": 721820,
-            "region": "Farm",
+            "region": "Eating",
             "tags": ["EATSANITY", "EATSANITY_CROP"],
             "content_packs": []
         },
         "Eat Fried Egg": {
             "code": 721831,
-            "region": "Farm",
+            "region": "Eating",
             "tags": ["EATSANITY", "EATSANITY_COOKING"],
             "content_packs": []
         },
         "Eat Omelet": {
             "code": 721832,
-            "region": "Farm",
+            "region": "Eating",
             "tags": ["EATSANITY", "EATSANITY_COOKING"],
             "content_packs": []
         },
         "Eat Salad": {
             "code": 721833,
-            "region": "Farm",
+            "region": "Eating",
             "tags": ["EATSANITY", "EATSANITY_COOKING"],
             "content_packs": []
         },
         "Eat Cheese Cauliflower": {
             "code": 721834,
-            "region": "Farm",
+            "region": "Eating",
             "tags": ["EATSANITY", "EATSANITY_COOKING"],
             "content_packs": []
         },
         "Eat Baked Fish": {
             "code": 721835,
-            "region": "Farm",
+            "region": "Eating",
             "tags": ["EATSANITY", "EATSANITY_COOKING"],
             "content_packs": []
         },
         "Eat Parsnip Soup": {
             "code": 721836,
-            "region": "Farm",
+            "region": "Eating",
             "tags": ["EATSANITY", "EATSANITY_COOKING"],
             "content_packs": []
         },
         "Eat Vegetable Medley": {
             "code": 721837,
-            "region": "Farm",
+            "region": "Eating",
             "tags": ["EATSANITY", "EATSANITY_COOKING"],
             "content_packs": []
         },
         "Eat Complete Breakfast": {
             "code": 721838,
-            "region": "Farm",
+            "region": "Eating",
             "tags": ["EATSANITY", "EATSANITY_COOKING"],
             "content_packs": []
         },
         "Eat Fried Calamari": {
             "code": 721839,
-            "region": "Farm",
+            "region": "Eating",
             "tags": ["EATSANITY", "EATSANITY_COOKING"],
             "content_packs": []
         },
         "Eat Strange Bun": {
             "code": 721840,
-            "region": "Farm",
+            "region": "Eating",
             "tags": ["EATSANITY", "EATSANITY_COOKING"],
             "content_packs": []
         },
         "Eat Lucky Lunch": {
             "code": 721841,
-            "region": "Farm",
+            "region": "Eating",
             "tags": ["EATSANITY", "EATSANITY_COOKING"],
             "content_packs": []
         },
         "Eat Fried Mushroom": {
             "code": 721842,
-            "region": "Farm",
+            "region": "Eating",
             "tags": ["EATSANITY", "EATSANITY_COOKING"],
             "content_packs": []
         },
         "Eat Pizza": {
             "code": 721843,
-            "region": "Farm",
+            "region": "Eating",
             "tags": ["EATSANITY", "EATSANITY_COOKING"],
             "content_packs": []
         },
         "Eat Bean Hotpot": {
             "code": 721844,
-            "region": "Farm",
+            "region": "Eating",
             "tags": ["EATSANITY", "EATSANITY_COOKING"],
             "content_packs": []
         },
         "Eat Glazed Yams": {
             "code": 721845,
-            "region": "Farm",
+            "region": "Eating",
             "tags": ["EATSANITY", "EATSANITY_COOKING"],
             "content_packs": []
         },
         "Eat Carp Surprise": {
             "code": 721846,
-            "region": "Farm",
+            "region": "Eating",
             "tags": ["EATSANITY", "EATSANITY_COOKING"],
             "content_packs": []
         },
         "Eat Hashbrowns": {
             "code": 721847,
-            "region": "Farm",
+            "region": "Eating",
             "tags": ["EATSANITY", "EATSANITY_COOKING"],
             "content_packs": []
         },
         "Eat Pancakes": {
             "code": 721848,
-            "region": "Farm",
+            "region": "Eating",
             "tags": ["EATSANITY", "EATSANITY_COOKING"],
             "content_packs": []
         },
         "Eat Salmon Dinner": {
             "code": 721849,
-            "region": "Farm",
+            "region": "Eating",
             "tags": ["EATSANITY", "EATSANITY_COOKING"],
             "content_packs": []
         },
         "Eat Fish Taco": {
             "code": 721850,
-            "region": "Farm",
+            "region": "Eating",
             "tags": ["EATSANITY", "EATSANITY_COOKING"],
             "content_packs": []
         },
         "Eat Crispy Bass": {
             "code": 721851,
-            "region": "Farm",
+            "region": "Eating",
             "tags": ["EATSANITY", "EATSANITY_COOKING"],
             "content_packs": []
         },
         "Eat Pepper Poppers": {
             "code": 721852,
-            "region": "Farm",
+            "region": "Eating",
             "tags": ["EATSANITY", "EATSANITY_COOKING"],
             "content_packs": []
         },
         "Eat Bread": {
             "code": 721853,
-            "region": "Farm",
+            "region": "Eating",
             "tags": ["EATSANITY", "EATSANITY_COOKING"],
             "content_packs": []
         },
         "Eat Tom Kha Soup": {
             "code": 721854,
-            "region": "Farm",
+            "region": "Eating",
             "tags": ["EATSANITY", "EATSANITY_COOKING"],
             "content_packs": []
         },
         "Eat Trout Soup": {
             "code": 721855,
-            "region": "Farm",
+            "region": "Eating",
             "tags": ["EATSANITY", "EATSANITY_COOKING"],
             "content_packs": []
         },
         "Eat Chocolate Cake": {
             "code": 721856,
-            "region": "Farm",
+            "region": "Eating",
             "tags": ["EATSANITY", "EATSANITY_COOKING"],
             "content_packs": []
         },
         "Eat Pink Cake": {
             "code": 721857,
-            "region": "Farm",
+            "region": "Eating",
             "tags": ["EATSANITY", "EATSANITY_COOKING"],
             "content_packs": []
         },
         "Eat Rhubarb Pie": {
             "code": 721858,
-            "region": "Farm",
+            "region": "Eating",
             "tags": ["EATSANITY", "EATSANITY_COOKING"],
             "content_packs": []
         },
         "Eat Cookies": {
             "code": 721859,
-            "region": "Farm",
+            "region": "Eating",
             "tags": ["EATSANITY", "EATSANITY_COOKING"],
             "content_packs": []
         },
         "Eat Spaghetti": {
             "code": 721860,
-            "region": "Farm",
+            "region": "Eating",
             "tags": ["EATSANITY", "EATSANITY_COOKING"],
             "content_packs": []
         },
         "Eat Fried Eel": {
             "code": 721861,
-            "region": "Farm",
+            "region": "Eating",
             "tags": ["EATSANITY", "EATSANITY_COOKING"],
             "content_packs": []
         },
         "Eat Spicy Eel": {
             "code": 721862,
-            "region": "Farm",
+            "region": "Eating",
             "tags": ["EATSANITY", "EATSANITY_COOKING"],
             "content_packs": []
         },
         "Eat Sashimi": {
             "code": 721863,
-            "region": "Farm",
+            "region": "Eating",
             "tags": ["EATSANITY", "EATSANITY_COOKING"],
             "content_packs": []
         },
         "Eat Maki Roll": {
             "code": 721864,
-            "region": "Farm",
+            "region": "Eating",
             "tags": ["EATSANITY", "EATSANITY_COOKING"],
             "content_packs": []
         },
         "Eat Tortilla": {
             "code": 721865,
-            "region": "Farm",
+            "region": "Eating",
             "tags": ["EATSANITY", "EATSANITY_COOKING"],
             "content_packs": []
         },
         "Eat Red Plate": {
             "code": 721866,
-            "region": "Farm",
+            "region": "Eating",
             "tags": ["EATSANITY", "EATSANITY_COOKING"],
             "content_packs": []
         },
         "Eat Eggplant Parmesan": {
             "code": 721867,
-            "region": "Farm",
+            "region": "Eating",
             "tags": ["EATSANITY", "EATSANITY_COOKING"],
             "content_packs": []
         },
         "Eat Rice Pudding": {
             "code": 721868,
-            "region": "Farm",
+            "region": "Eating",
             "tags": ["EATSANITY", "EATSANITY_COOKING"],
             "content_packs": []
         },
         "Eat Ice Cream": {
             "code": 721869,
-            "region": "Farm",
+            "region": "Eating",
             "tags": ["EATSANITY", "EATSANITY_COOKING"],
             "content_packs": []
         },
         "Eat Blueberry Tart": {
             "code": 721870,
-            "region": "Farm",
+            "region": "Eating",
             "tags": ["EATSANITY", "EATSANITY_COOKING"],
             "content_packs": []
         },
         "Eat Autumn's Bounty": {
             "code": 721871,
-            "region": "Farm",
+            "region": "Eating",
             "tags": ["EATSANITY", "EATSANITY_COOKING"],
             "content_packs": []
         },
         "Eat Pumpkin Soup": {
             "code": 721872,
-            "region": "Farm",
+            "region": "Eating",
             "tags": ["EATSANITY", "EATSANITY_COOKING"],
             "content_packs": []
         },
         "Eat Super Meal": {
             "code": 721873,
-            "region": "Farm",
+            "region": "Eating",
             "tags": ["EATSANITY", "EATSANITY_COOKING"],
             "content_packs": []
         },
         "Eat Cranberry Sauce": {
             "code": 721874,
-            "region": "Farm",
+            "region": "Eating",
             "tags": ["EATSANITY", "EATSANITY_COOKING"],
             "content_packs": []
         },
         "Eat Stuffing": {
             "code": 721875,
-            "region": "Farm",
+            "region": "Eating",
             "tags": ["EATSANITY", "EATSANITY_COOKING"],
             "content_packs": []
         },
         "Eat Farmer's Lunch": {
             "code": 721876,
-            "region": "Farm",
+            "region": "Eating",
             "tags": ["EATSANITY", "EATSANITY_COOKING"],
             "content_packs": []
         },
         "Eat Survival Burger": {
             "code": 721877,
-            "region": "Farm",
+            "region": "Eating",
             "tags": ["EATSANITY", "EATSANITY_COOKING"],
             "content_packs": []
         },
         "Eat Dish O' The Sea": {
             "code": 721878,
-            "region": "Farm",
+            "region": "Eating",
             "tags": ["EATSANITY", "EATSANITY_COOKING"],
             "content_packs": []
         },
         "Eat Miner's Treat": {
             "code": 721879,
-            "region": "Farm",
+            "region": "Eating",
             "tags": ["EATSANITY", "EATSANITY_COOKING"],
             "content_packs": []
         },
         "Eat Roots Platter": {
             "code": 721880,
-            "region": "Farm",
+            "region": "Eating",
             "tags": ["EATSANITY", "EATSANITY_COOKING"],
             "content_packs": []
         },
         "Drink Triple Shot Espresso": {
             "code": 721881,
-            "region": "Farm",
+            "region": "Eating",
             "tags": ["EATSANITY", "EATSANITY_COOKING"],
             "content_packs": []
         },
         "Eat Field Snack": {
             "code": 721882,
-            "region": "Farm",
+            "region": "Eating",
             "tags": ["EATSANITY", "EATSANITY_COOKING"],
             "content_packs": []
         },
         "Eat Algae Soup": {
             "code": 721883,
-            "region": "Farm",
+            "region": "Eating",
             "tags": ["EATSANITY", "EATSANITY_COOKING"],
             "content_packs": []
         },
         "Eat Pale Broth": {
             "code": 721884,
-            "region": "Farm",
+            "region": "Eating",
             "tags": ["EATSANITY", "EATSANITY_COOKING"],
             "content_packs": []
         },
         "Eat Plum Pudding": {
             "code": 721885,
-            "region": "Farm",
+            "region": "Eating",
             "tags": ["EATSANITY", "EATSANITY_COOKING"],
             "content_packs": []
         },
         "Eat Artichoke Dip": {
             "code": 721886,
-            "region": "Farm",
+            "region": "Eating",
             "tags": ["EATSANITY", "EATSANITY_COOKING"],
             "content_packs": []
         },
         "Eat Stir Fry": {
             "code": 721887,
-            "region": "Farm",
+            "region": "Eating",
             "tags": ["EATSANITY", "EATSANITY_COOKING"],
             "content_packs": []
         },
         "Eat Roasted Hazelnuts": {
             "code": 721888,
-            "region": "Farm",
+            "region": "Eating",
             "tags": ["EATSANITY", "EATSANITY_COOKING"],
             "content_packs": []
         },
         "Eat Pumpkin Pie": {
             "code": 721889,
-            "region": "Farm",
+            "region": "Eating",
             "tags": ["EATSANITY", "EATSANITY_COOKING"],
             "content_packs": []
         },
         "Eat Radish Salad": {
             "code": 721890,
-            "region": "Farm",
+            "region": "Eating",
             "tags": ["EATSANITY", "EATSANITY_COOKING"],
             "content_packs": []
         },
         "Eat Fruit Salad": {
             "code": 721891,
-            "region": "Farm",
+            "region": "Eating",
             "tags": ["EATSANITY", "EATSANITY_COOKING"],
             "content_packs": []
         },
         "Eat Blackberry Cobbler": {
             "code": 721892,
-            "region": "Farm",
+            "region": "Eating",
             "tags": ["EATSANITY", "EATSANITY_COOKING"],
             "content_packs": []
         },
         "Drink Cranberry Candy": {
             "code": 721893,
-            "region": "Farm",
+            "region": "Eating",
             "tags": ["EATSANITY", "EATSANITY_COOKING"],
             "content_packs": []
         },
         "Eat Bruschetta": {
             "code": 721894,
-            "region": "Farm",
+            "region": "Eating",
             "tags": ["EATSANITY", "EATSANITY_COOKING"],
             "content_packs": []
         },
         "Eat Coleslaw": {
             "code": 721895,
-            "region": "Farm",
+            "region": "Eating",
             "tags": ["EATSANITY", "EATSANITY_COOKING"],
             "content_packs": []
         },
         "Eat Fiddlehead Risotto": {
             "code": 721896,
-            "region": "Farm",
+            "region": "Eating",
             "tags": ["EATSANITY", "EATSANITY_COOKING"],
             "content_packs": []
         },
         "Eat Poppyseed Muffin": {
             "code": 721897,
-            "region": "Farm",
+            "region": "Eating",
             "tags": ["EATSANITY", "EATSANITY_COOKING"],
             "content_packs": []
         },
         "Eat Chowder": {
             "code": 721898,
-            "region": "Farm",
+            "region": "Eating",
             "tags": ["EATSANITY", "EATSANITY_COOKING"],
             "content_packs": []
         },
         "Eat Lobster Bisque": {
             "code": 721899,
-            "region": "Farm",
+            "region": "Eating",
             "tags": ["EATSANITY", "EATSANITY_COOKING"],
             "content_packs": []
         },
         "Eat Fish Stew": {
             "code": 721900,
-            "region": "Farm",
+            "region": "Eating",
             "tags": ["EATSANITY", "EATSANITY_COOKING"],
             "content_packs": []
         },
         "Eat Escargot": {
             "code": 721901,
-            "region": "Farm",
+            "region": "Eating",
             "tags": ["EATSANITY", "EATSANITY_COOKING"],
             "content_packs": []
         },
         "Eat Maple Bar": {
             "code": 721902,
-            "region": "Farm",
+            "region": "Eating",
             "tags": ["EATSANITY", "EATSANITY_COOKING"],
             "content_packs": []
         },
         "Eat Crab Cakes": {
             "code": 721903,
-            "region": "Farm",
+            "region": "Eating",
             "tags": ["EATSANITY", "EATSANITY_COOKING"],
             "content_packs": []
         },
         "Eat Shrimp Cocktail": {
             "code": 721904,
-            "region": "Farm",
+            "region": "Eating",
             "tags": ["EATSANITY", "EATSANITY_COOKING"],
             "content_packs": []
         },
         "Drink Oil of Garlic": {
             "code": 721905,
-            "region": "Farm",
+            "region": "Eating",
             "tags": ["EATSANITY", "EATSANITY_COOKING"],
             "content_packs": []
         },
         "Drink Life Elixir": {
             "code": 721906,
-            "region": "Farm",
+            "region": "Eating",
             "tags": ["EATSANITY", "EATSANITY_COOKING"],
             "content_packs": []
         },
         "Eat Seafoam Pudding": {
             "code": 721907,
-            "region": "Farm",
+            "region": "Eating",
             "tags": ["EATSANITY", "EATSANITY_COOKING"],
             "content_packs": []
         },
         "Eat Bug Steak": {
             "code": 721908,
-            "region": "Farm",
+            "region": "Eating",
             "tags": ["EATSANITY", "EATSANITY_COOKING"],
             "content_packs": []
         },
         "Drink Ginger Ale": {
             "code": 721909,
-            "region": "Farm",
+            "region": "Eating",
             "tags": ["EATSANITY", "EATSANITY_COOKING", "GINGER_ISLAND"],
             "content_packs": ["Ginger Island (Vanilla)"]
         },
         "Eat Banana Pudding": {
             "code": 721910,
-            "region": "Farm",
+            "region": "Eating",
             "tags": ["EATSANITY", "EATSANITY_COOKING", "GINGER_ISLAND"],
             "content_packs": ["Ginger Island (Vanilla)"]
         },
         "Eat Mango Sticky Rice": {
             "code": 721911,
-            "region": "Farm",
+            "region": "Eating",
             "tags": ["EATSANITY", "EATSANITY_COOKING", "GINGER_ISLAND"],
             "content_packs": ["Ginger Island (Vanilla)"]
         },
         "Eat Poi": {
             "code": 721912,
-            "region": "Farm",
+            "region": "Eating",
             "tags": ["EATSANITY", "EATSANITY_COOKING", "GINGER_ISLAND"],
             "content_packs": ["Ginger Island (Vanilla)"]
         },
         "Eat Tropical Curry": {
             "code": 721913,
-            "region": "Farm",
+            "region": "Eating",
             "tags": ["EATSANITY", "EATSANITY_COOKING", "GINGER_ISLAND"],
             "content_packs": ["Ginger Island (Vanilla)"]
         },
         "Eat Squid Ink Ravioli": {
             "code": 721914,
-            "region": "Farm",
+            "region": "Eating",
             "tags": ["EATSANITY", "EATSANITY_COOKING"],
             "content_packs": []
         },
         "Drink Moss Soup": {
             "code": 721915,
-            "region": "Farm",
+            "region": "Eating",
             "tags": ["EATSANITY", "EATSANITY_COOKING"],
             "content_packs": []
         },
         "Eat Egg": {
             "code": 721921,
-            "region": "Farm",
+            "region": "Eating",
             "tags": ["EATSANITY", "EATSANITY_ARTISAN"],
             "content_packs": []
         },
         "Eat Large Egg": {
             "code": 721922,
-            "region": "Farm",
+            "region": "Eating",
             "tags": ["EATSANITY", "EATSANITY_ARTISAN"],
             "content_packs": []
         },
         "Eat Egg (Brown)": {
             "code": 721923,
-            "region": "Farm",
+            "region": "Eating",
             "tags": ["EATSANITY", "EATSANITY_ARTISAN"],
             "content_packs": []
         },
         "Eat Large Egg (Brown)": {
             "code": 721924,
-            "region": "Farm",
+            "region": "Eating",
             "tags": ["EATSANITY", "EATSANITY_ARTISAN"],
             "content_packs": []
         },
         "Drink Milk": {
             "code": 721925,
-            "region": "Farm",
+            "region": "Eating",
             "tags": ["EATSANITY", "EATSANITY_ARTISAN"],
             "content_packs": []
         },
         "Drink Large Milk": {
             "code": 721926,
-            "region": "Farm",
+            "region": "Eating",
             "tags": ["EATSANITY", "EATSANITY_ARTISAN"],
             "content_packs": []
         },
         "Drink Pale Ale": {
             "code": 721927,
-            "region": "Farm",
+            "region": "Eating",
             "tags": ["EATSANITY", "EATSANITY_ARTISAN"],
             "content_packs": []
         },
         "Drink Mayonnaise": {
             "code": 721928,
-            "region": "Farm",
+            "region": "Eating",
             "tags": ["EATSANITY", "EATSANITY_ARTISAN"],
             "content_packs": []
         },
         "Drink Duck Mayonnaise": {
             "code": 721929,
-            "region": "Farm",
+            "region": "Eating",
             "tags": ["EATSANITY", "EATSANITY_ARTISAN"],
             "content_packs": []
         },
         "Drink Beer": {
             "code": 721930,
-            "region": "Farm",
+            "region": "Eating",
             "tags": ["EATSANITY", "EATSANITY_ARTISAN"],
             "content_packs": []
         },
         "Drink Wine": {
             "code": 721931,
-            "region": "Farm",
+            "region": "Eating",
             "tags": ["EATSANITY", "EATSANITY_ARTISAN"],
             "content_packs": []
         },
         "Drink Juice": {
             "code": 721932,
-            "region": "Farm",
+            "region": "Eating",
             "tags": ["EATSANITY", "EATSANITY_ARTISAN"],
             "content_packs": []
         },
         "Drink Coffee": {
             "code": 721933,
-            "region": "Farm",
+            "region": "Eating",
             "tags": ["EATSANITY", "EATSANITY_ARTISAN"],
             "content_packs": []
         },
         "Eat Cheese": {
             "code": 721934,
-            "region": "Farm",
+            "region": "Eating",
             "tags": ["EATSANITY", "EATSANITY_ARTISAN"],
             "content_packs": []
         },
         "Eat Goat Cheese": {
             "code": 721935,
-            "region": "Farm",
+            "region": "Eating",
             "tags": ["EATSANITY", "EATSANITY_ARTISAN"],
             "content_packs": []
         },
         "Eat Truffle": {
             "code": 721936,
-            "region": "Farm",
+            "region": "Eating",
             "tags": ["EATSANITY", "EATSANITY_ARTISAN"],
             "content_packs": []
         },
         "Drink Truffle Oil": {
             "code": 721937,
-            "region": "Farm",
+            "region": "Eating",
             "tags": ["EATSANITY", "EATSANITY_ARTISAN"],
             "content_packs": []
         },
         "Drink Goat Milk": {
             "code": 721938,
-            "region": "Farm",
+            "region": "Eating",
             "tags": ["EATSANITY", "EATSANITY_ARTISAN"],
             "content_packs": []
         },
         "Drink Large Goat Milk": {
             "code": 721939,
-            "region": "Farm",
+            "region": "Eating",
             "tags": ["EATSANITY", "EATSANITY_ARTISAN"],
             "content_packs": []
         },
         "Eat Duck Egg": {
             "code": 721940,
-            "region": "Farm",
+            "region": "Eating",
             "tags": ["EATSANITY", "EATSANITY_ARTISAN"],
             "content_packs": []
         },
         "Eat Aged Roe": {
             "code": 721941,
-            "region": "Farm",
+            "region": "Eating",
             "tags": ["EATSANITY", "EATSANITY_ARTISAN"],
             "content_packs": []
         },
         "Drink Mead": {
             "code": 721942,
-            "region": "Farm",
+            "region": "Eating",
             "tags": ["EATSANITY", "EATSANITY_ARTISAN"],
             "content_packs": []
         },
         "Drink Green Tea": {
             "code": 721943,
-            "region": "Farm",
+            "region": "Eating",
             "tags": ["EATSANITY", "EATSANITY_ARTISAN"],
             "content_packs": []
         },
         "Drink Maple Syrup": {
             "code": 721944,
-            "region": "Farm",
+            "region": "Eating",
             "tags": ["EATSANITY", "EATSANITY_ARTISAN"],
             "content_packs": []
         },
         "Drink Dinosaur Mayonnaise": {
             "code": 721945,
-            "region": "Farm",
+            "region": "Eating",
             "tags": ["EATSANITY", "EATSANITY_ARTISAN"],
             "content_packs": []
         },
         "Eat Roe": {
             "code": 721946,
-            "region": "Farm",
+            "region": "Eating",
             "tags": ["EATSANITY", "EATSANITY_ARTISAN"],
             "content_packs": []
         },
         "Eat Caviar": {
             "code": 721947,
-            "region": "Farm",
+            "region": "Eating",
             "tags": ["EATSANITY", "EATSANITY_ARTISAN"],
             "content_packs": []
         },
         "Eat Ostrich Egg": {
             "code": 721948,
-            "region": "Farm",
+            "region": "Eating",
             "tags": ["EATSANITY", "EATSANITY_ARTISAN", "GINGER_ISLAND"],
             "content_packs": ["Ginger Island (Vanilla)"]
         },
         "Eat Golden Egg": {
             "code": 721949,
-            "region": "Farm",
+            "region": "Eating",
             "tags": ["EATSANITY", "EATSANITY_ARTISAN"],
             "content_packs": []
         },
         "Drink Mystic Syrup": {
             "code": 721950,
-            "region": "Farm",
+            "region": "Eating",
             "tags": ["EATSANITY", "EATSANITY_ARTISAN", "REQUIRES_MASTERIES"],
             "content_packs": []
         },
         "Eat Raisins": {
             "code": 721951,
-            "region": "Farm",
+            "region": "Eating",
             "tags": ["EATSANITY", "EATSANITY_ARTISAN"],
             "content_packs": []
         },
         "Drink Jelly": {
             "code": 721952,
-            "region": "Farm",
+            "region": "Eating",
             "tags": ["EATSANITY", "EATSANITY_ARTISAN"],
             "content_packs": []
         },
         "Drink Pickles": {
             "code": 721953,
-            "region": "Farm",
+            "region": "Eating",
             "tags": ["EATSANITY", "EATSANITY_ARTISAN"],
             "content_packs": []
         },
         "Eat Rice": {
             "code": 721954,
-            "region": "Farm",
+            "region": "Eating",
             "tags": ["EATSANITY", "EATSANITY_ARTISAN"],
             "content_packs": []
         },
         "Eat Sugar": {
             "code": 721955,
-            "region": "Farm",
+            "region": "Eating",
             "tags": ["EATSANITY", "EATSANITY_ARTISAN"],
             "content_packs": []
         },
         "Eat Wheat Flour": {
             "code": 721956,
-            "region": "Farm",
+            "region": "Eating",
             "tags": ["EATSANITY", "EATSANITY_ARTISAN"],
             "content_packs": []
         },
         "Drink Oil": {
             "code": 721957,
-            "region": "Farm",
+            "region": "Eating",
             "tags": ["EATSANITY", "EATSANITY_ARTISAN"],
             "content_packs": []
         },
         "Drink Vinegar": {
             "code": 721958,
-            "region": "Farm",
+            "region": "Eating",
             "tags": ["EATSANITY", "EATSANITY_ARTISAN"],
             "content_packs": []
         },
         "Eat Smoked Fish": {
             "code": 721959,
-            "region": "Farm",
+            "region": "Eating",
             "tags": ["EATSANITY", "EATSANITY_ARTISAN"],
             "content_packs": []
         },
         "Eat Dried Fruit": {
             "code": 721960,
-            "region": "Farm",
+            "region": "Eating",
             "tags": ["EATSANITY", "EATSANITY_ARTISAN"],
             "content_packs": []
         },
         "Eat Dried Mushrooms": {
             "code": 721961,
-            "region": "Farm",
+            "region": "Eating",
             "tags": ["EATSANITY", "EATSANITY_ARTISAN"],
             "content_packs": []
         },
         "Eat Anchovy": {
             "code": 721971,
-            "region": "Farm",
+            "region": "Eating",
             "tags": ["EATSANITY", "EATSANITY_FISH"],
             "content_packs": []
         },
         "Eat Tuna": {
             "code": 721972,
-            "region": "Farm",
+            "region": "Eating",
             "tags": ["EATSANITY", "EATSANITY_FISH"],
             "content_packs": []
         },
         "Eat Sardine": {
             "code": 721973,
-            "region": "Farm",
+            "region": "Eating",
             "tags": ["EATSANITY", "EATSANITY_FISH"],
             "content_packs": []
         },
         "Eat Bream": {
             "code": 721974,
-            "region": "Farm",
+            "region": "Eating",
             "tags": ["EATSANITY", "EATSANITY_FISH"],
             "content_packs": []
         },
         "Eat Largemouth Bass": {
             "code": 721975,
-            "region": "Farm",
+            "region": "Eating",
             "tags": ["EATSANITY", "EATSANITY_FISH"],
             "content_packs": []
         },
         "Eat Smallmouth Bass": {
             "code": 721976,
-            "region": "Farm",
+            "region": "Eating",
             "tags": ["EATSANITY", "EATSANITY_FISH"],
             "content_packs": []
         },
         "Eat Rainbow Trout": {
             "code": 721977,
-            "region": "Farm",
+            "region": "Eating",
             "tags": ["EATSANITY", "EATSANITY_FISH"],
             "content_packs": []
         },
         "Eat Salmon": {
             "code": 721978,
-            "region": "Farm",
+            "region": "Eating",
             "tags": ["EATSANITY", "EATSANITY_FISH"],
             "content_packs": []
         },
         "Eat Walleye": {
             "code": 721979,
-            "region": "Farm",
+            "region": "Eating",
             "tags": ["EATSANITY", "EATSANITY_FISH"],
             "content_packs": []
         },
         "Eat Perch": {
             "code": 721980,
-            "region": "Farm",
+            "region": "Eating",
             "tags": ["EATSANITY", "EATSANITY_FISH"],
             "content_packs": []
         },
         "Eat Carp": {
             "code": 721981,
-            "region": "Farm",
+            "region": "Eating",
             "tags": ["EATSANITY", "EATSANITY_FISH"],
             "content_packs": []
         },
         "Eat Catfish": {
             "code": 721982,
-            "region": "Farm",
+            "region": "Eating",
             "tags": ["EATSANITY", "EATSANITY_FISH"],
             "content_packs": []
         },
         "Eat Pike": {
             "code": 721983,
-            "region": "Farm",
+            "region": "Eating",
             "tags": ["EATSANITY", "EATSANITY_FISH"],
             "content_packs": []
         },
         "Eat Sunfish": {
             "code": 721984,
-            "region": "Farm",
+            "region": "Eating",
             "tags": ["EATSANITY", "EATSANITY_FISH"],
             "content_packs": []
         },
         "Eat Red Mullet": {
             "code": 721985,
-            "region": "Farm",
+            "region": "Eating",
             "tags": ["EATSANITY", "EATSANITY_FISH"],
             "content_packs": []
         },
         "Eat Herring": {
             "code": 721986,
-            "region": "Farm",
+            "region": "Eating",
             "tags": ["EATSANITY", "EATSANITY_FISH"],
             "content_packs": []
         },
         "Eat Eel": {
             "code": 721987,
-            "region": "Farm",
+            "region": "Eating",
             "tags": ["EATSANITY", "EATSANITY_FISH"],
             "content_packs": []
         },
         "Eat Red Snapper": {
             "code": 721988,
-            "region": "Farm",
+            "region": "Eating",
             "tags": ["EATSANITY", "EATSANITY_FISH"],
             "content_packs": []
         },
         "Eat Squid": {
             "code": 721989,
-            "region": "Farm",
+            "region": "Eating",
             "tags": ["EATSANITY", "EATSANITY_FISH"],
             "content_packs": []
         },
         "Eat Seaweed": {
             "code": 721990,
-            "region": "Farm",
+            "region": "Eating",
             "tags": ["EATSANITY", "EATSANITY_FISH"],
             "content_packs": []
         },
         "Eat Green Algae": {
             "code": 721991,
-            "region": "Farm",
+            "region": "Eating",
             "tags": ["EATSANITY", "EATSANITY_FISH"],
             "content_packs": []
         },
         "Eat Super Cucumber": {
             "code": 721992,
-            "region": "Farm",
+            "region": "Eating",
             "tags": ["EATSANITY", "EATSANITY_FISH"],
             "content_packs": []
         },
         "Eat Ghostfish": {
             "code": 721993,
-            "region": "Farm",
+            "region": "Eating",
             "tags": ["EATSANITY", "EATSANITY_FISH"],
             "content_packs": []
         },
         "Eat White Algae": {
             "code": 721994,
-            "region": "Farm",
+            "region": "Eating",
             "tags": ["EATSANITY", "EATSANITY_FISH"],
             "content_packs": []
         },
         "Eat Crimsonfish": {
             "code": 721995,
-            "region": "Farm",
+            "region": "Eating",
             "tags": ["EATSANITY", "EATSANITY_FISH"],
             "content_packs": []
         },
         "Eat Angler": {
             "code": 721996,
-            "region": "Farm",
+            "region": "Eating",
             "tags": ["EATSANITY", "EATSANITY_FISH"],
             "content_packs": []
         },
         "Eat Ice Pip": {
             "code": 721997,
-            "region": "Farm",
+            "region": "Eating",
             "tags": ["EATSANITY", "EATSANITY_FISH"],
             "content_packs": []
         },
         "Eat Lava Eel": {
             "code": 721998,
-            "region": "Farm",
+            "region": "Eating",
             "tags": ["EATSANITY", "EATSANITY_FISH"],
             "content_packs": []
         },
         "Eat Legend": {
             "code": 721999,
-            "region": "Farm",
+            "region": "Eating",
             "tags": ["EATSANITY", "EATSANITY_FISH"],
             "content_packs": []
         },
         "Eat Sandfish": {
             "code": 722000,
-            "region": "Farm",
+            "region": "Eating",
             "tags": ["EATSANITY", "EATSANITY_FISH"],
             "content_packs": []
         },
         "Eat Mutant Carp": {
             "code": 722001,
-            "region": "Farm",
+            "region": "Eating",
             "tags": ["EATSANITY", "EATSANITY_FISH"],
             "content_packs": []
         },
         "Eat Sturgeon": {
             "code": 722002,
-            "region": "Farm",
+            "region": "Eating",
             "tags": ["EATSANITY", "EATSANITY_FISH"],
             "content_packs": []
         },
         "Eat Tiger Trout": {
             "code": 722003,
-            "region": "Farm",
+            "region": "Eating",
             "tags": ["EATSANITY", "EATSANITY_FISH"],
             "content_packs": []
         },
         "Eat Bullhead": {
             "code": 722004,
-            "region": "Farm",
+            "region": "Eating",
             "tags": ["EATSANITY", "EATSANITY_FISH"],
             "content_packs": []
         },
         "Eat Tilapia": {
             "code": 722005,
-            "region": "Farm",
+            "region": "Eating",
             "tags": ["EATSANITY", "EATSANITY_FISH"],
             "content_packs": []
         },
         "Eat Chub": {
             "code": 722006,
-            "region": "Farm",
+            "region": "Eating",
             "tags": ["EATSANITY", "EATSANITY_FISH"],
             "content_packs": []
         },
         "Eat Dorado": {
             "code": 722007,
-            "region": "Farm",
+            "region": "Eating",
             "tags": ["EATSANITY", "EATSANITY_FISH"],
             "content_packs": []
         },
         "Eat Albacore": {
             "code": 722008,
-            "region": "Farm",
+            "region": "Eating",
             "tags": ["EATSANITY", "EATSANITY_FISH"],
             "content_packs": []
         },
         "Eat Shad": {
             "code": 722009,
-            "region": "Farm",
+            "region": "Eating",
             "tags": ["EATSANITY", "EATSANITY_FISH"],
             "content_packs": []
         },
         "Eat Lingcod": {
             "code": 722010,
-            "region": "Farm",
+            "region": "Eating",
             "tags": ["EATSANITY", "EATSANITY_FISH"],
             "content_packs": []
         },
         "Eat Halibut": {
             "code": 722011,
-            "region": "Farm",
+            "region": "Eating",
             "tags": ["EATSANITY", "EATSANITY_FISH"],
             "content_packs": []
         },
         "Eat Woodskip": {
             "code": 722012,
-            "region": "Farm",
+            "region": "Eating",
             "tags": ["EATSANITY", "EATSANITY_FISH"],
             "content_packs": []
         },
         "Eat Glacierfish": {
             "code": 722013,
-            "region": "Farm",
+            "region": "Eating",
             "tags": ["EATSANITY", "EATSANITY_FISH"],
             "content_packs": []
         },
         "Eat Void Salmon": {
             "code": 722014,
-            "region": "Farm",
+            "region": "Eating",
             "tags": ["EATSANITY", "EATSANITY_FISH"],
             "content_packs": []
         },
         "Eat Slimejack": {
             "code": 722015,
-            "region": "Farm",
+            "region": "Eating",
             "tags": ["EATSANITY", "EATSANITY_FISH"],
             "content_packs": []
         },
         "Eat Midnight Squid": {
             "code": 722016,
-            "region": "Farm",
+            "region": "Eating",
             "tags": ["EATSANITY", "EATSANITY_FISH"],
             "content_packs": []
         },
         "Eat Spook Fish": {
             "code": 722017,
-            "region": "Farm",
+            "region": "Eating",
             "tags": ["EATSANITY", "EATSANITY_FISH"],
             "content_packs": []
         },
         "Eat Blobfish": {
             "code": 722018,
-            "region": "Farm",
+            "region": "Eating",
             "tags": ["EATSANITY", "EATSANITY_FISH"],
             "content_packs": []
         },
         "Eat Flounder": {
             "code": 722019,
-            "region": "Farm",
+            "region": "Eating",
             "tags": ["EATSANITY", "EATSANITY_FISH"],
             "content_packs": []
         },
         "Eat Midnight Carp": {
             "code": 722020,
-            "region": "Farm",
+            "region": "Eating",
             "tags": ["EATSANITY", "EATSANITY_FISH"],
             "content_packs": []
         },
         "Eat Stingray": {
             "code": 722021,
-            "region": "Farm",
+            "region": "Eating",
             "tags": ["EATSANITY", "EATSANITY_FISH", "GINGER_ISLAND"],
             "content_packs": ["Ginger Island (Vanilla)"]
         },
         "Eat Lionfish": {
             "code": 722022,
-            "region": "Farm",
+            "region": "Eating",
             "tags": ["EATSANITY", "EATSANITY_FISH", "GINGER_ISLAND"],
             "content_packs": ["Ginger Island (Vanilla)"]
         },
         "Eat Blue Discus": {
             "code": 722023,
-            "region": "Farm",
+            "region": "Eating",
             "tags": ["EATSANITY", "EATSANITY_FISH", "GINGER_ISLAND"],
             "content_packs": ["Ginger Island (Vanilla)"]
         },
         "Eat Son of Crimsonfish": {
             "code": 722024,
-            "region": "Farm",
+            "region": "Eating",
             "tags": ["EATSANITY", "EATSANITY_FISH", "GINGER_ISLAND", "REQUIRES_QI_ORDERS"],
             "content_packs": ["Ginger Island (Vanilla)", "Qi Board (Vanilla)"]
         },
         "Eat Ms. Angler": {
             "code": 722025,
-            "region": "Farm",
+            "region": "Eating",
             "tags": ["EATSANITY", "EATSANITY_FISH", "GINGER_ISLAND", "REQUIRES_QI_ORDERS"],
             "content_packs": ["Ginger Island (Vanilla)", "Qi Board (Vanilla)"]
         },
         "Eat Legend II": {
             "code": 722026,
-            "region": "Farm",
+            "region": "Eating",
             "tags": ["EATSANITY", "EATSANITY_FISH", "GINGER_ISLAND", "REQUIRES_QI_ORDERS"],
             "content_packs": ["Ginger Island (Vanilla)", "Qi Board (Vanilla)"]
         },
         "Eat Radioactive Carp": {
             "code": 722027,
-            "region": "Farm",
+            "region": "Eating",
             "tags": ["EATSANITY", "EATSANITY_FISH", "GINGER_ISLAND", "REQUIRES_QI_ORDERS"],
             "content_packs": ["Ginger Island (Vanilla)", "Qi Board (Vanilla)"]
         },
         "Eat Glacierfish Jr.": {
             "code": 722028,
-            "region": "Farm",
+            "region": "Eating",
             "tags": ["EATSANITY", "EATSANITY_FISH", "GINGER_ISLAND", "REQUIRES_QI_ORDERS"],
             "content_packs": ["Ginger Island (Vanilla)", "Qi Board (Vanilla)"]
         },
         "Eat Sea Jelly": {
             "code": 722029,
-            "region": "Farm",
+            "region": "Eating",
             "tags": ["EATSANITY", "EATSANITY_FISH"],
             "content_packs": []
         },
         "Eat Cave Jelly": {
             "code": 722030,
-            "region": "Farm",
+            "region": "Eating",
             "tags": ["EATSANITY", "EATSANITY_FISH"],
             "content_packs": []
         },
         "Eat River Jelly": {
             "code": 722031,
-            "region": "Farm",
+            "region": "Eating",
             "tags": ["EATSANITY", "EATSANITY_FISH"],
             "content_packs": []
         },
         "Drink Joja Cola": {
             "code": 722032,
-            "region": "Farm",
+            "region": "Eating",
             "tags": ["EATSANITY", "EATSANITY_FISH"],
             "content_packs": []
         },
         "Eat Magic Rock Candy": {
             "code": 722041,
-            "region": "Farm",
+            "region": "Eating",
             "tags": ["EATSANITY", "EATSANITY_SHOP"],
             "content_packs": []
         },
         "Drink Energy Tonic": {
             "code": 722042,
-            "region": "Farm",
+            "region": "Eating",
             "tags": ["EATSANITY", "EATSANITY_SHOP"],
             "content_packs": []
         },
         "Drink Muscle Remedy": {
             "code": 722043,
-            "region": "Farm",
+            "region": "Eating",
             "tags": ["EATSANITY", "EATSANITY_SHOP"],
             "content_packs": []
         },
         "Drink Pina Colada": {
             "code": 722044,
-            "region": "Farm",
+            "region": "Eating",
             "tags": ["EATSANITY", "EATSANITY_SHOP", "GINGER_ISLAND"],
             "content_packs": ["Ginger Island (Vanilla)"]
         },
         "Eat Stardrop": {
             "code": 722045,
-            "region": "Farm",
+            "region": "Eating",
             "tags": ["EATSANITY", "EATSANITY_SHOP"],
             "content_packs": []
         },
         "Eat Sap": {
             "code": 722051,
-            "region": "Farm",
+            "region": "Eating",
             "tags": ["EATSANITY", "EATSANITY_CROP", "EATSANITY_POISONOUS"],
             "content_packs": []
         },
         "Eat Holly": {
             "code": 722052,
-            "region": "Farm",
+            "region": "Eating",
             "tags": ["EATSANITY", "EATSANITY_CROP", "EATSANITY_POISONOUS"],
             "content_packs": []
         },
         "Eat Red Mushroom": {
             "code": 722053,
-            "region": "Farm",
+            "region": "Eating",
             "tags": ["EATSANITY", "EATSANITY_CROP", "EATSANITY_POISONOUS"],
             "content_packs": []
         },
         "Eat Void Egg": {
             "code": 722054,
-            "region": "Farm",
+            "region": "Eating",
             "tags": ["EATSANITY", "EATSANITY_ARTISAN", "EATSANITY_POISONOUS"],
             "content_packs": []
         },
         "Drink Void Mayonnaise": {
             "code": 722055,
-            "region": "Farm",
+            "region": "Eating",
             "tags": ["EATSANITY", "EATSANITY_ARTISAN", "EATSANITY_POISONOUS"],
             "content_packs": []
         },
         "Eat Pufferfish": {
             "code": 722056,
-            "region": "Farm",
+            "region": "Eating",
             "tags": ["EATSANITY", "EATSANITY_FISH", "EATSANITY_POISONOUS"],
             "content_packs": []
         },
         "Eat Sea Cucumber": {
             "code": 722057,
-            "region": "Farm",
+            "region": "Eating",
             "tags": ["EATSANITY", "EATSANITY_FISH", "EATSANITY_POISONOUS"],
             "content_packs": []
         },
         "Eat Goby": {
             "code": 722058,
-            "region": "Farm",
+            "region": "Eating",
             "tags": ["EATSANITY", "EATSANITY_FISH", "EATSANITY_POISONOUS"],
             "content_packs": []
         },
         "Eat Scorpion Carp": {
             "code": 722059,
-            "region": "Farm",
+            "region": "Eating",
             "tags": ["EATSANITY", "EATSANITY_FISH", "EATSANITY_POISONOUS"],
             "content_packs": []
         },
         "Drink Iridium Snake Milk": {
             "code": 722060,
-            "region": "Farm",
+            "region": "Eating",
             "tags": ["EATSANITY", "EATSANITY_ARTISAN", "EATSANITY_POISONOUS"],
             "content_packs": []
         },
@@ -18746,7 +19016,7 @@
         },
         "Purchase Return Scepter": {
             "code": 722107,
-            "region": "Sewer",
+            "region": "Sewer - Shop",
             "tags": ["ENDGAME_LOCATIONS"],
             "content_packs": []
         },
@@ -18824,7 +19094,7 @@
         },
         "Purchase Catalogue": {
             "code": 722122,
-            "region": "Pierre's General Store",
+            "region": "Pierre's General Store - Shop",
             "tags": ["ENDGAME_LOCATIONS"],
             "content_packs": []
         },
@@ -18860,7 +19130,7 @@
         },
         "Purchase Wizard Catalogue": {
             "code": 722128,
-            "region": "Sewer",
+            "region": "Sewer - Shop",
             "tags": ["ENDGAME_LOCATIONS"],
             "content_packs": []
         },
@@ -21684,6 +21954,192 @@
             "tags": ["FRIENDSANITY"],
             "content_packs": ["Boarding House and Bus Stop Extension"]
         },
+        "Meet Jasper": {
+            "code": 773401,
+            "region": "Museum",
+            "tags": ["MEET_VILLAGER"],
+            "content_packs": ["Professor Jasper Thomas"]
+        },
+        "Meet Yoba": {
+            "code": 773402,
+            "region": "Yoba's Clearing",
+            "tags": ["MEET_VILLAGER"],
+            "content_packs": ["Custom NPC - Yoba"]
+        },
+        "Meet Mr. Ginger": {
+            "code": 773403,
+            "region": "Marnie's Ranch",
+            "tags": ["MEET_VILLAGER"],
+            "content_packs": ["Mister Ginger (cat npc)"]
+        },
+        "Meet Ayeisha": {
+            "code": 773404,
+            "region": "Town",
+            "tags": ["MEET_VILLAGER"],
+            "content_packs": ["Ayeisha - The Postal Worker (Custom NPC)"]
+        },
+        "Meet Shiko": {
+            "code": 773405,
+            "region": "Saloon",
+            "tags": ["MEET_VILLAGER"],
+            "content_packs": ["Shiko - New Custom NPC"]
+        },
+        "Meet Wellwick": {
+            "code": 773406,
+            "region": "Wizard Tower",
+            "tags": ["MEET_VILLAGER"],
+            "content_packs": ["'Prophet' Wellwick"]
+        },
+        "Meet Delores": {
+            "code": 773407,
+            "region": "Forest",
+            "tags": ["MEET_VILLAGER"],
+            "content_packs": ["Delores - Custom NPC"]
+        },
+        "Meet Alec": {
+            "code": 773408,
+            "region": "Alec's Pet Shop",
+            "tags": ["MEET_VILLAGER"],
+            "content_packs": ["Alec Revisited"]
+        },
+        "Meet Eugene": {
+            "code": 773409,
+            "region": "Eugene's Garden",
+            "tags": ["MEET_VILLAGER"],
+            "content_packs": ["Custom NPC Eugene"]
+        },
+        "Meet Juna": {
+            "code": 773410,
+            "region": "Forest",
+            "tags": ["MEET_VILLAGER"],
+            "content_packs": ["Juna - Roommate NPC"]
+        },
+        "Meet Riley": {
+            "code": 773411,
+            "region": "Riley's House",
+            "tags": ["MEET_VILLAGER"],
+            "content_packs": ["Custom NPC - Riley"]
+        },
+        "Meet Claire": {
+            "code": 773412,
+            "region": "JojaMart",
+            "tags": ["MEET_VILLAGER"],
+            "content_packs": ["Stardew Valley Expanded"]
+        },
+        "Meet Lance": {
+            "code": 773413,
+            "region": "Galmoran Outpost",
+            "tags": ["GINGER_ISLAND", "MEET_VILLAGER"],
+            "content_packs": ["Ginger Island (Vanilla)", "Stardew Valley Expanded"]
+        },
+        "Meet Olivia": {
+            "code": 773414,
+            "region": "Jenkins' Residence",
+            "tags": ["MEET_VILLAGER"],
+            "content_packs": ["Stardew Valley Expanded"]
+        },
+        "Meet Sophia": {
+            "code": 773415,
+            "region": "Blue Moon Vineyard",
+            "tags": ["MEET_VILLAGER"],
+            "content_packs": ["Stardew Valley Expanded"]
+        },
+        "Meet Victor": {
+            "code": 773416,
+            "region": "Jenkins' Residence",
+            "tags": ["MEET_VILLAGER"],
+            "content_packs": ["Stardew Valley Expanded"]
+        },
+        "Meet Andy": {
+            "code": 773417,
+            "region": "Fairhaven Farm",
+            "tags": ["MEET_VILLAGER"],
+            "content_packs": ["Stardew Valley Expanded"]
+        },
+        "Meet Apples": {
+            "code": 773418,
+            "region": "Aurora Vineyard",
+            "tags": ["MEET_VILLAGER"],
+            "content_packs": ["Stardew Valley Expanded"]
+        },
+        "Meet Gunther": {
+            "code": 773419,
+            "region": "Museum",
+            "tags": ["MEET_VILLAGER"],
+            "content_packs": ["Stardew Valley Expanded"]
+        },
+        "Meet Martin": {
+            "code": 773420,
+            "region": "JojaMart",
+            "tags": ["MEET_VILLAGER"],
+            "content_packs": ["Stardew Valley Expanded"]
+        },
+        "Meet Marlon": {
+            "code": 773421,
+            "region": "Adventurer's Guild",
+            "tags": ["MEET_VILLAGER"],
+            "content_packs": ["Stardew Valley Expanded"]
+        },
+        "Meet Morgan": {
+            "code": 773422,
+            "region": "Wizard Tower",
+            "tags": ["MEET_VILLAGER"],
+            "content_packs": ["Stardew Valley Expanded"]
+        },
+        "Meet Scarlett": {
+            "code": 773423,
+            "region": "Scarlett's House",
+            "tags": ["MEET_VILLAGER"],
+            "content_packs": ["Stardew Valley Expanded"]
+        },
+        "Meet Susan": {
+            "code": 773424,
+            "region": "Susan's House",
+            "tags": ["MEET_VILLAGER"],
+            "content_packs": ["Stardew Valley Expanded"]
+        },
+        "Meet Morris": {
+            "code": 773425,
+            "region": "JojaMart",
+            "tags": ["MEET_VILLAGER"],
+            "content_packs": ["Stardew Valley Expanded"]
+        },
+        "Meet Zic": {
+            "code": 773426,
+            "region": "Witch's Swamp",
+            "tags": ["MEET_VILLAGER"],
+            "content_packs": ["Distant Lands - Witch Swamp Overhaul"]
+        },
+        "Meet Alecto": {
+            "code": 773427,
+            "region": "Witch's Attic",
+            "tags": ["MEET_VILLAGER"],
+            "content_packs": ["Alecto the Witch"]
+        },
+        "Meet Lacey": {
+            "code": 773428,
+            "region": "Mouse House",
+            "tags": ["MEET_VILLAGER"],
+            "content_packs": ["Hat Mouse Lacey"]
+        },
+        "Meet Joel": {
+            "code": 773429,
+            "region": "Boarding House - First Floor",
+            "tags": ["MEET_VILLAGER"],
+            "content_packs": ["Boarding House and Bus Stop Extension"]
+        },
+        "Meet Sheila": {
+            "code": 773430,
+            "region": "Boarding House - First Floor",
+            "tags": ["MEET_VILLAGER"],
+            "content_packs": ["Boarding House and Bus Stop Extension"]
+        },
+        "Meet Gregory": {
+            "code": 773431,
+            "region": "The Lost Valley",
+            "tags": ["MEET_VILLAGER"],
+            "content_packs": ["Boarding House and Bus Stop Extension"]
+        },
         "Premium Pack": {
             "code": 774001,
             "region": "Pierre's General Store",
@@ -21974,25 +22430,25 @@
         },
         "Craft Travel Core": {
             "code": 774402,
-            "region": "Farm",
+            "region": "Crafting",
             "tags": ["CRAFTSANITY", "CRAFTSANITY_CRAFT"],
             "content_packs": ["Magic"]
         },
         "Craft Haste Elixir": {
             "code": 774403,
-            "region": "Farm",
+            "region": "Crafting",
             "tags": ["CRAFTSANITY", "CRAFTSANITY_CRAFT"],
             "content_packs": ["Stardew Valley Expanded"]
         },
         "Craft Hero Elixir": {
             "code": 774404,
-            "region": "Farm",
+            "region": "Crafting",
             "tags": ["CRAFTSANITY", "CRAFTSANITY_CRAFT"],
             "content_packs": ["Stardew Valley Expanded"]
         },
         "Craft Armor Elixir": {
             "code": 774405,
-            "region": "Farm",
+            "region": "Crafting",
             "tags": ["CRAFTSANITY", "CRAFTSANITY_CRAFT"],
             "content_packs": ["Stardew Valley Expanded"]
         },
@@ -22004,199 +22460,199 @@
         },
         "Craft Glass Path": {
             "code": 774407,
-            "region": "Farm",
+            "region": "Crafting",
             "tags": ["CRAFTSANITY", "CRAFTSANITY_CRAFT"],
             "content_packs": ["Archaeology"]
         },
         "Craft Glass Brazier": {
             "code": 774408,
-            "region": "Farm",
+            "region": "Crafting",
             "tags": ["CRAFTSANITY", "CRAFTSANITY_CRAFT"],
             "content_packs": ["Archaeology"]
         },
         "Craft Glass Fence": {
             "code": 774409,
-            "region": "Farm",
+            "region": "Crafting",
             "tags": ["CRAFTSANITY", "CRAFTSANITY_CRAFT"],
             "content_packs": ["Archaeology"]
         },
         "Craft Bone Path": {
             "code": 774410,
-            "region": "Farm",
+            "region": "Crafting",
             "tags": ["CRAFTSANITY", "CRAFTSANITY_CRAFT"],
             "content_packs": ["Archaeology"]
         },
-        "Craft Water Sifter": {
+        "Craft Water Shifter": {
             "code": 774411,
-            "region": "Farm",
+            "region": "Crafting",
             "tags": ["CRAFTSANITY", "CRAFTSANITY_CRAFT"],
             "content_packs": ["Archaeology"]
         },
         "Craft Wooden Display": {
             "code": 774412,
-            "region": "Farm",
+            "region": "Crafting",
             "tags": ["CRAFTSANITY", "CRAFTSANITY_CRAFT"],
             "content_packs": ["Archaeology"]
         },
         "Craft Hardwood Display": {
             "code": 774413,
-            "region": "Farm",
+            "region": "Crafting",
             "tags": ["CRAFTSANITY", "CRAFTSANITY_CRAFT"],
             "content_packs": ["Archaeology"]
         },
         "Craft Dwarf Gadget: Infinite Volcano Simulation": {
             "code": 774414,
-            "region": "Farm",
+            "region": "Crafting",
             "tags": ["CRAFTSANITY", "CRAFTSANITY_CRAFT", "GINGER_ISLAND"],
             "content_packs": ["Archaeology", "Ginger Island (Vanilla)"]
         },
         "Craft Grinder": {
             "code": 774415,
-            "region": "Farm",
+            "region": "Crafting",
             "tags": ["CRAFTSANITY", "CRAFTSANITY_CRAFT"],
             "content_packs": ["Archaeology"]
         },
         "Craft Preservation Chamber": {
             "code": 774416,
-            "region": "Farm",
+            "region": "Crafting",
             "tags": ["CRAFTSANITY", "CRAFTSANITY_CRAFT"],
             "content_packs": ["Archaeology"]
         },
         "Craft Hardwood Preservation Chamber": {
             "code": 774417,
-            "region": "Farm",
+            "region": "Crafting",
             "tags": ["CRAFTSANITY", "CRAFTSANITY_CRAFT"],
             "content_packs": ["Archaeology"]
         },
         "Craft Ancient Battery Production Station": {
             "code": 774418,
-            "region": "Farm",
+            "region": "Crafting",
             "tags": ["CRAFTSANITY", "CRAFTSANITY_CRAFT"],
             "content_packs": ["Archaeology"]
         },
         "Craft Neanderthal Skeleton": {
             "code": 774419,
-            "region": "Farm",
+            "region": "Crafting",
             "tags": ["CRAFTSANITY", "CRAFTSANITY_CRAFT"],
             "content_packs": ["Boarding House and Bus Stop Extension"]
         },
         "Craft Pterodactyl Skeleton L": {
             "code": 774420,
-            "region": "Farm",
+            "region": "Crafting",
             "tags": ["CRAFTSANITY", "CRAFTSANITY_CRAFT"],
             "content_packs": ["Boarding House and Bus Stop Extension"]
         },
         "Craft Pterodactyl Skeleton M": {
             "code": 774421,
-            "region": "Farm",
+            "region": "Crafting",
             "tags": ["CRAFTSANITY", "CRAFTSANITY_CRAFT"],
             "content_packs": ["Boarding House and Bus Stop Extension"]
         },
         "Craft Pterodactyl Skeleton R": {
             "code": 774422,
-            "region": "Farm",
+            "region": "Crafting",
             "tags": ["CRAFTSANITY", "CRAFTSANITY_CRAFT"],
             "content_packs": ["Boarding House and Bus Stop Extension"]
         },
         "Craft T-Rex Skeleton L": {
             "code": 774423,
-            "region": "Farm",
+            "region": "Crafting",
             "tags": ["CRAFTSANITY", "CRAFTSANITY_CRAFT"],
             "content_packs": ["Boarding House and Bus Stop Extension"]
         },
         "Craft T-Rex Skeleton M": {
             "code": 774424,
-            "region": "Farm",
+            "region": "Crafting",
             "tags": ["CRAFTSANITY", "CRAFTSANITY_CRAFT"],
             "content_packs": ["Boarding House and Bus Stop Extension"]
         },
         "Craft T-Rex Skeleton R": {
             "code": 774425,
-            "region": "Farm",
+            "region": "Crafting",
             "tags": ["CRAFTSANITY", "CRAFTSANITY_CRAFT"],
             "content_packs": ["Boarding House and Bus Stop Extension"]
         },
         "Craft Restoration Table": {
             "code": 774426,
-            "region": "Farm",
+            "region": "Crafting",
             "tags": ["CRAFTSANITY", "CRAFTSANITY_CRAFT"],
             "content_packs": ["Archaeology"]
         },
         "Craft Rusty Path": {
             "code": 774427,
-            "region": "Farm",
+            "region": "Crafting",
             "tags": ["CRAFTSANITY", "CRAFTSANITY_CRAFT"],
             "content_packs": ["Archaeology"]
         },
         "Craft Rusty Brazier": {
             "code": 774428,
-            "region": "Farm",
+            "region": "Crafting",
             "tags": ["CRAFTSANITY", "CRAFTSANITY_CRAFT"],
             "content_packs": ["Archaeology"]
         },
         "Craft Lucky Ring": {
             "code": 774429,
-            "region": "Farm",
+            "region": "Crafting",
             "tags": ["CRAFTSANITY", "CRAFTSANITY_CRAFT"],
             "content_packs": ["Archaeology"]
         },
         "Craft Bone Fence": {
             "code": 774430,
-            "region": "Farm",
+            "region": "Crafting",
             "tags": ["CRAFTSANITY", "CRAFTSANITY_CRAFT"],
             "content_packs": ["Archaeology"]
         },
         "Craft Bouquet": {
             "code": 774431,
-            "region": "Farm",
+            "region": "Crafting",
             "tags": ["CRAFTSANITY", "CRAFTSANITY_CRAFT"],
             "content_packs": ["Socializing Skill"]
         },
         "Craft Trash Bin": {
             "code": 774432,
-            "region": "Farm",
+            "region": "Crafting",
             "tags": ["CRAFTSANITY", "CRAFTSANITY_CRAFT"],
             "content_packs": ["Binning Skill"]
         },
         "Craft Composter": {
             "code": 774433,
-            "region": "Farm",
+            "region": "Crafting",
             "tags": ["CRAFTSANITY", "CRAFTSANITY_CRAFT"],
             "content_packs": ["Binning Skill"]
         },
         "Craft Recycling Bin": {
             "code": 774434,
-            "region": "Farm",
+            "region": "Crafting",
             "tags": ["CRAFTSANITY", "CRAFTSANITY_CRAFT"],
             "content_packs": ["Binning Skill"]
         },
         "Craft Advanced Recycling Machine": {
             "code": 774435,
-            "region": "Farm",
+            "region": "Crafting",
             "tags": ["CRAFTSANITY", "CRAFTSANITY_CRAFT"],
             "content_packs": ["Binning Skill"]
         },
         "Craft Copper Slot Machine": {
             "code": 774440,
-            "region": "Farm",
+            "region": "Crafting",
             "tags": ["CRAFTSANITY", "CRAFTSANITY_CRAFT"],
             "content_packs": ["Luck Skill"]
         },
         "Craft Gold Slot Machine": {
             "code": 774441,
-            "region": "Farm",
+            "region": "Crafting",
             "tags": ["CRAFTSANITY", "CRAFTSANITY_CRAFT"],
             "content_packs": ["Luck Skill"]
         },
         "Craft Iridium Slot Machine": {
             "code": 774442,
-            "region": "Farm",
+            "region": "Crafting",
             "tags": ["CRAFTSANITY", "CRAFTSANITY_CRAFT"],
             "content_packs": ["Luck Skill"]
         },
         "Craft Radioactive Slot Machine": {
             "code": 774443,
-            "region": "Farm",
+            "region": "Crafting",
             "tags": ["CRAFTSANITY", "CRAFTSANITY_CRAFT", "GINGER_ISLAND", "REQUIRES_QI_ORDERS"],
             "content_packs": ["Ginger Island (Vanilla)", "Luck Skill", "Qi Board (Vanilla)"]
         },
@@ -22298,7 +22754,7 @@
         },
         "Quest: Void Soul Retrieval": {
             "code": 774512,
-            "region": "Sewer",
+            "region": "Sewer - Shop",
             "tags": ["GINGER_ISLAND", "STORY_QUEST"],
             "content_packs": ["Ginger Island (Vanilla)", "Stardew Valley Expanded"]
         },
@@ -22514,7 +22970,7 @@
         },
         "Big Bark Burger Recipe": {
             "code": 774603,
-            "region": "Saloon",
+            "region": "Saloon - Shop",
             "tags": ["CHEFSANITY", "CHEFSANITY_FRIENDSHIP"],
             "content_packs": ["Stardew Valley Expanded"]
         },
@@ -22526,13 +22982,13 @@
         },
         "Glazed Butterfish Recipe": {
             "code": 774605,
-            "region": "Saloon",
+            "region": "Saloon - Shop",
             "tags": ["CHEFSANITY", "CHEFSANITY_FRIENDSHIP"],
             "content_packs": ["Stardew Valley Expanded"]
         },
         "Mixed Berry Pie Recipe": {
             "code": 774606,
-            "region": "Saloon",
+            "region": "Saloon - Shop",
             "tags": ["CHEFSANITY", "CHEFSANITY_PURCHASE"],
             "content_packs": ["Stardew Valley Expanded"]
         },
@@ -22550,13 +23006,13 @@
         },
         "Void Delight Recipe": {
             "code": 774609,
-            "region": "Sewer",
+            "region": "Sewer - Shop",
             "tags": ["CHEFSANITY", "CHEFSANITY_FRIENDSHIP"],
             "content_packs": ["Stardew Valley Expanded"]
         },
         "Void Salmon Sushi Recipe": {
             "code": 774610,
-            "region": "Sewer",
+            "region": "Sewer - Shop",
             "tags": ["CHEFSANITY", "CHEFSANITY_PURCHASE"],
             "content_packs": ["Stardew Valley Expanded"]
         },
@@ -24036,7 +24492,7 @@
             "tags": ["GINGER_ISLAND", "SHIPSANITY"],
             "content_packs": ["Archaeology", "Ginger Island (Vanilla)"]
         },
-        "Shipsanity: Water Sifter": {
+        "Shipsanity: Water Shifter": {
             "code": 775202,
             "region": "Shipping",
             "tags": ["DEPRECATED", "SHIPSANITY"],

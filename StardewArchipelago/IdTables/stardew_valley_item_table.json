@@ -426,7 +426,7 @@
         },
         "Return Scepter": {
             "code": 717122,
-            "classification": "useful"
+            "classification": "progression"
         },
         "Progressive Season": {
             "code": 717123,
@@ -2400,6 +2400,146 @@
             "code": 717678,
             "classification": "progression"
         },
+        "Alex Arrival": {
+            "code": 717679,
+            "classification": "progression"
+        },
+        "Elliott Arrival": {
+            "code": 717680,
+            "classification": "progression"
+        },
+        "Harvey Arrival": {
+            "code": 717681,
+            "classification": "progression"
+        },
+        "Sam Arrival": {
+            "code": 717682,
+            "classification": "progression"
+        },
+        "Sebastian Arrival": {
+            "code": 717683,
+            "classification": "progression"
+        },
+        "Shane Arrival": {
+            "code": 717684,
+            "classification": "progression"
+        },
+        "Abigail Arrival": {
+            "code": 717685,
+            "classification": "progression"
+        },
+        "Emily Arrival": {
+            "code": 717686,
+            "classification": "progression"
+        },
+        "Haley Arrival": {
+            "code": 717687,
+            "classification": "progression"
+        },
+        "Leah Arrival": {
+            "code": 717688,
+            "classification": "progression"
+        },
+        "Maru Arrival": {
+            "code": 717689,
+            "classification": "progression"
+        },
+        "Penny Arrival": {
+            "code": 717690,
+            "classification": "progression"
+        },
+        "Caroline Arrival": {
+            "code": 717691,
+            "classification": "progression"
+        },
+        "Clint Arrival": {
+            "code": 717692,
+            "classification": "progression"
+        },
+        "Demetrius Arrival": {
+            "code": 717693,
+            "classification": "progression"
+        },
+        "Dwarf Arrival": {
+            "code": 717694,
+            "classification": "progression"
+        },
+        "Evelyn Arrival": {
+            "code": 717695,
+            "classification": "progression"
+        },
+        "George Arrival": {
+            "code": 717696,
+            "classification": "progression"
+        },
+        "Gus Arrival": {
+            "code": 717697,
+            "classification": "progression"
+        },
+        "Jas Arrival": {
+            "code": 717698,
+            "classification": "progression"
+        },
+        "Jodi Arrival": {
+            "code": 717699,
+            "classification": "progression"
+        },
+        "Kent Arrival": {
+            "code": 717700,
+            "classification": "progression"
+        },
+        "Krobus Arrival": {
+            "code": 717701,
+            "classification": "progression"
+        },
+        "Leo Arrival": {
+            "code": 717702,
+            "classification": "progression"
+        },
+        "Lewis Arrival": {
+            "code": 717703,
+            "classification": "progression"
+        },
+        "Linus Arrival": {
+            "code": 717704,
+            "classification": "progression"
+        },
+        "Marnie Arrival": {
+            "code": 717705,
+            "classification": "progression"
+        },
+        "Pam Arrival": {
+            "code": 717706,
+            "classification": "progression"
+        },
+        "Pierre Arrival": {
+            "code": 717707,
+            "classification": "progression"
+        },
+        "Robin Arrival": {
+            "code": 717708,
+            "classification": "progression"
+        },
+        "Sandy Arrival": {
+            "code": 717709,
+            "classification": "progression"
+        },
+        "Vincent Arrival": {
+            "code": 717710,
+            "classification": "progression"
+        },
+        "Willy Arrival": {
+            "code": 717711,
+            "classification": "progression"
+        },
+        "Wizard Arrival": {
+            "code": 717712,
+            "classification": "progression"
+        },
+        "Pet Arrival": {
+            "code": 717713,
+            "classification": "progression"
+        },
         "Burnt Trap": {
             "code": 721001,
             "classification": "trap"
@@ -2502,6 +2642,90 @@
         },
         "Nudge Trap": {
             "code": 721026,
+            "classification": "trap"
+        },
+        "Butterfingers Trap": {
+            "code": 721027,
+            "classification": "trap"
+        },
+        "Sale Trap": {
+            "code": 721028,
+            "classification": "trap"
+        },
+        "Exotic Trap": {
+            "code": 721029,
+            "classification": "trap"
+        },
+        "Encumbered Trap": {
+            "code": 721030,
+            "classification": "trap"
+        },
+        "Spoiled Trap": {
+            "code": 721031,
+            "classification": "trap"
+        },
+        "Super Monster Trap": {
+            "code": 721032,
+            "classification": "trap"
+        },
+        "We Moo Unseen Trap": {
+            "code": 721033,
+            "classification": "trap"
+        },
+        "Construction Trap": {
+            "code": 721034,
+            "classification": "trap"
+        },
+        "Error Trap": {
+            "code": 721035,
+            "classification": "trap"
+        },
+        "Cutscene Trap": {
+            "code": 721036,
+            "classification": "trap"
+        },
+        "Lorax Trap": {
+            "code": 721037,
+            "classification": "trap"
+        },
+        "Climate Change Trap": {
+            "code": 721038,
+            "classification": "trap"
+        },
+        "Noise Trap": {
+            "code": 721039,
+            "classification": "trap"
+        },
+        "Fishing Trap": {
+            "code": 721040,
+            "classification": "trap"
+        },
+        "Menu Trap": {
+            "code": 721041,
+            "classification": "trap"
+        },
+        "Emote Trap": {
+            "code": 721042,
+            "classification": "trap"
+        },
+        "Makeover Trap": {
+            "code": 721043,
+            "classification": "trap"
+        },
+        "Back To School Trap": {
+            "code": 721044,
+            "classification": "trap"
+        },
+        "Tired Trap": {
+            "code": 721045,
+            "classification": "trap"
+        },
+        "Injury Trap": {
+            "code": 721046,
+            "classification": "trap"
+        },
+        "Reverse Trap": {
+            "code": 721047,
             "classification": "trap"
         },
         "Deflation Bonus": {
@@ -3920,6 +4144,130 @@
             "code": 727131,
             "classification": "progression"
         },
+        "Juna Arrival": {
+            "code": 727141,
+            "classification": "progression"
+        },
+        "Jasper Arrival": {
+            "code": 727142,
+            "classification": "progression"
+        },
+        "Alec Arrival": {
+            "code": 727143,
+            "classification": "progression"
+        },
+        "Yoba Arrival": {
+            "code": 727144,
+            "classification": "progression"
+        },
+        "Eugene Arrival": {
+            "code": 727145,
+            "classification": "progression"
+        },
+        "Wellwick Arrival": {
+            "code": 727146,
+            "classification": "progression"
+        },
+        "Mr. Ginger Arrival": {
+            "code": 727147,
+            "classification": "progression"
+        },
+        "Shiko Arrival": {
+            "code": 727148,
+            "classification": "progression"
+        },
+        "Delores Arrival": {
+            "code": 727149,
+            "classification": "progression"
+        },
+        "Ayeisha Arrival": {
+            "code": 727150,
+            "classification": "progression"
+        },
+        "Riley Arrival": {
+            "code": 727151,
+            "classification": "progression"
+        },
+        "Claire Arrival": {
+            "code": 727152,
+            "classification": "progression"
+        },
+        "Lance Arrival": {
+            "code": 727153,
+            "classification": "progression"
+        },
+        "Olivia Arrival": {
+            "code": 727154,
+            "classification": "progression"
+        },
+        "Sophia Arrival": {
+            "code": 727155,
+            "classification": "progression"
+        },
+        "Victor Arrival": {
+            "code": 727156,
+            "classification": "progression"
+        },
+        "Andy Arrival": {
+            "code": 727157,
+            "classification": "progression"
+        },
+        "Apples Arrival": {
+            "code": 727158,
+            "classification": "progression"
+        },
+        "Gunther Arrival": {
+            "code": 727159,
+            "classification": "progression"
+        },
+        "Martin Arrival": {
+            "code": 727160,
+            "classification": "progression"
+        },
+        "Marlon Arrival": {
+            "code": 727161,
+            "classification": "progression"
+        },
+        "Morgan Arrival": {
+            "code": 727162,
+            "classification": "progression"
+        },
+        "Scarlett Arrival": {
+            "code": 727163,
+            "classification": "progression"
+        },
+        "Susan Arrival": {
+            "code": 727164,
+            "classification": "progression"
+        },
+        "Morris Arrival": {
+            "code": 727165,
+            "classification": "progression"
+        },
+        "Alecto Arrival": {
+            "code": 727166,
+            "classification": "progression"
+        },
+        "Zic Arrival": {
+            "code": 727167,
+            "classification": "progression"
+        },
+        "Lacey Arrival": {
+            "code": 727168,
+            "classification": "progression"
+        },
+        "Gregory Arrival": {
+            "code": 727169,
+            "classification": "progression"
+        },
+        "Sheila Arrival": {
+            "code": 727170,
+            "classification": "progression"
+        },
+        "Joel Arrival": {
+            "code": 727171,
+            "classification": "progression"
+        },
         "Progressive Woods Obelisk Sigils": {
             "code": 727301,
             "classification": "progression"
@@ -4168,7 +4516,7 @@
             "code": 727704,
             "classification": "filler"
         },
-        "Resource Pack: 3 Water Sifter": {
+        "Resource Pack: 3 Water Shifter": {
             "code": 727705,
             "classification": "filler"
         },
