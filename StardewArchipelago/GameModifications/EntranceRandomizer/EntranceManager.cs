@@ -437,6 +437,8 @@ namespace StardewArchipelago.GameModifications.EntranceRandomizer
             { "Town to Beach", "Town to Beach|39|0" },
             { "Mountain to Town", "Mountain|15|40 to Town" }, // Town 81 0 to Mountain 15 40
             { "Town to Mountain", "Town to Mountain|15|40" },
+            { "Beach Shortcut to Forest Shortcut", "Beach to Forest" },
+            { "Forest Shortcut to Beach Shortcut", "Forest to Beach" },
             { "Use Water Obelisk", "Farm to Beach" },
             { "Use Earth Obelisk", "Farm to Mountain" },
             { "Use Desert Obelisk", "Farm to Desert" },
@@ -496,7 +498,6 @@ namespace StardewArchipelago.GameModifications.EntranceRandomizer
             { "Town Shortcut through Cave", "Town|98|0" },
             { "Tide Pools Shortcut", "Beach|67|0" },
             { "Town Shortcut below Museum", "Town|94|109" },
-            { "Beach Shortcut", "Beach|0|5" },
             { "Forest Shortcut", "Forest" },
             { "Minecart Town", "Town|105|80" },
             { "Minecart Mines", "Mine|13|10" },
