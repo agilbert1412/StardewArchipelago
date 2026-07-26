@@ -476,6 +476,7 @@ namespace StardewArchipelago.GameModifications.EntranceRandomizer
             { "Men's Locker Room", "BathHouse_MensLocker" },
             { "Women's Locker Room", "BathHouse_WomensLocker" },
             { "Public Bath", "BathHouse_Pool" },
+            { "Island Southeast", "Island SouthEast" },
             { "Pirate Cove", "IslandSouthEastCave" },
             { "Leo Hut", "IslandHut" },
             { "Dig Site", "Island North" },
