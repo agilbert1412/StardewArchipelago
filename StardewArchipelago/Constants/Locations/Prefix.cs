@@ -7,5 +7,7 @@
         public const string BUILDING_DELUXE = "Deluxe ";
         public const string WALNUTSANITY = "Walnutsanity: ";
         public const string PURCHASE = "Purchase ";
+        public const string FORAGE = "Forage ";
+        public const string HARVEST = "Harvest ";
     }
 }

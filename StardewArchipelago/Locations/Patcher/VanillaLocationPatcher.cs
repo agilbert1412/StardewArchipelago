@@ -1259,6 +1259,16 @@ namespace StardewArchipelago.Locations.Patcher
 
         private void AddCropSanityLocations()
         {
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(GameLocation), nameof(GameLocation.OnHarvestedForage)),
+                postfix: new HarmonyMethod(typeof(CropsanityInjections), nameof(CropsanityInjections.OnHarvestedForage_CheckForageLocation_Postfix))
+            );
+
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(Bush), nameof(Bush.shake)),
+                prefix: new HarmonyMethod(typeof(CropsanityInjections), nameof(CropsanityInjections.Shake_CheckForageLocation_Prefix))
+            );
+
             if (_archipelago.SlotData.Cropsanity == Cropsanity.Disabled)
             {
                 return;

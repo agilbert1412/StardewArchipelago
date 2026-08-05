@@ -9,7 +9,9 @@ using StardewValley.TerrainFeatures;
 using KaitoKid.ArchipelagoUtilities.Net;
 using KaitoKid.ArchipelagoUtilities.Net.Constants;
 using KaitoKid.Utilities.Interfaces;
+using StardewArchipelago.Constants.Locations;
 using StardewArchipelago.Constants.Vanilla;
+using Object = StardewValley.Object;
 
 namespace StardewArchipelago.Locations.CodeInjections.Vanilla
 {
@@ -57,7 +59,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
                 }
 
                 var item = _itemManager.GetObjectById(itemId);
-                var apLocation = $"Harvest {item.Name}";
+                var apLocation = $"{Prefix.HARVEST}{item.Name}";
 
                 if (_archipelago.GetLocationId(apLocation) > -1)
                 {
@@ -88,7 +90,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
                 }
 
                 var fruit = __instance.fruit.First();
-                var apLocation = $"Harvest {fruit.Name}";
+                var apLocation = $"{Prefix.HARVEST}{fruit.Name}";
 
                 if (_archipelago.GetLocationId(apLocation) > -1)
                 {
@@ -105,6 +107,53 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
             {
                 _logger.LogError($"Failed in {nameof(Shake_CheckCropsanityFruitTreeLocation_Prefix)}:\n{ex}");
                 return MethodPrefix.RUN_ORIGINAL_METHOD;
+            }
+        }
+
+        // public void OnHarvestedForage(Farmer who, Object forage)
+        public static void OnHarvestedForage_CheckForageLocation_Postfix(GameLocation __instance, Farmer who, Object forage)
+        {
+            try
+            {
+                _locationChecker.AddCheckedLocation($"{Prefix.FORAGE}{forage.Name}");
+                return;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Failed in {nameof(OnHarvestedForage_CheckForageLocation_Postfix)}:\n{ex}");
+                return;
+            }
+        }
+
+        // public void shake(Vector2 tileLocation, bool doEvenIfStillShaking)
+        public static void Shake_CheckForageLocation_Prefix(Bush __instance, Vector2 tileLocation, bool doEvenIfStillShaking)
+        {
+            try
+            {
+                if (__instance.townBush.Value || !__instance.readyForHarvest() || !__instance.inBloom())
+                {
+                    return;
+                }
+
+                if (__instance.size.Value == 3 || __instance.size.Value == 4)
+                {
+                    return;
+                }
+
+                var shakeOff = __instance.GetShakeOffItem();
+                if (shakeOff == null)
+                {
+                    return;
+                }
+
+                var forage = ItemRegistry.Create(shakeOff);
+                _locationChecker.AddCheckedLocation($"{Prefix.FORAGE}{forage.Name}");
+                return;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Failed in {nameof(Shake_CheckForageLocation_Prefix)}:\n{ex}");
+                return;
             }
         }
     }
