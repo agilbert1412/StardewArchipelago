@@ -48,7 +48,7 @@ The available values are:
 - Very Cheap (-2)
 - Cheap (-1)
 - Normal (0)
-- Expensive (1)
+- Expensive (+1)
 - Very Expensive (+2)
 - Maximum (Always 8)
 
