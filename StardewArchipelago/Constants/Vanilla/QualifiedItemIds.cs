@@ -167,6 +167,7 @@ namespace StardewArchipelago.Constants.Vanilla
         public static readonly string GRAPE_STARTER = QualifiedObjectId(ObjectIds.GRAPE_STARTER);
         public static readonly string GRASS_STARTER = QualifiedObjectId(ObjectIds.GRASS_STARTER);
         public static readonly string GREEN_ALGAE = QualifiedObjectId(ObjectIds.GREEN_ALGAE);
+        public static readonly string GREEN_TEA = QualifiedObjectId(ObjectIds.GREEN_TEA);
         public static readonly string HARDWOOD = QualifiedObjectId(ObjectIds.HARDWOOD);
         public static readonly string HAY = QualifiedObjectId(ObjectIds.HAY);
         public static readonly string HAZELNUT = QualifiedObjectId(ObjectIds.HAZELNUT);

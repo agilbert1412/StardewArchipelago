@@ -3172,6 +3172,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
             if (CurrentPageBundle != null && CurrentPageBundle.name == MemeBundleNames.LINGO)
             {
                 FlashLingoSlotRed(slot);
+                _lingoHandler.GiveHintForSlot(slot);
             }
         }
 
