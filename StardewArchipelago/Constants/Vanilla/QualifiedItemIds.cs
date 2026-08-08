@@ -60,7 +60,7 @@ namespace StardewArchipelago.Constants.Vanilla
         public static readonly string BLUE_COWBOY_HAT = QualifiedHatId(HatIds.BLUE_COWBOY_HAT);
         public static readonly string BLUEBERRY = QualifiedObjectId(ObjectIds.BLUEBERRY);
         public static readonly string BLUEBERRY_SEEDS = QualifiedObjectId(ObjectIds.BLUEBERRY_SEEDS);
-        public static readonly string BLUEBERRY_TART = QualifiedPantsId(ObjectIds.BLUEBERRY_TART);
+        public static readonly string BLUEBERRY_TART = QualifiedObjectId(ObjectIds.BLUEBERRY_TART);
         public static readonly string BOAT = QualifiedFurnitureId(FurnitureIds.BOAT);
         public static readonly string BOK_CHOY_SEEDS = QualifiedObjectId(ObjectIds.BOK_CHOY_SEEDS);
         public static readonly string BOMB = QualifiedObjectId(ObjectIds.BOMB);
@@ -167,6 +167,7 @@ namespace StardewArchipelago.Constants.Vanilla
         public static readonly string GRAPE_STARTER = QualifiedObjectId(ObjectIds.GRAPE_STARTER);
         public static readonly string GRASS_STARTER = QualifiedObjectId(ObjectIds.GRASS_STARTER);
         public static readonly string GREEN_ALGAE = QualifiedObjectId(ObjectIds.GREEN_ALGAE);
+        public static readonly string GREEN_TEA = QualifiedObjectId(ObjectIds.GREEN_TEA);
         public static readonly string HARDWOOD = QualifiedObjectId(ObjectIds.HARDWOOD);
         public static readonly string HAY = QualifiedObjectId(ObjectIds.HAY);
         public static readonly string HAZELNUT = QualifiedObjectId(ObjectIds.HAZELNUT);

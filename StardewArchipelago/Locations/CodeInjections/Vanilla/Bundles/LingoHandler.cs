@@ -131,6 +131,8 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
                 { QualifiedItemIds.SHIRT, QualifiedItemIds.SHORTS },
                 { QualifiedItemIds.ACORN, QualifiedItemIds.CORN },
                 { QualifiedItemIds.CORN, QualifiedItemIds.ACORN },
+                { QualifiedItemIds.GREEN_TEA, QualifiedItemIds.FROZEN_TEAR },
+                { QualifiedItemIds.FROZEN_TEAR, QualifiedItemIds.GREEN_TEA },
                 { QualifiedItemIds.CORAL, QualifiedItemIds.COAL },
                 { QualifiedItemIds.COAL, QualifiedItemIds.CORAL },
                 { QualifiedItemIds.ANCIENT_SEEDS, QualifiedItemIds.ANCIENT_SEED },
@@ -162,8 +164,8 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
         public LingoPuzzleType GetLingoPuzzleType(BundleIngredientDescription ingredient)
         {
             var homophoneIds = new[] { QualifiedItemIds.SHORTS, QualifiedItemIds.SHIRT };
-            var addIds = new[] { QualifiedItemIds.ACORN, QualifiedItemIds.CORAL, QualifiedItemIds.ANCIENT_SEEDS, QualifiedItemIds.BAIT };
-            var subtractIds = new[] { QualifiedItemIds.CORN, QualifiedItemIds.COAL, QualifiedItemIds.ANCIENT_SEED };
+            var addIds = new[] { QualifiedItemIds.ACORN, QualifiedItemIds.CORAL, QualifiedItemIds.ANCIENT_SEEDS, QualifiedItemIds.FROZEN_TEAR, QualifiedItemIds.BAIT };
+            var subtractIds = new[] { QualifiedItemIds.CORN, QualifiedItemIds.COAL, QualifiedItemIds.ANCIENT_SEED, QualifiedItemIds.GREEN_TEA };
             var lesserIds = new[]
             {
                 QualifiedItemIds.BLUEBERRY, QualifiedItemIds.BLACKBERRY, QualifiedItemIds.CARP, QualifiedItemIds.SALMON, QualifiedItemIds.RHUBARB,
@@ -265,9 +267,9 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
                 case LingoPuzzleType.Homophone:
                     return item.QualifiedItemId == ingredientDescription.id || itemName == ingredientName || $" {itemName} ".Contains($" {ingredientName} ") ;
                 case LingoPuzzleType.AddLetter:
-                    return IsSameWithExtraLetter(itemName, drawnItemName);
+                    return item.QualifiedItemId == ingredientDescription.id || IsSameWithExtraLetter(itemName, drawnItemName);
                 case LingoPuzzleType.SubtractLetter:
-                    return IsSameWithExtraLetter(drawnItemName, itemName);
+                    return item.QualifiedItemId == ingredientDescription.id || IsSameWithExtraLetter(drawnItemName, itemName);
                 case LingoPuzzleType.Lesser:
                     return item.QualifiedItemId == ingredientDescription.id;
                 case LingoPuzzleType.Greater:
@@ -294,6 +296,53 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
             }
 
             return false;
+        }
+
+        public void GiveHintForSlot(ClickableTextureComponent slot)
+        {
+            if (slot == null)
+            {
+                return;
+            }
+            var slotIndex = _slots.IndexOf(slot);
+            if (slotIndex <= -1 || slotIndex >= _puzzleTypes.Count)
+            {
+                return;
+            }
+
+            var puzzleType = _puzzleTypes[slotIndex];
+            var color = GetLingoColor(puzzleType);
+            var hintMessage = "";
+
+            switch (puzzleType)
+            {
+
+                case LingoPuzzleType.Normal:
+                    hintMessage = $"Find something that is the same...";
+                    break;
+                case LingoPuzzleType.Homophone:
+                    hintMessage = $"Find something that sounds the same...";
+                    break;
+                case LingoPuzzleType.AddLetter:
+                    hintMessage = $"Find something spelled with a little extra...";
+                    break;
+                case LingoPuzzleType.SubtractLetter:
+                    hintMessage = $"Find something spelled with a little less...";
+                    break;
+                case LingoPuzzleType.Lesser:
+                    hintMessage = $"Find the whole to this part...";
+                    break;
+                case LingoPuzzleType.Greater:
+                    hintMessage = $"Find the part to this whole...";
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
+
+            if (!string.IsNullOrWhiteSpace(hintMessage))
+            {
+                Game1.chatBox.addMessage(hintMessage, color);
+            }
         }
     }
 

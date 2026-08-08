@@ -203,7 +203,8 @@ namespace StardewArchipelago.GameModifications.RandomizedData
                     locationName.Equals($"{Prefix.PURCHASE}{randomizedShopItemData.ItemName}") ||
                     locationName.Equals($"{randomizedShopItemData.ItemName}{Suffix.UPGRADE}"))
                 {
-                    isCorrectItem = shopDataEntryIsRecipe == randomizedItemName.EndsWith(ItemParser.RECIPE_SUFFIX);
+                    // isCorrectItem = shopDataEntryIsRecipe == randomizedItemName.EndsWith(ItemParser.RECIPE_SUFFIX);
+                    isCorrectItem = true; // I think we just return true here. If it's an ap location, it's never a recipe, but it can often match a recipe in name. Example: Banana Pudding Recipe
                     return true;
                 }
                 if (locationName.Equals(FestivalLocationNames.STRAWBERRY_SEEDS))

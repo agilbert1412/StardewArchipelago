@@ -420,6 +420,7 @@ namespace StardewArchipelago
             if (AttemptConnectionToArchipelago().Success)
             {
                 InitializeAfterConnection();
+                DoArchipelagoNewDayProcesses();
                 DoArchipelagoDayStartedProcesses();
             }
         }
@@ -452,18 +453,7 @@ namespace StardewArchipelago
         [EventPriority((EventPriority)((int)EventPriority.Low * 10))]
         private void OnDayStarted(object sender, DayStartedEventArgs e)
         {
-            SeasonsRandomizer.ChangeMailKeysBasedOnSeasonsToDaysElapsed();
-            SeasonsRandomizer.SendMailHardcodedForToday();
-            ArchipelagoJunimoNoteMenu.OnDayStarted(_giftHandler.Receiver);
-            _itemManager.TrapManager.TrapExecutor.DayUpdateDebt();
-            _itemManager.TrapManager.TrapExecutor.DebuffApplier.LoadBuffs();
-            State.TrapsState.DaysShunRemaining = Math.Max(0, State.TrapsState.DaysShunRemaining-1);
-
-            var pariahShunningDays = new TrapDifficultyBalancer().PariahShunningDays[_archipelago.SlotData.TrapItemsDifficulty];
-            if (State.TrapsState.DaysShunRemaining > pariahShunningDays * 2)
-            {
-                State.TrapsState.DaysShunRemaining = pariahShunningDays;
-            }
+            DoArchipelagoNewDayProcesses();
 
             if (MultiSleepManager.TryDoMultiSleepOnDayStarted())
             {
@@ -471,7 +461,27 @@ namespace StardewArchipelago
             }
 
             DoArchipelagoDayStartedProcesses();
-            NoHouseInjections.BeHomelessIfNeeded();
+        }
+
+        private void DoArchipelagoNewDayProcesses()
+        {
+            if (!_archipelago.MakeSureConnected(5))
+            {
+                return;
+            }
+
+            SeasonsRandomizer.ChangeMailKeysBasedOnSeasonsToDaysElapsed();
+            SeasonsRandomizer.SendMailHardcodedForToday();
+            ArchipelagoJunimoNoteMenu.OnDayStarted(_giftHandler.Receiver);
+            _itemManager.TrapManager.TrapExecutor.DayUpdateDebt();
+            _itemManager.TrapManager.TrapExecutor.DebuffApplier.LoadBuffs();
+            State.TrapsState.DaysShunRemaining = Math.Max(0, State.TrapsState.DaysShunRemaining - 1);
+
+            var pariahShunningDays = new TrapDifficultyBalancer().PariahShunningDays[_archipelago.SlotData.TrapItemsDifficulty];
+            if (State.TrapsState.DaysShunRemaining > pariahShunningDays * 2)
+            {
+                State.TrapsState.DaysShunRemaining = pariahShunningDays;
+            }
         }
 
         private void DoArchipelagoDayStartedProcesses()
@@ -508,6 +518,7 @@ namespace StardewArchipelago
             bugFixer.FixKnownBugs();
 
             _hintHelper.GiveHintTip(_archipelago.GetSession());
+            NoHouseInjections.BeHomelessIfNeeded();
         }
 
         private void OnDayEnding(object sender, DayEndingEventArgs e)
