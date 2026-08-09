@@ -110,7 +110,10 @@ namespace StardewArchipelago.Archipelago.SlotData
             JotPKLocations = slotDataReader.GetSlotSetting(SlotDataKeys.JOTPK, JourneyOfThePrairieKing.FullShuffle);
             JunimoKartLocations = slotDataReader.GetSlotSetting(SlotDataKeys.JUNIMO_KART, JunimoKart.FullShuffle);
             SpecialOrderLocations = slotDataReader.GetSlotSetting(SlotDataKeys.SPECIAL_ORDERS, SpecialOrderLocations.Board);
-            QuestLocations = new QuestLocations(slotDataReader.GetSlotSetting(SlotDataKeys.QUEST_LOCATIONS, 0));
+            var questLocations = slotDataReader.GetSlotSetting(SlotDataKeys.QUEST_LOCATIONS, 0);
+            var helpWantedsStringData = slotDataReader.GetSlotSetting(SlotDataKeys.HELP_WANTED_QUESTS, "");
+            var helpWanteds = JsonConvert.DeserializeObject<Dictionary<string, string>>(helpWantedsStringData);
+            QuestLocations = new QuestLocations(questLocations, helpWanteds);
             Fishsanity = slotDataReader.GetSlotSetting(SlotDataKeys.FISHSANITY, Fishsanity.None);
             Museumsanity = slotDataReader.GetSlotSetting(SlotDataKeys.MUSEUMSANITY, Museumsanity.None);
             Monstersanity = slotDataReader.GetSlotSetting(SlotDataKeys.MONSTERSANITY, Monstersanity.None);

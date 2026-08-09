@@ -9,6 +9,7 @@ using StardewArchipelago.Archipelago;
 using KaitoKid.ArchipelagoUtilities.Net.Constants;
 using KaitoKid.Utilities.Interfaces;
 using StardewArchipelago.Locations.Secrets;
+using StardewArchipelago.Stardew;
 
 namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Quests
 {
@@ -20,7 +21,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Quests
         private static LocationChecker _locationChecker;
         private static ContentManager _englishContentManager;
 
-        public static void Initialize(ILogger logger, IModHelper helper, StardewArchipelagoClient archipelago, LocationChecker locationChecker)
+        public static void Initialize(ILogger logger, IModHelper helper, StardewArchipelagoClient archipelago, LocationChecker locationChecker, StardewItemManager itemManager)
         {
             _logger = logger;
             _helper = helper;
@@ -28,7 +29,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Quests
             _locationChecker = locationChecker;
             _englishContentManager = new ContentManager(Game1.game1.Content.ServiceProvider, Game1.game1.Content.RootDirectory);
             StoryQuestInjections.Initialize(logger, helper, archipelago, locationChecker);
-            HelpWantedQuestInjections.Initialize(logger, helper, archipelago, locationChecker);
+            HelpWantedQuestInjections.Initialize(logger, helper, archipelago, locationChecker, itemManager);
             OtherQuestInjections.Initialize(logger, helper, archipelago, locationChecker);
             // SecretNotesInjections.Initialize(logger, helper, archipelago, locationChecker);
         }

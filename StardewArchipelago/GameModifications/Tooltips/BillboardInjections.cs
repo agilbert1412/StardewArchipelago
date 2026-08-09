@@ -143,9 +143,9 @@ namespace StardewArchipelago.GameModifications.Tooltips
                 return;
             }
 
-            var dailyQuestCheckName = GetDailyQuestCheckName(quest);
+            var dailyQuestCheckName = HelpWantedQuestInjections.GetQuestLocationName(quest);
 
-            if (string.IsNullOrWhiteSpace(dailyQuestCheckName) || !_locationChecker.GetAllLocationsNotCheckedContainingWord(dailyQuestCheckName).Any())
+            if (string.IsNullOrWhiteSpace(dailyQuestCheckName) || !_locationChecker.IsLocationMissing(dailyQuestCheckName))
             {
                 return;
             }
@@ -157,18 +157,6 @@ namespace StardewArchipelago.GameModifications.Tooltips
             var color = Color.White;
             spriteBatch.Draw(_bigArchipelagoIcon, position1, sourceRectangle, color, 0f, Vector2.Zero, 1f, SpriteEffects.None, 1f);
             spriteBatch.Draw(_bigArchipelagoIcon, position2, sourceRectangle, color, 0f, Vector2.Zero, 1f, SpriteEffects.None, 1f);
-        }
-
-        private static string GetDailyQuestCheckName(Quest quest)
-        {
-            return quest.questType.Value switch
-            {
-                (int)QuestType.ItemDelivery => string.Format(DailyQuest.HELP_WANTED, DailyQuest.ITEM_DELIVERY),
-                (int)QuestType.SlayMonsters => string.Format(DailyQuest.HELP_WANTED, DailyQuest.SLAY_MONSTERS),
-                (int)QuestType.Fishing => string.Format(DailyQuest.HELP_WANTED, DailyQuest.FISHING),
-                (int)QuestType.ResourceCollection => string.Format(DailyQuest.HELP_WANTED, DailyQuest.GATHERING),
-                _ => "",
-            };
         }
 
         private static void DrawCalendarIndicators(Billboard billBoard, SpriteBatch spriteBatch)

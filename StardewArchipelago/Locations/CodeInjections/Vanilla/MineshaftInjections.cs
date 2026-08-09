@@ -220,8 +220,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
             {
                 if (MineshaftConsequences.CanUseElevatorToday())
                 {
-                    var mineLevelUnlocked = numberOfMineElevatorReceived * ArchipelagoMineElevatorMenu.FLOORS_PER_ELEVATOR;
-                    mineLevelUnlocked = Math.Min(120, Math.Max(0, mineLevelUnlocked));
+                    var mineLevelUnlocked = ElevatorFloorUnlocked(numberOfMineElevatorReceived);
                     Game1.activeClickableMenu = new ArchipelagoMineElevatorMenu(mineLevelUnlocked);
                     return;
                 }
@@ -231,6 +230,19 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
             }
 
             Game1.drawObjectDialogue(Game1.parseText(Game1.content.LoadString("Strings\\Locations:Mines_MineElevator_NotWorking")));
+        }
+
+        public static int ElevatorFloorUnlocked()
+        {
+            var numberOfMineElevatorReceived = _archipelago.GetReceivedItemCount(VanillaUnlockManager.PROGRESSIVE_MINE_ELEVATOR);
+            return ElevatorFloorUnlocked(numberOfMineElevatorReceived);
+        }
+
+        public static int ElevatorFloorUnlocked(int receivedElevatorItems)
+        {
+            var mineLevelUnlocked = receivedElevatorItems * ArchipelagoMineElevatorMenu.FLOORS_PER_ELEVATOR;
+            mineLevelUnlocked = Math.Min(120, Math.Max(0, mineLevelUnlocked));
+            return mineLevelUnlocked;
         }
 
         private static void CreateSkullCavernElevatorMenuIfUnlocked()

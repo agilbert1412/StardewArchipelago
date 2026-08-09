@@ -22,6 +22,7 @@
         public const string JUNIMO_KART = "junimo_kart";
         public const string SPECIAL_ORDERS = "special_order_locations";
         public const string QUEST_LOCATIONS = "quest_locations";
+        public const string HELP_WANTED_QUESTS = "help_wanted_quests";
         public const string FISHSANITY = "fishsanity";
         public const string MUSEUMSANITY = "museumsanity";
         public const string MONSTERSANITY = "monstersanity";

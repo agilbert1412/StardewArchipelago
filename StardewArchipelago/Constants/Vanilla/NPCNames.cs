@@ -1,4 +1,6 @@
-﻿namespace StardewArchipelago.Constants.Vanilla
+﻿using Newtonsoft.Json.Linq;
+
+namespace StardewArchipelago.Constants.Vanilla
 {
     public static class NPCNames
     {
@@ -28,5 +30,7 @@
         public const string LEAH = "Leah";
         public const string MARU = "Maru";
         public const string ALEX = "Alex";
+        public const string ROBIN = "Robin";
+        public const string CLINT = "Clint";
     }
 }

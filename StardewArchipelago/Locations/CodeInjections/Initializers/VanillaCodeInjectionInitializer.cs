@@ -40,7 +40,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Initializers
             InitializeBundleInjections(logger, modHelper, archipelago, state, locationChecker, bundlesManager, bundleReader, trapManager, bank, giftSender);
             MineshaftInjections.Initialize(logger, modHelper, config, archipelago, locationChecker, jojaLocationChecker);
             InitializeSkills(logger, modHelper, archipelago, locationChecker);
-            QuestInjections.Initialize(logger, modHelper, archipelago, locationChecker);
+            QuestInjections.Initialize(logger, modHelper, archipelago, locationChecker, itemManager);
             DarkTalismanInjections.Initialize(logger, modHelper, archipelago, locationChecker);
             CarpenterInjections.Initialize(logger, modHelper, archipelago, locationChecker);
             IsolatedEventInjections.Initialize(logger, modHelper, archipelago, locationChecker);
