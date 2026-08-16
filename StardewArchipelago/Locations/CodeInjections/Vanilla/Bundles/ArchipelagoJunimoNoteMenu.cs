@@ -111,6 +111,11 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
             InitializeFields();
         }
 
+        public ArchipelagoJunimoNoteMenu(string noteTexturePath) : base(noteTexturePath)
+        {
+            InitializeFields();
+        }
+
         private void InitializeFields()
         {
             _currencyManager = new BundleCurrencyManager(_logger, _modHelper, _wallet, _bank, this);
