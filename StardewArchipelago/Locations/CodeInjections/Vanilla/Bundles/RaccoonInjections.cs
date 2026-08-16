@@ -25,6 +25,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
     public static class RaccoonInjections
     {
         private const string GIANT_STUMP = "Quest: The Giant Stump";
+        private const string RACCOON_REQUEST_PREFIX = "Raccoon Request ";
 
         private static LogHandler _logger;
         private static IModHelper _modHelper;
@@ -33,6 +34,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
         private static StardewLocationChecker _locationChecker;
         private static BundlesManager _bundlesManager;
         private static BundleReader _bundleReader;
+        private static int _currentRaccoonBundleNumber;
 
         public static void Initialize(LogHandler logger, IModHelper modHelper, StardewArchipelagoClient archipelago, ArchipelagoStateDto state,
             StardewLocationChecker locationChecker, BundlesManager bundlesManager, BundleReader bundleReader)
@@ -44,6 +46,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
             _locationChecker = locationChecker;
             _bundlesManager = bundlesManager;
             _bundleReader = bundleReader;
+            _currentRaccoonBundleNumber = -1;
         }
 
         // public override bool performAction(string[] action, Farmer who, Location tileLocation)
@@ -144,17 +147,10 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
                     return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
                 }
 
-                var maxNumberOfRaccoons = GetMaxRaccoonsInSlot();
-                var receivedRaccoons = _archipelago.GetReceivedItemCount(APItem.PROGRESSIVE_RACCOON);
-                if (!_archipelago.SlotData.QuestLocations.StoryQuestsEnabled)
-                {
-                    receivedRaccoons += 1;
-                }
+                var availableRaccoonNumbers = GetAvailableMissingRaccoonNumbers();
+                var raccoonBundleAvailable = availableRaccoonNumbers.Any();
 
-                var nextRaccoonRequestNumber = GetCurrentRaccoonBundleNumber();
-                var raccoonBundleAvailable = nextRaccoonRequestNumber < receivedRaccoons;
-
-                if (receivedRaccoons >= maxNumberOfRaccoons && nextRaccoonRequestNumber == -1)
+                if (!raccoonBundleAvailable)
                 {
                     Game1.drawObjectDialogue(Game1.content.LoadString("Strings\\1_6_Strings:Raccoon_interim"));
                     return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
@@ -209,16 +205,26 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
             var wasTalkedToField = _modHelper.Reflection.GetField<bool>(raccoon, "wasTalkedTo");
             wasTalkedToField.SetValue(true);
 
-            var currentRaccoonBundleNumber = GetCurrentRaccoonBundleNumber();
+            var currentRaccoonBundleNumber = GetFirstRaccoonBundleNumber();
             if (currentRaccoonBundleNumber <= 0)
             {
                 return;
             }
 
-            if (Game1.netWorldState.Value.SeasonOfCurrentRacconBundle != currentRaccoonBundleNumber)
+            ActivateMrRaccoon(raccoon, currentRaccoonBundleNumber);
+        }
+
+        // private void _activateMrRaccoon()
+        private static void ActivateMrRaccoon(Raccoon raccoon, int raccoonBundleNumber)
+        {
+            // private bool wasTalkedTo;
+            var wasTalkedToField = _modHelper.Reflection.GetField<bool>(raccoon, "wasTalkedTo");
+            wasTalkedToField.SetValue(true);
+
+            if (Game1.netWorldState.Value.SeasonOfCurrentRacconBundle != raccoonBundleNumber)
             {
-                _state.CurrentRaccoonBundleStatus.Clear();
-                Game1.netWorldState.Value.SeasonOfCurrentRacconBundle = currentRaccoonBundleNumber;
+                _state.CurrentRaccoonBundleStatus[raccoonBundleNumber].Clear();
+                Game1.netWorldState.Value.SeasonOfCurrentRacconBundle = raccoonBundleNumber;
             }
 
             var ingredients = new List<BundleIngredientDescription>();
@@ -409,10 +415,48 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
             numRaccoonBabiesField.SetValue(correctNumRaccoonBabies);
         }
 
+        private static List<string> GetRaccoonLocationsInSlot()
+        {
+            var locations = _locationChecker.GetAllLocationsStartingWith(RACCOON_REQUEST_PREFIX).ToList();
+            return locations;
+        }
+
+        private static List<string> GetRaccoonMissingLocationsInSlot()
+        {
+            var locations = GetRaccoonLocationsInSlot().Where(x => _locationChecker.IsLocationMissing(x)).ToList();
+            return locations;
+        }
+
+        private static List<int> GetRaccoonNumbersInSlot()
+        {
+            var locations = GetRaccoonLocationsInSlot();
+            var numbers = locations.Select(x => int.Parse(x.Split(" ").Last())).ToList();
+            return numbers;
+        }
+
+        private static List<int> GetAvailableRaccoonNumbers()
+        {
+            var raccoonNumbers = GetRaccoonNumbersInSlot();
+            var receivedRaccoons = _archipelago.GetReceivedItemCount(APItem.PROGRESSIVE_RACCOON);
+            if (!_archipelago.SlotData.QuestLocations.StoryQuestsEnabled)
+            {
+                receivedRaccoons += 1;
+            }
+
+            return raccoonNumbers.Where(x => x < receivedRaccoons).ToList();
+        }
+
+        private static List<int> GetAvailableMissingRaccoonNumbers()
+        {
+            var raccoonNumbers = GetAvailableRaccoonNumbers();
+            var missingNumbers = raccoonNumbers.Where(x => _locationChecker.IsLocationMissing($"{RACCOON_REQUEST_PREFIX}{x}")).ToList();
+            return missingNumbers;
+        }
+
         private static int GetMaxRaccoonsInSlot()
         {
             var defaultNum = 8;
-            var numAsLocations = _locationChecker.GetAllLocationsStartingWith("Raccoon Request ").Count();
+            var numAsLocations = GetRaccoonLocationsInSlot().Count();
             var realNum = Math.Min(defaultNum, numAsLocations);
             if (_archipelago.SlotData.QuestLocations.StoryQuestsEnabled)
             {

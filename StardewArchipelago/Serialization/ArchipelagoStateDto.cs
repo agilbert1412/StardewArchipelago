@@ -20,7 +20,7 @@ namespace StardewArchipelago.Serialization
         public int TravelingMerchantPurchases { get; set; }
         public ArchipelagoWalletDto Wallet { get; set; }
         public List<string> EntrancesTraversed { get; set; }
-        public List<bool> CurrentRaccoonBundleStatus { get; set; }
+        public Dictionary<int, List<bool>> CurrentRaccoonBundleStatus { get; set; }
         public int NumberOfLOTLEpisodesWatched { get; set; }
         public int NumberTimesCursed { get; set; }
         public List<string> QualifiedIdsClothesDonated { get; set; }
@@ -46,7 +46,7 @@ namespace StardewArchipelago.Serialization
             TravelingMerchantPurchases = 0;
             Wallet = new ArchipelagoWalletDto();
             EntrancesTraversed = new List<string>();
-            CurrentRaccoonBundleStatus = new List<bool>();
+            CurrentRaccoonBundleStatus = new Dictionary<int, List<bool>>();
             NumberOfLOTLEpisodesWatched = 0;
             NumberTimesCursed = 0;
             QualifiedIdsClothesDonated = new List<string>();
