@@ -209,7 +209,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
             JunimoNoteMenuRemake.ScreenSwipe = new ScreenSwipe(1);
             var number = Game1.netWorldState.Value.SeasonOfCurrentRacconBundle;
             _locationChecker.AddCheckedLocation($"{APName.RACCOON_REQUEST_PREFIX}{number}");
-            _state.CurrentRaccoonBundleStatus[number].Clear();
+            // _state.CurrentRaccoonBundleStatus[number].Clear();
             Game1.netWorldState.Value.SeasonOfCurrentRacconBundle = -1;
 
             // private bool wasTalkedTo;
