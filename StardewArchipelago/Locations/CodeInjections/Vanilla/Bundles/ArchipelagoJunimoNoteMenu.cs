@@ -52,12 +52,12 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
         private const string MORSHU_RICHER_CUE = "little_bit_richer";
 
         private static LogHandler _logger;
-        private static IModHelper _modHelper;
-        private static StardewArchipelagoClient _archipelago;
+        protected static IModHelper _modHelper;
+        protected static StardewArchipelagoClient _archipelago;
         private static ArchipelagoStateDto _state;
         private static ArchipelagoWalletDto _wallet;
         private static BankHandler _bank;
-        private static LocationChecker _locationChecker;
+        protected static LocationChecker _locationChecker;
         private static BundleReader _bundleReader;
         private static TrapManager _trapManager;
         private BundleCurrencyManager _currencyManager;

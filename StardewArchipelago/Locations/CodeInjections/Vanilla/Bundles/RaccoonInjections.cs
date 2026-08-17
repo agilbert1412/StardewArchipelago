@@ -17,6 +17,7 @@ using xTile.Dimensions;
 using KaitoKid.ArchipelagoUtilities.Net.Constants;
 using StardewArchipelago.Archipelago;
 using StardewArchipelago.Constants.Vanilla;
+using StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles.Remakes;
 using StardewArchipelago.Stardew;
 using StardewArchipelago.Logging;
 
@@ -146,7 +147,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
                     return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
                 }
 
-                var availableRaccoonNumbers = GetAvailableMissingRaccoonNumbers();
+                var availableRaccoonNumbers = RaccoonJunimoNoteMenu.GetAvailableMissingRaccoonNumbers(_archipelago, _locationChecker);
                 var raccoonBundleAvailable = availableRaccoonNumbers.Any();
 
                 // private bool wasTalkedTo;
@@ -196,17 +197,20 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
                 return;
             }
 
-            var raccoonNoteMenu = new RaccoonJunimoNoteMenu(raccoonBundleNumber, raccoon, _locationChecker, _bundlesManager, _state);
+            var raccoonNoteMenu = new RaccoonJunimoNoteMenu(raccoonBundleNumber, raccoon, _archipelago, _locationChecker, _bundlesManager, _state);
+            raccoonNoteMenu.OnBundleComplete = _ => BundleComplete(raccoon);
+            raccoonNoteMenu.OnScreenSwipeFinished = _ => BundleCompleteAfterSwipe(raccoon);
             Game1.activeClickableMenu = raccoonNoteMenu;
         }
 
         // private void bundleComplete(JunimoNoteMenu menu)
         private static void BundleComplete(Raccoon raccoon)
         {
-            JunimoNoteMenu.screenSwipe = new ScreenSwipe(1);
-            _locationChecker.AddCheckedLocation($"{APName.RACCOON_REQUEST_PREFIX}{Game1.netWorldState.Value.SeasonOfCurrentRacconBundle}");
+            JunimoNoteMenuRemake.ScreenSwipe = new ScreenSwipe(1);
+            var number = Game1.netWorldState.Value.SeasonOfCurrentRacconBundle;
+            _locationChecker.AddCheckedLocation($"{APName.RACCOON_REQUEST_PREFIX}{number}");
+            _state.CurrentRaccoonBundleStatus[number].Clear();
             Game1.netWorldState.Value.SeasonOfCurrentRacconBundle = -1;
-            _state.CurrentRaccoonBundleStatus.Clear();
 
             // private bool wasTalkedTo;
             var wasTalkedToField = _modHelper.Reflection.GetField<bool>(raccoon, "wasTalkedTo");
@@ -240,16 +244,10 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
             return -1;
         }
 
-        private static List<string> GetRaccoonMissingLocationsInSlot()
-        {
-            var locations = GetRaccoonLocationsInSlot().Where(x => _locationChecker.IsLocationMissing(x)).ToList();
-            return locations;
-        }
-
         private static int GetMaxRaccoonsInSlot()
         {
             var defaultNum = 8;
-            var numAsLocations = GetRaccoonLocationsInSlot().Count();
+            var numAsLocations = RaccoonJunimoNoteMenu.GetRaccoonLocationsInSlot(_locationChecker).Count();
             var realNum = Math.Min(defaultNum, numAsLocations);
             if (_archipelago.SlotData.QuestLocations.StoryQuestsEnabled)
             {

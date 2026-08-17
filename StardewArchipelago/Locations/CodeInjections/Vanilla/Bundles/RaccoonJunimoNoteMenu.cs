@@ -1,17 +1,20 @@
-﻿using Microsoft.Xna.Framework.Graphics;
+﻿using KaitoKid.ArchipelagoUtilities.Net;
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+using StardewArchipelago.Archipelago;
 using StardewArchipelago.Bundles;
 using StardewArchipelago.Constants;
+using StardewArchipelago.Serialization;
+using StardewModdingAPI;
 using StardewValley;
+using StardewValley.BellsAndWhistles;
+using StardewValley.Characters;
 using StardewValley.Menus;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using StardewArchipelago.Serialization;
-using StardewValley.Characters;
-using KaitoKid.ArchipelagoUtilities.Net;
-using StardewArchipelago.Archipelago;
 
 namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
 {
@@ -20,21 +23,24 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
         private const string RACCOON_REQUEST_PREFIX = "Raccoon Request ";
 
         private readonly Raccoon _raccoon;
+        private readonly StardewArchipelagoClient _archipelago;
         private readonly StardewLocationChecker _locationChecker;
         private readonly BundlesManager _bundlesManager;
         private readonly ArchipelagoStateDto _state;
         private int _currentBundleNumber = -1;
 
-        public RaccoonJunimoNoteMenu(int bundleNumber, Raccoon raccoon, StardewLocationChecker _locationChecker, BundlesManager bundlesManager, ArchipelagoStateDto state) : base("LooseSprites\\raccoon_bundle_menu")
+        public RaccoonJunimoNoteMenu(int bundleNumber, Raccoon raccoon, StardewArchipelagoClient archipelago, StardewLocationChecker locationChecker, BundlesManager bundlesManager, ArchipelagoStateDto state) : base("LooseSprites\\raccoon_bundle_menu")
         {
             _raccoon = raccoon;
-            this._locationChecker = _locationChecker;
+            _archipelago = archipelago;
+            _locationChecker = locationChecker;
             _bundlesManager = bundlesManager;
             _state = state;
 
+            InitializeArrows();
             var currentRaccoonBundle = InitializeBundle(bundleNumber);
             SetUpBundleSpecificPage(currentRaccoonBundle);
-            
+
             behaviorBeforeCleanup = _ => _raccoon.mutex?.ReleaseLock();
 
             if (!Game1.options.SnappyMenus)
@@ -50,7 +56,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
             if (Game1.netWorldState.Value.SeasonOfCurrentRacconBundle != bundleNumber)
             {
                 _state.CurrentRaccoonBundleStatus.TryAdd(bundleNumber, new List<bool>());
-                _state.CurrentRaccoonBundleStatus[bundleNumber].Clear();
+                // _state.CurrentRaccoonBundleStatus[bundleNumber].Clear();
                 Game1.netWorldState.Value.SeasonOfCurrentRacconBundle = bundleNumber;
             }
 
@@ -82,25 +88,100 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
             };
 
             OnIngredientDeposit = x => currentBundleStatus[x] = true;
-            OnBundleComplete = _ => BundleComplete(_raccoon);
-            OnScreenSwipeFinished = _ => BundleCompleteAfterSwipe(_raccoon);
 
             SetArrowsVisibility();
 
             _currentBundleNumber = bundleNumber;
             return bundle;
         }
+
+        private void InitializeArrows()
+        {
+            var textureComponent1 = new ClickableTextureComponent(new Rectangle(xPositionOnScreen + width - 128, yPositionOnScreen, 48, 44), Game1.mouseCursors, new Rectangle(365, 495, 12, 11), 4f);
+            textureComponent1.visible = false;
+            textureComponent1.myID = REGION_AREA_NEXT_BUTTON;
+            textureComponent1.leftNeighborID = REGION_AREA_BACK_BUTTON;
+            textureComponent1.leftNeighborImmutable = true;
+            textureComponent1.downNeighborID = -99998;
+            AreaNextButton = textureComponent1;
+            var textureComponent2 = new ClickableTextureComponent(new Rectangle(xPositionOnScreen + 64, yPositionOnScreen, 48, 44), Game1.mouseCursors, new Rectangle(352, 495, 12, 11), 4f);
+            textureComponent2.visible = false;
+            textureComponent2.myID = REGION_AREA_BACK_BUTTON;
+            textureComponent2.rightNeighborID = REGION_AREA_NEXT_BUTTON;
+            textureComponent2.rightNeighborImmutable = true;
+            textureComponent2.downNeighborID = -99998;
+            AreaBackButton = textureComponent2;
+        }
+
         private void SetArrowsVisibility()
         {
+            var visible = GetAvailableMissingRaccoonNumbers(_archipelago, _locationChecker).Count > 1;
+            AreaNextButton.visible = visible;
+            AreaBackButton.visible = visible;
+        }
 
+        public override void receiveLeftClick(int x, int y, bool playSound = true)
+        {
+            if (AreaNextButton.containsPoint(x, y))
+            {
+                SwapPage(1);
+                return;
+            }
+            if (AreaBackButton.containsPoint(x, y))
+            {
+                SwapPage(-1);
+                return;
+            }
+            base.receiveLeftClick(x, y, playSound);
         }
 
         public override void SwapPage(int direction)
         {
-            base.SwapPage(direction);
+            var bundleNumbers = GetAvailableMissingRaccoonNumbers(_archipelago, _locationChecker);
+            var currentIndex = bundleNumbers.IndexOf(_currentBundleNumber);
+            var newIndex = (currentIndex + direction + bundleNumbers.Count) % bundleNumbers.Count;
+            var newNumber = bundleNumbers[newIndex];
+
+            var raccoonNoteMenu = new RaccoonJunimoNoteMenu(newNumber, _raccoon, _archipelago, _locationChecker, _bundlesManager, _state)
+            {
+                GameMenuTabToReturnTo = this.GameMenuTabToReturnTo,
+                OnBundleComplete = this.OnBundleComplete,
+                OnScreenSwipeFinished = this.OnScreenSwipeFinished,
+            };
+            Game1.activeClickableMenu = raccoonNoteMenu;
         }
 
-        private static List<string> GetRaccoonLocationsInSlot(StardewLocationChecker locationChecker)
+        public override void performHoverAction(int x, int y)
+        {
+            base.performHoverAction(x, y);
+            PerformHoverActionArrows(x, y);
+        }
+
+        protected override void PerformHoverActionArrows(int x, int y)
+        {
+            if (AreaNextButton.visible)
+            {
+                AreaNextButton.tryHover(x, y);
+            }
+            if (AreaBackButton.visible)
+            {
+                AreaBackButton.tryHover(x, y);
+            }
+        }
+
+        protected override void DrawArrows(SpriteBatch b)
+        {
+            if (AreaNextButton.visible)
+            {
+                AreaNextButton.draw(b);
+            }
+            if (AreaBackButton.visible)
+            {
+                AreaBackButton.draw(b);
+            }
+        }
+
+        public static List<string> GetRaccoonLocationsInSlot(StardewLocationChecker locationChecker)
         {
             var locations = locationChecker.GetAllLocationsStartingWith(RACCOON_REQUEST_PREFIX).ToList();
             return locations;
@@ -125,7 +206,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
             return raccoonNumbers.Where(x => x < receivedRaccoons).ToList();
         }
 
-        private static List<int> GetAvailableMissingRaccoonNumbers(StardewArchipelagoClient archipelago, StardewLocationChecker locationChecker)
+        public static List<int> GetAvailableMissingRaccoonNumbers(StardewArchipelagoClient archipelago, StardewLocationChecker locationChecker)
         {
             var raccoonNumbers = GetAvailableRaccoonNumbers(archipelago, locationChecker);
             var missingNumbers = raccoonNumbers.Where(x => locationChecker.IsLocationMissing($"{RACCOON_REQUEST_PREFIX}{x}")).ToList();
