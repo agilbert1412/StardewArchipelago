@@ -105,8 +105,8 @@ namespace StardewArchipelago.Locations.ShopStockModifiers
                     continue;
                 }
 
-                toolShopItem.Price = (int)Math.Round(toolShopItem.Price * priceMultiplier);
-                toolShopItem.TradeItemAmount = (int)Math.Round(toolShopItem.TradeItemAmount * priceMultiplier);
+                toolShopItem.Price = Math.Max(1, (int)Math.Round(toolShopItem.Price * priceMultiplier));
+                toolShopItem.TradeItemAmount = Math.Max(1, (int)Math.Round(toolShopItem.TradeItemAmount * priceMultiplier));
             }
         }
     }

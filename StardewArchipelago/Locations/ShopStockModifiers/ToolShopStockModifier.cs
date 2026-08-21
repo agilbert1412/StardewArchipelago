@@ -141,13 +141,13 @@ namespace StardewArchipelago.Locations.ShopStockModifiers
 
             foreach (var toolShopItem in toolShopData.Items)
             {
-                toolShopItem.Price = (int)Math.Round(toolShopItem.Price * priceMultiplier);
-                toolShopItem.TradeItemAmount = (int)Math.Round(toolShopItem.TradeItemAmount * priceMultiplier);
+                toolShopItem.Price = Math.Max(1, (int)Math.Round(toolShopItem.Price * priceMultiplier));
+                toolShopItem.TradeItemAmount = Math.Max(1, (int)Math.Round(toolShopItem.TradeItemAmount * priceMultiplier));
                 if (toolShopItem.CustomFields != null && toolShopItem.CustomFields.ContainsKey(ShopMenuInjections.MATERIALS_KEY))
                 {
                     var materialsJson = toolShopItem.CustomFields[ShopMenuInjections.MATERIALS_KEY];
                     var materials = JsonConvert.DeserializeObject<Dictionary<string, int>>(materialsJson);
-                    var pricedMaterials = materials.ToDictionary(x => x.Key, x => (int)Math.Round(x.Value * priceMultiplier));
+                    var pricedMaterials = materials.ToDictionary(x => x.Key, x => Math.Max(1, (int)Math.Round(x.Value * priceMultiplier)));
                     toolShopItem.CustomFields[ShopMenuInjections.MATERIALS_KEY] = JsonConvert.SerializeObject(pricedMaterials);
                 }
             }
@@ -206,8 +206,8 @@ namespace StardewArchipelago.Locations.ShopStockModifiers
                 }
                 var obj = ItemRegistry.Create("(T)" + key1);
                 var price = toolUpgradeData.Price > -1 ? toolUpgradeData.Price : Math.Max(0, obj.salePrice());
-                price = (int)Math.Round(price * priceMultiplier);
-                var tradeItemAmount = toolUpgradeData.TradeItemAmount;
+                price = Math.Max(1, (int)Math.Round(price * priceMultiplier));
+                var tradeItemAmount = Math.Max(1, toolUpgradeData.TradeItemAmount);
                 tradeItemAmount = (int)Math.Round(tradeItemAmount * priceMultiplier);
                 var itemQueryResult = new ItemQueryResult(obj)
                 {
