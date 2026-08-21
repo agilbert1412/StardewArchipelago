@@ -40,35 +40,8 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
         {
             try
             {
-                if (!__result && !__instance.fullyGrown.Value || __instance.indexOfHarvest.Value == null)
-                {
-                    return;
-                }
-
-                var itemId = __instance.indexOfHarvest.Value;
-
-                if (itemId == ObjectIds.SUNFLOWER_SEEDS)
-                {
-                    itemId = ObjectIds.SUNFLOWER; // Sunflower instead of sunflower seeds
-                }
-
-                if (!_itemManager.ObjectExistsById(itemId))
-                {
-                    _logger.LogError($"Unrecognized Cropsanity Crop: [{itemId}]");
-                    return;
-                }
-
-                var item = _itemManager.GetObjectById(itemId);
-                var apLocation = $"{Prefix.HARVEST}{item.Name}";
-
-                if (_archipelago.GetLocationId(apLocation) > -1)
-                {
-                    _locationChecker.AddCheckedLocation(apLocation);
-                }
-                else if (!_cropsanityExceptions.Contains(itemId))
-                {
-                    _logger.LogError($"Unrecognized Cropsanity Location: {item.Name} [{itemId}]");
-                }
+                TryCheckHarvestLocation(__instance, __result);
+                TryCheckForageLocation(__instance);
 
                 return;
             }
@@ -76,6 +49,53 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
             {
                 _logger.LogError($"Failed in {nameof(Harvest_CheckCropsanityLocation_Postfix)}:\n{ex}");
                 return;
+            }
+        }
+
+        private static void TryCheckHarvestLocation(Crop crop, bool __result)
+        {
+
+            if (!__result && !crop.fullyGrown.Value || crop.indexOfHarvest.Value == null)
+            {
+                return;
+            }
+
+            var itemId = crop.indexOfHarvest.Value;
+
+            if (itemId == ObjectIds.SUNFLOWER_SEEDS)
+            {
+                itemId = ObjectIds.SUNFLOWER; // Sunflower instead of sunflower seeds
+            }
+
+            if (!_itemManager.ObjectExistsById(itemId))
+            {
+                _logger.LogError($"Unrecognized Cropsanity Crop: [{itemId}]");
+                return;
+            }
+
+            var item = _itemManager.GetObjectById(itemId);
+            var apLocation = $"{Prefix.HARVEST}{item.Name}";
+
+            if (_archipelago.GetLocationId(apLocation) > -1)
+            {
+                _locationChecker.AddCheckedLocation(apLocation);
+            }
+            else if (!_cropsanityExceptions.Contains(itemId))
+            {
+                _logger.LogError($"Unrecognized Cropsanity Location: {item.Name} [{itemId}]");
+            }
+        }
+
+        private static void TryCheckForageLocation(Crop crop)
+        {
+            if (crop == null || crop.dead.Value || !crop.forageCrop.Value || crop.whichForageCrop == null)
+            {
+                return;
+            }
+
+            if (crop.whichForageCrop.Value == "1")
+            {
+                _locationChecker.AddCheckedLocation($"Forage Spring Onion");
             }
         }
 
