@@ -175,9 +175,9 @@ namespace StardewArchipelago.Locations.ShopStockModifiers
             }
 
             var priceMultiplier = _archipelago.SlotData.BuildingPriceMultiplier;
-            var finalPrice = (int)(price * priceMultiplier);
+            var finalPrice = Math.Max(1, (int)(price * priceMultiplier));
             var pricedMaterials = materialsDict.ToDictionary(x => x.Key, x => Math.Max(1, (int)Math.Round(x.Value * priceMultiplier)));
-            tradeItemAmount = (int)(tradeItemAmount * priceMultiplier);
+            tradeItemAmount = Math.Max(1, (int)(tradeItemAmount * priceMultiplier));
 
             customFields.Add(ShopMenuInjections.MATERIALS_KEY, JsonConvert.SerializeObject(pricedMaterials));
             var blueprintCheck = new ShopItemData()

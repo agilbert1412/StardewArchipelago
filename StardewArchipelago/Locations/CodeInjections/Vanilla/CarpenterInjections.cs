@@ -118,11 +118,11 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
                 {
                     case 0:
                         text = Game1.parseText(Game1.content.LoadString("Strings\\Locations:ScienceHouse_Carpenter_UpgradeHouse1"));
-                        text = text.Replace("10,000", $"{(int)Math.Round(10000 * priceMultiplier)}")
+                        text = text.Replace("10,000", $"{Math.Max(1, (int)Math.Round(10000 * priceMultiplier))}")
                             .Replace("450", $"{Math.Max(1, (int)Math.Round(450 * priceMultiplier))}");
                         break;
                     case 1:
-                        var priceGold = (int)Math.Round(50000 * priceMultiplier);
+                        var priceGold = Math.Max(1, (int)Math.Round(50000 * priceMultiplier));
                         var priceWood = Math.Max(1, (int)Math.Round(150 * priceMultiplier));
                         text = Game1.parseText(Game1.content.LoadString("Strings\\Locations:ScienceHouse_Carpenter_UpgradeHouse2", priceGold, priceWood));
                         break;
@@ -293,7 +293,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
                 switch (Game1.player.HouseUpgradeLevel)
                 {
                     case 0:
-                        var price1 = (int)(10000 * priceMultiplier);
+                        var price1 = Math.Max(1, (int)(10000 * priceMultiplier));
                         var woodAmount = Math.Max(1, (int)(450 * priceMultiplier));
                         if (Game1.player.Money >= price1 && Game1.player.Items.ContainsId("388", woodAmount))
                         {
@@ -312,7 +312,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
                         Game1.drawObjectDialogue(Game1.content.LoadString("Strings\\Locations:ScienceHouse_Carpenter_NotEnoughWood", (object)450));
                         break;
                     case 1:
-                        var price2 = (int)(50000 * priceMultiplier);
+                        var price2 = Math.Max(1, (int)(50000 * priceMultiplier));
                         var hardwoodAmount = Math.Max(1, (int)(150 * priceMultiplier));
                         if (Game1.player.Money >= price2 && Game1.player.Items.ContainsId("709", hardwoodAmount))
                         {
@@ -331,7 +331,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
                         Game1.drawObjectDialogue(Game1.content.LoadString("Strings\\Locations:ScienceHouse_Carpenter_NotEnoughHardwood", (object)100));
                         break;
                     case 2:
-                        var price3 = (int)(100000 * priceMultiplier);
+                        var price3 = Math.Max(1, (int)(100000 * priceMultiplier));
                         if (Game1.player.Money >= price3)
                         {
                             Game1.player.daysUntilHouseUpgrade.Value = 3;

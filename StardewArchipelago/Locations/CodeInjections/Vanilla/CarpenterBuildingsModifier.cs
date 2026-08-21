@@ -112,7 +112,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
 
             foreach (var (_, buildingData) in buildingsData)
             {
-                var finalCost = (int)Math.Round(buildingData.BuildCost * priceMultiplier);
+                var finalCost = Math.Max(1, (int)Math.Round(buildingData.BuildCost * priceMultiplier));
                 buildingData.BuildCost = finalCost;
                 if (buildingData.BuildMaterials == null)
                 {
