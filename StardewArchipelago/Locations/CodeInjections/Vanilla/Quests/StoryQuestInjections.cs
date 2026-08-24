@@ -158,8 +158,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Quests
             }
         }
 
-        public static bool Shake_WinterMysteryBush_Prefix(Bush __instance, Vector2 tileLocation,
-            bool doEvenIfStillShaking)
+        public static bool ShakeWinterMysteryBush(Bush __instance, Vector2 tileLocation, bool doEvenIfStillShaking)
         {
             try
             {
@@ -178,37 +177,35 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Quests
                 maxShakeField.SetValue((float)Math.PI / 128f);
                 var isTownBush = __instance.townBush.Value;
                 var isInBloom = __instance.inBloom();
-                if (!isTownBush && __instance.tileSheetOffset.Value == 1 && isInBloom)
+
+                if (!isTownBush && __instance.readyForHarvest() && isInBloom)
                 {
                     ShakeForBushItem(__instance, tileLocation);
-                    return false; // run original logic;
+                    return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
                 }
 
                 if (tileLocation.X == 20.0 && tileLocation.Y == 8.0 && Game1.dayOfMonth == 28 && Game1.timeOfDay == 1200 && !Game1.player.mailReceived.Contains("junimoPlush"))
                 {
                     GetJunimoPlush(__instance);
+                    return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
                 }
-                else if (tileLocation.X == 28.0 && tileLocation.Y == 14.0 && Game1.player.eventsSeen.Contains("520702") && Game1.player.hasQuest("31") && Game1.currentLocation is Town currentTown)
+                if (tileLocation.X == 28.0 && tileLocation.Y == 14.0 && Game1.player.eventsSeen.Contains("520702") && Game1.player.hasQuest("31") && Game1.currentLocation is Town currentTown)
                 {
                     currentTown.initiateMagnifyingGlassGet();
+                    return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
                 }
-                else
+                if (tileLocation.X == 47.0 && tileLocation.Y == 100.0 && Game1.player.secretNotesSeen.Contains(21) && Game1.timeOfDay == 2440 && Game1.currentLocation is Town && !Game1.player.mailReceived.Contains("secretNote21_done"))
                 {
-                    if (tileLocation.X != 47.0 || tileLocation.Y != 100.0 ||
-                        !Game1.player.secretNotesSeen.Contains(21) || Game1.timeOfDay != 2440 ||
-                        !(Game1.currentLocation is Town) || Game1.player.mailReceived.Contains("secretNote21_done"))
-                    {
-                        return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
-                    }
                     Game1.player.mailReceived.Add("secretNote21_done");
                     ((Town)Game1.currentLocation).initiateMarnieLewisBush();
+                    return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
                 }
 
                 return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
             }
             catch (Exception ex)
             {
-                _logger.LogError($"Failed in {nameof(Shake_WinterMysteryBush_Prefix)}:\n{ex}");
+                _logger.LogError($"Failed in {nameof(ShakeWinterMysteryBush)}:\n{ex}");
                 return MethodPrefix.RUN_ORIGINAL_METHOD;
             }
         }

@@ -11,6 +11,7 @@ using KaitoKid.ArchipelagoUtilities.Net.Constants;
 using KaitoKid.Utilities.Interfaces;
 using StardewArchipelago.Constants.Locations;
 using StardewArchipelago.Constants.Vanilla;
+using StardewArchipelago.Locations.CodeInjections.Vanilla.Quests;
 using Object = StardewValley.Object;
 
 namespace StardewArchipelago.Locations.CodeInjections.Vanilla
@@ -95,7 +96,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
 
             if (crop.whichForageCrop.Value == "1")
             {
-                _locationChecker.AddCheckedLocation($"Forage Spring Onion");
+                _locationChecker.AddCheckedLocation($"{Prefix.FORAGE}Spring Onion");
             }
         }
 
@@ -146,35 +147,41 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
         }
 
         // public void shake(Vector2 tileLocation, bool doEvenIfStillShaking)
-        public static void Shake_CheckForageLocation_Prefix(Bush __instance, Vector2 tileLocation, bool doEvenIfStillShaking)
+        public static bool Shake_VariousShakePatches_Prefix(Bush __instance, Vector2 tileLocation, bool doEvenIfStillShaking)
         {
             try
             {
-                if (__instance.townBush.Value || !__instance.readyForHarvest() || !__instance.inBloom())
-                {
-                    return;
-                }
-
-                if (__instance.size.Value == 3 || __instance.size.Value == 4)
-                {
-                    return;
-                }
-
-                var shakeOff = __instance.GetShakeOffItem();
-                if (shakeOff == null)
-                {
-                    return;
-                }
-
-                var forage = ItemRegistry.Create(shakeOff);
-                _locationChecker.AddCheckedLocation($"{Prefix.FORAGE}{forage.Name}");
-                return;
+                ShakeForageLocation(__instance);
+                return StoryQuestInjections.ShakeWinterMysteryBush(__instance, tileLocation, doEvenIfStillShaking);
             }
             catch (Exception ex)
             {
-                _logger.LogError($"Failed in {nameof(Shake_CheckForageLocation_Prefix)}:\n{ex}");
+                _logger.LogError($"Failed in {nameof(Shake_VariousShakePatches_Prefix)}:\n{ex}");
+                return MethodPrefix.RUN_ORIGINAL_METHOD;
+            }
+        }
+
+        private static void ShakeForageLocation(Bush bush)
+        {
+
+            if (bush.townBush.Value || !bush.readyForHarvest() || !bush.inBloom())
+            {
                 return;
             }
+
+            if (bush.size.Value == 3 || bush.size.Value == 4)
+            {
+                return;
+            }
+
+            var shakeOff = bush.GetShakeOffItem();
+            if (shakeOff == null)
+            {
+                return;
+            }
+
+            var forage = ItemRegistry.Create(shakeOff);
+            _locationChecker.AddCheckedLocation($"{Prefix.FORAGE}{forage.Name}");
         }
     }
 }
