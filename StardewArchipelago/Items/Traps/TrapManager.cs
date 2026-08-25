@@ -195,12 +195,12 @@ namespace StardewArchipelago.Items.Traps
 
         public void DequeueTrap()
         {
-            if (!TrapExecutor.CanGetTrappedRightNow())
+            if (_queuedTraps.IsEmpty)
             {
                 return;
             }
 
-            if (_queuedTraps.IsEmpty)
+            if (!TrapExecutor.CanGetTrappedRightNow())
             {
                 return;
             }
