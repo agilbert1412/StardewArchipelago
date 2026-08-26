@@ -213,14 +213,14 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Relationship
 
                 var locationBeingChecked = _locationChecker.IsLocationMissing(FIRST_BABY) ? FIRST_BABY : SECOND_BABY;
                 var scoutedItem = _archipelago.ScoutStardewLocation(locationBeingChecked);
-                var scoutedItemName = scoutedItem.ItemName;
+                var scoutedItemName = scoutedItem?.ItemName ?? "a surprise";
                 var marriageDialogue = new MarriageDialogueReference("Data\\ExtraDialogue", chosenDialogue, true, scoutedItemName);
                 Game1.player.getSpouse().currentMarriageDialogue.Insert(0, marriageDialogue);
 
                 var playerName = Lexicon.capitalize(Game1.player.Name);
                 var spouseName = Game1.player.spouse;
                 var pronoun = "it";
-                var scoutedItemClassification = $"{scoutedItem.GetClassificationString()} item";
+                var scoutedItemClassification = scoutedItem == null ? "item" : $"{scoutedItem.GetClassificationString()} item";
 
                 var multiplayerField = _helper.Reflection.GetField<Multiplayer>(typeof(Game1), "multiplayer");
                 var multiplayer = multiplayerField.GetValue();

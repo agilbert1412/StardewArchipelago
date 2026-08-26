@@ -77,7 +77,12 @@ namespace StardewArchipelago.Locations.CodeInjections.Modded
                     && hasPendantCommunity)
                 {
                     Game1.playSound("yoba");
-                    var swordItem = _archipelago.ScoutStardewLocation(EXCALIBUR_AP_LOCATION).ItemName;
+                    var scoutedLocation = _archipelago.ScoutStardewLocation(EXCALIBUR_AP_LOCATION);
+                    var swordItem = "A great reward";
+                    if (scoutedLocation != null)
+                    {
+                        swordItem = scoutedLocation.ItemName;
+                    }
                     if (swordItem.Length > 20)
                     {
                         swordItem = swordItem.Substring(0, 20); //Lets make it readable for the Archipidle enjoyers.
