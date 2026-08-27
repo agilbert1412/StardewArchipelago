@@ -263,7 +263,7 @@ namespace StardewArchipelago.Items.Traps
             _traps.Add(MENU, TrapExecutor.OpenMenus);
             _traps.Add(EMOTE, TrapExecutor.PerformEmotes);
             _traps.Add(MAKEOVER, TrapExecutor.PerformMakeover);
-            _traps.Add(BACK_TO_SCHOOL, TrapExecutor.RandomizeProfessions);
+            _traps.Add(BACK_TO_SCHOOL, TrapExecutor.BackToSchool);
             _traps.Add(TIRED, TrapExecutor.Tired);
             _traps.Add(INJURY, TrapExecutor.Injury);
             _traps.Add(REVERSE, TrapExecutor.ReverseControls);

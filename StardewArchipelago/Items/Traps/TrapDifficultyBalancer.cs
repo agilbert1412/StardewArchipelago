@@ -535,6 +535,17 @@ namespace StardewArchipelago.Items.Traps
             { TrapItemsDifficulty.Eldritch, Traps.MakeoverTargets.RandomizeEntireAppearance },
         };
 
+        public Dictionary<TrapItemsDifficulty, double> ExperiencePercentToLose = new()
+        {
+            { TrapItemsDifficulty.NoTraps, 0 },
+            { TrapItemsDifficulty.Easy, 0.1 },
+            { TrapItemsDifficulty.Medium, 0.2 },
+            { TrapItemsDifficulty.Hard, 0.3 },
+            { TrapItemsDifficulty.Hell, 0.5 },
+            { TrapItemsDifficulty.Nightmare, 0.8 },
+            { TrapItemsDifficulty.Eldritch, 0.95 },
+        };
+
         public Dictionary<TrapItemsDifficulty, float> EnergyToRemove = new()
         {
             { TrapItemsDifficulty.NoTraps, 0 },
