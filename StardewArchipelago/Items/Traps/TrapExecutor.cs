@@ -48,7 +48,7 @@ namespace StardewArchipelago.Items.Traps
         private static TrapsStateDto _trapsState;
         public static TrapDifficultyBalancer _difficultyBalancer;
 
-        private readonly DebtManager _debtManager;
+        public readonly DebtManager DebtManager;
         public readonly BombSpawner BombSpawner;
         public readonly TileChooser TileChooser;
         public readonly MonsterSpawner MonsterSpawner;
@@ -70,7 +70,7 @@ namespace StardewArchipelago.Items.Traps
             _archipelagoState = state;
             _trapsState = state.TrapsState;
             _difficultyBalancer = new TrapDifficultyBalancer();
-            _debtManager = new DebtManager(_trapsState);
+            DebtManager = new DebtManager(_trapsState);
             BombSpawner = new BombSpawner(_helper);
             TileChooser = new TileChooser();
             MonsterSpawner = new MonsterSpawner(TileChooser);
@@ -355,7 +355,7 @@ namespace StardewArchipelago.Items.Traps
 
         public void DayUpdateDebt()
         {
-            _debtManager.DayUpdateDebt().FireAndForget();
+            DebtManager.DayUpdateDebt().FireAndForget();
         }
 
         public void SendCrows()

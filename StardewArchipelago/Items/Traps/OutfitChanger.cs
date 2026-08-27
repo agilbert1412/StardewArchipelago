@@ -217,7 +217,7 @@ namespace StardewArchipelago.Items.Traps
             Game1.player.Equip(chosenHat, Game1.player.hat);
         }
 
-        private static void GiveBackPanIfWearingIt()
+        public static void GiveBackPanIfWearingIt()
         {
             var oldHat = Game1.player.hat.Value;
             if (oldHat is not null)

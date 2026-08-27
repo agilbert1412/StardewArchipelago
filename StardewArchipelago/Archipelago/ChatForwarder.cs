@@ -36,13 +36,15 @@ namespace StardewArchipelago.Archipelago
         private static IGiftHandler _giftHandler;
         private static GoalManager _goalManager;
         private static TileSanityManager _tileSanityManager;
+        private static TrapExecutor _trapExecutor;
         private static BankHandler _bankHandler;
         private static PlayerUnstucker _playerUnstucker;
         private static PlayerSleeper _playerSleeper;
 
         private static string _lastCommand;
+        private static string _bankruptcyConfirmationPassword = string.Empty;
 
-        public ChatForwarder(ILogger logger, IMonitor monitor, IModHelper helper, Harmony harmony, StardewArchipelagoClient archipelago, IGiftHandler giftHandler, GoalManager goalManager, TileChooser tileChooser, TileSanityManager tileSanityManager, BankHandler bank)
+        public ChatForwarder(ILogger logger, IMonitor monitor, IModHelper helper, Harmony harmony, StardewArchipelagoClient archipelago, IGiftHandler giftHandler, GoalManager goalManager, TrapExecutor trapExecutor, TileSanityManager tileSanityManager, BankHandler bank)
         {
             _logger = logger;
             _helper = helper;
@@ -51,7 +53,8 @@ namespace StardewArchipelago.Archipelago
             _giftHandler = giftHandler;
             _goalManager = goalManager;
             _tileSanityManager = tileSanityManager;
-            _playerUnstucker = new PlayerUnstucker(tileChooser);
+            _trapExecutor = trapExecutor;
+            _playerUnstucker = new PlayerUnstucker(trapExecutor.TileChooser);
             _playerSleeper = new PlayerSleeper(_logger);
             _bankHandler = bank;
             _lastCommand = null;
@@ -102,11 +105,13 @@ namespace StardewArchipelago.Archipelago
             {
                 return true;
             }
+
             if (HandleGoalCommand(messageLower))
             {
                 _lastCommand = message;
                 return true;
             }
+
             if (HandleVanillaGoalCommand(messageLower))
             {
                 _lastCommand = message;
@@ -126,6 +131,12 @@ namespace StardewArchipelago.Archipelago
             }
 
             if (HandleArcadeReleaseCommand(messageLower))
+            {
+                _lastCommand = message;
+                return true;
+            }
+
+            if (HandleBankruptCommand(message))
             {
                 _lastCommand = message;
                 return true;
@@ -327,6 +338,63 @@ namespace StardewArchipelago.Archipelago
 
             MailboxHelper.TryGetNextMail();
             return true;
+        }
+
+        private static bool HandleBankruptCommand(string message)
+        {
+            var bankruptPrefix = $"{COMMAND_PREFIX}bankruptcy";
+            if (!message.StartsWith(bankruptPrefix))
+            {
+                return false;
+            }
+
+            if (message == bankruptPrefix)
+            {
+                _bankruptcyConfirmationPassword = GenerateBankruptcyPassword();
+                Game1.chatBox?.addMessage("Are you sure you want to surrender all your assets to void your debts and declare bankruptcy?", DebtManager.JOJA_COLOR);
+                Game1.chatBox?.addMessage($"Use `{bankruptPrefix} {_bankruptcyConfirmationPassword}` to confirm", DebtManager.JOJA_COLOR);
+                return true;
+            }
+            if (string.IsNullOrWhiteSpace(_bankruptcyConfirmationPassword))
+            {
+                Game1.chatBox?.addMessage($"Bankruptcy password is not recognized. run {bankruptPrefix} to generate a new password", DebtManager.JOJA_COLOR);
+                return true;
+            }
+
+            var expectedMessage = $"{bankruptPrefix} {_bankruptcyConfirmationPassword}";
+            if (message == expectedMessage)
+            {
+                PerformBankruptcy();
+                _bankruptcyConfirmationPassword = string.Empty;
+            }
+            else
+            {
+                Game1.chatBox?.addMessage($"Bankruptcy password is not recognized. run {bankruptPrefix} to generate a new password", DebtManager.JOJA_COLOR);
+            }
+            return true;
+        }
+
+        private static string GenerateBankruptcyPassword()
+        {
+            var chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+            const int length = 5;
+            var password = "";
+            var random = new Random();
+            for (var i = 0; i < length; i++)
+            {
+                var newChar = chars[random.Next(chars.Length)];
+                password += newChar;
+            }
+
+            return password;
+        }
+
+        private static void PerformBankruptcy()
+        {
+            Game1.chatBox?.addMessage($"Bankruptcy requested. Seizing all assets of {Game1.player.Name}.", DebtManager.JOJA_COLOR);
+            _trapExecutor.DebtManager.PerformBankruptcy();
+            Game1.chatBox?.addMessage($"All assets seized. All of the debts of {Game1.player.Name} are now void.", DebtManager.JOJA_COLOR);
+            Game1.chatBox?.addMessage($"Thank you for doing business with Joja Capital", DebtManager.JOJA_COLOR);
         }
 
         private static bool HandleSyncCommand(string message)
