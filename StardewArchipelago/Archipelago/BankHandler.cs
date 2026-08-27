@@ -40,7 +40,7 @@ namespace StardewArchipelago.Archipelago
 
             if (!_archipelago.SlotData.Banking || !_archipelago.MakeSureConnected()) // Did I enable that feature?
             {
-                Game1.chatBox?.addMessage($"Your archipelago slot does not have a Joja Capital account", Color.Gold);
+                Game1.chatBox?.addMessage($"Your archipelago slot does not have a [50]oja Capital account", Color.Gold);
                 return true;
             }
 
@@ -123,11 +123,11 @@ namespace StardewArchipelago.Archipelago
                 Game1.player.Money -= amountToDeposit;
                 Game1.chatBox?.addMessage($"You have successfully made a deposit of {realDepositAmount}$ into your shared account", Color.Gold);
                 Game1.chatBox?.addMessage($"You have been charged a tax of {tax}$", Color.Gold);
-                Game1.chatBox?.addMessage($"Thank you for using Joja Capital", Color.Gold);
+                Game1.chatBox?.addMessage($"Thank you for using [50]oja Capital", Color.Gold);
             }
             else
             {
-                Game1.chatBox?.addMessage($"The Joja Capital online services are down at the moment. Apologies for the inconvenience, please try again later.", Color.Red);
+                Game1.chatBox?.addMessage($"The [50]oja Capital online services are down at the moment. Apologies for the inconvenience, please try again later.", Color.Red);
             }
         }
 
@@ -160,11 +160,11 @@ namespace StardewArchipelago.Archipelago
                 Game1.player.addUnearnedMoney(amountToWithdraw);
                 Game1.chatBox?.addMessage($"You have successfully withdrawn {amountToWithdraw}$ from your shared account", Color.Gold);
                 PrintCurrentBalance();
-                Game1.chatBox?.addMessage($"Thank you for using Joja Capital", Color.Gold);
+                Game1.chatBox?.addMessage($"Thank you for using [50]oja Capital", Color.Gold);
             }
             else
             {
-                Game1.chatBox?.addMessage($"The Joja Capital online services are down at the moment. Apologies for the inconvenience, please try again later.", Color.Red);
+                Game1.chatBox?.addMessage($"The [50]oja Capital online services are down at the moment. Apologies for the inconvenience, please try again later.", Color.Red);
             }
         }
 

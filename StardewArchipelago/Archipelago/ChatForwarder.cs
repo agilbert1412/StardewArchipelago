@@ -394,7 +394,7 @@ namespace StardewArchipelago.Archipelago
             Game1.chatBox?.addMessage($"Bankruptcy requested. Seizing all assets of {Game1.player.Name}.", DebtManager.JOJA_COLOR);
             _trapExecutor.DebtManager.PerformBankruptcy();
             Game1.chatBox?.addMessage($"All assets seized. All of the debts of {Game1.player.Name} are now void.", DebtManager.JOJA_COLOR);
-            Game1.chatBox?.addMessage($"Thank you for doing business with Joja Capital", DebtManager.JOJA_COLOR);
+            Game1.chatBox?.addMessage($"Thank you for doing business with [50]oja Capital", DebtManager.JOJA_COLOR);
         }
 
         private static bool HandleSyncCommand(string message)
