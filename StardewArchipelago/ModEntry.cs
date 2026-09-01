@@ -387,15 +387,22 @@ namespace StardewArchipelago
             return result;
         }
 
-        private void OnButtonChanged(object sender, ButtonsChangedEventArgs e){
-            if (!Context.IsWorldReady) return;
+        private void OnButtonChanged(object sender, ButtonsChangedEventArgs e)
+        {
+            if (!Context.IsWorldReady)
+            {
+                return;
+            }
 
-            try {
-                if (Context.IsPlayerFree && Config.Controls.OpenMail.JustPressed()) {
+            try
+            {
+                if (Context.IsPlayerFree && Config.Controls.OpenMail.JustPressed())
+                {
                     MailboxHelper.TryGetNextMail();
                 }
             }
-            catch (Exception ex) {
+            catch (Exception ex)
+            {
                 _logger.LogError($"Error handling input, {ex.Message}");
             }
         }
