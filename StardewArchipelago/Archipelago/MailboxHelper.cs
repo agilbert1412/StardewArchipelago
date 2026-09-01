@@ -4,7 +4,14 @@ using StardewValley;
 namespace StardewArchipelago.Archipelago
 {
 	public static class MailboxHelper {
-		public static void TryGetNextMail() {
+		public static void TryGetNextMail() 
+        {
+            if (Game1.eventUp || Game1.CurrentEvent != null || Game1.activeClickableMenu != null || Game1.player.isEating || !Game1.player.CanMove || Game1.currentMinigame != null || Game1.isWarping || Game1.killScreen ||
+                Game1.player.isInBed.Value || Game1.player.FarmerSprite.isPassingOut() || Game1.player.passedOut)
+            {
+                return;
+            }
+
 			var mailAmount = Game1.mailbox.Count;
 			if (mailAmount <= 0)
 			{
