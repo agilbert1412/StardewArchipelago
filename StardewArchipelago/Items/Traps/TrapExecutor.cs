@@ -1473,6 +1473,10 @@ namespace StardewArchipelago.Items.Traps
             {
                 var itemToSpoil = allItemsWithQuality[Game1.random.Next(allItemsWithQuality.Count)];
                 itemToSpoil.Quality -= 1;
+                if (itemToSpoil.Quality == 3)
+                {
+                    itemToSpoil.Quality -= 1;
+                }
                 spoilsRemaining -= itemToSpoil.Stack;
                 allItemsWithQuality = FilterItemsThatCanSpoil(allItemsWithQuality, spoilsRemaining);
             }
