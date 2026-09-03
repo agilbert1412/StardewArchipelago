@@ -31,12 +31,10 @@ using StardewValley.Tools;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net.Cache;
 using System.Numerics;
 using System.Threading;
 using System.Threading.Tasks;
 using StardewArchipelago.GameModifications.CodeInjections;
-using xTile.Dimensions;
 using Object = StardewValley.Object;
 using Vector2 = Microsoft.Xna.Framework.Vector2;
 
