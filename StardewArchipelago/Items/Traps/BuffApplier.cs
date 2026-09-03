@@ -131,6 +131,12 @@ namespace StardewArchipelago.Items.Traps
             }
         }
 
+        public bool HasPermanentBuff(Buffs whichBuff)
+        {
+            var buffId = ((int)whichBuff).ToString();
+            return Game1.player.buffs.AppliedBuffs.ContainsKey(buffId) && _permanentState.CurrentBuffs.ContainsKey(whichBuff) && _permanentState.CurrentBuffs[whichBuff] > 0;
+        }
+
         public void SaveBuffs()
         {
             foreach (var realTimeBuff in _permanentState.CurrentBuffs.Keys.ToArray())

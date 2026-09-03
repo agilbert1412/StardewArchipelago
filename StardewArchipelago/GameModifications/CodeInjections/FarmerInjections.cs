@@ -104,13 +104,7 @@ namespace StardewArchipelago.GameModifications.CodeInjections
                     ArchipelagoJunimoNoteMenu.IsBundleRemaining(MemeBundleNames.FLOOR_IS_LAVA) &&
                     _archipelago.HasReceivedItem("Forest Magic"))
                 {
-                    var firePosition = new Vector2((float)(tile.X * 64 + 16 - 4), (float)(tile.Y * 64 - 8));
-                    var sourceRect = new Rectangle(276, 1985, 12, 11);
-                    // var sourceRect = new Rectangle?(new Rectangle(276 + (int)((Game1.currentGameTime.TotalGameTime.TotalMilliseconds + (double)(x * 3047) + (double)(y * 88)) % 400.0 / 100.0) * 12, 1985, 12, 11));
-                    var tempSprite = new TemporaryAnimatedSprite("LooseSprites\\Cursors", sourceRect, 60, 4, 4, firePosition, false, false);
-                    tempSprite.scale = 4f;
-                    Game1.currentLocation.TemporarySprites.Add(tempSprite);
-                    Game1.playSound("fireball");
+                    PlayFireFeetEffect(tile);
                 }
 
                 ArchipelagoJunimoNoteMenu.FloorIsLavaHasTouchedGroundToday++;
@@ -120,6 +114,27 @@ namespace StardewArchipelago.GameModifications.CodeInjections
                 _logger.LogError($"Failed in {nameof(TakeStep_FloorIsLava_Postfix)}:\n{ex}");
                 return;
             }
+        }
+
+        public static void PlayFireFeetEffect(Farmer farmer, int offsetX = 0, int offsetY = 0, float scale = 4f, int animationInterval = 60, int numberOfLoops = 4)
+        {
+            var tile = farmer.Tile;
+            PlayFireFeetEffect(tile, offsetX, offsetY, scale, animationInterval, numberOfLoops);
+        }
+
+        private static void PlayFireFeetEffect(Vector2 tile, int offsetX = 0, int offsetY = 0, float scale = 4f, int animationInterval = 60, int numberOfLoops = 4)
+        {
+            PlayFireFeetEffect(tile.X * 64 + 16 - 4 + offsetX, tile.Y * 64 - 8 + offsetY, scale, animationInterval, numberOfLoops);
+        }
+
+        private static void PlayFireFeetEffect(float firePositionX, float firePositionY, float scale = 4f, int animationInterval = 60, int numberOfLoops = 4)
+        {
+            var firePosition = new Vector2(firePositionX, firePositionY);
+            var sourceRect = new Rectangle(276, 1985, 12, 11);
+            var tempSprite = new TemporaryAnimatedSprite("LooseSprites\\Cursors", sourceRect, animationInterval, 4, numberOfLoops, firePosition, false, false);
+            tempSprite.scale = scale;
+            Game1.currentLocation.TemporarySprites.Add(tempSprite);
+            Game1.playSound("fireball");
         }
     }
 }

@@ -569,6 +569,8 @@ namespace StardewArchipelago
                 _itemManager.ItemParser.TrapManager.DequeueTrap();
             }
 
+            _itemManager.TrapManager.TrapExecutor.FrameUpdate(e);
+
             MovementInjections.UpdateMove(e);
             MultiplayerVisionInjections.OnUpdateTicked(e);
             _jojapocalypseManager?.OnUpdateTicked(e);

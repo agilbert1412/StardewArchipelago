@@ -11,9 +11,11 @@ using StardewArchipelago.Archipelago.SlotData.SlotEnums;
 using StardewArchipelago.Constants.Vanilla;
 using StardewArchipelago.GameModifications.MultiSleep;
 using StardewArchipelago.Items.Traps.Shuffle;
+using StardewArchipelago.Locations.CodeInjections.Vanilla;
 using StardewArchipelago.Serialization;
 using StardewArchipelago.Stardew;
 using StardewModdingAPI;
+using StardewModdingAPI.Events;
 using StardewValley;
 using StardewValley.BellsAndWhistles;
 using StardewValley.Buildings;
@@ -22,6 +24,7 @@ using StardewValley.GameData.MakeoverOutfits;
 using StardewValley.Internal;
 using StardewValley.Locations;
 using StardewValley.Menus;
+using StardewValley.Network;
 using StardewValley.Objects;
 using StardewValley.TerrainFeatures;
 using StardewValley.Tools;
@@ -32,8 +35,8 @@ using System.Net.Cache;
 using System.Numerics;
 using System.Threading;
 using System.Threading.Tasks;
-using StardewArchipelago.Locations.CodeInjections.Vanilla;
-using StardewValley.Network;
+using StardewArchipelago.GameModifications.CodeInjections;
+using xTile.Dimensions;
 using Object = StardewValley.Object;
 using Vector2 = Microsoft.Xna.Framework.Vector2;
 
@@ -356,6 +359,87 @@ namespace StardewArchipelago.Items.Traps
         public void DayUpdateDebt()
         {
             DebtManager.DayUpdateDebt().FireAndForget();
+        }
+
+        public void FrameUpdate(UpdateTickedEventArgs e)
+        {
+            var farmer = Game1.player;
+            if (ShouldDoFireEffect(farmer))
+            {
+                DoFireEffect(e, farmer);
+            }
+        }
+
+        private bool ShouldDoFireEffect(Farmer farmer)
+        {
+            return DebuffApplier.HasPermanentBuff(Buffs.GoblinsCurse);
+        }
+
+        private void DoFireEffect(UpdateTickedEventArgs e, Farmer farmer)
+        {
+            var difficulty = _archipelago.SlotData.TrapItemsDifficulty;
+            if (difficulty < TrapItemsDifficulty.Hell)
+            {
+                return;
+            }
+
+            var delay = difficulty switch
+            {
+                TrapItemsDifficulty.Hell => 10,
+                TrapItemsDifficulty.Nightmare => 5,
+                TrapItemsDifficulty.Eldritch => 2,
+                _ => 1,
+            };
+
+            var range = delay / 2f;
+            var minDelay = delay - range;
+            var maxDelay = delay + range;
+
+            var randomDelay = (uint)Math.Round((Game1.random.NextDouble() * range * 2) + minDelay);
+            if (!e.IsMultipleOf(randomDelay))
+            {
+                return;
+            }
+
+            var distanceRange = difficulty switch
+            {
+                TrapItemsDifficulty.Hell => 32,
+                TrapItemsDifficulty.Nightmare => 128,
+                TrapItemsDifficulty.Eldritch => 1024,
+                _ => 0,
+            };
+
+            var scaleRange = difficulty switch
+            {
+                TrapItemsDifficulty.Hell => 1,
+                TrapItemsDifficulty.Nightmare => 2,
+                TrapItemsDifficulty.Eldritch => 4,
+                _ => 0,
+            };
+
+            var animationIntervalRange = difficulty switch
+            {
+                TrapItemsDifficulty.Hell => 5,
+                TrapItemsDifficulty.Nightmare => 15,
+                TrapItemsDifficulty.Eldritch => 30,
+                _ => 0,
+            };
+
+            var numberOfLoopsRange = difficulty switch
+            {
+                TrapItemsDifficulty.Hell => 1,
+                TrapItemsDifficulty.Nightmare => 2,
+                TrapItemsDifficulty.Eldritch => 4,
+                _ => 0,
+            };
+
+            var offsetX = Game1.random.Next(-distanceRange, distanceRange);
+            var offsetY = Game1.random.Next(-distanceRange, distanceRange);
+            var scale = 4f + (float)(((Game1.random.NextDouble() - 0.5f) * 2) * scaleRange);
+            // var animationInterval = 60 + Game1.random.Next(-animationIntervalRange, animationIntervalRange);
+            var numberOfLoops = 4 + Game1.random.Next(-numberOfLoopsRange, numberOfLoopsRange);
+
+            FarmerInjections.PlayFireFeetEffect(farmer, offsetX, offsetY, scale, 60, numberOfLoops);
         }
 
         public void SendCrows()
