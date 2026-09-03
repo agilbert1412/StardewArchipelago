@@ -230,7 +230,7 @@ namespace StardewArchipelago.Locations.Secrets
                     return;
                 }
 
-                if (__instance.TileLocation.X.IsApproximately(57) && __instance.TileLocation.Y.IsApproximately(16))
+                if (__instance.TileLocation.X.IsApproximately(57, 5) && __instance.TileLocation.Y.IsApproximately(16, 5))
                 {
                     _locationChecker.AddCheckedLocation(SecretsLocationNames.SECRET_NOTE_14);
                 }
