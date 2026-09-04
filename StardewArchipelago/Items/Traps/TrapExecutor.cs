@@ -403,7 +403,7 @@ namespace StardewArchipelago.Items.Traps
             {
                 TrapItemsDifficulty.Hell => 32,
                 TrapItemsDifficulty.Nightmare => 128,
-                TrapItemsDifficulty.Eldritch => 1024,
+                TrapItemsDifficulty.Eldritch => 256,
                 _ => 0,
             };
 
