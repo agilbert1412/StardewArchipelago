@@ -445,7 +445,7 @@ namespace StardewArchipelago.Locations.Jojapocalypse
             return false;
         }
 
-        private static NPC Morris
+        public static NPC Morris
         {
             get
             {

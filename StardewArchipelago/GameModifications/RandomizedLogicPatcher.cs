@@ -21,6 +21,7 @@ using StardewArchipelago.Locations.CodeInjections.Vanilla;
 using StardewArchipelago.Locations.CodeInjections.Vanilla.Relationship;
 using StardewArchipelago.Locations.Festival;
 using StardewArchipelago.Locations.InGameLocations;
+using StardewArchipelago.Locations.Jojapocalypse;
 using StardewArchipelago.Logging;
 using StardewArchipelago.Serialization;
 using StardewArchipelago.Stardew;
@@ -1117,6 +1118,11 @@ namespace StardewArchipelago.GameModifications
             _harmony.Patch(
                 original: AccessTools.Method(typeof(DefaultPhoneHandler), nameof(DefaultPhoneHandler.CheckForIncomingCall)),
                 postfix: new HarmonyMethod(typeof(PhoneInjections), nameof(PhoneInjections.CheckForIncomingCall_AdjustCalls_Postfix))
+            );
+
+            _harmony.Patch(
+                original: AccessTools.Method(typeof(Phone), nameof(Phone.GetIncomingCallAction)),
+                prefix: new HarmonyMethod(typeof(PhoneInjections), nameof(PhoneInjections.GetIncomingCallAction_JojaLoanIncomingCall_Prefix))
             );
         }
 

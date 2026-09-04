@@ -10,8 +10,10 @@ using StardewValley;
 using StardewValley.Objects;
 using System;
 using System.Linq;
+using Microsoft.Xna.Framework;
 using StardewArchipelago.Archipelago.SlotData.SlotEnums;
 using StardewArchipelago.GameModifications.CodeInjections;
+using StardewArchipelago.Items.Traps;
 
 namespace StardewArchipelago.Locations.CodeInjections.Vanilla
 {
@@ -89,12 +91,35 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
                 }
 
                 RemoveCallIfInvalid(ref __result);
+
+                if (TryReplaceCallWithLoanAd(random, ref __result))
+                {
+                    return;
+                }
             }
             catch (Exception ex)
             {
                 _logger.LogError($"Failed in {nameof(CheckForIncomingCall_AdjustCalls_Postfix)}:\n{ex}");
                 return;
             }
+        }
+
+        private static bool TryReplaceCallWithLoanAd(Random random, ref string __result)
+        {
+            if (!string.IsNullOrWhiteSpace(__result) || Game1.player.Money >= 5000)
+            {
+                return false;
+            }
+
+            // Weird math. The poorer you are, the closer to 40% this gets. Exponential (inverted), so every dollar makes less of a difference than the last
+            var chanceOfAd = Game1.player.Money == 0 ? 0.2 : (0.1 * (1 - (Math.Log10(Game1.player.Money) / 4)));
+            if (random.NextDouble() < chanceOfAd)
+            {
+                __result = JojaConstants.JOJA_LOAN_INCOMING_CALL;
+                return true;
+            }
+
+            return false;
         }
 
         private static bool TryReplaceCallWithJojaAd(Random random, ref string __result)
@@ -141,6 +166,62 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
             }
 
             __result = null;
+        }
+
+        // public static Action GetIncomingCallAction(string callId)
+        public static bool GetIncomingCallAction_JojaLoanIncomingCall_Prefix(string callId, ref Action __result)
+        {
+            try
+            {
+                if (callId != JojaConstants.JOJA_LOAN_INCOMING_CALL)
+                {
+                    return MethodPrefix.RUN_ORIGINAL_METHOD;
+                }
+
+                var dialogueAction = () =>
+                {
+                    var speaker = JojapocalypseShopPatcher.Morris;
+                    speaker = new NPC(speaker.Sprite, Vector2.Zero, "", 0, speaker.Name, speaker.Portrait, false);
+                    speaker.displayName = speaker.displayName;
+
+                    var dialoguePart1 = "Hello! This is your Joja Capital customer service representative." +
+                                             " We have noticed that your account is pretty low on funds.";
+                    var maxAmount = DebtManager.MAX_LOAN_AMOUNT;
+                    var dialoguePart2 = "We wanted to remind you that Joja offers Loans at any time, no questions asked!" +
+                                        $" You have been preapproved for a loan of up to {maxAmount}g.";
+                    var dialoguePart3 = $"You can type '!!loan x' in chat to immediately request a loan to your account.";
+
+                    var dialogue1 = new Dialogue(speaker, nameof(dialoguePart1), dialoguePart1);
+                    var dialogue2 = new Dialogue(speaker, nameof(dialoguePart2), dialoguePart2);
+                    var dialogue3 = new Dialogue(speaker, nameof(dialoguePart3), dialoguePart3);
+
+                    dialogue1.onFinish = () =>
+                    {
+                        speaker.CurrentDialogue.Clear();
+                        speaker.CurrentDialogue.Push(dialogue2);
+                        Game1.drawDialogue(speaker);
+                    };
+
+                    dialogue2.onFinish = () =>
+                    {
+                        speaker.CurrentDialogue.Clear();
+                        speaker.CurrentDialogue.Push(dialogue3);
+                        Game1.drawDialogue(speaker);
+                    };
+
+                    speaker.CurrentDialogue.Clear();
+                    speaker.CurrentDialogue.Push(dialogue1);
+                    Game1.drawDialogue(speaker);
+                };
+
+                __result = dialogueAction;
+                return MethodPrefix.DONT_RUN_ORIGINAL_METHOD;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Failed in {nameof(GetIncomingCallAction_JojaLoanIncomingCall_Prefix)}:\n{ex}");
+                return MethodPrefix.RUN_ORIGINAL_METHOD;
+            }
         }
     }
 }

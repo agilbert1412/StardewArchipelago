@@ -480,6 +480,7 @@ namespace StardewArchipelago
 
             SeasonsRandomizer.ChangeMailKeysBasedOnSeasonsToDaysElapsed();
             SeasonsRandomizer.SendMailHardcodedForToday();
+            _mail.SendTrustFundLetter();
             ArchipelagoJunimoNoteMenu.OnDayStarted(_giftHandler.Receiver);
             _itemManager.TrapManager.TrapExecutor.DayUpdateDebt();
             _itemManager.TrapManager.TrapExecutor.DebuffApplier.LoadBuffs();

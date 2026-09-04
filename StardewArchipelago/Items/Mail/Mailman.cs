@@ -1,16 +1,20 @@
-﻿using System;
-using System.Linq;
-using KaitoKid.Utilities.Interfaces;
+﻿using KaitoKid.Utilities.Interfaces;
+using Microsoft.Xna.Framework.Input;
 using StardewArchipelago.Archipelago;
 using StardewArchipelago.Constants;
 using StardewArchipelago.Extensions;
 using StardewArchipelago.Serialization;
 using StardewValley;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace StardewArchipelago.Items.Mail
 {
     public class Mailman
     {
+        public const string GRANDPA_TRUST_FUND_KEY = "GrandpaTrustFundMonthly";
+
         private static readonly Random _random = new();
         private bool _sendForTomorrow = true;
 
@@ -29,7 +33,22 @@ namespace StardewArchipelago.Items.Mail
                 mailData[mailKey] = mailContent;
             }
 
+            AddHardCodedLetters(mailData);
             FixLettersThatWereNotGeneratedProperly();
+        }
+
+        private void AddHardCodedLetters(Dictionary<string, string> mailData)
+        {
+            const int monthlyAmount = 200;
+            mailData.TryAdd(GRANDPA_TRUST_FUND_KEY, $"This is your monthly payout of {monthlyAmount}g from the Trust Fund 'Grandchild's Bequest'.^^This will be immediately deposited into your account, no action is required.^^Thank you for trusting Joja Capital with your assets.%item money {monthlyAmount} %%");
+        }
+
+        public void SendTrustFundLetter()
+        {
+            if (Game1.dayOfMonth == 28)
+            {
+                Game1.mailbox.Add(GRANDPA_TRUST_FUND_KEY);
+            }
         }
 
         public void SendVanillaMail(string mailTitle, bool noLetter)

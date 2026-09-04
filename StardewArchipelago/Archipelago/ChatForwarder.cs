@@ -136,6 +136,12 @@ namespace StardewArchipelago.Archipelago
                 return true;
             }
 
+            if (HandleLoanCommand(message))
+            {
+                _lastCommand = message;
+                return true;
+            }
+
             if (HandleBankruptCommand(message))
             {
                 _lastCommand = message;
@@ -337,6 +343,26 @@ namespace StardewArchipelago.Archipelago
             }
 
             MailboxHelper.TryGetNextMail();
+            return true;
+        }
+
+        private static bool HandleLoanCommand(string message)
+        {
+            var loanPrefix = $"{COMMAND_PREFIX}loan";
+            if (!message.StartsWith(loanPrefix))
+            {
+                return false;
+            }
+
+            var loanAmountText = message.Substring(loanPrefix.Length).Trim();
+            if (!int.TryParse(loanAmountText, out var loanAmount) || loanAmount <= 0)
+            {
+                Game1.chatBox?.addMessage($"Please specify the desired amount of your loan. You are approved for up to {DebtManager.MAX_LOAN_AMOUNT}g", DebtManager.JOJA_COLOR);
+                return true;
+            }
+
+            loanAmount = Math.Max(1, Math.Min(DebtManager.MAX_LOAN_AMOUNT, loanAmount));
+            _trapExecutor.DebtManager.TakeOutLoan(loanAmount);
             return true;
         }
 

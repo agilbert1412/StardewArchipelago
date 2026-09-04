@@ -40,6 +40,17 @@ namespace StardewArchipelago.Items.Traps
             { TrapItemsDifficulty.Eldritch, 2 },
         };
 
+        public Dictionary<TrapItemsDifficulty, double> InterestRates = new()
+        {
+            { TrapItemsDifficulty.NoTraps, 0 },
+            { TrapItemsDifficulty.Easy, 0.01 },
+            { TrapItemsDifficulty.Medium, 0.02 },
+            { TrapItemsDifficulty.Hard, 0.05 },
+            { TrapItemsDifficulty.Hell, 0.10 },
+            { TrapItemsDifficulty.Nightmare, 0.15 },
+            { TrapItemsDifficulty.Eldritch, 0.20 },
+        };
+
         public Dictionary<TrapItemsDifficulty, TeleportDestination> TeleportDestinations = new()
         {
             { TrapItemsDifficulty.NoTraps, TeleportDestination.None },

@@ -71,7 +71,7 @@ namespace StardewArchipelago.Items.Traps
             _archipelagoState = state;
             _trapsState = state.TrapsState;
             _difficultyBalancer = new TrapDifficultyBalancer();
-            DebtManager = new DebtManager(_trapsState);
+            DebtManager = new DebtManager(logger, archipelago, _difficultyBalancer, _trapsState);
             BombSpawner = new BombSpawner(_helper);
             TileChooser = new TileChooser();
             MonsterSpawner = new MonsterSpawner(TileChooser);

@@ -6,6 +6,7 @@ namespace StardewArchipelago.Locations.Jojapocalypse
     {
         public const string MEMBERSHIP_MAIL = "JojaMember";
         public const string JOJA_INCOMING_CALL = "JojaPhoneAd";
+        public const string JOJA_LOAN_INCOMING_CALL = "JojaPhoneLoan";
         public static readonly Color JOJA_COLOR = new(53, 83, 139);
     }
 }
