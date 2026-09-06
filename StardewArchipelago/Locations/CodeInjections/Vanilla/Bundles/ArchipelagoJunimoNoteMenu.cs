@@ -389,14 +389,25 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
             }
 
             var scoutedItem = _archipelago.ScoutStardewLocation(apLocationToScout, true);
-            var playerName = "Unknown Player";
-            var itemName = "Unknown Item";
+            var rewardText = $"Reward: Unknown";
             if (scoutedItem != null)
             {
-                itemName = scoutedItem.GetItemName(StringExtensions.TurnHeartsIntoStardewHearts);
-                playerName = scoutedItem.PlayerName;
+                var itemName = scoutedItem.GetItemName(StringExtensions.TurnHeartsIntoStardewHearts);
+                var playerName = scoutedItem.PlayerName;
+                rewardText = $"Reward: {playerName}'s {itemName}";
             }
-            var rewardText = $"Reward: {playerName}'s {itemName}";
+            else
+            {
+                if (ModEntry.Instance.TesterFeatures.NoScouting.Value >= 1)
+                {
+                    rewardText = "Reward: Not Scouted";
+                }
+                else
+                {
+                    rewardText = "Reward: Scout Failed";
+                }
+            }
+
             return rewardText;
         }
 
