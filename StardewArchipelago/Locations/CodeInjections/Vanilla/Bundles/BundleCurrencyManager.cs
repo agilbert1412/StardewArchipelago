@@ -301,8 +301,16 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
 
             DrawText(spriteBatch, $"cost: {_wallet.CookieClicker.GetCursorUpgradePrice()}", cursorPriceX, pricesY, font);
             DrawText(spriteBatch, $"{_wallet.CookieClicker.CursorUpgrades}", cursorAmountX, amountsY, font);
-            DrawText(spriteBatch, $"{_wallet.CookieClicker.Grandmas}", grandmaAmountX, amountsY, font);
-            DrawText(spriteBatch, $"cost: {_wallet.CookieClicker.GetGrandmaUpgradePrice()}", grandmaPriceX, pricesY, font);
+            var evelyn = Game1.getCharacterFromName("Evelyn");
+            if (evelyn != null)
+            {
+                DrawText(spriteBatch, $"{_wallet.CookieClicker.Grandmas}", grandmaAmountX, amountsY, font);
+                DrawText(spriteBatch, $"cost: {_wallet.CookieClicker.GetGrandmaUpgradePrice()}", grandmaPriceX, pricesY, font);
+            }
+            else
+            {
+                DrawText(spriteBatch, $"Grandma unavailable", grandmaAmountX, amountsY, font);
+            }
         }
 
         private void DrawGachaPrices(SpriteBatch spriteBatch)

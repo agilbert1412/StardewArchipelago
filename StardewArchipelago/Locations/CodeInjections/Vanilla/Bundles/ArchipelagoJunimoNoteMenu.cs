@@ -926,22 +926,28 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
             var grandmaBackground = new BundleButton(grandmaButtonRect, NoteTexture, buttonBackgroundRectangle, buttonScale);
             var grandmaTextureRect = new Rectangle(0, 168, 16, 24);
             var grandmaRect = GetCenteredTexture(grandmaButtonRect, grandmaTextureRect, buttonScale, grandmaScale);
-            var grandmaButton = new BundleButton(grandmaRect, Game1.getCharacterFromName("Evelyn").Sprite.Texture, grandmaTextureRect, grandmaScale);
-            grandmaButton.myID = 795;
+
+            var evelyn = Game1.getCharacterFromName("Evelyn");
+            if (evelyn != null)
+            {
+                var grandmaButton = new BundleButton(grandmaRect, evelyn.Sprite.Texture, grandmaTextureRect, grandmaScale);
+                grandmaButton.myID = 795;
+                cookieButton.rightNeighborID = grandmaButton.myID;
+                grandmaButton.leftNeighborID = cookieButton.myID;
+                grandmaButton.rightNeighborID = REGION_PURCHASE_BUTTON;
+                ExtraButtons.Add(grandmaButton, _wallet.CookieClicker.UpgradeGrandma);
+            }
+
 
             cursorButton.leftNeighborID = REGION_BACK_BUTTON;
             cursorButton.rightNeighborID = cookieButton.myID;
             cookieButton.leftNeighborID = cursorButton.myID;
-            cookieButton.rightNeighborID = grandmaButton.myID;
-            grandmaButton.leftNeighborID = cookieButton.myID;
-            grandmaButton.rightNeighborID = REGION_PURCHASE_BUTTON;
 
             ExtraButtons.Add(cookieBackground, () => { });
             ExtraButtons.Add(cursorBackground, () => { });
             ExtraButtons.Add(grandmaBackground, () => { });
             ExtraButtons.Add(cookieButton, _wallet.CookieClicker.ClickCookie);
             ExtraButtons.Add(cursorButton, _wallet.CookieClicker.UpgradeCursor);
-            ExtraButtons.Add(grandmaButton, _wallet.CookieClicker.UpgradeGrandma);
         }
 
         private void SetUpMonstersButton()
