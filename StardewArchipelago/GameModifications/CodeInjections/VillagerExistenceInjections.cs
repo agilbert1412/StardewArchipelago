@@ -97,7 +97,12 @@ namespace StardewArchipelago.GameModifications.CodeInjections
         public static bool AddNPCs_RemoveNPCsThatDontExistYet_Prefix()
         {
             try
-            {
+            { 
+                if (!_archipelago.MakeSureConnected())
+                {
+                    return MethodPrefix.RUN_ORIGINAL_METHOD;
+                }
+
                 _fakeNpcs.Clear();
                 var npcsFoundYet = new HashSet<string>();
                 Utility.ForEachLocation(location =>
