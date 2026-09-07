@@ -401,7 +401,10 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Quests
 
                 if (_archipelago.SlotData.Goal == Goal.CrypticNote)
                 {
-                    _archipelago.ReportGoalCompletion();
+                    if (!StardewLocationChecker.PREVENT_SENDING_CHECKS)
+                    {
+                        _archipelago.ReportGoalCompletion();
+                    }
                 }
 
                 ++@event.CurrentCommand;

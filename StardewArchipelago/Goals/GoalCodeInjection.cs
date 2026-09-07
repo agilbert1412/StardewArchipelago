@@ -738,6 +738,11 @@ namespace StardewArchipelago.Goals
 
         public static void ReportGoalIfQualified()
         {
+            if (StardewLocationChecker.PREVENT_SENDING_CHECKS)
+            {
+                return;
+            }
+
             if (Game1.player.hasOrWillReceiveMail(JojaConstants.MEMBERSHIP_MAIL) && _config.JojapocalypseMinimumCompletionPercentToGoal > 0)
             {
                 var percentChecked = _locationChecker.GetPercentLocationsChecked() * 100;

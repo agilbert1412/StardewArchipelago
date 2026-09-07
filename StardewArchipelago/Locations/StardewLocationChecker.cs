@@ -10,7 +10,7 @@ namespace StardewArchipelago.Locations
 
     public class StardewLocationChecker : LocationChecker, ILocationChecker
     {
-        private const bool PREVENT_SENDING_CHECKS = false;
+        public const bool PREVENT_SENDING_CHECKS = true;
 
         private readonly StardewArchipelagoClient _archipelago;
         private readonly LocationNameMatcher _locationNameMatcher;
