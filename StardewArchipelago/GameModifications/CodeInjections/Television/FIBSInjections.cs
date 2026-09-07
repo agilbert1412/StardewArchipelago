@@ -119,6 +119,14 @@ namespace StardewArchipelago.GameModifications.CodeInjections.Television
                     num = 0;
                 }
             }
+
+            if (fishInfoEntry.Length > 0 && num > 0)
+            {
+                fishInfoEntries.Add(fishInfoEntry.ToString());
+                fishInfoEntry.Clear();
+                num = 0;
+            }
+
             return fishInfoEntries.ToArray();
         }
 
