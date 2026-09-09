@@ -57,14 +57,36 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
                 var skillName = skill.ToString();
                 var currentExperience = (int)Math.Round(experience);
                 var currentLevel = GetLevel(currentExperience);
+                string printedSkill;
                 if (currentLevel >= 10)
                 {
-                    printedSkills.Add($"{skillName}: Max!");
-                    continue;
+                    printedSkill = $"{skillName}: Max!";
+                }
+                else
+                {
+                    var neededExperience = GetExperienceNeeded(currentLevel + 1);
+                    printedSkill = string.Format(pattern, skillName, currentLevel, currentExperience, neededExperience);
                 }
 
-                var neededExperience = GetExperienceNeeded(currentLevel + 1);
-                printedSkills.Add(string.Format(pattern, skillName, currentLevel, currentExperience, neededExperience));
+                if (CanEarnMasteryXPWithSkill(skill))
+                {
+                    printedSkill += $" [Can earn Mastery XP]";
+                }
+
+                printedSkills.Add(printedSkill);
+            }
+
+            var masteryXp = Game1.stats.Get("MasteryExp");
+            if (masteryXp > 0)
+            {
+                var masteryLevel = MasteryTrackerMenu.getCurrentMasteryLevel();
+                var printedMastery = $"Mastery: Max!";
+                if (masteryLevel < 5)
+                {
+                    var neededForNextLevel = MasteryTrackerMenu.getMasteryExpNeededForLevel(masteryLevel + 1);
+                    printedMastery = string.Format(pattern, "Mastery", masteryLevel, masteryXp, neededForNextLevel);
+                }
+                printedSkills.Add(printedMastery);
             }
 
             return printedSkills;
@@ -210,7 +232,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
         {
             var apSkillName = skill.ToString();
             var experienceAmount = GetMultipliedExperience(amount);
-            if (_archipelago.GetReceivedItemCount($"{apSkillName} Level") >= 10)
+            if (CanEarnMasteryXPWithSkill(skill))
             {
                 var currentMasteryLevel = MasteryTrackerMenu.getCurrentMasteryLevel();
                 var masteryXP = experienceAmount;
@@ -234,6 +256,12 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
                 var checkedLocation = string.Format(_skillLocationName, i, apSkillName);
                 _locationChecker.AddCheckedLocation(checkedLocation);
             }
+        }
+
+        private static bool CanEarnMasteryXPWithSkill(Skill skill)
+        {
+            var apSkillName = skill.ToString();
+            return _archipelago.GetReceivedItemCount($"{apSkillName} Level") >= 10;
         }
 
         private static double GetMultipliedExperience(int amount)
