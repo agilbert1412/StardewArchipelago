@@ -240,7 +240,11 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
 
         public bool IsValidItemForThisIngredientDescription(Item item, BundleIngredientDescription ingredient, int ingredientIndex)
         {
-            var puzzleType = _puzzleTypes[ingredientIndex];
+            if (item == null)
+            {
+                return false;
+            }
+
             var drawnItemId = _drawnItemIds[ingredientIndex];
             if (item.QualifiedItemId == drawnItemId)
             {
