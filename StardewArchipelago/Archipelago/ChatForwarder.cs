@@ -263,7 +263,7 @@ namespace StardewArchipelago.Archipelago
 
         private static bool HandleExperienceCommand(string message)
         {
-            if (message != $"{COMMAND_PREFIX}experience")
+            if (message != $"{COMMAND_PREFIX}experience" && message != $"{COMMAND_PREFIX}xp")
             {
                 return false;
             }
