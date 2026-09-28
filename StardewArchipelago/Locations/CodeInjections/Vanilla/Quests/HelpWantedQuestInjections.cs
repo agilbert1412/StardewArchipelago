@@ -994,7 +994,13 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Quests
             foreach (var gameLocation in Game1.locations)
             {
                 var season = gameLocation.GetSeason();
-                foreach (var spawnForageData in gameLocation.GetData().Forage)
+                var locationData = gameLocation.GetData();
+                var locationForage = locationData?.Forage;
+                if (locationForage == null)
+                {
+                    continue;
+                }
+                foreach (var spawnForageData in locationForage)
                 {
                     if (spawnForageData.Condition != null && !GameStateQuery.CheckConditions(spawnForageData.Condition, gameLocation, random: Game1.random))
                     {
