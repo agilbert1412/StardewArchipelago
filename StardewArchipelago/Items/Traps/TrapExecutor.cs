@@ -1659,13 +1659,13 @@ namespace StardewArchipelago.Items.Traps
                 return false;
             }
 
-            var currentFish = Game1.currentLocation.getFish(1, "", 1, Game1.player, 0, Vector2.Zero);
-            if (currentFish == null || currentFish.Category != Category.FISH || !DataLoader.Fish(Game1.content).ContainsKey(currentFish.ItemId))
+            if (!TryFindFishingRod(out _))
             {
                 return false;
             }
 
-            if (!TryFindFishingRod(out _))
+            var currentFish = Game1.currentLocation.getFish(1, "", 1, Game1.player, 0, Vector2.Zero);
+            if (currentFish == null || currentFish.Category != Category.FISH || !DataLoader.Fish(Game1.content).ContainsKey(currentFish.ItemId))
             {
                 return false;
             }
