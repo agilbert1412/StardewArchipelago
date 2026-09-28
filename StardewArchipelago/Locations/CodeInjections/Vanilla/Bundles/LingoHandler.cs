@@ -341,10 +341,10 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles
                     hintMessage = $"Find something spelled with a little less...";
                     break;
                 case LingoPuzzleType.Lesser:
-                    hintMessage = $"Find the whole to this part...";
+                    hintMessage = $"Find the part to this whole...";
                     break;
                 case LingoPuzzleType.Greater:
-                    hintMessage = $"Find the part to this whole...";
+                    hintMessage = $"Find the whole to this part...";
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();
