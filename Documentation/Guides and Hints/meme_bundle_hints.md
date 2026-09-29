@@ -788,9 +788,6 @@ You must donate the ingredients to craft the item that shows up in the bundle, r
 </ul>
 </details>
 
-- **Looney Bundle**
-- **Morshu Bundle**
-
 <details>
 <summary><h3>Lingo Bundle</h3></summary>
 <ul>
@@ -830,7 +827,7 @@ The colors mean:
 - Red: Remove
 - Blue: Add
 - White: Keep the same
-
+<br/>
 The heights mean:
 - High: Pronunciation of the item
 - Middle: Spelling of the item
@@ -898,6 +895,47 @@ You must donate any fish that you found in a trash can specifically.
 </details>
 
 <details>
+<summary><h3>Looney Bundle</h3></summary>
+<ul>
+
+<details>
+<summary><h4>Hint #1</h4></summary>
+
+This bundle is based on Looney Tunes comics, specifically Wile E Coyote's elaborate attempts at capturing the Road Runner.
+
+</details>
+
+<details>
+<summary><h4>Hint #2</h4></summary>
+
+You will need an Anvil or this bundle
+
+</details>
+
+<details>
+<summary><h4>Hint #3</h4></summary>
+
+Be careful not to hurt yourself with the Anvil
+
+</details>
+
+<details>
+<summary><h4>Hint #4</h4></summary>
+
+You should try to drop the Anvil on the Road Runner from a significant height.
+
+</details>
+
+<details>
+<summary><h4>Solution</h4></summary>
+
+Place the Anvil on the bundle image, not the road runner itself. It will slowly fall down towards the Road Runner.
+
+</details>
+</ul>
+</details>
+
+<details>
 <summary><h3>Mermaid Bundle</h3></summary>
 <ul>
 
@@ -933,6 +971,47 @@ In stardew, mermaids are typically associated to a specific song that has 5 note
 <summary><h4>Solution</h4></summary>
 
 You must donate the items in the order [1-5-4-2-3] (left to right) to play the mermaid song.
+
+</details>
+</ul>
+</details>
+
+<details>
+<summary><h3>Morshu Bundle</h3></summary>
+<ul>
+
+<details>
+<summary><h4>Hint #1</h4></summary>
+
+This bundle is based on Morshu's Store in the game "Link: The Faces of Evil"
+
+</details>
+
+<details>
+<summary><h4>Hint #2</h4></summary>
+
+You can see the shop in this video: https://youtu.be/iPn3LIe2e3w?t=115 (Timestamp: 1:55)
+
+</details>
+
+<details>
+<summary><h4>Hint #3</h4></summary>
+
+Morshu sells 3 items. Oil, Rope, Bombs. But he requires payment...
+
+</details>
+
+<details>
+<summary><h4>Hint #4</h4></summary>
+
+You must pay the correct currency and amount for the items. The audio Cue should help.
+
+</details>
+
+<details>
+<summary><h4>Solution</h4></summary>
+
+All 3 items actually cost rubies. 5 Rubies for the oil, 10 rubies for the rope, and 20 rubies for the bomb. You will receive the item as part of the transaction.
 
 </details>
 </ul>
