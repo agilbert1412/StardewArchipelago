@@ -43,6 +43,7 @@ In this guide, we will be separating bundles into 3 distinct categories, and pro
 - **Dr Seuss Bundle**
 - **Eg Bundle**
 - **Emmalution Bundle**
+- **Finders Keeper Bundle**
 - **Frazzleduck Bundle**
 - **Hats Off To You Bundle**
 - **Hurricane Tortilla Bundle**
@@ -52,7 +53,9 @@ In this guide, we will be separating bundles into 3 distinct categories, and pro
 - **Look At These Chickens Bundle**
 - **Minecraft Bundle**
 - **Not The Bees Bundle**
+- **Numbers Bundle**
 - **Obelisks Bundle**
+- **Peace Bundle**
 - **Potato Bundle**
 - **Rick Bundle**
 - **Romance Bundle**
@@ -148,6 +151,40 @@ If you excluded Ginger Island, someone in Pelican Town will give you the remote
 If you included Ginger Island, after completing "The Pirate's Wife", talk to George. He ends up not liking the complicated remote, and donates it to the Community Center for you.
 
 If you excluded Ginger Island, talk to George, he will give you a remote to donate on your own.
+
+</details>
+</ul>
+</details>
+
+<details>
+<summary><h3>Camping Bundle</h3></summary>
+<ul>
+
+<details>
+<summary><h4>Hint #1</h4></summary>
+
+You need a tent kit to complete this bundle
+
+</details>
+
+<details>
+<summary><h4>Hint #2</h4></summary>
+
+You need a tent kit to go camping
+
+</details>
+
+<details>
+<summary><h4>Hint #3</h4></summary>
+
+The tent kit usage conditions were lessened to make this bundle possible
+
+</details>
+
+<details>
+<summary><h4>Solution</h4></summary>
+
+You need to spend the night in the community center, using a Tent Kid, to complete this bundle
 
 </details>
 </ul>
@@ -746,6 +783,82 @@ The item that the bundle requests can be crafted
 <summary><h4>Solution</h4></summary>
 
 You must donate the ingredients to craft the item that shows up in the bundle, rather than the item itself.
+
+</details>
+</ul>
+</details>
+
+- **Lingo Bundle**
+- **Looney Bundle**
+- **Morshu Bundle**
+
+<details>
+<summary><h3>Lingo Bundle</h3></summary>
+<ul>
+
+<details>
+<summary><h4>Hint #1</h4></summary>
+
+This Bundle is based on the puzzle game LINGO.
+
+</details>
+
+<details>
+<summary><h4>Hint #2</h4></summary>
+
+The items you see are not actually the items being requested. You need to find items that are related.
+
+</details>
+
+<details>
+<summary><h4>Hint #3</h4></summary>
+
+For each of the items being requested, the color of the box and the height at which the box is placed, matters when figuring out the relationship between the displayed item and the required item.
+
+</details>
+
+<details>
+<summary><h4>Hint #4</h4></summary>
+
+If you donate a wrong item, it will be refunded to you, and the game will give you a hint as to what to look for.
+
+</details>
+
+<details>
+<summary><h4>Hint #5</h4></summary>
+
+The colors mean:
+- Red: Remove
+- Blue: Add
+- White: Keep the same
+
+The heights mean:
+- High: Pronunciation of the item
+- Middle: Spelling of the item
+- Bottom: Nature of the item
+
+</details>
+
+<details>
+<summary><h4>Hint #6</h4></summary>
+
+The full matrix is:
+|        | $${\color{red}{Red}}$$      | White               | $${\color{blue}{Blue}}$$    |
+|--------|-----------------------------|---------------------|-----------------------------|
+| High   | Not Applicable              | Pronounced the same | Not Applicable              |
+| Middle | Remove One Letter           | Spelled the same    | Add One Letter              |
+| Bottom | Find the part to this whole | Same Item           | Find the whole to this part | 
+
+</details>
+
+<details>
+<summary><h4>Solution</h4></summary>
+
+|        | $${\color{red}{Red}}$$      | White               | $${\color{blue}{Blue}}$$    |
+|--------|-----------------------------|---------------------|-----------------------------|
+| High   | Not Applicable              | Shirt <-> Shorts    | Not Applicable              |
+| Middle | Acorn -> Corn $${&nbsp;}$$           | Spelled the same    | Corn -> Acorn              |
+| Bottom | Find the part to this whole | Same Item           | Find the whole to this part | 
 
 </details>
 </ul>
