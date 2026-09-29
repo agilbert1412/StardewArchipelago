@@ -125,6 +125,7 @@ namespace StardewArchipelago.Constants
             "Thestral Things",
             "toaster",
             "Trev",
+            "Verr_",
             "Violet",
             "WhySoThirstyy",
             "Yellow_Meep",
