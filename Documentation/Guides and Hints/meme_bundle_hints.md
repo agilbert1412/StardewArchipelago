@@ -857,7 +857,7 @@ The full matrix is:
 |        | $${\color{red}{Red}}$$      | White               | $${\color{blue}{Blue}}$$    |
 |--------|-----------------------------|---------------------|-----------------------------|
 | High   | Not Applicable              | Shirt <-> Shorts    | Not Applicable              |
-| Middle | Acorn -> Corn $${<br>}$$ Coral -> Coal           | Spelled the same    | Corn -> Acorn <code>{&nbsp;}</code> Coral -> Coral              |
+| Middle | Acorn -> Corn <br> Coral -> Coal           | Spelled the same    | Corn -> Acorn <br> Coral -> Coral              |
 | Bottom | Find the part to this whole | Same Item           | Find the whole to this part | 
 
 </details>
