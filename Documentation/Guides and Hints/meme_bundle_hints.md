@@ -1004,7 +1004,7 @@ Morshu sells 3 items. Oil, Rope, Bombs. But he requires payment...
 <details>
 <summary><h4>Hint #4</h4></summary>
 
-You must pay the correct currency and amount for the items. The audio Cue should help.
+You must pay the correct currency and amount for the items. The audio cue should help.
 
 </details>
 
