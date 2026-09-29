@@ -788,7 +788,6 @@ You must donate the ingredients to craft the item that shows up in the bundle, r
 </ul>
 </details>
 
-- **Lingo Bundle**
 - **Looney Bundle**
 - **Morshu Bundle**
 
@@ -854,11 +853,11 @@ The full matrix is:
 <details>
 <summary><h4>Solution</h4></summary>
 
-|        | $${\color{red}{Red}}$$      | White               | $${\color{blue}{Blue}}$$    |
-|--------|-----------------------------|---------------------|-----------------------------|
-| High   | Not Applicable              | Shirt <-> Shorts    | Not Applicable              |
-| Middle | Acorn -> Corn <br> Coral -> Coal           | Spelled the same    | Corn -> Acorn <br> Coral -> Coral              |
-| Bottom | Find the part to this whole | Same Item           | Find the whole to this part | 
+|        | $${\color{red}{Red}}$$                                                                                                                                                                                                                                                                                                                   | White              | $${\color{blue}{Blue}}$$                                                                                                                                                                                                                                                                                                                  |
+|--------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|--------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| High   | Not Applicable                                                                                                                                                                                                                                                                                                                           | Shirt <-> Shorts   | Not Applicable                                                                                                                                                                                                                                                                                                                            |
+| Middle | Acorn -> Corn <br> Coral -> Coal <br> Ancient Seeds -> Ancient Seed <br> (Frozen) Tear -> (Green) Tea                                                                                                                                                                                                                                    | Any item -> Itself | Corn -> Acorn <br> Coral -> Coral <br> Ancient Seed -> Ancient Seeds <br> (Green) Tea -> (Frozen) Tear                                                                                                                                                                                                                                    |
+| Bottom | Any Bar -> Related Source Ore <br> Blueberry Tart -> Blueberry <br> Blackberry Cobbler -> Blackberry <br> Carp Surprise -> Carp <br> Salmon Dinner -> Salmon <br> Rhubarb Pie -> Rhubarb <br> Fried Eel -> Eel <br> Rice Pudding -> Rice <br> Pumpkin Soup -> Pumpkin <br> Cranberry Sauce -> Cranberries <br> Shrimp Cocktail -> Shrimp | Any item -> Itself | Any Ore -> Related Smelted Bar <br> Blueberry -> Blueberry Tart <br> Blackberry -> Blackberry Cobbler <br> Carp -> Carp Surprise <br> Salmon -> Salmon Dinner <br> Rhubarb -> Rhubarb Pie <br> Eel -> Fried Eel <br> Rice -> Rice Pudding <br> Pumpkin -> Pumpkin Soup <br> Cranberries -> Cranberry Sauce <br> Shrimp -> Shrimp Cocktail | 
 
 </details>
 </ul>
