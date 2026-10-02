@@ -477,6 +477,51 @@ If you reach day 999, the bundle will stop growing due to the technical limitati
 </details>
 
 <details>
+<summary><h3>Error Bundle</h3></summary>
+<ul>
+
+<details>
+<summary><h4>Hint #1</h4></summary>
+
+This bundle requires an error
+
+</details>
+
+<details>
+<summary><h4>Hint #2</h4></summary>
+
+Errors are displayed in Red in SMAPI
+
+</details>
+
+<details>
+<summary><h4>Hint #3</h4></summary>
+
+A disconnection will not work because it happens while disconnected
+
+</details>
+
+<details>
+<summary><h4>Hint #4</h4></summary>
+
+Any error, other than a disconnection, will work
+
+</details>
+
+<details>
+<summary><h4>Solution</h4></summary>
+
+Causing any mod error at all (except a disconnect) that displays in SMAPI while in-game will trigger the bundle.
+
+Many mods cause errors when bugs occur, or incompatibilities with each other. This includes Archipelago itself, it is entirely possible to complete this bundle by accident.
+
+Still, the easiest way to complete it that I know of, is to simply type an invalid command in SMAPI. For example, the command `error` will cause a harmless error.
+
+</details>
+</ul>
+</details>
+
+<details>
 <summary><h3>Fast Bundle</h3></summary>
 <ul>
 
@@ -1584,6 +1629,40 @@ Once you bring an item, TheAlGoreRhythm will teach you that this item is stackab
 <summary><h4>Solution</h4></summary>
 
 You simply need a stack of 2 of the item, to donate it to the bundle, just to show it is stackable.
+
+</details>
+</ul>
+</details>
+
+<details>
+<summary><h3>Yeehaw Bundle</h3></summary>
+<ul>
+
+<details>
+<summary><h4>Hint #1</h4></summary>
+
+You need to be someone who says "Yeehaw!" to complete this bundle
+
+</details>
+
+<details>
+<summary><h4>Hint #2</h4></summary>
+
+Cowboys are commonly associated with the phrase "Yeehaw!"
+
+</details>
+
+<details>
+<summary><h4>Hint #3</h4></summary>
+
+Cowboys generally wear a specific style of hat
+
+</details>
+
+<details>
+<summary><h4>Solution</h4></summary>
+
+If you wear a cowboy hat, you can complete the bundle
 
 </details>
 </ul>
