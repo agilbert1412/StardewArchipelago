@@ -361,6 +361,17 @@ namespace StardewArchipelago.Archipelago
             return ModEntry.Instance.Config.ScoutHintBehavior;
         }
 
+        public ScoutedLocation ScoutHintStardewLocation(string locationName)
+        {
+            var scoutedLocation = ScoutSingleLocation(locationName, true);
+            if (ModEntry.Instance.Config.AnonymizeNamesInChat)
+            {
+                scoutedLocation = new ScoutedLocation(scoutedLocation.LocationName, scoutedLocation.ItemName, scoutedLocation.PlayerName.AnonymizePlayerNames(GetSession().Players), scoutedLocation.GameName, scoutedLocation.LocationId,
+                    scoutedLocation.ItemId, scoutedLocation.PlayerId, scoutedLocation.ClassificationFlags);
+            }
+            return scoutedLocation;
+        }
+
         public ScoutedLocation ScoutStardewLocation(string locationName, bool createAsHint = false)
         {
             if (ModEntry.Instance.TesterFeatures.NoScouting.Value >= 1)

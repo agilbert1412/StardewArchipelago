@@ -21,12 +21,12 @@ namespace StardewArchipelago.Archipelago
                 return;
             }
 
-            if (!TryGetCurrentHintCost(session, out var hintCost))
+            var canAffordHintToday = CanAffordHint(session);
+            if (!canAffordHintToday)
             {
                 return;
             }
 
-            var canAffordHintToday = session.RoomState.HintPoints >= hintCost;
             if (!_canAffordHintYesterday && canAffordHintToday)
             {
                 Game1.chatBox?.addMessage($"You can now afford a hint. Syntax: '!hint [itemName]'", Color.Gold);
@@ -35,7 +35,17 @@ namespace StardewArchipelago.Archipelago
             _canAffordHintYesterday = canAffordHintToday;
         }
 
-        private static bool TryGetCurrentHintCost(ArchipelagoSession session, out int hintCost)
+        public static bool CanAffordHint(ArchipelagoSession session)
+        {
+            if (!TryGetCurrentHintCost(session, out var hintCost))
+            {
+                return false;
+            }
+
+            return session.RoomState.HintPoints >= hintCost;
+        }
+
+        public static bool TryGetCurrentHintCost(ArchipelagoSession session, out int hintCost)
         {
             hintCost = session.RoomState.HintCost;
             if (hintCost <= 0)

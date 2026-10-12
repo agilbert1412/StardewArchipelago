@@ -9,6 +9,7 @@ using KaitoKid.ArchipelagoUtilities.Net.Constants;
 using KaitoKid.Utilities.Interfaces;
 using StardewArchipelago.Archipelago;
 using StardewArchipelago.Archipelago.SlotData.SlotEnums;
+using StardewArchipelago.Constants.Vanilla;
 
 namespace StardewArchipelago.Locations.Festival
 {
@@ -99,7 +100,10 @@ namespace StardewArchipelago.Locations.Festival
                                 // inventory.Add(new Furniture("SquidKid_Painting", Vector2.Zero));
                                 //if (!hasCrabBook)
                                 //{
-                                //    inventory.Add(ItemRegistry.Create("(O)Book_Crabbing"));
+                                if (_archipelago.HasReceivedItem($"Book: {PowerBooks.THE_ART_O_CRABBING}"))
+                                {
+                                    inventory.Add(ItemRegistry.Create("(O)Book_Crabbing"));
+                                }
                                 //    continue;
                                 //}
                                 inventory.Add(ItemRegistry.Create("(O)MysteryBox", 3));
@@ -123,7 +127,10 @@ namespace StardewArchipelago.Locations.Festival
                                 }
                                 //if (!hasCrabBook)
                                 //{
-                                //    inventory.Add(ItemRegistry.Create("(O)Book_Crabbing"));
+                                if (_archipelago.HasReceivedItem($"Book: {PowerBooks.THE_ART_O_CRABBING}"))
+                                {
+                                    inventory.Add(ItemRegistry.Create("(O)Book_Crabbing"));
+                                }
                                 //    continue;
                                 //}
                                 inventory.Add(ItemRegistry.Create("(O)MysteryBox", 3));

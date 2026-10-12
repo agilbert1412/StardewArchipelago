@@ -38,13 +38,15 @@ namespace StardewArchipelago.Archipelago
         private static TileSanityManager _tileSanityManager;
         private static TrapExecutor _trapExecutor;
         private static BankHandler _bankHandler;
+        private static HintHelper _hintHelper;
         private static PlayerUnstucker _playerUnstucker;
         private static PlayerSleeper _playerSleeper;
 
         private static string _lastCommand;
         private static string _bankruptcyConfirmationPassword = string.Empty;
 
-        public ChatForwarder(ILogger logger, IMonitor monitor, IModHelper helper, Harmony harmony, StardewArchipelagoClient archipelago, IGiftHandler giftHandler, GoalManager goalManager, TrapExecutor trapExecutor, TileSanityManager tileSanityManager, BankHandler bank)
+        public ChatForwarder(ILogger logger, IMonitor monitor, IModHelper helper, Harmony harmony, StardewArchipelagoClient archipelago, IGiftHandler giftHandler, GoalManager goalManager, TrapExecutor trapExecutor,
+            TileSanityManager tileSanityManager, BankHandler bank, HintHelper hintHelper)
         {
             _logger = logger;
             _helper = helper;
@@ -57,6 +59,7 @@ namespace StardewArchipelago.Archipelago
             _playerUnstucker = new PlayerUnstucker(trapExecutor.TileChooser);
             _playerSleeper = new PlayerSleeper(_logger);
             _bankHandler = bank;
+            _hintHelper = hintHelper;
             _lastCommand = null;
         }
 
@@ -95,12 +98,18 @@ namespace StardewArchipelago.Archipelago
 
         private static bool TryHandleCommand(string message)
         {
+            var messageLower = message.ToLower();
+            if (HandleHintBundleCommand(messageLower))
+            {
+                _lastCommand = message;
+                return true;
+            }
+
             if (string.IsNullOrWhiteSpace(message) || !message.StartsWith(COMMAND_PREFIX))
             {
                 return false;
             }
 
-            var messageLower = message.ToLower();
             if (HandleReCommand(messageLower))
             {
                 return true;
@@ -344,6 +353,40 @@ namespace StardewArchipelago.Archipelago
 
             MailboxHelper.TryGetNextMail();
             return true;
+        }
+
+        private static bool HandleHintBundleCommand(string message)
+        {
+            var bundleLocation = "Hint Bundle";
+            if (message != $"!hint_location {bundleLocation}".ToLower())
+            {
+                return false;
+            }
+
+            var session = _archipelago.GetSession();
+            if (HintHelper.TryGetCurrentHintCost(session, out var hintCost))
+            {
+                var hintCostPercentage = ((double)hintCost / (double)session.Locations.AllLocations.Count) * 100;
+                var canAffordHint = HintHelper.CanAffordHint(session);
+                var hintsAreExpensive = hintCostPercentage >= 10;
+                var hintsAreFairButCantAfford = hintCostPercentage >= 5 && !canAffordHint;
+                var currentProgress = (double)session.Locations.AllLocationsChecked.Count / (double)session.Locations.AllLocations.Count;
+                var cantAffordAndAlreadyMidGame = !canAffordHint && currentProgress >= 0.5;
+                var alreadyLateGame = currentProgress >= 0.75;
+                var hintsAreFree = hintCostPercentage <= 0;
+                if (hintsAreFree)
+                {
+                    return false;
+                }
+
+                if (hintsAreExpensive || hintsAreFairButCantAfford || cantAffordAndAlreadyMidGame || alreadyLateGame)
+                {
+                    _archipelago.ScoutHintStardewLocation(bundleLocation);
+                    return false;
+                }
+            }
+
+            return false;
         }
 
         private static bool HandleLoanCommand(string message)
