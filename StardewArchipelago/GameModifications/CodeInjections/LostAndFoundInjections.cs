@@ -4,7 +4,9 @@ using KaitoKid.ArchipelagoUtilities.Net.Constants;
 using KaitoKid.Utilities.Interfaces;
 using StardewArchipelago.Archipelago;
 using StardewArchipelago.Archipelago.SlotData.SlotEnums;
+using StardewArchipelago.Constants;
 using StardewArchipelago.Items.Mail;
+using StardewArchipelago.Items.Unlocks.Vanilla;
 using StardewValley;
 using StardewValley.Internal;
 using StardewValley.Tools;
@@ -29,6 +31,10 @@ namespace StardewArchipelago.GameModifications.CodeInjections
             {
                 foreach (var lostAndFoundItem in __instance.returnedDonations.ToArray())
                 {
+                    if (lostAndFoundItem is Wand)
+                    {
+                        continue;
+                    }
                     if (lostAndFoundItem is not Tool lostAndFoundTool)
                     {
                         continue;
@@ -98,6 +104,11 @@ namespace StardewArchipelago.GameModifications.CodeInjections
             var team = Game1.player.team;
             foreach (var lostAndFoundItem in team.returnedDonations.ToArray())
             {
+                if (lostAndFoundItem is Wand)
+                {
+                    continue;
+                }
+
                 if (lostAndFoundItem is not Tool lostAndFoundTool)
                 {
                     continue;
@@ -168,7 +179,7 @@ namespace StardewArchipelago.GameModifications.CodeInjections
         private static bool MakeToolCorrectLevel(in ForEachItemContext context)
         {
             var item = context.Item;
-            if (item is not Tool tool || item is FishingRod || item is MeleeWeapon || item is Slingshot)
+            if (item is not Tool tool || item is FishingRod || item is MeleeWeapon || item is Slingshot || item is Wand)
             {
                 return true;
             }

@@ -2,6 +2,7 @@
 using StardewArchipelago.Archipelago;
 using StardewArchipelago.Constants;
 using StardewArchipelago.Constants.Vanilla;
+using StardewArchipelago.Items.Unlocks.Vanilla;
 using StardewArchipelago.Stardew;
 using StardewArchipelago.Stardew.NameMapping;
 using StardewModdingAPI;
@@ -71,7 +72,7 @@ namespace StardewArchipelago.Locations.ShopStockModifiers
                     continue;
                 }
 
-                item.Condition = GameStateConditionProvider.CreateHasReceivedItemCondition("Return Scepter");
+                item.Condition = GameStateConditionProvider.CreateHasReceivedItemCondition(ToolUnlockManager.RETURN_SCEPTER);
                 // shopData.Items.RemoveAt(i);
 
                 var apShopItem = CreateArchipelagoLocation(item, returnScepterLocationName);
