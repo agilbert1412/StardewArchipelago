@@ -614,7 +614,10 @@ namespace StardewArchipelago.Items.Traps
                 }
 
                 ++Game1.stats.GiftsGiven;
-                player.currentLocation.localSound("give_gift");
+                if (Game1.playSound("give_gift", out var giftSound))
+                {
+                    giftSound.Volume *= 0.05f;
+                }
                 ++player.friendshipData[name].GiftsToday;
                 ++player.friendshipData[name].GiftsThisWeek;
                 player.friendshipData[name].LastGiftDate = new WorldDate(Game1.Date);

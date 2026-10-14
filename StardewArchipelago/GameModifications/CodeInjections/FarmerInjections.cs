@@ -1,15 +1,16 @@
-﻿using System;
-using StardewArchipelago.Archipelago;
-using StardewValley;
-using StardewArchipelago.Constants.Vanilla;
-using System.Linq;
-using KaitoKid.Utilities.Interfaces;
+﻿using KaitoKid.Utilities.Interfaces;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Audio;
+using StardewArchipelago.Archipelago;
 using StardewArchipelago.Archipelago.SlotData.SlotEnums;
 using StardewArchipelago.Bundles;
-using Object = StardewValley.Object;
+using StardewArchipelago.Constants.Vanilla;
 using StardewArchipelago.Locations.CodeInjections.Vanilla.Bundles;
+using StardewValley;
 using StardewValley.TerrainFeatures;
+using System;
+using System.Linq;
+using Object = StardewValley.Object;
 
 namespace StardewArchipelago.GameModifications.CodeInjections
 {
@@ -134,7 +135,10 @@ namespace StardewArchipelago.GameModifications.CodeInjections
             var tempSprite = new TemporaryAnimatedSprite("LooseSprites\\Cursors", sourceRect, animationInterval, 4, numberOfLoops, firePosition, false, false);
             tempSprite.scale = scale;
             Game1.currentLocation.TemporarySprites.Add(tempSprite);
-            Game1.playSound("fireball");
+            if (Game1.playSound("fireball", out var fireballCue))
+            {
+                fireballCue.Volume *= 0.1f;
+            }
         }
     }
 }
