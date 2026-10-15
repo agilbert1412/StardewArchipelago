@@ -188,7 +188,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
                                              " We have noticed that your account is pretty low on funds.";
                     var maxAmount = DebtManager.MAX_LOAN_AMOUNT;
                     var dialoguePart2 = "We wanted to remind you that Joja offers Loans at any time, no questions asked!" +
-                                        $" You have been preapproved for a loan of up to {maxAmount}g.";
+                                        $" We offer loans of up to {maxAmount}g, assuming your credit score is high enough to qualify.";
                     var dialoguePart3 = $"You can type '!!loan x' in chat to immediately request a loan to your account.";
 
                     var dialogue1 = new Dialogue(speaker, nameof(dialoguePart1), dialoguePart1);

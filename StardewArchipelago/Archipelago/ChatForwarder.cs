@@ -398,13 +398,20 @@ namespace StardewArchipelago.Archipelago
             }
 
             var loanAmountText = message.Substring(loanPrefix.Length).Trim();
+            var approvedLoanAmount = _trapExecutor.DebtManager.GetCurrentApprovedLoanAmount();
+
+            if (approvedLoanAmount <= 0)
+            {
+                Game1.chatBox?.addMessage($"You do not currently qualify for a loan. You are welcome to apply again once your credit score has improved.", DebtManager.JOJA_COLOR);
+            }
+
             if (!int.TryParse(loanAmountText, out var loanAmount) || loanAmount <= 0)
             {
-                Game1.chatBox?.addMessage($"Please specify the desired amount of your loan. You are approved for up to {DebtManager.MAX_LOAN_AMOUNT}g", DebtManager.JOJA_COLOR);
+                Game1.chatBox?.addMessage($"Please specify the desired amount of your loan. You are approved for up to {approvedLoanAmount}g", DebtManager.JOJA_COLOR);
                 return true;
             }
 
-            loanAmount = Math.Max(1, Math.Min(DebtManager.MAX_LOAN_AMOUNT, loanAmount));
+            loanAmount = Math.Max(1, Math.Min(approvedLoanAmount, loanAmount));
             _trapExecutor.DebtManager.TakeOutLoan(loanAmount);
             return true;
         }

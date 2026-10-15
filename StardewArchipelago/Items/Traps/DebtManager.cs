@@ -29,7 +29,7 @@ namespace StardewArchipelago.Items.Traps
         private const double DEBT_NEEDED_TO_ADVERTISE_BANKRUPTCY = 1_000_000;
         private const double DEBT_NEEDED_TO_WARN_ABOUT_AUTO_BANKRUPTCY = 2_000_000;
         private const double DEBT_NEEDED_TO_AUTO_BANKRUPTCY = 10_000_000;
-        private static readonly string AUTO_BANKRUPTCY_FORMATTED = DEBT_NEEDED_TO_AUTO_BANKRUPTCY.ToString("N", new NumberFormatInfo{NumberGroupSeparator = " "});
+        private static readonly string AUTO_BANKRUPTCY_FORMATTED = DEBT_NEEDED_TO_AUTO_BANKRUPTCY.ToString("N", new NumberFormatInfo{NumberGroupSeparator = " ", NumberDecimalDigits = 0});
         private readonly ILogger _logger;
         private readonly StardewArchipelagoClient _archipelago;
         private readonly TrapDifficultyBalancer _balancer;
@@ -92,10 +92,13 @@ namespace StardewArchipelago.Items.Traps
             await AddMessageAndWait($"Remaining Debt: {_permanentState.CurrentDebt}g. Thank you for financing with [50]oja Capital");
             if (_permanentState.CurrentDebt > Game1.player.totalMoneyEarned || _permanentState.CurrentDebt >= DEBT_NEEDED_TO_ADVERTISE_BANKRUPTCY)
             {
-                await AddMessageAndWait($"If you wish to declare bankruptcy, you can request it with the command {ChatForwarder.COMMAND_PREFIX}bankruptcy");
-                if (_permanentState.CurrentDebt >= DEBT_NEEDED_TO_WARN_ABOUT_AUTO_BANKRUPTCY)
+                if (_permanentState.CurrentDebt < DEBT_NEEDED_TO_WARN_ABOUT_AUTO_BANKRUPTCY)
                 {
-                    await AddMessageAndWait($"If your debt reaches {AUTO_BANKRUPTCY_FORMATTED}g, you will be forced to declare bankruptcy.");
+                    await AddMessageAndWait($"If you wish to declare bankruptcy, you can request it with the command {ChatForwarder.COMMAND_PREFIX}bankruptcy");
+                }
+                else
+                {
+                    await AddMessageAndWait($"If your debt reaches {AUTO_BANKRUPTCY_FORMATTED}g, you will be forced to declare !!bankruptcy.");
                 }
             }
         }
@@ -227,6 +230,22 @@ namespace StardewArchipelago.Items.Traps
             _permanentState.CurrentDebt += amount;
             Game1.chatBox.addMessage($"You have been approved for a {amount}g loan. It has been deposited in your account.", JOJA_COLOR);
             Game1.chatBox.addMessage($"Thank you for financing with [50]oja Capital", JOJA_COLOR);
+        }
+
+        public int GetCurrentApprovedLoanAmount()
+        {
+            var maxAmount = MAX_LOAN_AMOUNT;
+            var currentDebt = _permanentState.CurrentDebt;
+            var forgivenAmount = MAX_LOAN_AMOUNT * 10;
+            if (currentDebt < forgivenAmount)
+            {
+                return maxAmount;
+            }
+
+            var outstandingDebt = currentDebt - forgivenAmount;
+            var approvalReduction = outstandingDebt / 100;
+            var approvedAmount = maxAmount - approvalReduction;
+            return approvedAmount;
         }
     }
 }
