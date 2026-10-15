@@ -10,6 +10,7 @@ using StardewValley.Internal;
 using StardewValley.Objects;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -25,6 +26,10 @@ namespace StardewArchipelago.Items.Traps
         private const int ALWAYS_ALLOWED_PAYMENT = 1000;
         private const double MINIMUM_PAYMENT_RATE = 0.05;
         private const double MAXIMUM_PAYMENT_RATE = 0.5;
+        private const double DEBT_NEEDED_TO_ADVERTISE_BANKRUPTCY = 1_000_000;
+        private const double DEBT_NEEDED_TO_WARN_ABOUT_AUTO_BANKRUPTCY = 2_000_000;
+        private const double DEBT_NEEDED_TO_AUTO_BANKRUPTCY = 10_000_000;
+        private static readonly string AUTO_BANKRUPTCY_FORMATTED = DEBT_NEEDED_TO_AUTO_BANKRUPTCY.ToString("N", new NumberFormatInfo{NumberGroupSeparator = " "});
         private readonly ILogger _logger;
         private readonly StardewArchipelagoClient _archipelago;
         private readonly TrapDifficultyBalancer _balancer;
@@ -42,8 +47,21 @@ namespace StardewArchipelago.Items.Traps
 
         public async Task DayUpdateDebt()
         {
+            if (_permanentState.CurrentDebt < 0)
+            {
+                _permanentState.CurrentDebt = 0;
+            }
+
             if (_permanentState.CurrentDebt <= 0)
             {
+                return;
+            }
+
+            if (_permanentState.CurrentDebt >= DEBT_NEEDED_TO_AUTO_BANKRUPTCY)
+            {
+                await AddMessageAndWait($"Debt Exceeded the maximum allowed amount. Bankruptcy Declared. Seizing all assets of {Game1.player.Name}.");
+                PerformBankruptcy();
+                PrintPostBankruptcyMessages();
                 return;
             }
 
@@ -72,9 +90,13 @@ namespace StardewArchipelago.Items.Traps
             await AddMessageAndWait($"Interests Added: {interests}g");
             _permanentState.CurrentDebt += interests;
             await AddMessageAndWait($"Remaining Debt: {_permanentState.CurrentDebt}g. Thank you for financing with [50]oja Capital");
-            if (_permanentState.CurrentDebt > Game1.player.totalMoneyEarned || _permanentState.CurrentDebt > 1000000)
+            if (_permanentState.CurrentDebt > Game1.player.totalMoneyEarned || _permanentState.CurrentDebt >= DEBT_NEEDED_TO_ADVERTISE_BANKRUPTCY)
             {
                 await AddMessageAndWait($"If you wish to declare bankruptcy, you can request it with the command {ChatForwarder.COMMAND_PREFIX}bankruptcy");
+                if (_permanentState.CurrentDebt >= DEBT_NEEDED_TO_WARN_ABOUT_AUTO_BANKRUPTCY)
+                {
+                    await AddMessageAndWait($"If your debt reaches {AUTO_BANKRUPTCY_FORMATTED}g, you will be forced to declare bankruptcy.");
+                }
             }
         }
 
@@ -191,6 +213,12 @@ namespace StardewArchipelago.Items.Traps
 
             Game1.player.Money = 0;
             _permanentState.CurrentDebt = 0;
+        }
+
+        public void PrintPostBankruptcyMessages()
+        {
+            Game1.chatBox?.addMessage($"All assets seized. All of the debts of {Game1.player.Name} are now void.", JOJA_COLOR);
+            Game1.chatBox?.addMessage($"Thank you for doing business with [50]oja Capital", JOJA_COLOR);
         }
 
         public void TakeOutLoan(int amount)
