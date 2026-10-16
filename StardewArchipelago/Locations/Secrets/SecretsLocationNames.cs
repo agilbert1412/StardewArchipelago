@@ -161,7 +161,7 @@ namespace StardewArchipelago.Locations.Secrets
             new(POISON_THE_GOVERNOR, FestivalNames.LUAU),
             new(GRANGE_DISPLAY_BRIBE, FestivalNames.FAIR),
             new(PURPLE_LETTUCE, FestivalNames.FAIR),
-            new(SOMETHING_FOR_SANTA, FestivalNames.WINTER_STAR),
+            new(SOMETHING_FOR_SANTA, Season.Winter, 24),
             new(ANNOY_THE_MOON_MAN, 27),
             new(FREE_THE_FORSAKEN_SOULS, Season.Fall, 26),
 
