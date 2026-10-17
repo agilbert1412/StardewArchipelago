@@ -1,17 +1,25 @@
 ﻿using KaitoKid.ArchipelagoUtilities.Net;
 using KaitoKid.ArchipelagoUtilities.Net.Client;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Audio;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using StardewArchipelago.Archipelago;
 using StardewArchipelago.Archipelago.Gifting;
 using StardewArchipelago.Archipelago.SlotData.SlotEnums;
+using StardewArchipelago.Archipelago.SlotData.SlotEnums.SlotDataRandomization;
+using StardewArchipelago.GameModifications;
 using StardewArchipelago.GameModifications;
 using StardewArchipelago.Items.Traps;
+using StardewArchipelago.Items.Traps;
+using StardewArchipelago.Locations;
 using StardewArchipelago.Locations;
 using StardewArchipelago.Locations.CodeInjections.Vanilla.MonsterSlayer;
 using StardewArchipelago.Logging;
 using StardewArchipelago.Serialization;
+using StardewArchipelago.Serialization;
+using StardewArchipelago.Stardew;
 using StardewArchipelago.Stardew;
 using StardewModdingAPI;
 using StardewValley;
@@ -20,15 +28,8 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using static StardewArchipelago.ModEntry;
-using StardewArchipelago.GameModifications;
-using StardewArchipelago.Stardew;
 using System.Linq;
-using Microsoft.Xna.Framework;
-using StardewArchipelago.Archipelago.SlotData.SlotEnums.SlotDataRandomization;
-using StardewArchipelago.Items.Traps;
-using StardewArchipelago.Serialization;
-using StardewArchipelago.Locations;
+using static StardewArchipelago.ModEntry;
 
 namespace StardewArchipelago.Registry
 {

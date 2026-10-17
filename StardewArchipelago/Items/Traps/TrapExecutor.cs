@@ -90,7 +90,19 @@ namespace StardewArchipelago.Items.Traps
 
             // private readonly Dictionary<string, CueDefinition> _cues = new Dictionary<string, CueDefinition>();
             var cuesField = _helper.Reflection.GetField<Dictionary<string, CueDefinition>>(soundBank, "_cues");
-            _availableSoundCues = cuesField.GetValue().Keys.ToArray();
+            var allSounds = cuesField.GetValue().Keys.ToArray();
+            var loopingSounds = FilterSoundsLooping(allSounds, true);
+            var notLoopingSounds = FilterSoundsLooping(allSounds, false);
+            _availableSoundCues = notLoopingSounds;
+        }
+
+        private string[] FilterSoundsLooping(IEnumerable<string> sounds, bool looping)
+        {
+            return sounds
+                .Where(soundCue => Game1.soundBank.GetCueDefinition(soundCue).sounds
+                    .Any(sound => sound.soundClips == null || sound.soundClips
+                        .Any(clip => clip.clipEvents == null || clip.clipEvents
+                            .Any(clipEvent => clipEvent == null || clipEvent is not PlayWaveEvent playWaveEvent || (playWaveEvent.Loop == looping))))).ToArray();
         }
 
         public bool CanGetTrappedRightNow()
