@@ -275,7 +275,10 @@ namespace StardewArchipelago.GameModifications.EntranceRandomizer
                 if (!_state.EntrancesTraversed.Contains(entranceBeforeAlias))
                 {
                     _state.EntrancesTraversed.Add(entranceBeforeAlias);
-                    _archipelago.SaveEntrancesTraversedToServer(_archipelago.SlotData.ModifiedEntrances, _state.EntrancesTraversed);
+                    if (!_archipelago.SlotData.EntranceRandomizationBehavior.HasFlag(EntranceRandomizationBehavior.Chaos))
+                    {
+                        _archipelago.SaveEntrancesTraversedToServer(_archipelago.SlotData.ModifiedEntrances, _state.EntrancesTraversed);
+                    }
 
                 }
                 return true;
@@ -373,8 +376,18 @@ namespace StardewArchipelago.GameModifications.EntranceRandomizer
 
         private static string ReverseKey(string key)
         {
-            var parts = key.Split(TRANSITIONAL_STRING);
-            return $"{parts[1]}{TRANSITIONAL_STRING}{parts[0]}";
+            if (key.Contains(TRANSITIONAL_STRING))
+            {
+                var parts = key.Split(TRANSITIONAL_STRING);
+                return $"{parts[1]}{TRANSITIONAL_STRING}{parts[0]}";
+            }
+            const string exit_suffix = " Exit";
+            if (key.EndsWith(exit_suffix))
+            {
+                return key.Substring(0, key.Length - exit_suffix.Length);
+            }
+
+            return $"{key}{exit_suffix}";
         }
 
         private static (string, string) GetLocationNames(string key)

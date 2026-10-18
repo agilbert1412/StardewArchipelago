@@ -581,11 +581,21 @@ namespace StardewArchipelago.Archipelago
         const string EntrancesKey = "found_entrances";
         public void SaveEntrancesTraversedToServer(Dictionary<string, string> slotDataModifiedEntrances, List<string> stateEntrancesTraversed)
         {
+            if (!MakeSureConnected())
+            {
+                return;
+            }
+
             _bigIntegerDataStorage.ReadAsync(Scope.Slot, EntrancesKey, (x) => SaveEntrancesTraversedToServer(slotDataModifiedEntrances, stateEntrancesTraversed, x));
         }
 
         public void SaveEntrancesTraversedToServer(Dictionary<string, string> slotDataModifiedEntrances, List<string> stateEntrancesTraversed, BigInteger existingValue)
         {
+            if (!MakeSureConnected())
+            {
+                return;
+            }
+
             var sortedEntrances = slotDataModifiedEntrances.Keys.ToList();
             sortedEntrances.Sort();
             var value = new BigInteger(0);
