@@ -952,7 +952,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Quests
                     count *= 10;
                     if (hints.Any(hint => _archipelago.GetLocationName(hint) == helpWantedLocation))
                     {
-                        count *= 10;
+                        count *= 2;
                     }
                 }
 
@@ -1099,7 +1099,7 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Quests
                 return 0;
             }
 
-            return (int)Math.Ceiling(Game1.player.friendshipData.Length / 10d);
+            return (int)Math.Ceiling(Game1.player.friendshipData.Length / 15d);
         }
 
         private static int GetFishingWeight((string type, string fishName) extraInfo)
