@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using Microsoft.Xna.Framework;
 using KaitoKid.Utilities.Interfaces;
@@ -392,8 +393,15 @@ namespace StardewArchipelago.GameModifications.EntranceRandomizer
 
         private static (string, string) GetLocationNames(string key)
         {
-            var split = key.Split(TRANSITIONAL_STRING);
-            return (split[0], split[1]);
+            if (key.Contains(TRANSITIONAL_STRING))
+            {
+                var split = key.Split(TRANSITIONAL_STRING);
+                return (split[0], split[1]);
+            }
+
+            // I'm not sure if this is right... need to investigate eventually. I think this only happens on chaos + decoupled
+            Debugger.Break();
+            return (key, key);
         }
 
         public static string TurnAliased(string key)
