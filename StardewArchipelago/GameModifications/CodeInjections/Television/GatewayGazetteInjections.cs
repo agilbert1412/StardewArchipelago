@@ -129,7 +129,7 @@ namespace StardewArchipelago.GameModifications.CodeInjections.Television
             var entranceToReveal = entrancesNotChecked[random.Next(entrancesNotChecked.Length)];
             var friendlyEntranceName = _entranceManager.EntranceAliasesMap[entranceToReveal];
             var destinationInternalName = _entranceManager.ModifiedEntrances[entranceToReveal];
-            var destinationFriendlyName = _entranceManager.EntranceAliasesMap[destinationInternalName];
+            var destinationFriendlyName = GetDestinationName(_entranceManager.EntranceAliasesMap[destinationInternalName]);
             Game1.drawObjectDialogue(Game1.parseText(string.Format(GAZETTE_EPISODE, agentName, friendlyEntranceName, destinationFriendlyName)));
             Game1.afterDialogues = tv.proceedToNextScene;
         }
@@ -141,10 +141,14 @@ namespace StardewArchipelago.GameModifications.CodeInjections.Television
             Game1.afterDialogues = tv.proceedToNextScene;
         }
 
-        private static string GetFriendlyDestinationName(string destinationInternalName)
+        private static string GetDestinationName(string destinationName)
         {
-            var friendlyDestinationName = destinationInternalName.Split(EntranceManager.TRANSITIONAL_STRING).Last().Split(" ").Last().Split("|").First();
-            return GetFriendlyMapName(friendlyDestinationName);
+            if (destinationName.Contains(EntranceManager.TRANSITIONAL_STRING))
+            {
+                return destinationName.Split(EntranceManager.TRANSITIONAL_STRING).Last();
+            }
+
+            return destinationName;
         }
 
         private static string GetFriendlyMapName(string mapName)
