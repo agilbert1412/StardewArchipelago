@@ -143,12 +143,12 @@ namespace StardewArchipelago.Locations.ShopStockModifiers
             {
                 toolShopItem.Price = Math.Max(1, (int)Math.Round(toolShopItem.Price * priceMultiplier));
                 toolShopItem.TradeItemAmount = Math.Max(1, (int)Math.Round(toolShopItem.TradeItemAmount * priceMultiplier));
-                if (toolShopItem.CustomFields != null && toolShopItem.CustomFields.ContainsKey(ShopMenuInjections.MATERIALS_KEY))
+                if (toolShopItem.ModData != null && toolShopItem.ModData.ContainsKey(ShopMenuInjections.MATERIALS_KEY))
                 {
-                    var materialsJson = toolShopItem.CustomFields[ShopMenuInjections.MATERIALS_KEY];
+                    var materialsJson = toolShopItem.ModData[ShopMenuInjections.MATERIALS_KEY];
                     var materials = JsonConvert.DeserializeObject<Dictionary<string, int>>(materialsJson);
                     var pricedMaterials = materials.ToDictionary(x => x.Key, x => Math.Max(1, (int)Math.Round(x.Value * priceMultiplier)));
-                    toolShopItem.CustomFields[ShopMenuInjections.MATERIALS_KEY] = JsonConvert.SerializeObject(pricedMaterials);
+                    toolShopItem.ModData[ShopMenuInjections.MATERIALS_KEY] = JsonConvert.SerializeObject(pricedMaterials);
                 }
             }
         }
