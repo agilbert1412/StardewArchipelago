@@ -24,6 +24,8 @@ namespace StardewArchipelago.Extensions
             { "IslandEast|28|28", new WarpRequest("IslandEast", 28, 29, FacingDirection.Down) }, // "Parrot Express Jungle"
             { "IslandWest|74|9", new WarpRequest("IslandWest", 74, 10, FacingDirection.Down) }, // "Parrot Express Farm"
             
+            { "VolcanoDungeon5 to IslandNorthExit", new WarpRequest("IslandNorth", 56, 17, FacingDirection.Down) }, // "Island Obelisk"
+
             { "UseEarthObeliskExit", new WarpRequest("Mountain", 31, 20, FacingDirection.Down) }, // "Island Obelisk"
             { "UseWaterObeliskExit", new WarpRequest("Beach", 20, 4, FacingDirection.Down) }, // "Island Obelisk"
             { "UseDesertObeliskExit", new WarpRequest("Desert", 35, 43, FacingDirection.Down) }, // "Island Obelisk"

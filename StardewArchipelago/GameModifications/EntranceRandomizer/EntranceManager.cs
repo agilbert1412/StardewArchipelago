@@ -465,6 +465,7 @@ namespace StardewArchipelago.GameModifications.EntranceRandomizer
             { "Use Desert Obelisk", "Farm to Desert" },
             { "Use Island Obelisk", "Farm to IslandSouth" },
             { "Use Farm Obelisk", "IslandWest to Farm" },
+            { "Volcano Floor 5 to Island North", "VolcanoDungeon5 to IslandNorth|56|17" },
         };
 
         private static readonly Dictionary<string, string> _locationAliases = new()
@@ -507,6 +508,7 @@ namespace StardewArchipelago.GameModifications.EntranceRandomizer
             { "Island Farmhouse", "IslandFarmHouse" },
             { "Volcano Entrance", "VolcanoDungeon0|31|53" },
             { "Volcano River", "VolcanoDungeon0|6|49" },
+            { "Volcano Floor 5", "VolcanoDungeon5" },
             { "Secret Beach", "IslandNorth|12|31" },
             { "Secret Woods", "Woods" },
             { "Professor Snail Cave", "IslandNorthCave1" },
