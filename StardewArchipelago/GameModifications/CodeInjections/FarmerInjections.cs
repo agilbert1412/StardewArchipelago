@@ -24,6 +24,7 @@ namespace StardewArchipelago.GameModifications.CodeInjections
         public static void Initialize(ILogger logger, StardewArchipelagoClient archipelago, TrapsStateDto trapsState)
         {
             _logger = logger;
+            _archipelago = archipelago;
             _trapsState = trapsState;
         }
 
