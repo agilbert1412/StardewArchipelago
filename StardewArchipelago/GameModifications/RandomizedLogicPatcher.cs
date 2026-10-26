@@ -78,7 +78,7 @@ namespace StardewArchipelago.GameModifications
             MineshaftLogicInjections.Initialize(logger, modHelper, _archipelago);
             CommunityCenterLogicInjections.Initialize(logger, locationChecker);
             FarmInjections.Initialize(logger, _archipelago, state);
-            FarmerInjections.Initialize(logger, _archipelago);
+            FarmerInjections.Initialize(logger, _archipelago, state.TrapsState);
             EventInjections.Initialize(logger, _archipelago, locationChecker);
             AchievementInjections.Initialize(logger, _archipelago);
             EntranceInjections.Initialize(logger, _helper, _archipelago, entranceManager, state);
@@ -1034,7 +1034,7 @@ namespace StardewArchipelago.GameModifications
         {
             _harmony.Patch(
                 original: AccessTools.Method(typeof(Stats), nameof(Stats.takeStep)),
-                postfix: new HarmonyMethod(typeof(FarmerInjections), nameof(FarmerInjections.TakeStep_FloorIsLava_Postfix))
+                postfix: new HarmonyMethod(typeof(FarmerInjections), nameof(FarmerInjections.TakeStep_FloorIsLavaAndBath_Postfix))
             );
         }
 

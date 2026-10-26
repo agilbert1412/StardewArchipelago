@@ -10,6 +10,7 @@ using StardewValley;
 using StardewValley.TerrainFeatures;
 using System;
 using System.Linq;
+using StardewArchipelago.Serialization;
 using Object = StardewValley.Object;
 
 namespace StardewArchipelago.GameModifications.CodeInjections
@@ -18,11 +19,12 @@ namespace StardewArchipelago.GameModifications.CodeInjections
     {
         private static ILogger _logger;
         private static StardewArchipelagoClient _archipelago;
+        private static TrapsStateDto _trapsState;
 
-        public static void Initialize(ILogger logger, StardewArchipelagoClient archipelago)
+        public static void Initialize(ILogger logger, StardewArchipelagoClient archipelago, TrapsStateDto trapsState)
         {
             _logger = logger;
-            _archipelago = archipelago;
+            _trapsState = trapsState;
         }
 
         public static void DoneEatingFavoriteThingKaito(Farmer __instance)
@@ -79,41 +81,64 @@ namespace StardewArchipelago.GameModifications.CodeInjections
         }
 
         // public void takeStep()
-        public static void TakeStep_FloorIsLava_Postfix(Stats __instance)
+        public static void TakeStep_FloorIsLavaAndBath_Postfix(Stats __instance)
         {
             try
             {
-                var farmer = Game1.player;
-                if (farmer == null || farmer.isRidingHorse() || farmer.IsSitting() || farmer.bathingClothes.Value)
-                {
-                    return;
-                }
-
-                var tile = farmer.Tile;
-                if (Game1.currentLocation.terrainFeatures.TryGetValue(tile, out var terrainFeature) && terrainFeature is Flooring flooring)
-                {
-                    return;
-                }
-
-                var canPlace = Game1.currentLocation.CanItemBePlacedHere(tile, collisionMask: CollisionMask.Flooring);
-                if (!canPlace)
-                {
-                    return;
-                }
-
-                if (ArchipelagoJunimoNoteMenu.FloorIsLavaHasTouchedGroundToday == 0 &&
-                    ArchipelagoJunimoNoteMenu.IsBundleRemaining(MemeBundleNames.FLOOR_IS_LAVA) &&
-                    _archipelago.HasReceivedItem("Forest Magic"))
-                {
-                    PlayFireFeetEffect(tile);
-                }
-
-                ArchipelagoJunimoNoteMenu.FloorIsLavaHasTouchedGroundToday++;
+                TakeStepFloorIsLava();
+                TakeStepStinky();
             }
             catch (Exception ex)
             {
-                _logger.LogError($"Failed in {nameof(TakeStep_FloorIsLava_Postfix)}:\n{ex}");
+                _logger.LogError($"Failed in {nameof(TakeStep_FloorIsLavaAndBath_Postfix)}:\n{ex}");
                 return;
+            }
+        }
+
+        private static void TakeStepFloorIsLava()
+        {
+
+            var farmer = Game1.player;
+            if (farmer == null || farmer.isRidingHorse() || farmer.IsSitting() || farmer.bathingClothes.Value)
+            {
+                return;
+            }
+
+            var tile = farmer.Tile;
+            if (Game1.currentLocation.terrainFeatures.TryGetValue(tile, out var terrainFeature) && terrainFeature is Flooring flooring)
+            {
+                return;
+            }
+
+            var canPlace = Game1.currentLocation.CanItemBePlacedHere(tile, collisionMask: CollisionMask.Flooring);
+            if (!canPlace)
+            {
+                return;
+            }
+
+            if (ArchipelagoJunimoNoteMenu.FloorIsLavaHasTouchedGroundToday == 0 &&
+                ArchipelagoJunimoNoteMenu.IsBundleRemaining(MemeBundleNames.FLOOR_IS_LAVA) &&
+                _archipelago.HasReceivedItem("Forest Magic"))
+            {
+                PlayFireFeetEffect(tile);
+            }
+
+            ArchipelagoJunimoNoteMenu.FloorIsLavaHasTouchedGroundToday++;
+            return;
+        }
+
+        private static void TakeStepStinky()
+        {
+            if (_trapsState.DaysShunRemaining <= 0)
+            {
+                return;
+            }
+
+            var farmer = Game1.player;
+            if (farmer.bathingClothes.Value && farmer.swimming.Value)
+            {
+                _trapsState.DaysShunRemaining = 0;
+                Game1.chatBox?.addMessage("Nothing like a good bath to smell good", Color.Gold);
             }
         }
 
