@@ -313,7 +313,7 @@ namespace StardewArchipelago.Constants.Vanilla
         public static readonly string SHIRT = QualifiedShirtId(ShirtIds.SHIRT);
         public static readonly string SHORTS = QualifiedPantsId(PantsIds.SHORTS);
         public static readonly string SHRIMP = QualifiedObjectId(ObjectIds.SHRIMP);
-        public static readonly string SHRIMP_COCKTAIL = QualifiedPantsId(ObjectIds.SHRIMP_COCKTAIL);
+        public static readonly string SHRIMP_COCKTAIL = QualifiedObjectId(ObjectIds.SHRIMP_COCKTAIL);
         public static readonly string SMOKED_FISH = QualifiedObjectId(ObjectIds.SMOKED_FISH);
         public static readonly string SNAKE_SKULL = QualifiedObjectId(ObjectIds.SNAKE_SKULL);
         public static readonly string SOGGY_NEWSPAPER = QualifiedObjectId(ObjectIds.SOGGY_NEWSPAPER);
