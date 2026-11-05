@@ -1,17 +1,19 @@
-﻿using System;
-using System.Linq;
-using Microsoft.Xna.Framework;
+﻿using KaitoKid.ArchipelagoUtilities.Net;
 using KaitoKid.ArchipelagoUtilities.Net.Client;
+using KaitoKid.ArchipelagoUtilities.Net.Constants;
+using KaitoKid.Utilities.Interfaces;
+using Microsoft.Xna.Framework;
+using StardewArchipelago.Archipelago.SlotData.SlotEnums;
+using StardewArchipelago.Constants.Locations;
+using StardewArchipelago.Constants.Vanilla;
+using StardewArchipelago.Locations.CodeInjections.Vanilla.Quests;
 using StardewArchipelago.Stardew;
 using StardewValley;
 using StardewValley.Characters;
 using StardewValley.TerrainFeatures;
-using KaitoKid.ArchipelagoUtilities.Net;
-using KaitoKid.ArchipelagoUtilities.Net.Constants;
-using KaitoKid.Utilities.Interfaces;
-using StardewArchipelago.Constants.Locations;
-using StardewArchipelago.Constants.Vanilla;
-using StardewArchipelago.Locations.CodeInjections.Vanilla.Quests;
+using System;
+using System.Linq;
+using StardewArchipelago.Archipelago;
 using Object = StardewValley.Object;
 
 namespace StardewArchipelago.Locations.CodeInjections.Vanilla
@@ -24,11 +26,11 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
         };
 
         private static ILogger _logger;
-        private static ArchipelagoClient _archipelago;
+        private static StardewArchipelagoClient _archipelago;
         private static LocationChecker _locationChecker;
         private static StardewItemManager _itemManager;
 
-        public static void Initialize(ILogger logger, ArchipelagoClient archipelago, LocationChecker locationChecker, StardewItemManager itemManager)
+        public static void Initialize(ILogger logger, StardewArchipelagoClient archipelago, LocationChecker locationChecker, StardewItemManager itemManager)
         {
             _logger = logger;
             _archipelago = archipelago;
@@ -55,6 +57,10 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla
 
         private static void TryCheckHarvestLocation(Crop crop, bool __result)
         {
+            if (_archipelago.SlotData.Cropsanity == Cropsanity.Disabled)
+            {
+                return;
+            }
 
             if (!__result && !crop.fullyGrown.Value || crop.indexOfHarvest.Value == null)
             {

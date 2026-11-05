@@ -1264,15 +1264,15 @@ namespace StardewArchipelago.Locations.Patcher
                 prefix: new HarmonyMethod(typeof(CropsanityInjections), nameof(CropsanityInjections.Shake_VariousShakePatches_Prefix))
             );
 
-            if (_archipelago.SlotData.Cropsanity == Cropsanity.Disabled)
-            {
-                return;
-            }
-
             _harmony.Patch(
                 original: AccessTools.Method(typeof(Crop), nameof(Crop.harvest)),
                 postfix: new HarmonyMethod(typeof(CropsanityInjections), nameof(CropsanityInjections.Harvest_CheckCropsanityLocation_Postfix))
             );
+
+            if (_archipelago.SlotData.Cropsanity == Cropsanity.Disabled)
+            {
+                return;
+            }
 
             _harmony.Patch(
                 original: AccessTools.Method(typeof(FruitTree), nameof(FruitTree.shake)),
