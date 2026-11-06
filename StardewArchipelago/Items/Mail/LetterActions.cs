@@ -725,7 +725,12 @@ namespace StardewArchipelago.Items.Mail
             {
                 var sourceRect = new Rectangle(0, 0, 16, 32);
                 var position = who.Position + new Vector2(0f, -182f);
-                var spriteForHoldingUp = new TemporaryAnimatedSprite($"Characters\\{characterId}", sourceRect, 2500f, 1, 0, position, false, false)
+                var textureName = characterId;
+                if (NPC.TryGetData(characterId, out var npcData) && !string.IsNullOrWhiteSpace(npcData.TextureName))
+                {
+                    textureName = npcData.TextureName;
+                }
+                var spriteForHoldingUp = new TemporaryAnimatedSprite($"Characters\\{textureName}", sourceRect, 2500f, 1, 0, position, false, false)
                 {
                     motion = new Vector2(0.0f, -0.1f),
                     scale = 4f,
