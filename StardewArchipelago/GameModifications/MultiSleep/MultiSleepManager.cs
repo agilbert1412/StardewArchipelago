@@ -177,6 +177,10 @@ namespace StardewArchipelago.GameModifications.MultiSleep
             {
                 possibleResponses.Add(new Response(MultiSleepUntilBehavior.RAIN, "Rain"));
                 possibleResponses.Add(new Response(MultiSleepUntilBehavior.STORM, "Storm"));
+                if (Game1.season == Season.Summer)
+                {
+                    possibleResponses.Add(new Response(MultiSleepUntilBehavior.GREEN_RAIN, "Green Rain"));
+                }
             }
             if (_archipelago.HasReceivedItem("Fortune Teller"))
             {
@@ -248,6 +252,7 @@ namespace StardewArchipelago.GameModifications.MultiSleep
             {
                 case MultiSleepUntilBehavior.RAIN:
                 case MultiSleepUntilBehavior.STORM:
+                case MultiSleepUntilBehavior.GREEN_RAIN:
                 case MultiSleepUntilBehavior.GREAT_LUCK:
                 case MultiSleepUntilBehavior.FESTIVAL:
                 case MultiSleepUntilBehavior.BIRTHDAY:

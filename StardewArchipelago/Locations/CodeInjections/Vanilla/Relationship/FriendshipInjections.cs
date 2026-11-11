@@ -492,6 +492,11 @@ namespace StardewArchipelago.Locations.CodeInjections.Vanilla.Relationship
         private static void AutoPetNpc(Farmer farmer, string npcName, NPC npc)
         {
             var npcLocation = npc.currentLocation;
+            if (npcLocation == null)
+            {
+                return;
+            }
+
             foreach (var (_, objectInSameRoom) in npcLocation.Objects.Pairs)
             {
                 if (!objectInSameRoom.bigCraftable.Value || objectInSameRoom.ParentSheetIndex != AUTO_PETTER)

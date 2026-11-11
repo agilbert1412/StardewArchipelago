@@ -13,6 +13,7 @@ namespace StardewArchipelago.GameModifications.MultiSleep
     {
         public const string RAIN = "Rain";
         public const string STORM = "Storm";
+        public const string GREEN_RAIN = "Green Rain";
         public const string GREAT_LUCK = "Great Luck";
         public const string FESTIVAL = "Festival";
         public const string BIRTHDAY = "Birthday";
@@ -50,6 +51,11 @@ namespace StardewArchipelago.GameModifications.MultiSleep
             if (IsBehavior(_untilWhat, STORM))
             {
                 return !Game1.isLightning;
+            }
+
+            if (IsBehavior(_untilWhat, GREEN_RAIN))
+            {
+                return Game1.season == Season.Summer && !Game1.isGreenRain;
             }
 
             if (IsBehavior(_untilWhat, GREAT_LUCK))
