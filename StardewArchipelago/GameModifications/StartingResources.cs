@@ -18,8 +18,8 @@ namespace StardewArchipelago.GameModifications
 {
     public class StartingResources
     {
-        private const int UNLIMITED_MONEY_AMOUNT = 9999999;
-        private const int MINIMUM_UNLIMITED_MONEY = 1000000;
+        private const int UNLIMITED_MONEY_AMOUNT = 99999999;
+        private const int MINIMUM_UNLIMITED_MONEY = UNLIMITED_MONEY_AMOUNT / 10;
         private readonly ILogger _logger;
         private readonly StardewArchipelagoClient _archipelago;
         private readonly LocationChecker _locationChecker;
@@ -35,14 +35,12 @@ namespace StardewArchipelago.GameModifications
 
         public void GivePlayerStartingResources()
         {
-            _logger.LogDebug($"Starting {nameof(GivePlayerStartingResources)} (Game1.Date.TotalDays: {Game1.Date.TotalDays})");
-            GivePlayerStartingMoney();
             if (Game1.Date.TotalDays == 0)
             {
-                _logger.LogDebug($"It's the first day! Taking care of Quick Start, Tools and Backpacks!");
                 GivePlayerQuickStart();
                 RemoveStartingTools();
                 RemoveStartingBackpack();
+                GivePlayerStartingMoney();
             }
 
             RemoveHouse();
@@ -55,15 +53,27 @@ namespace StardewArchipelago.GameModifications
         private void GivePlayerStartingMoney()
         {
             var startingMoney = _archipelago.SlotData.StartingMoney;
-            var isUnlimitedMoney = startingMoney.IsUnlimited();
-            if (isUnlimitedMoney)
+            if (startingMoney.IsUnlimited())
             {
-                startingMoney = UNLIMITED_MONEY_AMOUNT;
+                Game1.player.Money = UNLIMITED_MONEY_AMOUNT;
+                return;
             }
 
-            if (Game1.Date.TotalDays == 0 || (isUnlimitedMoney && Game1.player.Money < MINIMUM_UNLIMITED_MONEY))
+            Game1.player.Money = startingMoney;
+        }
+
+        public void GiveUnlimitedMoneyIfNeeded()
+        {
+            var startingMoney = _archipelago.SlotData.StartingMoney;
+            var isUnlimitedMoney = startingMoney.IsUnlimited();
+            if (!isUnlimitedMoney)
             {
-                Game1.player.Money = startingMoney;
+                return;
+            }
+
+            if (Game1.player.Money < MINIMUM_UNLIMITED_MONEY)
+            {
+                Game1.player.Money = UNLIMITED_MONEY_AMOUNT;
             }
         }
 

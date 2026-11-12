@@ -170,7 +170,7 @@ namespace StardewArchipelago.GameModifications
             PatchFestivals();
 
             _dataPatcher.PatchAllRandomizedData();
-            _startingResources.GivePlayerStartingResources();
+            GiveStartingResources();
             PatchMultiplayerVision();
 
             PatchDebugMethods();
@@ -184,6 +184,16 @@ namespace StardewArchipelago.GameModifications
             UnPatchRecipes();
             CleanPowersEvents();
             _dataPatcher.CleanRandomizedDataEvents();
+        }
+
+        public void GiveStartingResources()
+        {
+            _startingResources.GivePlayerStartingResources();
+        }
+
+        public void GiveUnlimitedMoneyIfNeeded()
+        {
+            _startingResources.GiveUnlimitedMoneyIfNeeded();
         }
 
         private void PatchPickUpLocation()

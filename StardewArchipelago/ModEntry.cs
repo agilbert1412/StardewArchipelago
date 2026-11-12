@@ -477,7 +477,8 @@ namespace StardewArchipelago
             {
                 return;
             }
-
+            
+            _logicPatcher.GiveUnlimitedMoneyIfNeeded();
             SeasonsRandomizer.ChangeMailKeysBasedOnSeasonsToDaysElapsed();
             SeasonsRandomizer.SendMailHardcodedForToday();
             _mail.SendTrustFundLetter();
