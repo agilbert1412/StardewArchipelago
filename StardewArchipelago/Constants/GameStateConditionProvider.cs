@@ -183,6 +183,16 @@ namespace StardewArchipelago.Constants
             return newCondition;
         }
 
+        public static string ConcatenateConditions(string condition1, string condition2, bool invert)
+        {
+            return ConcatenateConditions(new[] { condition1, condition2 }, invert);
+        }
+
+        public static string ConcatenateConditions(string condition1, string condition2, string condition3, bool invert)
+        {
+            return ConcatenateConditions(new[] { condition1, condition2, condition3 }, invert);
+        }
+
         public static string ConcatenateConditions(IReadOnlyList<string> conditions, bool invert)
         {
             if (conditions == null || conditions.All(string.IsNullOrWhiteSpace))

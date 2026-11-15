@@ -93,6 +93,8 @@ namespace StardewArchipelago.GameModifications.RandomizedData
                         break;
                 }
 
+                AddFestivalSpawnDatas(mapSpawnDatas, fishName);
+
                 var conditionsToKeep = new[] { GameStateCondition.PLAYER_SPECIAL_ORDER_RULE_ACTIVE };
                 var originalSpawnDatas = CreateSpawnDataFrom(null, fishName, false, false)
                     .Where(x => !string.IsNullOrWhiteSpace(x.Condition) && conditionsToKeep.Any(y => x.Condition.Contains(y)));
@@ -125,6 +127,37 @@ namespace StardewArchipelago.GameModifications.RandomizedData
             }
 
             return spawnDatas;
+        }
+
+        private void AddFestivalSpawnDatas(Dictionary<string, List<SpawnFishData>> mapsSpawnDatas, string fishName)
+        {
+            var festivalSpawnDatas = new List<SpawnFishData>();
+            switch (fishName)
+            {
+                case "Rainbow Trout":
+                case "Squid":
+                    festivalSpawnDatas.AddRange(CreateSpawnDataWithFestivalConditionFrom(fishName));
+                    break;
+                default:
+                    return;
+            }
+
+            foreach (var mapName in mapsSpawnDatas.Keys.ToArray())
+            {
+                var mapSpawnDatas = mapsSpawnDatas[mapName];
+                foreach (var mapSpawnData in mapSpawnDatas.ToArray())
+                {
+                    foreach (var festivalSpawnData in festivalSpawnDatas)
+                    {
+                        var mergedSpawnData = mapSpawnData.DeepClone();
+                        mergedSpawnData.IgnoreFishDataRequirements = mapSpawnData.IgnoreFishDataRequirements || festivalSpawnData.IgnoreFishDataRequirements;
+                        mergedSpawnData.Season = null;
+                        mergedSpawnData.Condition = GameStateConditionProvider.ConcatenateConditions(mapSpawnData.Condition, festivalSpawnData.Condition, false);
+                        mergedSpawnData.Chance = festivalSpawnData.Chance;
+                        mapSpawnDatas.Add(mergedSpawnData);
+                    }
+                }
+            }
         }
 
         private void AddMapSpawnDatasWithCondition(Dictionary<string, List<SpawnFishData>> mapSpawnDatas, string map, string fish, string condition)
@@ -188,7 +221,7 @@ namespace StardewArchipelago.GameModifications.RandomizedData
             var entries = _originalFishEntries[key];
             if (entries.Count > 1)
             {
-                _logger.LogWarning($"There are multiple matching fish for '{fish}' in '{map}'. First one will be used.");
+                _logger.LogDebug($"There are multiple matching fish for '{fish}' in '{map}'. First one will be used.");
             }
 
             var entry = entries.OrderBy(x => x.Condition?.Length ?? 0).First().DeepClone();
@@ -198,15 +231,6 @@ namespace StardewArchipelago.GameModifications.RandomizedData
             }
 
             var newEntries = new List<SpawnFishData> { CleanEntry(entry, keepSpawnFields, false) };
-
-            switch (fish)
-            {
-                case "Rainbow Trout":
-                case "Squid":
-                    newEntries.AddRange(CreateSpawnDataWithFestivalConditionFrom(fish));
-                    break;
-            }
-
             return newEntries;
         }
 
